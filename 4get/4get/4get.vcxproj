@@ -76,12 +76,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="logic_parser.cpp" />
+    <ClCompile Include="logic_task.cpp" />
+    <ClCompile Include="logic_task_deadline.cpp" />
+    <ClCompile Include="logic_task_floating.cpp" />
+    <ClCompile Include="logic_task_list.cpp" />
+    <ClCompile Include="logic_task_repeat.cpp" />
+    <ClCompile Include="logic_task_timed.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="storage.cpp" />
     <ClCompile Include="ui_convert.cpp" />
     <ClCompile Include="ui_display.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_message.h" />
+    <ClInclude Include="logic_parser.h" />
+    <ClInclude Include="logic_task.h" />
+    <ClInclude Include="logic_task_deadline.h" />
+    <ClInclude Include="logic_task_floating.h" />
+    <ClInclude Include="logic_task_list.h" />
+    <ClInclude Include="logic_task_repeat.h" />
+    <ClInclude Include="logic_task_timed.h" />
+    <ClInclude Include="storage.h" />
     <ClInclude Include="ui_convert.h" />
     <ClInclude Include="ui_display.h">
       <FileType>CppForm</FileType>
