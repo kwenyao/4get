@@ -6,11 +6,10 @@ bool save(int listSize){
 	for(int i=0; i<listSize; i++){
 		
 	}
-
 	tempSaveFile.close();
 	return false; //stub
 }
 
 bool load(){
-	
+	return 0; //stub
 }
