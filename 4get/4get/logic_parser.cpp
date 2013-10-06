@@ -11,42 +11,42 @@ void Parser::parseCommand(string commandString, vector<string>& inputBits)
 	try{
 		if(commandString.compare(COMMAND_A)==COMPARE_SUCCESS || commandString.compare(COMMAND_ADD)==COMPARE_SUCCESS || commandString.compare(COMMAND_NEW_TASK)==COMPARE_SUCCESS){
 			if(separateInput(ADD, inputBits)){
-				throw ERROR_COMMAND_ADD;
+				throw MESSAGE_ERROR_COMMAND_ADD;
 			}
 		}
 		else if(commandString.compare(COMMAND_DEL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE)==COMPARE_SUCCESS) {
 			if(separateInput(DELETE, inputBits)){
-				throw ERROR_COMMAND_DELETE;
+				throw MESSAGE_ERROR_COMMAND_DELETE;
 			}
 		}
 		else if(commandString.compare(COMMAND_DEL_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE_ALL)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE_ALL)==COMPARE_SUCCESS) {
 			if(separateInput(DELETE_ALL, inputBits)){
-				throw ERROR_COMMAND_DELETE;
+				throw MESSAGE_ERROR_COMMAND_DELETE;
 			}
 		}
 		else if(commandString.compare(COMMAND_M)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK)==COMPARE_SUCCESS) {
 			if(separateInput(MARK, inputBits)){
-				throw ERROR_COMMAND_MARK;
+				throw MESSAGE_ERROR_COMMAND_MARK;
 			}
 		}
 		else if(commandString.compare(COMMAND_M_DONE)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK_DONE)==COMPARE_SUCCESS) {
 			if(separateInput(MARK_DONE, inputBits)){
-				throw ERROR_COMMAND_MARK;
+				throw MESSAGE_ERROR_COMMAND_MARK;
 			}
 		}
 		else if(commandString.compare(COMMAND_MOD)==COMPARE_SUCCESS || commandString.compare(COMMAND_MODIFY)==COMPARE_SUCCESS) {
 			if(separateInput(MODIFY, inputBits)){
-				throw ERROR_COMMAND_MODIFY;
+				throw MESSAGE_ERROR_COMMAND_MODIFY;
 			}
 		}
 		else if(commandString.compare(COMMAND_UNDO)==COMPARE_SUCCESS) {
 			if(separateInput(UNDO, inputBits)){
-				throw ERROR_COMMAND_UNDO;
+				throw MESSAGE_ERROR_COMMAND_UNDO;
 			}
 		}
 		else if(commandString.compare(COMMAND_UPDATE)==COMPARE_SUCCESS) {
 			if(separateInput(UPDATE, inputBits)){
-				throw ERROR_COMMAND_UPDATE;
+				throw MESSAGE_ERROR_COMMAND_UPDATE;
 			}
 		}
 	}
