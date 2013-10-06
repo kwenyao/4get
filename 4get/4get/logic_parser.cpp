@@ -327,6 +327,7 @@ bool Parser::determinePriority()
 	if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
 		found = textInput.find(MARKER_PRIORITY);
 		if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=std::string::npos){
+			foundEnclose = textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH);
 			extractLength = determindExtractLength(found, foundEnclose, MARKER_PRIORITY, extractStartPos);
 			textPriority = _textInput.substr(extractStartPos, extractLength);
 			shortenInput(found, foundEnclose);
@@ -334,7 +335,7 @@ bool Parser::determinePriority()
 		}
 
 		else{
-			textPriority = _textInput.substr(extractStartPos);
+			textPriority = _textInput.substr(++found);
 			shortenInput(found, MARKER_PRIORITY_LENGTH);
 			return true;
 		}
