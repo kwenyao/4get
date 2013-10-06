@@ -45,6 +45,10 @@ namespace Enum{
 const int COMPARE_SUCCESS = 0;
 const int FOUND_SUCCESS = 0;
 
+//Initializer
+const string INITIALIZE_STRING_BLANK = "";
+const size_t INITIALIZE_SIZE_T = 0;
+
 //variants of add
 const string COMMAND_ADD = "add";
 const string COMMAND_A = "a";
@@ -98,22 +102,44 @@ const int SLOT_LOCATION = 1;
 const int SLOT_REMIND_TIME = 2;
 const int SLOT_PRIORITY = 3;
 const int SLOT_REPEAT = 4;
-const int SLOT_START_TIME = 5;
-const int SLOT_END_TIME = 6;
+const int SLOT_REMIND_ON = 5;
+const int SLOT_TIME = 6;
+
 
 //parser markers
 
 const char MARKER_COMMA = ',';
-const string MARKER_ENCLOSE = " ";
-const string MARKER_AT = ",at";
-const string MARKER_NEAR = ",near";
-const string MARKER_BY = ",by";
-const string MARKER_FROM = ",from";
-const string MARKER_TO = " to ";
-const string MARKER_REMIND = ",remind";
-const string MARKER_ON = " on ";
-const string MARKER_REPEAT = ",repeat";
+const std::size_t MARKER_COMMA_LENGTH = 1;
 
+const char MARKER_ENCLOSE = ' ';
+const std::size_t MARKER_ENCLOSE_LENGTH = 1;
+
+const string MARKER_AT = ",at";
+const std::size_t MARKER_AT_LENGTH = 3;
+
+const string MARKER_NEAR = ",near";
+const std::size_t MARKER_NEAR_LENGTH = 3;
+
+const string MARKER_BY = ",by";
+const std::size_t MARKER_BY_LENGTH = 3;
+
+const string MARKER_FROM = ",from";
+const std::size_t MARKER_FROM_LENGTH = 5;
+
+const string MARKER_TO = " to ";
+const std::size_t MARKER_TO_LENGTH = 4;
+
+const string MARKER_REMIND = ",remind";
+const std::size_t MARKER_REMIND_LENGTH = 7;
+
+const string MARKER_ON = " on ";
+const std::size_t MARKER_ON_LENGTH = 4;
+
+const string MARKER_REPEAT = ",repeat";
+const std::size_t MARKER_REPEAT_LENGTH = 7;
+
+const string MARKER_PRIORITY = ",!";
+const std::size_t MARKER_PRIORITY_LENGTH = 2;
 
 
 #endif
