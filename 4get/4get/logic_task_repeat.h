@@ -11,7 +11,7 @@ protected:
 	tm *taskNextOccurance;
 public:
 	TaskRepeat();
-	void setRepeat(RepeatType repeat); 
+	void setTaskRepeat(RepeatType repeat); 
 	RepeatType getTaskRepeat();
 };
 

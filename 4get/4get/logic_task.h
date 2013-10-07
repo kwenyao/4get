@@ -25,7 +25,7 @@ protected:
 
 public:
 	Task();
-	void setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status);
+	virtual void setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status);
 	//Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminder);
 
 	//getter functions
@@ -43,6 +43,9 @@ public:
 	void setTaskLocation(string location);
 	void setTaskStatus(Status status);
 	void setTaskReminderTime(tm* remindTime);
+	virtual void setTaskStart(tm *startTask);
+	virtual void setTaskEnd(tm *endTask);
+	virtual void setTaskRepeat(RepeatType repeat); 
 	
 	//update function
 	void updateAllAttr();

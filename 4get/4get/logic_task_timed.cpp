@@ -1,13 +1,13 @@
 #include "logic_task_timed.h"
 
-TaskTimed::TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime)
+TaskTimed::TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime) : TaskRepeat()
 {
 	type = timed;
 	setupTask(id, type, description, location, reminderTime, priority, status);
 	taskStart = startTime;
 	taskEnd = endTime;
 	if(repeat != none)
-		setRepeat(repeat);
+		setTaskRepeat(repeat);
 
 }
 void TaskTimed::setTaskStart(tm* startTime)

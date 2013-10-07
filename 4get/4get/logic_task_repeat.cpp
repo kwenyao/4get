@@ -5,7 +5,7 @@ TaskRepeat::TaskRepeat() : Task()
 
 }
 
-void TaskRepeat::setRepeat(RepeatType repeat)
+void TaskRepeat::setTaskRepeat(RepeatType repeat)
 {
 	switch(repeat)
 	{

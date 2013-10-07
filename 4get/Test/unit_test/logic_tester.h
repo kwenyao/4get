@@ -6,7 +6,7 @@
 #include "logic_task_floating.h"
 #include "logic_task_timed.h"
 #include "logic_task_repeat.h"
-#include "logic_task_list.h"
+//#include "logic_task_list.h"
 
 
 
@@ -17,6 +17,15 @@ protected:
 
 	Parser parser;
 	string input1;
+
+	int id;
+	string description;
+	string location;
+	tm *reminderTime;
+	Priority priority;
+	Status status;
+	RepeatType repeat;
+	tm *endTime;
  
   ParserTest() {
     // You can do set-up work for each test here.
@@ -34,6 +43,23 @@ protected:
     // before each test).
 	input1 = "Add HomeWork from EE2020 ,at com1 ,repeat weekly ,From Monday 2PM to Saturday 4PM ,!";
 	
+	id = 1;
+	description = "HomeWork from EE2020";
+	location = "com1";
+
+	reminderTime->tm_hour = 20;
+	reminderTime->tm_min = 00;
+	reminderTime->tm_wday = 5;
+
+	priority = high;
+	status = incomplete;
+	repeat = none;
+
+	endTime->tm_hour = 23;
+	endTime->tm_min = 59;
+	endTime->tm_wday = 0;
+
+
   }
  
   virtual void TearDown() {
