@@ -31,7 +31,7 @@ class Executor
 public:
 	Executor();
 
-	string stringCollector(string task);
+	void stringCollector(string task);
 	bool receive(string command, vector<string> parameters);
 	Command determineCommandType (string commandTypeString); 
 	void loadListOfTasks();

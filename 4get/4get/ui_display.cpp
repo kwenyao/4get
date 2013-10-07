@@ -2,8 +2,8 @@
 using namespace UIDisplay;
 
 //constructor
-ui_display::ui_display(void){
-	execute = new Executor;
+ui_display::ui_display(){
+	/*execute = new Executor;*/
 	converter = new UiConvert;
 	loaded = false;
 
@@ -387,7 +387,7 @@ void ui_display::loadList(){
 void ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-	execute->stringCollector(stdCommand);
+	/*execute->stringCollector(stdCommand);*/
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
@@ -426,3 +426,4 @@ void ui_display::printList(std::list<Task> *list){
 		j++;
 	}
 	loaded = true;
+}

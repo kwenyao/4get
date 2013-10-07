@@ -39,9 +39,9 @@
 //		return true;
 //	return false;
 //}
-//string Executor::stringCollector(string task)
+//void Executor::stringCollector(string task)
 //{
-//	return task;
+//	
 //}
 //void Executor::loadListOfTasks()
 //{

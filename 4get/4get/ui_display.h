@@ -28,7 +28,7 @@ namespace UIDisplay {
 
 #pragma region initialise
 	private: UiConvert* converter;
-	private: Executor* execute;
+	/*private: Executor* execute;*/
 	
 	private: bool loaded;
 	private: list<Task> *list;

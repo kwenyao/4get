@@ -5,6 +5,8 @@
 using namespace System;
 using namespace msclr::interop;
 
+UiConvert::UiConvert(){};
+
 bool UiConvert::stringSysToStdConversion(String^ source, string& result){
 	result = marshal_as<string>(source);
 	return true;
