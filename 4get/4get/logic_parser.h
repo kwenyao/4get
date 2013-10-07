@@ -38,7 +38,7 @@ private:
 public:
 	Parser();
 
-	vector<string> parseInput(string input);
+	void parseInput(string input, vector<string>& inputBits);
 	void parseCommand(string commandString, vector<string>& inputBits);
 	void populateContainer(vector<string>& inputBits);
 

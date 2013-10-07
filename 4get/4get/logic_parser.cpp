@@ -74,18 +74,14 @@ void Parser::parseCommand(string commandString, vector<string>& inputBits)
 
 }
 
-vector<string> Parser::parseInput(string input)
+void Parser::parseInput(string input, vector<string>& inputBits)
 {
-
-	vector<string> inputBits(SLOT_SIZE);
-
 	removeFirstWord(input);
 	_textInput = textInput = input;
 	toLowerCase(textInput);
 
 	parseCommand(textCommand, inputBits);
 
-	return inputBits;
 }
 
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
