@@ -6,9 +6,6 @@
 
 class TaskFloating : Task
 {
-private:
-	TaskType type;
-
 public:
 	TaskFloating(int id, string description, string location, tm *reminderTime, Priority priority, Status status);
 };

@@ -7,8 +7,7 @@
 class TaskRepeat : public Task
 {
 protected:
-	RepeatType taskRepeat;
-	tm *taskNextOccurance;
+	
 public:
 	TaskRepeat();
 	void setTaskRepeat(RepeatType repeat); 

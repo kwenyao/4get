@@ -22,6 +22,11 @@ protected:
 	string taskLocation;
 	tm *taskReminderTime;
 	Status taskStatus;
+	RepeatType taskRepeat;
+	tm *taskNextOccurance;
+	tm *taskStart;
+	tm *taskEnd;
+	
 
 public:
 	Task();
