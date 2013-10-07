@@ -11,9 +11,9 @@
 //
 //	switch(commandType)
 //	{
-//	case ADD:
+//	case commandAdd:
 //		return true;
-//	case DELETE:
+//	case commandDelete:
 //		return true;
 //	default: return false;
 //	}
@@ -21,11 +21,11 @@
 //Enum::Command Executor::determineCommandType (string commandTypeString)
 //{
 //	if(isEqual(commandTypeString, COMMAND_ADD))
-//		return Command::ADD;
+//		return Command::commandAdd;
 //	else if(isEqual(commandTypeString, COMMAND_DELETE))
-//		return Command::DELETE;
+//		return Command::commandDelete;
 //	else
-//		return Command::INVALID;
+//		return Command::commandInvalid;
 //}
 //bool Executor::adderFunction(vector<string>& vectorOfInputs)
 //{
@@ -53,13 +53,11 @@
 //	string day, month, year;
 //	int dayInt, monthInt, yearInt;
 //
-//
 //	day += date[0];
 //	day += date[1];
 //	month += date[3];
 //	year += date[5];
 //	year += date[6];
-//
 //
 //	cout << day<< endl;
 //	cout << month << endl;

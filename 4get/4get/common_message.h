@@ -91,8 +91,8 @@ namespace Enum{
 		commandMarkDone, 
 		commandModify, 
 		commandUndo, 
-		commandUpdate
-		INVALID
+		commandUpdate,
+		commandInvalid
 	};
 };
 
