@@ -2,11 +2,11 @@
 
 TaskTimed::TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime)
 {
-	type = TIMED;
+	type = timed;
 	setupTask(id, type, description, location, reminderTime, priority, status);
 	taskStart = startTime;
 	taskEnd = endTime;
-	if(repeat != NONE)
+	if(repeat != none)
 		setRepeat(repeat);
 
 }

@@ -4,5 +4,12 @@
 
 TEST_F(ParserTest, MethodReturnsFirstItem)
 {
+	vector<string> inputBits(SLOT_SIZE);
+
+	 parser.parseInput(input1,inputBits);
+
+
+
+
 
 }

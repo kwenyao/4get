@@ -8,7 +8,7 @@ bool TaskList::saveListToFile(){
 	return 0; //stub
 }
 
-bool TaskList::addToList(Task* task, ListType listToAdd){
+bool TaskList::addToList(Task task, ListType listToAdd){
 	switch (listToAdd){
 	case toDo:
 		return addToDoList(task);
@@ -20,23 +20,47 @@ bool TaskList::addToList(Task* task, ListType listToAdd){
 	return false; 
 }
 
-bool TaskList::addToDoList(Task* task){
+bool TaskList::addToDoList(Task task){
 	toDoList.push_back(task);
 	return 0; //stub
 }
 
-bool TaskList::addCompletedList(Task* task){
+bool TaskList::addCompletedList(Task task){
 	completedList.push(task);
 	return 0; //stub
 }
 
-bool TaskList::addOverdueList(Task* task){
+bool TaskList::addOverdueList(Task task){
 	overdueList.push(task);
 	return 0; //stub
 }
 
-bool TaskList::deleteFromList(int taskToDelete){
+bool TaskList::deleteFromList(int taskToDelete, ListType list){
+	switch (list){
+	case toDo:
+		return deleteFromToDo(taskToDelete);
+	case completed:
+		return deleteFromCompleted(taskToDelete);
+	case overdue:
+		return deleteFromOverdue(taskToDelete);
+	}
 	return 0; //stub
+}
+
+bool TaskList::deleteFromToDo(int taskToDelete){
+	list<Task>::iterator iterator;
+	for(int i=0; i<taskToDelete; i++)
+		++iterator;
+	toDoList.erase(iterator);
+	return false; //stub
+}
+
+bool TaskList::deleteFromCompleted(int taskToDelete){
+	return 0; //stub
+}
+
+bool TaskList::deleteFromOverdue(int taskToDelete){
+	return 0;
 }
 
 int TaskList::getNextID(){

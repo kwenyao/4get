@@ -3,6 +3,15 @@
 
 Parser::Parser()
 {
+	textInput = INITIALIZE_STRING_BLANK;
+	_textInput = INITIALIZE_STRING_BLANK;
+	textCommand = INITIALIZE_STRING_BLANK;
+	textDescription = INITIALIZE_STRING_BLANK;
+	textVenue = INITIALIZE_STRING_BLANK;
+	textDateAndTime = INITIALIZE_STRING_BLANK;
+	textRepeat = INITIALIZE_STRING_BLANK;
+	textPriority = INITIALIZE_STRING_BLANK;
+	textRemindDateAndTime = INITIALIZE_STRING_BLANK;
 }
 
 
@@ -10,42 +19,50 @@ void Parser::parseCommand(string commandString, vector<string>& inputBits)
 {
 	try{
 		if(commandString.compare(COMMAND_A)==COMPARE_SUCCESS || commandString.compare(COMMAND_ADD)==COMPARE_SUCCESS || commandString.compare(COMMAND_NEW_TASK)==COMPARE_SUCCESS){
-			if(separateInput(ADD, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_ADD;
+			if(!separateInput(commandAdd, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_ADD;
 			}
 		}
 		else if(commandString.compare(COMMAND_DEL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE)==COMPARE_SUCCESS) {
-			if(separateInput(DELETE, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_DELETE;
+			if(!separateInput(commandDelete, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_DELETE;
 			}
 		}
 		else if(commandString.compare(COMMAND_DEL_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE_ALL)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM_ALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE_ALL)==COMPARE_SUCCESS) {
-			if(separateInput(DELETE_ALL, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_DELETE_ALL;
+			if(!separateInput(commandDeleteAll, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_DELETE;
 			}
 		}
 		else if(commandString.compare(COMMAND_M)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK)==COMPARE_SUCCESS) {
-			if(separateInput(MARK, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_MARK;
+			if(!separateInput(commandMark, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_MARK;
 			}
 		}
 		else if(commandString.compare(COMMAND_M_DONE)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK_DONE)==COMPARE_SUCCESS) {
-			if(separateInput(MARK_DONE, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_MARK;
+			if(!separateInput(commandMarkDone, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_MARK;
 			}
 		}
 		else if(commandString.compare(COMMAND_MOD)==COMPARE_SUCCESS || commandString.compare(COMMAND_MODIFY)==COMPARE_SUCCESS) {
-			if(separateInput(MODIFY, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_MODIFY;
+			if(!separateInput(commandModify, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_MODIFY;
 			}
 		}
 		else if(commandString.compare(COMMAND_UNDO)==COMPARE_SUCCESS) {
-			if(separateInput(UNDO, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_UNDO;
+			if(!separateInput(commandUndo, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_UNDO;
 			}
 		}
 		else if(commandString.compare(COMMAND_UPDATE)==COMPARE_SUCCESS) {
-			if(separateInput(UPDATE, inputBits)){
+			inputBits[SLOT_COMMAND] = COMMAND_UPDATE;
+			if(!separateInput(commandUpdate, inputBits)){
 				throw MESSAGE_ERROR_COMMAND_UPDATE;
 			}
 		}
@@ -57,56 +74,35 @@ void Parser::parseCommand(string commandString, vector<string>& inputBits)
 
 }
 
-vector<string> Parser::parseInput(string input)
+void Parser::parseInput(string input, vector<string>& inputBits)
 {
-
-	vector<string> inputBits;
-
 	removeFirstWord(input);
 	_textInput = textInput = input;
 	toLowerCase(textInput);
 
 	parseCommand(textCommand, inputBits);
 
-	/*
-
-	iss >> command;
-	int state = 0;
-	transform(command.begin(), command.end(), command.begin(),::tolower);
-	bool isDone = false;
-	while(!iss.eof())
-	{
-	state = separateInput(state);
-	}
-	cout << textDescription <<endl;
-	cout << textVenue << endl;
-	cout << textDateAndTime <<endl;
-	*/
-
-
-	cout << "Parse return" << endl;
-
-	return inputBits;
 }
 
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 {
+
 	switch (userCommand){
-	case ADD: 
+	case commandAdd: 
 		return separateFunctionAdd(inputBits);
-	case DELETE:
+	case commandDelete:
 		return separateFunctionDelete(inputBits);
-	case DELETE_ALL:
+	case commandDeleteAll:
 		return separateFunctionDeleteAll(inputBits);
-	case MARK:
+	case commandMark:
 		return separateFunctionMark(inputBits);
-	case MARK_DONE:
+	case commandMarkDone:
 		return separateFunctionMarkDone(inputBits);
-	case MODIFY:
+	case commandModify:
 		return separateFunctionModify(inputBits);
-	case UNDO:
+	case commandUndo:
 		return separateFunctionUndo(inputBits);
-	case UPDATE:
+	case commandUpdate:
 		return separateFunctionUpdate(inputBits);
 	default:
 		return false;
@@ -116,31 +112,27 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 
 }
 
-
-
-
-
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
-
+	
 	if(determineVenue()){
-		cout << textVenue << endl;
+		cout << "venue: <" << textVenue << ">" << endl;
 	}
 	if(determineDateAndTime()){
-		cout << textDateAndTime << endl;
+		cout << "D&T: <" << textDateAndTime << ">" << endl;
 	}
 	if(determineRepeat()){
-		cout << textRepeat << endl;
+		cout << "repeat: <" << textRepeat << ">" << endl;
 	}
 	if(determinePriority()){
-		cout << textPriority << endl;
+		cout << "priority: <" << textPriority << ">" << endl;
 	}
 	if(determineReminder()){
-		cout << textRemindDateAndTime << endl;
+		cout << "reminder: <" << textRemindDateAndTime << ">" << endl;
 	}
-	cout << _textInput << endl;
-
-
+	cout << "remaining: <" << _textInput << ">" << endl;
+	
+	populateContainer(inputBits);
 
 	return true;
 
@@ -148,6 +140,7 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 }
 bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
+
 	return true;
 }
 bool Parser::separateFunctionDeleteAll(vector<string>& inputBits)
@@ -220,6 +213,7 @@ bool Parser::determineVenue()
 				return true;
 			}
 			else
+
 				return false;
 		}
 		else
@@ -335,7 +329,8 @@ bool Parser::determinePriority()
 		}
 
 		else{
-			textPriority = _textInput.substr(++found);
+			extractStartPos = found;
+			textPriority = _textInput.substr(++extractStartPos);
 			shortenInput(found, MARKER_PRIORITY_LENGTH);
 			return true;
 		}
@@ -350,21 +345,28 @@ bool Parser::determineReminder()
 {
 	std::size_t found = 0;
 	std::size_t foundComma = 0;
+	std::size_t extractStartPos;
+	std::size_t extractLength;
+	std::size_t stringLength = textInput.size();
 	std::size_t i;
-	string marker = "";
+	string marker = INITIALIZE_STRING_BLANK;
 
 
 	if(textInput.find(MARKER_REMIND)!=std::string::npos){
 		found = textInput.find(MARKER_REMIND);
-		foundComma = textInput.find(MARKER_COMMA, found+7);
-		i = foundComma;
-		while(textInput[i]!=MARKER_ENCLOSE || i!=std::string::npos)
-			marker += textInput[i++];
-		if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REPEAT || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY && textInput.find(MARKER_ON, found)!=std::string::npos){
-			textRemindDateAndTime = _textInput.substr(found+7, foundComma-1);
-			textInput.erase(found, foundComma-1);
-			_textInput.erase(found, foundComma-1);
-			return true;
+		if(textInput.find(MARKER_ENCLOSE, found+MARKER_REMIND_LENGTH)!=std::string::npos){
+			foundComma = textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH);
+			extractLength = determindExtractLength(found, foundComma, MARKER_REMIND, extractStartPos);
+			i = foundComma;
+			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+				marker += textInput[i++];
+			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REPEAT || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY && textInput.find(MARKER_ON, found)!=std::string::npos){
+				textRemindDateAndTime = _textInput.substr(extractStartPos, extractLength);
+				shortenInput(found, foundComma);
+				return true;
+			}
+			else
+				return false;
 		}
 		else
 			return false;
@@ -386,7 +388,7 @@ std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundC
 
 	else
 		shiftPos = markConstant.size();
-	
+
 	extractStartPos = found + (++shiftPos); //shift the pos to first pos of text to be extracted.
 	extractEndPos = --foundComma;
 
@@ -435,6 +437,16 @@ textDescription += temp + " ";
 }
 }
 */
+
+void Parser::populateContainer(vector<string>& inputBits)
+{
+	inputBits[SLOT_DESCRIPTION] = textInput;
+	inputBits[SLOT_LOCATION] = textVenue;
+	inputBits[SLOT_REMIND_TIME] = textRemindDateAndTime;
+	inputBits[SLOT_PRIORITY] = textPriority;
+	inputBits[SLOT_REPEAT] = textRepeat;
+	inputBits[SLOT_TIME] = textDateAndTime; 
+}
 
 void Parser::toLowerCase(string &str)
 {

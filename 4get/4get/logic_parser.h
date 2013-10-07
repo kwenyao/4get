@@ -22,8 +22,8 @@ class Parser
 private:
 
 	//istringstream iss;
-	string _textInput;
-	string textInput;
+	string _textInput; // Main input
+	string textInput; // lower case input
 	string textCommand;
 	string textDescription;
 	string textVenue;
@@ -38,10 +38,9 @@ private:
 public:
 	Parser();
 
+	void parseInput(string input, vector<string>& inputBits);
 	void parseCommand(string commandString, vector<string>& inputBits);
-
-	vector<string> parseInput(string input);
-
+	void populateContainer(vector<string>& inputBits);
 
 	//separate functions
 	bool separateInput(Command userCommand, vector<string>& inputBits);

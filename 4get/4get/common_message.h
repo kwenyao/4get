@@ -52,46 +52,46 @@ namespace Message{
 
 namespace Enum{
 	enum ListType{
-		toDo,
-		completed,
-		overdue,
+		toDoList,
+		completedList,
+		overdueList,
 	};
 
 	enum RepeatType{
-		NONE, 
-		DAILY, 
-		WEEKLY, 
-		FORTNIGHTLY, 
-		MONTHLY, 
-		ANNUALLY
+		none, 
+		daily, 
+		weekly, 
+		fortnightly, 
+		monthly, 
+		annually
 	};
 
 	enum Priority{
-		HIGH, 
-		NORMAL
+		high, 
+		normal
 	};
 
 	enum Status{
-		COMPLETED, 
-		INCOMPLETE, 
-		OVERDUED
+		completed, 
+		incomplete, 
+		overdued
 	};
 
 	enum TaskType{
-		FLOATING, 
-		TIMED, 
-		DEADLINE
+		floating, 
+		timed, 
+		deadline
 	};
 
 	enum Command{
-		ADD, 
-		DELETE, 
-		DELETE_ALL, 
-		MARK, 
-		MARK_DONE, 
-		MODIFY, 
-		UNDO, 
-		UPDATE
+		commandAdd, 
+		commandDelete, 
+		commandDeleteAll, 
+		commandMark, 
+		commandMarkDone, 
+		commandModify, 
+		commandUndo, 
+		commandUpdate
 	};
 };
 
@@ -107,12 +107,13 @@ namespace Constants{
 	const size_t INITIALIZE_SIZE_T = 0;
 
 	//Input Bits slots
-	const int SLOT_DESCRIPTION = 0;
-	const int SLOT_LOCATION = 1;
-	const int SLOT_REMIND_TIME = 2;
-	const int SLOT_PRIORITY = 3;
-	const int SLOT_REPEAT = 4;
-	const int SLOT_REMIND_ON = 5;
+	const int SLOT_SIZE = 10;
+	const int SLOT_COMMAND = 0;
+	const int SLOT_DESCRIPTION = 1;
+	const int SLOT_LOCATION = 2;
+	const int SLOT_REMIND_TIME = 3;
+	const int SLOT_PRIORITY = 4;
+	const int SLOT_REPEAT = 5;
 	const int SLOT_TIME = 6;
 
 	//parser markers

@@ -10,6 +10,7 @@ protected:
 	RepeatType taskRepeat;
 	tm *taskNextOccurance;
 public:
+	TaskRepeat();
 	void setRepeat(RepeatType repeat); 
 	RepeatType getTaskRepeat();
 };
