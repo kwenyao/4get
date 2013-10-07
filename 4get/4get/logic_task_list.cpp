@@ -55,6 +55,14 @@ bool TaskList::deleteFromToDo(int taskToDelete){
 	return false; //stub
 }
 
+bool TaskList::deleteFromCompleted(int taskToDelete){
+	return 0; //stub
+}
+
+bool TaskList::deleteFromOverdue(int taskToDelete){
+	return 0;
+}
+
 int TaskList::getNextID(){
 	int temp =  nextTaskID;
 	nextTaskID++;
