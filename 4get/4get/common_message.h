@@ -92,6 +92,7 @@ namespace Enum{
 		commandModify, 
 		commandUndo, 
 		commandUpdate
+		INVALID
 	};
 };
 
