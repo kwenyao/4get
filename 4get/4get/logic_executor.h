@@ -42,7 +42,7 @@ public:
 	//helper functions
 	bool isEqual(string str1, const string str2);
 	string determineListType(tm);
-	tm convertStringToTm(vector<string>& vectorOfInputs);
-	int convertStringToInt(vector<string>& vectorOfInputs);
+	tm* convertStringToTm(vector<string>& vectorOfInputs);
+	
 };
 #endif

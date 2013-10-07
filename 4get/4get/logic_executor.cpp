@@ -31,6 +31,8 @@
 //{
 //	_task.setTaskDescription(vectorOfInputs[SLOT_DESCRIPTION]);
 //	_task.setTaskLocation(vectorOfInputs[SLOT_LOCATION]);
+//	tm* remindertime
+//	_task.setTaskReminderTime()
 //
 //}
 //bool Executor::isEqual(string str1, const string str2)
@@ -47,9 +49,9 @@
 //{
 //	tasks.loadListFromFile();	
 //}
-//int Executor::convertStringToInt(vector<string>& vectorOfInputs)
+//tm* Executor::convertStringToTm(vector<string>& vectorOfInputs)
 //{
-//	string date = vectorOfInputs[SLOT_TIME];
+//	string date = vectorOfInputs[SLOT_REMIND_TIME];
 //	string day, month, year;
 //	int dayInt, monthInt, yearInt;
 //
@@ -69,4 +71,11 @@
 //	sm >> monthInt;
 //	stringstream sy(year);
 //	sy >> yearInt;
+//
+//	tm* remindTime;
+//	remindTime ->tm_mday = dayInt;
+//	remindTime ->tm_mon = monthInt;
+//	remindTime ->tm_year = yearInt;
+//
+//	return remindTime;
 //}
