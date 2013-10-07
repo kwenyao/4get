@@ -16,7 +16,7 @@ protected:
   // is empty.
 
 	Parser parser;
-	string input1, input2, input3, input4, input5;
+	string input1;
  
   ParserTest() {
     // You can do set-up work for each test here.
@@ -32,13 +32,8 @@ protected:
   virtual void SetUp() {
     // Code here will be called immediately after the constructor (right
     // before each test).
-	input1 = "A new string";
-	input2 = "2nd String";
-	input3 = "B3 String";
-	input4 = "new string";
-	input5 = "2nd string";
+	input1 = "Add HomeWork EE2020 ,by Thursday ,Repeat Weekly ,!"; 
 	
-
   }
  
   virtual void TearDown() {
