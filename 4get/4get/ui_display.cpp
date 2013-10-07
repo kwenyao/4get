@@ -380,7 +380,7 @@ void ui_display::InitializeComponent(void){
 }
 
 void ui_display::loadList(){
-	list = execute->load();
+	/*list = execute->load();*/
 	this->printList(list);
 }
 
