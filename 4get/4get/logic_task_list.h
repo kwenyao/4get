@@ -18,9 +18,10 @@ private:
 	list<Task> toDoList;
 	stack<Task> completedList;
 	queue<Task> overdueList;
-	int nextTaskID;
+	static int nextTaskID;
 	
 public:
+	TaskList();
 	bool loadListFromFile();
 	bool saveListToFile();
 	bool addToList(Task task, ListType listToAdd);
@@ -36,4 +37,5 @@ public:
 	bool deleteFromOverdue(int taskToDelete);
 
 	int getNextID();
+	int retrieveCurrentDate();
 };

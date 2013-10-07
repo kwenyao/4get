@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="logic_executor.cpp" />
     <ClCompile Include="logic_parser.cpp" />
     <ClCompile Include="logic_task.cpp" />
     <ClCompile Include="logic_task_deadline.cpp" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_message.h" />
+    <ClInclude Include="logic_executor.h" />
     <ClInclude Include="logic_parser.h" />
     <ClInclude Include="logic_task.h" />
     <ClInclude Include="logic_task_deadline.h" />

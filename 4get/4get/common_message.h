@@ -52,9 +52,9 @@ namespace Message{
 
 namespace Enum{
 	enum ListType{
-		toDoList,
-		completedList,
-		overdueList,
+		listToDo,
+		listCompleted,
+		listOverdue,
 	};
 
 	enum RepeatType{
@@ -91,7 +91,8 @@ namespace Enum{
 		commandMarkDone, 
 		commandModify, 
 		commandUndo, 
-		commandUpdate
+		commandUpdate,
+		commandInvalid
 	};
 };
 
