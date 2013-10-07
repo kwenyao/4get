@@ -32,7 +32,7 @@ protected:
   virtual void SetUp() {
     // Code here will be called immediately after the constructor (right
     // before each test).
-	input1 = "Add HomeWork EE2020 ,by Thursday ,Repeat Weekly ,!"; 
+	input1 = "Add HomeWork from EE2020 ,at com1 ,repeat weekly ,From Monday 2PM to Saturday 4PM ,!";
 	
   }
  

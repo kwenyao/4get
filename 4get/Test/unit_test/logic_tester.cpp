@@ -4,5 +4,12 @@
 
 TEST_F(ParserTest, MethodReturnsFirstItem)
 {
+	vector<string> inputBits;
+
+	inputBits = parser.parseInput(input1);
+
+
+
+
 
 }
