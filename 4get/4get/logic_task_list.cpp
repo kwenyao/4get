@@ -10,11 +10,11 @@ bool TaskList::saveListToFile(){
 
 bool TaskList::addToList(Task task, ListType listToAdd){
 	switch (listToAdd){
-	case toDo:
+	case toDoList:
 		return addToDoList(task);
-	case completed:
+	case completedList:
 		return addCompletedList(task);
-	case overdue:
+	case overdueList:
 		return addOverdueList(task);
 	}
 	return false; 
@@ -37,11 +37,11 @@ bool TaskList::addOverdueList(Task task){
 
 bool TaskList::deleteFromList(int taskToDelete, ListType list){
 	switch (list){
-	case toDo:
+	case toDoList:
 		return deleteFromToDo(taskToDelete);
-	case completed:
+	case completedList:
 		return deleteFromCompleted(taskToDelete);
-	case overdue:
+	case overdueList:
 		return deleteFromOverdue(taskToDelete);
 	}
 	return 0; //stub
