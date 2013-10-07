@@ -17,27 +17,30 @@ bool UiConvert::stringStdToSysConversion(String^ result, string& source){
 	return true;
 }
 
-//void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item)
-//{
-//	Task t1 = print();
-//	//convert to system string
-//	System::String^ sys_name = gcnew System::String(p1.getName().c_str()); //name
-//	System::String^ sys_bar = System::Convert::ToString(p1.getBarcode()); //barcode
-//	System::String^ sys_price = System::Convert::ToString(p1.getPrice()); //price
-//	System::String^ sys_manu = gcnew System::String(p1.getManufacturer().c_str()); //manufacturer
-//	System::String^ sys_instock = System::Convert::ToString(p1.getInstock()); //number in stock
-//	System::String^ sys_cat = gcnew System::String(p1.getCategory().c_str()); //category
-//	System::String^ sys_nosold = System::Convert::ToString(p1.getNosold()); //number sold
-//
-//	item->BeginEdit();
-//
-//	item->SubItems[0]->Text = sys_name;
-//
-//	//creating item for listview
-//	item->SubItems->Add(sys_bar); //add barcode
-//	item->SubItems->Add(sys_cat); //add category	 
-//	item->SubItems->Add(sys_manu); //add manu
-//	item->SubItems->Add(sys_price); //add price
-//	item->SubItems->Add(sys_nosold); //add number sold
-//	item->SubItems->Add(sys_instock); //add number in stock
-//}
+bool UiConvert::intToSysStringConversion(System::String^ result, int& source){
+	source = Convert::ToInt32(result);
+	return true;
+}
+
+void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list)
+{
+	Task t1 = list->front();
+	//convert to system string
+	System::String^ sys_index = System::Convert::ToString(t1.getTaskId());; //index
+	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
+	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
+	System::String^ sys_time = ""; //time
+	System::String^ sys_due = ""; //due
+	System::String^ sys_priority = ""; //priority
+
+	item->BeginEdit();
+
+	item->SubItems[0]->Text = sys_index;
+
+	//creating item for listview
+	item->SubItems->Add(sys_desc); //add description
+	item->SubItems->Add(sys_venue); //add venue	 
+	item->SubItems->Add(sys_time); //add time
+	item->SubItems->Add(sys_due); //add due
+	item->SubItems->Add(sys_priority); //add priority
+}

@@ -405,25 +405,19 @@ void ui_display::printList(std::list<Task> *list){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->todoListView->BeginUpdate();
-	this->completedListView->BeginUpdate();
-	this->overdueListView->BeginUpdate();
-	this->floatingListView->BeginUpdate();
-
 	if(loaded)
 	{
 		this->todoListView->Items->Clear();
-		this->completedListView->Items->Clear();
-		this->overdueListView->Items->Clear();
-		this->floatingListView->Items->Clear();
 	}
 
 	for (int i=0; i<size; i++)
 	{
-		Task t1 = list->front();
 		ListViewItem^item = gcnew ListViewItem;
-
+		converter->printItem(item, list);
 		temp[j] = item;
 		j++;
 	}
 	loaded = true;
+	this->todoListView->EndUpdate();
+
 }
