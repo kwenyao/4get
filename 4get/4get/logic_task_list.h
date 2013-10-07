@@ -18,7 +18,7 @@ private:
 	list<Task> toDoList;
 	stack<Task> completedList;
 	queue<Task> overdueList;
-	static int nextTaskID;
+	int nextTaskID;
 	
 public:
 	TaskList();
