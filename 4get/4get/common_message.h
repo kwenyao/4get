@@ -150,6 +150,12 @@ namespace Constants{
 
 	const string MARKER_PRIORITY = ",!";
 	const std::size_t MARKER_PRIORITY_LENGTH = 2;
+
+	//tasklist constants
+	const int CONSTANT_START_YEAR = 1900;
+	const int CONSTANT_MULTIPLIER_YEAR = 100000;
+	const int CONSTANT_MULTIPLIER_MONTH = 1000;
+	const int CONSTANT_MULTIPLIER_DAY = 10;
 };
 
 #endif
