@@ -7,11 +7,10 @@
 class TaskRepeat : public Task
 {
 protected:
-	RepeatType taskRepeat;
-	tm *taskNextOccurance;
+	
 public:
 	TaskRepeat();
-	void setRepeat(RepeatType repeat); 
+	void setTaskRepeat(RepeatType repeat); 
 	RepeatType getTaskRepeat();
 };
 

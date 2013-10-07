@@ -23,5 +23,6 @@ public:
 	static string trim(const string& s, const string& delimiters = " \f\n\r\t\v" );
 	bool stringSysToStdConversion(System::String^ source, string& result);
 	bool stringStdToSysConversion(System::String^ result, string& source);
+	void printItem(System::Windows::Forms::ListViewItem^ item);
 };
 #endif

@@ -1,5 +1,7 @@
 #include "storage.h"
 
+Storage::Storage(){}
+
 bool save(int listSize){
 	ofstream tempSaveFile("temp_save.4get");
 	tempSaveFile << listSize << endl;

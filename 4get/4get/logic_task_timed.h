@@ -6,12 +6,6 @@
 
 class TaskTimed : public TaskRepeat
 {
-private:
-	TaskType type;
-	tm *taskStart;
-	tm *taskEnd;
-
-
 public:
 	TaskTimed(int id, string description, string location, tm *reminderTime, Enum::Priority priority, Enum::Status status, Enum::RepeatType repeat, tm *startTime, tm *endTime);
 

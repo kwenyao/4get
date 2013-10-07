@@ -2,6 +2,8 @@
 
 #include "ui_convert.h"
 #include "logic_executor.h"
+#include "logic_task.h"
+#include <list>
 #include <Windows.h>
 
 namespace UIDisplay {
@@ -26,7 +28,11 @@ namespace UIDisplay {
 
 #pragma region initialise
 	private: UiConvert* converter;
-	private: Executor* execute;
+	/*private: Executor* execute;*/
+	
+	private: bool loaded;
+	private: list<Task> *list;
+	
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
 	private: System::Windows::Forms::TabPage^  tabCompleted;
@@ -63,7 +69,8 @@ namespace UIDisplay {
 	private: System::Windows::Forms::GroupBox^  todayContainer;
 	private: System::Windows::Forms::CheckedListBox^  checkedTaskList;
 	private: System::Windows::Forms::DateTimePicker^  chooseDate;
-	private: System::Windows::Forms::ListView^  listView1;
+	private: System::Windows::Forms::ListView^  floatingListView;
+
 	private: System::Windows::Forms::ColumnHeader^  fTaskIndex;
 	private: System::Windows::Forms::ColumnHeader^  fTaskDescription;
 	private: System::Windows::Forms::ColumnHeader^  fTaskVenue;
@@ -95,7 +102,7 @@ namespace UIDisplay {
 #pragma endregion
 
 	private: void loadList();
-	private: void printList();
+	private: void printList(std::list<Task> *list);
 	private: void passUserInput();
 	          
 	private: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);

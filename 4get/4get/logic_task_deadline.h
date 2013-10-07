@@ -6,10 +6,6 @@
 
 class TaskDeadline : public TaskRepeat
 {
-private:
-	TaskType type;
-	tm *taskEnd;
-
 public:
 	TaskDeadline(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *endTime);
 	void setTaskEnd(tm *endTask);

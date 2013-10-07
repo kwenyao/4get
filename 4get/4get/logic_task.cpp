@@ -75,6 +75,22 @@ void Task::setTaskReminderTime(tm* remindTime)
 {
 	taskReminderTime = remindTime;
 }
+void Task::setTaskStart(tm* startTime)
+{
+	cout << "error" << endl;
+}
+void Task::setTaskEnd(tm* endTime)
+{
+	cout << "error" << endl;
+}
+void Task::setTaskRepeat(RepeatType repeat)
+{
+	cout << "error" << endl;
+}
+
+
+
+
 
 void Task::updateAllAttr()
 {

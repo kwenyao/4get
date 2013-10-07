@@ -2,9 +2,10 @@
 using namespace UIDisplay;
 
 //constructor
-ui_display::ui_display(void){
-	execute = new Executor;
+ui_display::ui_display(){
+	/*execute = new Executor;*/
 	converter = new UiConvert;
+	loaded = false;
 
 	InitializeComponent();
 }
@@ -42,7 +43,7 @@ void ui_display::InitializeComponent(void){
 	this->oTaskDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->oTaskPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabFloat = (gcnew System::Windows::Forms::TabPage());
-	this->listView1 = (gcnew System::Windows::Forms::ListView());
+	this->floatingListView = (gcnew System::Windows::Forms::ListView());
 	this->fTaskIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->fTaskDescription = (gcnew System::Windows::Forms::ColumnHeader());
 	this->fTaskVenue = (gcnew System::Windows::Forms::ColumnHeader());
@@ -157,7 +158,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 1;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
-	this->completedListView->SelectedIndexChanged += gcnew System::EventHandler(this, &ui_display::completedListView_SelectedIndexChanged);
+	
 	// 
 	// cTaskIndex
 	// 
@@ -239,7 +240,7 @@ void ui_display::InitializeComponent(void){
 	// 
 	// tabFloat
 	// 
-	this->tabFloat->Controls->Add(this->listView1);
+	this->tabFloat->Controls->Add(this->floatingListView);
 	this->tabFloat->Location = System::Drawing::Point(4, 22);
 	this->tabFloat->Name = L"tabFloat";
 	this->tabFloat->Size = System::Drawing::Size(434, 255);
@@ -247,21 +248,21 @@ void ui_display::InitializeComponent(void){
 	this->tabFloat->Text = L"Floating";
 	this->tabFloat->UseVisualStyleBackColor = true;
 	// 
-	// listView1
+	// floatingListView
 	// 
-	this->listView1->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->listView1->AutoArrange = false;
-	this->listView1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->listView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->fTaskIndex, this->fTaskDescription, 
-		this->fTaskVenue, this->fTaskTime, this->fTaskDate, this->fTaskPriority});
-	this->listView1->FullRowSelect = true;
-	this->listView1->GridLines = true;
-	this->listView1->Location = System::Drawing::Point(-4, -4);
-	this->listView1->Name = L"listView1";
-	this->listView1->Size = System::Drawing::Size(440, 259);
-	this->listView1->TabIndex = 2;
-	this->listView1->UseCompatibleStateImageBehavior = false;
-	this->listView1->View = System::Windows::Forms::View::Details;
+	this->floatingListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->floatingListView->AutoArrange = false;
+	this->floatingListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->floatingListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->fTaskIndex, 
+		this->fTaskDescription, this->fTaskVenue, this->fTaskTime, this->fTaskDate, this->fTaskPriority});
+	this->floatingListView->FullRowSelect = true;
+	this->floatingListView->GridLines = true;
+	this->floatingListView->Location = System::Drawing::Point(-4, -4);
+	this->floatingListView->Name = L"floatingListView";
+	this->floatingListView->Size = System::Drawing::Size(440, 259);
+	this->floatingListView->TabIndex = 2;
+	this->floatingListView->UseCompatibleStateImageBehavior = false;
+	this->floatingListView->View = System::Windows::Forms::View::Details;
 	// 
 	// fTaskIndex
 	// 
@@ -378,10 +379,15 @@ void ui_display::InitializeComponent(void){
 
 }
 
+void ui_display::loadList(){
+	/*list = execute->load();*/
+	this->printList(list);
+}
+
 void ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-	execute->stringCollector(stdCommand);
+	/*execute->stringCollector(stdCommand);*/
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
@@ -391,3 +397,33 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	}
 }
 
+void ui_display::printList(std::list<Task> *list){
+	int size = list->size();
+	int j=0;
+	array<ListViewItem^>^ temp;
+
+	this->Cursor = Cursors::WaitCursor;
+
+	this->todoListView->BeginUpdate();
+	this->completedListView->BeginUpdate();
+	this->overdueListView->BeginUpdate();
+	this->floatingListView->BeginUpdate();
+
+	if(loaded)
+	{
+		this->todoListView->Items->Clear();
+		this->completedListView->Items->Clear();
+		this->overdueListView->Items->Clear();
+		this->floatingListView->Items->Clear();
+	}
+
+	for (int i=0; i<size; i++)
+	{
+		Task t1 = list->front();
+		ListViewItem^item = gcnew ListViewItem;
+
+		temp[j] = item;
+		j++;
+	}
+	loaded = true;
+}
