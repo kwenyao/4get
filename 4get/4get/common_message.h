@@ -91,7 +91,8 @@ namespace Enum{
 		MARK_DONE, 
 		MODIFY, 
 		UNDO, 
-		UPDATE
+		UPDATE,
+		INVALID
 	};
 };
 
