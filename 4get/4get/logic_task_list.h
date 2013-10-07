@@ -1,16 +1,16 @@
+#ifndef _LOGIC_TASK_LIST_H_
+#define _LOGIC_TASK_LIST_H_
+
 #include <iostream>
 #include <list>
-#include <stack>
-#include <queue>
+#include <time.h>
 #include "logic_task.h"
-#include "logic_task_timed.h"
-#include "logic_task_deadline.h"
 #include "common_message.h"
 #include "storage.h"
-#include <time.h>
 
 using namespace std;
-using namespace Enum; 
+using namespace Enum;
+using namespace Constants;
 
 class TaskList{
 private:
@@ -19,7 +19,7 @@ private:
 	list<Task> completedList;
 	list<Task> overdueList;
 	int nextTaskID;
-	
+
 public:
 	TaskList();
 	bool loadListFromFile();
@@ -41,3 +41,4 @@ public:
 
 	list<Task> obtainList(ListType listToReturn);
 };
+#endif
