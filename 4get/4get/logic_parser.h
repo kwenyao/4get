@@ -40,6 +40,7 @@ public:
 
 	vector<string> parseInput(string input);
 	void parseCommand(string commandString, vector<string>& inputBits);
+	void populateContainer(vector<string>& inputBits);
 
 	//separate functions
 	bool separateInput(Command userCommand, vector<string>& inputBits);

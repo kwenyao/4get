@@ -107,14 +107,14 @@ namespace Constants{
 	const size_t INITIALIZE_SIZE_T = 0;
 
 	//Input Bits slots
+	const int SLOT_SIZE = 10;
 	const int SLOT_COMMAND = 0;
 	const int SLOT_DESCRIPTION = 1;
 	const int SLOT_LOCATION = 2;
 	const int SLOT_REMIND_TIME = 3;
 	const int SLOT_PRIORITY = 4;
 	const int SLOT_REPEAT = 5;
-	const int SLOT_REMIND_ON = 6;
-	const int SLOT_TIME = 7;
+	const int SLOT_TIME = 6;
 
 	//parser markers
 	const char MARKER_COMMA = ',';

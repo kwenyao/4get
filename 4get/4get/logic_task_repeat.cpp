@@ -1,5 +1,10 @@
 #include "logic_task_repeat.h"
 
+TaskRepeat::TaskRepeat() : Task()
+{
+
+}
+
 void TaskRepeat::setRepeat(RepeatType repeat)
 {
 	switch(repeat)
