@@ -1,5 +1,9 @@
 #include "logic_task_list.h"
 
+TaskList::TaskList(){
+	nextTaskID = retrieveCurrentDate();
+}
+
 bool TaskList::loadListFromFile(){
 	return 0; //stub
 }
@@ -10,11 +14,11 @@ bool TaskList::saveListToFile(){
 
 bool TaskList::addToList(Task task, ListType listToAdd){
 	switch (listToAdd){
-	case toDo:
+	case listToDo:
 		return addToDoList(task);
-	case completed:
+	case listCompleted:
 		return addCompletedList(task);
-	case overdue:
+	case listOverdue:
 		return addOverdueList(task);
 	}
 	return false; 
@@ -37,11 +41,11 @@ bool TaskList::addOverdueList(Task task){
 
 bool TaskList::deleteFromList(int taskToDelete, ListType list){
 	switch (list){
-	case toDo:
+	case listToDo:
 		return deleteFromToDo(taskToDelete);
-	case completed:
+	case listCompleted:
 		return deleteFromCompleted(taskToDelete);
-	case overdue:
+	case listOverdue:
 		return deleteFromOverdue(taskToDelete);
 	}
 	return 0; //stub
@@ -68,4 +72,15 @@ int TaskList::getNextID(){
 	nextTaskID++;
 	return temp;
 }
+
+int TaskList::retrieveCurrentDate(){
+	time_t temp = time(0);
+	struct tm* currentTime = localtime(&temp);
+	int day = currentTime ->tm_mday;
+	int month = currentTime->tm_mon;
+	int year = currentTime -> tm_year + 1900;
+	int yearMonthDay = (year*100000 + month*1000 + day*10);
+	return yearMonthDay;
+}
+
 
