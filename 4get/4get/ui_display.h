@@ -40,13 +40,6 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 
-
-
-
-
-
-
-
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 	private: System::Windows::Forms::ListView^  completedListView;
 	private: System::Windows::Forms::ColumnHeader^  cTaskIndex;

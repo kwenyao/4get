@@ -76,17 +76,15 @@ int TaskList::getNextID(){
 int TaskList::retrieveCurrentDate(){
 	time_t temp = time(NULL);
 	int yearMonthDay;
-	struct tm* currentTime; 
-	localtime_s(currentTime, &temp);
+	tm* currentTime; 
+	currentTime = localtime(&temp);
 	int day = currentTime ->tm_mday;
 	int month = currentTime ->tm_mon;
 	int year = currentTime ->tm_year + CONSTANT_START_YEAR;
-
 	day = day*CONSTANT_MULTIPLIER_DAY;
 	month = month*CONSTANT_MULTIPLIER_MONTH;
 	year = year*CONSTANT_MULTIPLIER_YEAR;
 	yearMonthDay = (year + month + day);
-
 	return yearMonthDay;
 }
 
