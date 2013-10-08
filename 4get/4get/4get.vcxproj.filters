@@ -39,9 +39,6 @@
     <ClCompile Include="logic_task_list.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logic_task_repeat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="logic_task_timed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logic_task_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="logic_task_repeat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logic_task_timed.h">

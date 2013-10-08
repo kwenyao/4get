@@ -31,6 +31,8 @@ private:
 	string textRepeat;
 	string textPriority;
 	string textRemindDateAndTime;
+	string textSlotNumber;
+	string textTaskList;
 
 	//Executor job;
 
@@ -39,7 +41,7 @@ public:
 	Parser();
 
 	void parseInput(string input, vector<string>& inputBits);
-	void parseCommand(string commandString, vector<string>& inputBits);
+	void processCommand(string commandString, vector<string>& inputBits);
 	void populateContainer(vector<string>& inputBits);
 
 	//separate functions
@@ -59,6 +61,8 @@ public:
 	bool determineReminder();
 	bool determinePriority();
 	bool determineRepeat();
+	bool determineSlot();
+	bool determineTaskList();
 	std::size_t determindExtractLength(std::size_t found, std::size_t foundComma, string markerConstant, std::size_t& extractStart);
 
 	void shortenInput(std::size_t partitionStart, std::size_t partitionEnd);
@@ -68,5 +72,6 @@ public:
 	void toLowerCase(string &string);
 	string getFirstWord(string input);
 	void removeFirstWord(string &input);
+	bool isParseInt(string input, int &value);
 };
 #endif

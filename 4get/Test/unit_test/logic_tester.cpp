@@ -8,9 +8,8 @@ TEST_F(ParserTest, MethodReturnsFirstItem)
 	TaskDeadline Dtask(id, description, location, reminderTime, priority, status, repeat, endTime);
 
 	parser.parseInput(input1,inputBits);
+	
+	cout << Dtask.getTaskDescription() << endl;
 
-
-
-
-
+	parser.parseInput(input2, inputBits);
 }

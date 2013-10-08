@@ -12,10 +12,12 @@ Parser::Parser()
 	textRepeat = INITIALIZE_STRING_BLANK;
 	textPriority = INITIALIZE_STRING_BLANK;
 	textRemindDateAndTime = INITIALIZE_STRING_BLANK;
+	textSlotNumber = INITIALIZE_STRING_BLANK;
+	textTaskList = INITIALIZE_STRING_BLANK;
 }
 
 
-void Parser::parseCommand(string commandString, vector<string>& inputBits)
+void Parser::processCommand(string commandString, vector<string>& inputBits)
 {
 	try{
 		if(commandString.compare(COMMAND_A)==COMPARE_SUCCESS || commandString.compare(COMMAND_ADD)==COMPARE_SUCCESS || commandString.compare(COMMAND_NEW_TASK)==COMPARE_SUCCESS){
@@ -67,7 +69,7 @@ void Parser::parseCommand(string commandString, vector<string>& inputBits)
 			}
 		}
 	}
-	catch(char const* error)
+	catch(string error)
 	{
 		cout << error << endl;
 	}
@@ -80,9 +82,11 @@ void Parser::parseInput(string input, vector<string>& inputBits)
 	_textInput = textInput = input;
 	toLowerCase(textInput);
 
-	parseCommand(textCommand, inputBits);
+	processCommand(textCommand, inputBits);
+	populateContainer(inputBits);
 
 }
+
 
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 {
@@ -114,37 +118,48 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
-	
-	if(determineVenue()){
-		cout << "venue: <" << textVenue << ">" << endl;
-	}
-	if(determineDateAndTime()){
-		cout << "D&T: <" << textDateAndTime << ">" << endl;
-	}
-	if(determineRepeat()){
-		cout << "repeat: <" << textRepeat << ">" << endl;
-	}
-	if(determinePriority()){
-		cout << "priority: <" << textPriority << ">" << endl;
-	}
-	if(determineReminder()){
-		cout << "reminder: <" << textRemindDateAndTime << ">" << endl;
-	}
-	cout << "remaining: <" << _textInput << ">" << endl;
-	
-	populateContainer(inputBits);
+
+	if(!determineVenue())
+		return false;
+
+	if(!determineDateAndTime())
+		return false;
+
+	if(!determineRepeat())
+		return false;
+
+	if(!determinePriority())
+		return false;
+
+	if(!determineReminder())
+		return false;
+
+	textDescription = _textInput;
+	cout << "command: <" << textCommand << ">" << endl;
+	cout << "description: <" << textDescription << ">" << endl;
+	cout << "venue: <" << textVenue << ">" << endl;
+	cout << "D&T: <" << textDateAndTime << ">" << endl;
+	cout << "repeat: <" << textRepeat << ">" << endl;
+	cout << "priority: <" << textPriority << ">" << endl;
+	cout << "reminder: <" << textRemindDateAndTime << ">" << endl;
 
 	return true;
-
-
 }
 bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
+	if(!determineTaskList())
+		return false;
+	if(!determineSlot())
+		return false;
+
+	cout << "slot number: <" << textSlotNumber << ">" << endl;
+	cout << "TaskList: <" << textTaskList <<  ">" << endl;
 
 	return true;
 }
 bool Parser::separateFunctionDeleteAll(vector<string>& inputBits)
 {
+
 	return true;
 }
 bool Parser::separateFunctionMark(vector<string>& inputBits)
@@ -341,6 +356,7 @@ bool Parser::determinePriority()
 
 }
 
+//reminder is not neccessary. If user defines Reminder in input, then it will process.
 bool Parser::determineReminder()
 {
 	std::size_t found = 0;
@@ -373,9 +389,50 @@ bool Parser::determineReminder()
 	}
 
 	else
-		return false; 
+		return true; 
 }
 
+bool Parser::determineSlot()
+{
+	int slotNumber =0;
+	//istringstream iss(_textInput);
+	string temp = _textInput;
+	//iss >> temp;
+
+	if(!isParseInt(temp, slotNumber))
+		return false;
+	textSlotNumber = std::to_string(slotNumber);
+	
+	return true;
+}
+
+bool Parser::determineTaskList()
+{
+	std::size_t found = 0;
+	std::size_t stringLength = textInput.size();
+
+	if(textInput.rfind(LIST_COMPLETED)!=std::string::npos){
+		found = textInput.rfind(LIST_COMPLETED);
+		textTaskList = _textInput.substr(found, LIST_COMPLETED_LENGTH);
+		shortenInput(found, stringLength);
+		return true;
+	}
+	else if(textInput.rfind(LIST_TO_DO)!=std::string::npos){
+		found = textInput.rfind(LIST_TO_DO);
+		textTaskList = _textInput.substr(found, LIST_TO_DO_LENGTH);
+		shortenInput(found, stringLength);
+		return true;
+	}
+	else if(textInput.rfind(LIST_OVERDUED)!=std::string::npos){
+		found = textInput.rfind(LIST_OVERDUED);
+		textTaskList = _textInput.substr(found, LIST_OVERDUED_LENGTH);
+		shortenInput(found, stringLength);
+		return true;
+	}
+
+	else
+		return false;
+}
 
 std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundComma, string markConstant, std::size_t& extractStartPos)
 {
@@ -440,12 +497,14 @@ textDescription += temp + " ";
 
 void Parser::populateContainer(vector<string>& inputBits)
 {
-	inputBits[SLOT_DESCRIPTION] = textInput;
+	inputBits[SLOT_DESCRIPTION] = textDescription;
 	inputBits[SLOT_LOCATION] = textVenue;
 	inputBits[SLOT_REMIND_TIME] = textRemindDateAndTime;
 	inputBits[SLOT_PRIORITY] = textPriority;
 	inputBits[SLOT_REPEAT] = textRepeat;
 	inputBits[SLOT_TIME] = textDateAndTime; 
+	inputBits[SLOT_SLOT_NUMBER] = textSlotNumber;
+	inputBits[SLOT_TASKLIST] = textTaskList;
 }
 
 void Parser::toLowerCase(string &str)
@@ -473,4 +532,16 @@ void Parser::removeFirstWord(string &input)
 	std::size_t found = input.find(textCommand);
 	toLowerCase(textCommand);
 	input.replace(0, found+textCommand.length()+1, "");
+}
+
+//Check if the first character is a valid digit
+bool Parser::isParseInt(string input, int &value)
+{	
+	if (isdigit(input[0]))
+	{
+		value = atoi(input.c_str());
+		return 1;
+	}
+	else
+		return 0;
 }

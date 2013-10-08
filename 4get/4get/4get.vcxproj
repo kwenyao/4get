@@ -82,7 +82,6 @@
     <ClCompile Include="logic_task_deadline.cpp" />
     <ClCompile Include="logic_task_floating.cpp" />
     <ClCompile Include="logic_task_list.cpp" />
-    <ClCompile Include="logic_task_repeat.cpp" />
     <ClCompile Include="logic_task_timed.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="storage.cpp" />
@@ -97,7 +96,6 @@
     <ClInclude Include="logic_task_deadline.h" />
     <ClInclude Include="logic_task_floating.h" />
     <ClInclude Include="logic_task_list.h" />
-    <ClInclude Include="logic_task_repeat.h" />
     <ClInclude Include="logic_task_timed.h" />
     <ClInclude Include="storage.h" />
     <ClInclude Include="ui_convert.h" />

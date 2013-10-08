@@ -5,7 +5,8 @@
 #include "logic_task_deadline.h"
 #include "logic_task_floating.h"
 #include "logic_task_timed.h"
-#include "logic_task_repeat.h"
+#include <time.h>
+
 //#include "logic_task_list.h"
 
 
@@ -16,7 +17,7 @@ protected:
   // is empty.
 
 	Parser parser;
-	string input1;
+	string input1, input2;
 
 	int id;
 	string description;
@@ -42,7 +43,12 @@ protected:
     // Code here will be called immediately after the constructor (right
     // before each test).
 	input1 = "Add HomeWork from EE2020 ,at com1 ,repeat weekly ,From Monday 2PM to Saturday 4PM ,!";
-	
+	input2 = "delete 2" + LIST_TO_DO;
+
+	time_t rawtime;
+	time ( &rawtime );
+	reminderTime = localtime ( &rawtime );
+	endTime =localtime( &rawtime);
 	id = 1;
 	description = "HomeWork from EE2020";
 	location = "com1";
@@ -50,6 +56,8 @@ protected:
 	reminderTime->tm_hour = 20;
 	reminderTime->tm_min = 00;
 	reminderTime->tm_wday = 5;
+
+	mktime ( reminderTime );
 
 	priority = high;
 	status = incomplete;
@@ -59,6 +67,7 @@ protected:
 	endTime->tm_min = 59;
 	endTime->tm_wday = 0;
 
+	mktime ( endTime );
 
   }
  

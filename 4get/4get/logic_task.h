@@ -40,6 +40,9 @@ public:
 	string getTaskLocation();
 	Status getTaskStatus();
 	tm* getTaskReminderTime();
+	virtual tm* getTaskStart();
+	virtual tm* getTaskEnd();
+	virtual RepeatType getTaskRepeat();
 
 	//setter functions
 	void setTaskId(int id);

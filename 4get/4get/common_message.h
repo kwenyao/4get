@@ -116,6 +116,9 @@ namespace Constants{
 	const int SLOT_PRIORITY = 4;
 	const int SLOT_REPEAT = 5;
 	const int SLOT_TIME = 6;
+	const int SLOT_SLOT_NUMBER = 7;
+	const int SLOT_TASKLIST = 8;
+	const int SLOT_USER_RESPONSE = 9;
 
 	//parser markers
 	const char MARKER_COMMA = ',';
@@ -152,10 +155,17 @@ namespace Constants{
 	const std::size_t MARKER_PRIORITY_LENGTH = 2;
 
 	//tasklist constants
+	const string LIST_COMPLETED = " listcompleted";
+	const std::size_t LIST_COMPLETED_LENGTH = 14;
+	const string LIST_TO_DO = " listtodo";
+	const std::size_t LIST_TO_DO_LENGTH = 9;
+	const string LIST_OVERDUED = " listoverdued";
+	const std::size_t LIST_OVERDUED_LENGTH = 13;
 	const int CONSTANT_START_YEAR = 1900;
 	const int CONSTANT_MULTIPLIER_YEAR = 100000;
 	const int CONSTANT_MULTIPLIER_MONTH = 1000;
 	const int CONSTANT_MULTIPLIER_DAY = 10;
+
 };
 
 #endif

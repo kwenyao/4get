@@ -50,6 +50,21 @@ tm* Task::getTaskReminderTime()
 {
 	return taskReminderTime;
 }
+tm* Task::getTaskStart()
+{
+	return taskStart;
+}
+
+tm* Task::getTaskEnd()
+{
+	return taskEnd;
+}
+RepeatType Task::getTaskRepeat()
+{
+	return taskRepeat;
+}
+
+
 
 void Task::setTaskId(int id)
 {
@@ -85,7 +100,35 @@ void Task::setTaskEnd(tm* endTime)
 }
 void Task::setTaskRepeat(RepeatType repeat)
 {
-	cout << "error" << endl;
+	switch(repeat)
+	{
+	case daily:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case weekly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case fortnightly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case monthly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case annually:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	}
+
 }
 
 
