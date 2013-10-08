@@ -21,4 +21,5 @@ TEST_F(ParserTest, MethodReturnsFirstItem)
 	parser.parseReset();
 	parser.parseInput(input4, inputBits4);
 	parser.parseReset();
+
 }
