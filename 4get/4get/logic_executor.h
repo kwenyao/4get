@@ -39,7 +39,8 @@ public:
 	bool determineTaskType();
 	bool adderFunction(vector<string>& vectorOfInputs);
 	bool addToTaskList(TaskList tasks);
-
+	bool deleteFunction(TaskList tasks, vector<string> vectorOfInputs);
+	list<Task> getUpdatedList();
 
 	//helper functions
 	bool isEqual(string str1, const string str2);

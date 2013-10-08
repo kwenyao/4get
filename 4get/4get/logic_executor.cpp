@@ -54,7 +54,7 @@ tm* Executor::convertStringToTm(vector<string> vectorOfInputs)
 	string day, month, year;
 	int dayInt, monthInt, yearInt;
 
-	day += date[0];
+	day += date[0];			//enter date format as dd/m/yy for now..
 	day += date[1];
 	month += date[3];
 	year += date[5];
@@ -74,9 +74,18 @@ tm* Executor::convertStringToTm(vector<string> vectorOfInputs)
 
 	return remindTime;
 }
+bool Executor::deleteFunction(TaskList tasks, vector<string> vectorOfInputs)
+{
+	/*int deleteNumber;
+	deleteNumber = vectorOfInputs[SLOT_SLOT_NUMBER];
+	tasks.deleteFromToDo();*/
+}
 bool Executor::addToTaskList(TaskList tasks)
 {
 	tasks.addToList(_task, listToDo);
 	return true;
+}
+list<Task> Executor::getUpdatedList(){
+	return tasks.obtainList(listToDo);
 }
 
