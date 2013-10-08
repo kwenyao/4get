@@ -3,8 +3,9 @@ using namespace UIDisplay;
 
 //constructor
 ui_display::ui_display(){
-	/*execute = new Executor;*/
+	execute = new Executor;
 	converter = new UiConvert;
+	list = new std::list<Task>;
 	loaded = false;
 
 	InitializeComponent();
@@ -385,7 +386,8 @@ void ui_display::loadList(){
 void ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-	/*execute->stringCollector(stdCommand);*/
+	execute->stringCollector(stdCommand);
+
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
@@ -393,6 +395,8 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	{
 		this->passUserInput();
 		MessageBox::Show("Enter pressed");
+		list = execute->getUpdatedList();
+		printList(list);
 	}
 }
 

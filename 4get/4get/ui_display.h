@@ -28,10 +28,10 @@ namespace UIDisplay {
 
 #pragma region initialise
 	private: UiConvert* converter;
-	/*private: Executor* execute;*/
+	private: Executor* execute;
+	private: list<Task>* list;
 	
 	private: bool loaded;
-	private: list<Task> *list;
 	
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
