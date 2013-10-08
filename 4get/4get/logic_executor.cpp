@@ -79,13 +79,14 @@ bool Executor::deleteFunction(TaskList tasks, vector<string> vectorOfInputs)
 	/*int deleteNumber;
 	deleteNumber = vectorOfInputs[SLOT_SLOT_NUMBER];
 	tasks.deleteFromToDo();*/
+	return true;
 }
 bool Executor::addToTaskList(TaskList tasks)
 {
 	tasks.addToList(_task, listToDo);
 	return true;
 }
-list<Task> Executor::getUpdatedList(){
-	return tasks.obtainList(listToDo);
+list<Task>* Executor::getUpdatedList(){
+	return &tasks.obtainList(listToDo);
 }
 
