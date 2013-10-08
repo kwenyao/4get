@@ -136,19 +136,19 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 
 	if(!determineVenue())
-		return false;
+		cout << "no venue" << endl;
 
 	if(!determineDateAndTime())
-		return false;
+		cout << "no date and time" << endl;
 
 	if(!determineRepeat())
-		return false;
+		cout << "no repeat" << endl;
 
 	if(!determinePriority())
-		return false;
+		cout << "no priority" << endl;
 
 	if(!determineReminder())
-		return false;
+		cout << "no reminder" << endl;
 
 	textDescription = _textInput;
 	cout << "command: <" << textCommand << ">" << endl;
@@ -164,9 +164,9 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
 	if(!determineTaskList())
-		return false;
+		cout << "no tasklist" << endl;
 	if(!determineSlot())
-		return false;
+		cout << "no slot" << endl;
 
 	cout << "slot number: <" << textSlotNumber << ">" << endl;
 	cout << "TaskList: <" << textTaskList <<  ">" << endl;
@@ -181,11 +181,11 @@ bool Parser::separateFunctionDeleteAll(vector<string>& inputBits)
 bool Parser::separateFunctionMark(vector<string>& inputBits)
 {
 	if(!determineTaskList())
-		return false;
+		cout << "no tasklist" << endl;
 	if(!determineStatus())
-		return false;
+		cout << "no status" << endl;
 	if(!determineSlot())
-		return false;
+		cout << "no slot" << endl;
 
 	cout << "slot number: <" << textSlotNumber << ">" << endl;
 	cout << "TaskList: <" << textTaskList <<  ">" << endl;
