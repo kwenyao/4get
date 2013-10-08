@@ -27,6 +27,7 @@ void Parser::parseReset()
 	textDateAndTime = INITIALIZE_STRING_BLANK;
 	textRepeat = INITIALIZE_STRING_BLANK;
 	textPriority = INITIALIZE_STRING_BLANK;
+	textStatus = INITIALIZE_STRING_BLANK;
 	textRemindDateAndTime = INITIALIZE_STRING_BLANK;
 	textSlotNumber = INITIALIZE_STRING_BLANK;
 	textTaskList = INITIALIZE_STRING_BLANK;
@@ -200,25 +201,25 @@ bool Parser::separateFunctionMarkDone(vector<string>& inputBits)
 bool Parser::separateFunctionModify(vector<string>& inputBits)
 {
 	if(!determineTaskList())
-		return false;
+		cout << "no tasklist" << endl;
 
 	if(!determineSlot())
-		return false;
+		cout << "no slot" << endl;
 
 	if(!determineVenue())
-		return false;
+		cout << "no venue" << endl;
 
 	if(!determineDateAndTime())
-		return false;
+		cout << "no date and time" << endl;
 
 	if(!determineRepeat())
-		return false;
+		cout << "no repeat" << endl;
 
 	if(!determinePriority())
-		return false;
+		cout << "no priority" << endl;
 
 	if(!determineReminder())
-		return false;
+		cout << "no reminder" << endl;
 	
 	return true;
 }
@@ -258,8 +259,12 @@ bool Parser::determineVenue()
 			else
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_AT, extractStartPos);
+			textVenue = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 	else if(textInput.find(MARKER_NEAR)!=std::string::npos){
 		found = textInput.find(MARKER_NEAR);
@@ -278,8 +283,12 @@ bool Parser::determineVenue()
 
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_NEAR, extractStartPos);
+			textVenue = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 	else
 		return false; 
@@ -312,8 +321,12 @@ bool Parser::determineDateAndTime()
 			else
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
+			textDateAndTime = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 	else if(textInput.find(MARKER_FROM)!=std::string::npos){
 		found = textInput.find(MARKER_FROM);
@@ -331,8 +344,12 @@ bool Parser::determineDateAndTime()
 			else
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_FROM, extractStartPos);
+			textDateAndTime = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 	else
 		return false; 
@@ -365,8 +382,12 @@ bool Parser::determineRepeat()
 			else
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_REPEAT, extractStartPos);
+			textRepeat = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 
 	else
@@ -431,8 +452,12 @@ bool Parser::determineReminder()
 			else
 				return false;
 		}
-		else
-			return false;
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_REMIND, extractStartPos);
+			textRemindDateAndTime = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
 	}
 
 	else
