@@ -14,7 +14,7 @@ bool Executor::receive(string usercommand, vector<string> parameter)
 	case commandAdd:
 		return adderFunction(vectorOfInputs);
 	case commandDelete:
-		return true;
+		return deleteFunction(tasks, vectorOfInputs);
 	default: return false;
 	}
 }
@@ -42,7 +42,10 @@ bool Executor::isEqual(string str1, const string str2)
 }
 void Executor::stringCollector(string task)
 {
-	parser.parseInput(task, vectorOfInputs);
+	vector<string> temp(SLOT_SIZE);
+	parser.parseInput(task, (temp));
+	vectorOfInputs.clear();
+	vectorOfInputs = temp;
 }
 void Executor::loadListOfTasks()
 {
@@ -76,9 +79,10 @@ tm* Executor::convertStringToTm(vector<string> vectorOfInputs)
 }
 bool Executor::deleteFunction(TaskList tasks, vector<string> vectorOfInputs)
 {
-	/*int deleteNumber;
-	deleteNumber = vectorOfInputs[SLOT_SLOT_NUMBER];
-	tasks.deleteFromToDo();*/
+	int deleteNumber;
+	stringstream  slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	slotNumber >> deleteNumber;
+	tasks.deleteFromToDo(deleteNumber);
 	return true;
 }
 bool Executor::addToTaskList(TaskList tasks)
