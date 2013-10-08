@@ -33,19 +33,19 @@ public:
 	Executor();
 
 	void stringCollector(string task);
-	bool receive(string command, vector<string> parameters);
+	bool receive(string command);
 	Command determineCommandType (string commandTypeString); 
 	void loadListOfTasks();
 	bool determineTaskType();
-	bool adderFunction(vector<string>& vectorOfInputs);
+	bool adderFunction();
 	bool addToTaskList();
-	bool deleteFunction(TaskList tasks, vector<string> vectorOfInputs);
+	bool deleteFunction();
 	list<Task>* getUpdatedList();
 
 	//helper functions
 	bool isEqual(string str1, const string str2);
 	string determineListType(tm);
-	tm* convertStringToTm(vector<string> vectorOfInputs);
+	tm* convertStringToTm();
 	
 };
 #endif

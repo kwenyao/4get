@@ -2,19 +2,21 @@
 
 using namespace std;
 
-Executor::Executor(){}
+Executor::Executor(){
+	vectorOfInputs.reserve(SLOT_SIZE);
+}
 
 
-bool Executor::receive(string usercommand, vector<string> parameter)
+bool Executor::receive(string usercommand)
 {
 	Command commandType = determineCommandType(usercommand);
 
 	switch(commandType)
 	{
 	case commandAdd:
-		return adderFunction(vectorOfInputs);
+		return adderFunction();
 	case commandDelete:
-		return deleteFunction(tasks, vectorOfInputs);
+		return deleteFunction();
 	default: return false;
 	}
 }
@@ -27,11 +29,11 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 	else
 		return Command::commandInvalid;
 }
-bool Executor::adderFunction(vector<string>& vectorOfInputs)
+bool Executor::adderFunction()
 {
 	_task.setTaskDescription(vectorOfInputs[SLOT_DESCRIPTION]);
 	_task.setTaskLocation(vectorOfInputs[SLOT_LOCATION]);
-	_task.setTaskReminderTime(convertStringToTm(vectorOfInputs));
+	_task.setTaskReminderTime(convertStringToTm());
 	addToTaskList();
 	return true;
 }
@@ -45,6 +47,7 @@ void Executor::stringCollector(string task)
 {
 	vector<string> temp(SLOT_SIZE);
 	parser.parseInput(task, (temp));
+	receive(temp[SLOT_COMMAND]);
 	vectorOfInputs.clear();
 	vectorOfInputs = temp;
 }
@@ -52,7 +55,7 @@ void Executor::loadListOfTasks()
 {
 	tasks.loadListFromFile();	
 }
-tm* Executor::convertStringToTm(vector<string> vectorOfInputs)
+tm* Executor::convertStringToTm()
 {
 	string date = vectorOfInputs[SLOT_REMIND_TIME];
 	string day, month, year;
@@ -78,7 +81,7 @@ tm* Executor::convertStringToTm(vector<string> vectorOfInputs)
 
 	return remindTime;
 }
-bool Executor::deleteFunction(TaskList tasks, vector<string> vectorOfInputs)
+bool Executor::deleteFunction()
 {
 	int deleteNumber;
 	stringstream  slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
