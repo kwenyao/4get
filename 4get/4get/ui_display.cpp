@@ -158,7 +158,6 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 1;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
-	
 	// 
 	// cTaskIndex
 	// 
@@ -296,7 +295,7 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer->Controls->Add(this->textboxInput);
 	this->inputContainer->Location = System::Drawing::Point(12, 12);
 	this->inputContainer->Name = L"inputContainer";
-	this->inputContainer->Size = System::Drawing::Size(800, 49);
+	this->inputContainer->Size = System::Drawing::Size(800, 30);
 	this->inputContainer->TabIndex = 2;
 	// 
 	// textboxInput
@@ -304,9 +303,8 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
 	this->textboxInput->Location = System::Drawing::Point(3, 3);
-	this->textboxInput->Multiline = true;
 	this->textboxInput->Name = L"textboxInput";
-	this->textboxInput->Size = System::Drawing::Size(793, 42);
+	this->textboxInput->Size = System::Drawing::Size(793, 22);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
@@ -314,9 +312,9 @@ void ui_display::InitializeComponent(void){
 	// messageContainer
 	// 
 	this->messageContainer->Controls->Add(this->richTextBox1);
-	this->messageContainer->Location = System::Drawing::Point(12, 67);
+	this->messageContainer->Location = System::Drawing::Point(12, 48);
 	this->messageContainer->Name = L"messageContainer";
-	this->messageContainer->Size = System::Drawing::Size(800, 100);
+	this->messageContainer->Size = System::Drawing::Size(800, 119);
 	this->messageContainer->TabIndex = 3;
 	// 
 	// richTextBox1
@@ -325,7 +323,7 @@ void ui_display::InitializeComponent(void){
 	this->richTextBox1->Location = System::Drawing::Point(3, 3);
 	this->richTextBox1->Name = L"richTextBox1";
 	this->richTextBox1->ReadOnly = true;
-	this->richTextBox1->Size = System::Drawing::Size(793, 94);
+	this->richTextBox1->Size = System::Drawing::Size(793, 116);
 	this->richTextBox1->TabIndex = 0;
 	this->richTextBox1->Text = L"";
 	// 
@@ -394,6 +392,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
+		MessageBox::Show("Enter pressed");
 	}
 }
 

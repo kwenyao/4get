@@ -105,6 +105,6 @@ namespace UIDisplay {
 	private: void printList(std::list<Task> *list);
 	private: void passUserInput();
 	          
-	private: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	};
 }
