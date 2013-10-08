@@ -32,6 +32,7 @@ bool Executor::adderFunction(vector<string>& vectorOfInputs)
 	_task.setTaskDescription(vectorOfInputs[SLOT_DESCRIPTION]);
 	_task.setTaskLocation(vectorOfInputs[SLOT_LOCATION]);
 	_task.setTaskReminderTime(convertStringToTm(vectorOfInputs));
+	addToTaskList();
 	return true;
 }
 bool Executor::isEqual(string str1, const string str2)
@@ -85,7 +86,7 @@ bool Executor::deleteFunction(TaskList tasks, vector<string> vectorOfInputs)
 	tasks.deleteFromToDo(deleteNumber);
 	return true;
 }
-bool Executor::addToTaskList(TaskList tasks)
+bool Executor::addToTaskList()
 {
 	tasks.addToList(_task, listToDo);
 	return true;

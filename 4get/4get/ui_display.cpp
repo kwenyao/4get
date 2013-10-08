@@ -308,8 +308,7 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Size = System::Drawing::Size(793, 22);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
-	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_test);
-	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);
+	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
 	// 
 	// messageContainer
 	// 
@@ -392,7 +391,7 @@ void ui_display::passUserInput(){
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
-	//if(e->KeyCode == Keys::Enter)
+	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
 		MessageBox::Show("Enter pressed");
@@ -406,6 +405,7 @@ void ui_display::printList(std::list<Task> *list){
 	int size = list->size();
 	int j=0;
 	array<ListViewItem^>^ temp;
+	Array::Resize(temp, 1000000);
 
 	if(size==0){
 		MessageBox::Show("List is empty");

@@ -104,16 +104,15 @@ namespace UIDisplay {
 				 {
 					 MessageBox::Show("Alt pressed");
 					 array<ListViewItem^>^ temp;
-					 Array::Resize(temp, 1000);
-
-					 this->Cursor = Cursors::WaitCursor;
+					 Array::Resize(temp, 1);
+					 ListViewItem^item = gcnew ListViewItem;
 
 					 this->todoListView->BeginUpdate();
 					 if(loaded)
 					 {
 						 this->todoListView->Items->Clear();
 					 }
-					 System::Windows::Forms::ListViewItem^ item;
+					 
 					 System::String^ sys_index = "1";
 					 System::String^ sys_desc = "description";
 					 System::String^ sys_venue = "location";
@@ -121,11 +120,10 @@ namespace UIDisplay {
 					 System::String^ sys_due = "05-10-2013"; //due
 					 System::String^ sys_priority = "high"; //priority
 					 item->BeginEdit();
-
-					 //item->SubItems[0]->Text = sys_index;
+					 
+					 item->SubItems[0]->Text = sys_index;
 
 					 //creating item for listview
-					 item->SubItems->Add(sys_index);
 					 item->SubItems->Add(sys_desc); //add description
 					 item->SubItems->Add(sys_venue); //add venue	 
 					 item->SubItems->Add(sys_time); //add time
