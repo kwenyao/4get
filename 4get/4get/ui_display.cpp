@@ -5,7 +5,7 @@ using namespace UIDisplay;
 ui_display::ui_display(){
 	execute = new Executor;
 	converter = new UiConvert;
-	list = new std::list<Task>;
+	listOfTasks = new std::list<Task>;
 	loaded = false;
 
 	InitializeComponent();
@@ -308,6 +308,7 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Size = System::Drawing::Size(793, 22);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
+	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
 	// 
 	// messageContainer
@@ -380,7 +381,7 @@ void ui_display::InitializeComponent(void){
 
 void ui_display::loadList(){
 	/*list = execute->load();*/
-	this->printList(list);
+	this->printList();
 }
 
 void ui_display::passUserInput(){
@@ -394,15 +395,16 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
+		this->textboxInput->Text->Replace(this->textboxInput->Text,"Enter Command Here:");
 		MessageBox::Show("Enter pressed");
-		list = execute->getUpdatedList();
-		MessageBox::Show(System::Convert::ToString(list->size()));
-		printList(list);
+		listOfTasks = execute->getUpdatedList();
+		MessageBox::Show(System::Convert::ToString(1));
+		printList();
 	}
 }
 
-void ui_display::printList(std::list<Task> *list){
-	int size = list->size();
+void ui_display::printList(){
+	int size = listOfTasks->size();
 	int j=0;
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, 1000000);
@@ -423,7 +425,7 @@ void ui_display::printList(std::list<Task> *list){
 	{
 		MessageBox::Show("In print loop");
 		ListViewItem^item = gcnew ListViewItem;
-		converter->printItem(item, list);
+		converter->printItem(item, listOfTasks);
 		temp[j] = item;
 		j++;
 	}
@@ -472,4 +474,8 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 		this->Cursor = Cursors::Default;
 		this->todoListView->EndUpdate();
 	}
+}
+
+Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+	this->textboxInput->Clear();
 }

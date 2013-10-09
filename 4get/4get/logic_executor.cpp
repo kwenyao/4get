@@ -47,9 +47,9 @@ void Executor::stringCollector(string task)
 {
 	vector<string> temp(SLOT_SIZE);
 	parser.parseInput(task, (temp));
-	receive(temp[SLOT_COMMAND]);
 	vectorOfInputs.clear();
 	vectorOfInputs = temp;
+	receive(temp[SLOT_COMMAND]);
 }
 void Executor::loadListOfTasks()
 {
@@ -59,14 +59,24 @@ tm* Executor::convertStringToTm()
 {
 	string date = vectorOfInputs[SLOT_REMIND_TIME];
 	string day, month, year;
-	int dayInt, monthInt, yearInt;
+	int dayInt=0, monthInt=0, yearInt=0;
+	struct tm* remindTime;
+
+	remindTime = new struct tm;
+
+	if(date == ""){
+		remindTime->tm_mday = dayInt;
+		remindTime->tm_mon = monthInt;
+		remindTime ->tm_year = yearInt;
+		return remindTime;
+	}
 
 	day += date[0];			//enter date format as dd/m/yy for now..
 	day += date[1];
 	month += date[3];
 	year += date[5];
 	year += date[6];
-	
+
 	stringstream sd(day);
 	sd >> dayInt;
 	stringstream sm(month);
@@ -74,7 +84,6 @@ tm* Executor::convertStringToTm()
 	stringstream sy(year);
 	sy >> yearInt;
 
-	tm* remindTime;
 	remindTime ->tm_mday = dayInt;
 	remindTime ->tm_mon = monthInt;
 	remindTime ->tm_year = yearInt;

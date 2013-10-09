@@ -29,7 +29,7 @@ namespace UIDisplay {
 #pragma region initialise
 	private: UiConvert* converter;
 	private: Executor* execute;
-	private: list<Task>* list;
+	private: list<Task>* listOfTasks;
 
 	private: bool loaded;
 
@@ -95,7 +95,7 @@ namespace UIDisplay {
 #pragma endregion
 
 	private: void loadList();
-	private: void printList(std::list<Task> *list);
+	private: void printList();
 	private: void passUserInput();          
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
@@ -137,5 +137,6 @@ namespace UIDisplay {
 					 this->todoListView->EndUpdate();
 				 }
 			 }
-	};
+	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+};
 }
