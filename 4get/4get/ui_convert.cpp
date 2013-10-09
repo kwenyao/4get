@@ -24,26 +24,22 @@ bool UiConvert::intToSysStringConversion(System::String^ result, int& source){
 
 void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list)
 {
-	//Task t1 = list->front();
+	Task t1 = list->front();
 	//convert to system string
-	//System::String^ sys_index = System::Convert::ToString(t1.getTaskId()); //index
-	//System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
-	//System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
-	System::String^ sys_index = "1";
-	System::String^ sys_desc = "description";
-	System::String^ sys_venue = "location";
-	System::String^ sys_time = "1200"; //time
-	System::String^ sys_due = "05-10-2013"; //due
-	System::String^ sys_priority = "high"; //priority
+	System::String^ sys_index = System::Convert::ToString(t1.getTaskId()); //index
+	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
+	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
+	System::String^ sys_time = ""; //time
+	System::String^ sys_due = ""; //due
+	System::String^ sys_priority = ""; //priority
 
 	//list->pop_front();
 
 	item->BeginEdit();
 
-	//item->SubItems[0]->Text = sys_index;
+	item->SubItems[0]->Text = sys_index;
 
 	//creating item for listview
-	item->SubItems->Add(sys_index);
 	item->SubItems->Add(sys_desc); //add description
 	item->SubItems->Add(sys_venue); //add venue	 
 	item->SubItems->Add(sys_time); //add time

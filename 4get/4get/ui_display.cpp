@@ -412,8 +412,8 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 void ui_display::printList(){
 	int size = listOfTasks->size();
 	int j=0;
-	array<ListViewItem^>^ temp = {};
-	Array::Resize(temp, 1000000);
+	array<ListViewItem^>^ temp;
+	Array::Resize(temp, size);
 
 	if(size==0){
 		MessageBox::Show("List is empty");
