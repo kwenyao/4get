@@ -104,6 +104,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->Name = L"todoListView";
 	this->todoListView->Size = System::Drawing::Size(440, 259);
 	this->todoListView->TabIndex = 2;
+	this->todoListView->LabelEdit = true;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
 	// 
@@ -395,9 +396,14 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
-		this->textboxInput->Text->Replace(this->textboxInput->Text,"Enter Command Here:");
+		this->textboxInput->Clear();
+		this->textboxInput->Text = L"Enter Command Here:";
+
 		MessageBox::Show("Enter pressed");
-		listOfTasks = execute->getUpdatedList();
+		list<Task> taskList;
+		taskList = execute->getUpdatedList();
+		*listOfTasks = taskList;
+
 		MessageBox::Show(System::Convert::ToString(1));
 		printList();
 	}
@@ -406,7 +412,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 void ui_display::printList(){
 	int size = listOfTasks->size();
 	int j=0;
-	array<ListViewItem^>^ temp;
+	array<ListViewItem^>^ temp = {};
 	Array::Resize(temp, 1000000);
 
 	if(size==0){
@@ -424,7 +430,7 @@ void ui_display::printList(){
 	for (int i=0; i<size; i++)
 	{
 		MessageBox::Show("In print loop");
-		ListViewItem^item = gcnew ListViewItem;
+		ListViewItem^ item = gcnew ListViewItem;
 		converter->printItem(item, listOfTasks);
 		temp[j] = item;
 		j++;

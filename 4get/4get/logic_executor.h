@@ -40,7 +40,7 @@ public:
 	bool adderFunction();
 	bool addToTaskList();
 	bool deleteFunction();
-	list<Task>* getUpdatedList();
+	list<Task> getUpdatedList();
 
 	//helper functions
 	bool isEqual(string str1, const string str2);

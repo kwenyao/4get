@@ -103,7 +103,7 @@ bool Executor::addToTaskList()
 	tasks.addToList(_task, listToDo);
 	return true;
 }
-list<Task>* Executor::getUpdatedList(){
-	return &tasks.obtainList(listToDo);
+list<Task> Executor::getUpdatedList(){
+	return tasks.obtainList(listToDo);
 }
 
