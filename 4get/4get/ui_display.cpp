@@ -148,6 +148,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 3;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
+	this->completedListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::completedListView_ItemActivate);
 	// 
 	// cIndexNo
 	// 
@@ -192,6 +193,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 1;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
+	this->overdueListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::overdueListView_ItemActivate);
 	// 
 	// oTaskIndex
 	// 
@@ -425,4 +427,10 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Clear();
+}
+Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
+	this->printList(listCompleted);
+}
+Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
+	this->printList(listOverdue);
 }

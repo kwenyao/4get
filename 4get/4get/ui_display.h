@@ -129,7 +129,7 @@ namespace UIDisplay {
 					 {
 						 this->todoListView->Items->Clear();
 					 }
-					 
+
 					 System::String^ sys_index = "1";
 					 System::String^ sys_desc = "description";
 					 System::String^ sys_venue = "location";
@@ -137,7 +137,7 @@ namespace UIDisplay {
 					 System::String^ sys_due = "05-10-2013"; //due
 					 System::String^ sys_priority = "high"; //priority
 					 item->BeginEdit();
-					 
+
 					 item->SubItems[0]->Text = sys_index;
 
 					 //creating item for listview
@@ -155,5 +155,7 @@ namespace UIDisplay {
 				 }
 			 }
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 };
 }
