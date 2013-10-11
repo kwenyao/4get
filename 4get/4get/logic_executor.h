@@ -28,6 +28,7 @@ class Executor
 	string task;
 	vector<string> vectorOfInputs;
 	Parser parser;
+	int taskID;
 
 public:
 	Executor();
@@ -36,6 +37,7 @@ public:
 	bool receive(string command);
 	Command determineCommandType (string commandTypeString); 
 	void loadListOfTasks();
+	
 	bool determineTaskType();
 	bool adderFunction();
 	bool addToTaskList();
@@ -44,9 +46,10 @@ public:
 
 	//helper functions
 	bool isEqual(string str1, const string str2);
-	string determineListType(tm);
+	string determineListType();
 	tm* convertStringToTm();
-	void clearAttributes();
+	int retrieveCurrentDate();
+	
 
 	
 };

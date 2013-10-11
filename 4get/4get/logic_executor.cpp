@@ -1,9 +1,9 @@
 #include "logic_executor.h"
 
-using namespace std;
-
 Executor::Executor(){
 	vectorOfInputs.reserve(SLOT_SIZE);
+	taskID = retrieveCurrentDate();
+	tasks.loadFromFile();
 }
 
 
@@ -96,7 +96,7 @@ bool Executor::deleteFunction()
 	int deleteNumber;
 	stringstream  slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	slotNumber >> deleteNumber;
-	tasks.deleteFromToDo(deleteNumber);
+	tasks.deleteFromList(deleteNumber);
 	return true;
 }
 bool Executor::addToTaskList()
@@ -107,9 +107,17 @@ bool Executor::addToTaskList()
 list<Task> Executor::getUpdatedList(){
 	return tasks.obtainList(listToDo);
 }
-void Executor::clearAttributes(){
-	
-	_task.setTaskId(0);  //clear task id
-	_task.getTaskDescription().clear();  // clear task description
-	_task.setTaskPriority(normal);		
+int Executor::retrieveCurrentDate(){
+	time_t temp = time(NULL);
+	int yearMonthDay;
+	tm* currentTime; 
+	currentTime = localtime(&temp);
+	int day = currentTime ->tm_mday;
+	int month = currentTime ->tm_mon;
+	int year = currentTime ->tm_year + CONSTANT_START_YEAR;
+	day = day*CONSTANT_MULTIPLIER_DAY;
+	month = month*CONSTANT_MULTIPLIER_MONTH;
+	year = year*CONSTANT_MULTIPLIER_YEAR;
+	yearMonthDay = (year + month + day);
+	return yearMonthDay;
 }
