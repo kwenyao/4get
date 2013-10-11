@@ -76,6 +76,10 @@ bool TaskList::deleteFromOverdue(int taskToDelete){
 	return 0;
 }
 
+bool sort(ListType listType){
+	return false; //stub
+}
+
 int TaskList::getNextID(){
 	int temp =  nextTaskID;
 	nextTaskID++;
@@ -109,5 +113,6 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 		listToDisplay = overdueList;
 		break;
 	}
+	currentDisplayed = listToReturn;
 	return listToDisplay;
 }

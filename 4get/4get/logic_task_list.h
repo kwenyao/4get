@@ -18,6 +18,7 @@ private:
 	list<Task> overdueList;
 	list<Task> listToDisplay;
 	Storage storage;
+	ListType currentDisplayed;
 	int nextTaskID;
 	int toDoListSize;
 	int completedListSize;
