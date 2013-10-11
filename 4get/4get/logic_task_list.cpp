@@ -4,11 +4,17 @@ TaskList::TaskList(){
 	nextTaskID = retrieveCurrentDate();
 }
 
-bool TaskList::loadListFromFile(){
+bool TaskList::loadFromFile(){
+	storage.load(toDoList, listToDo);
+	storage.load(completedList, listCompleted);
+	storage.load(overdueList, listOverdue);
 	return 0; //stub
 }
 
-bool TaskList::saveListToFile(){
+bool TaskList::saveToFile(){
+	storage.save(toDoList, listToDo, toDoListSize);
+	storage.save(completedList, listCompleted, completedListSize);
+	storage.save(overdueList, listOverdue, overdueListSize);
 	return 0; //stub
 }
 
@@ -26,16 +32,19 @@ bool TaskList::addToList(Task task, ListType listToAdd){
 
 bool TaskList::addToDoList(Task task){
 	toDoList.push_back(task);
+	sort(listToDo);
 	return 0; //stub
 }
 
 bool TaskList::addCompletedList(Task task){
 	completedList.push_back(task);
+	sort(listCompleted);
 	return 0; //stub
 }
 
 bool TaskList::addOverdueList(Task task){
 	overdueList.push_back(task);
+	sort(listOverdue);
 	return 0; //stub
 }
 
@@ -91,10 +100,14 @@ int TaskList::retrieveCurrentDate(){
 list<Task> TaskList::obtainList(ListType listToReturn){
 	switch (listToReturn){
 	case listToDo:
-		return toDoList;
+		listToDisplay = toDoList;
+		break;
 	case listCompleted:
-		return completedList;
+		listToDisplay = completedList;
+		break;
 	case listOverdue:
-		return overdueList;
+		listToDisplay = overdueList;
+		break;
 	}
+	return listToDisplay;
 }

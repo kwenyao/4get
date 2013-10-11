@@ -2,7 +2,7 @@
 
 Storage::Storage(){}
 
-bool save(int listSize){
+bool Storage::save(list<Task> list, ListType listType, int listSize){
 	ofstream tempSaveFile("temp_save.4get");
 	tempSaveFile << listSize << endl;
 	for(int i=0; i<listSize; i++){
@@ -12,6 +12,8 @@ bool save(int listSize){
 	return false; //stub
 }
 
-bool load(){
-	return 0; //stub
+int Storage::load(list<Task> list,ListType listType ){
+	int listSize;
+
+	return listSize;
 }

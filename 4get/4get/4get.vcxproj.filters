@@ -42,10 +42,10 @@
     <ClCompile Include="logic_task_timed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="storage.cpp">
+    <ClCompile Include="logic_executor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logic_executor.cpp">
+    <ClCompile Include="storage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,10 +77,10 @@
     <ClInclude Include="logic_task_timed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="storage.h">
+    <ClInclude Include="logic_executor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="logic_executor.h">
+    <ClInclude Include="storage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
