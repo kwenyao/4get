@@ -4,10 +4,10 @@ Task::Task(){
 }
 
 
-void Task::setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status)
+void Task::setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status)
 {
 	taskId = id;
-	taskType = type;
+	//taskType = type;
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
@@ -155,7 +155,7 @@ void Task::clearTimeAttr()
 void Task::clearAllAttr()
 {
 	taskId = INITIALIZE_INT;
-	taskType = taskTypeNone;
+	//taskType = taskTypeNone;
 	taskDescription = INITIALIZE_STRING_BLANK;
 	taskPriority = normal;
 	taskLocation = INITIALIZE_STRING_BLANK;

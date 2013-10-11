@@ -26,6 +26,8 @@ private:
 	string textCommand;
 	string textDescription;
 	string textVenue;
+	string textStartTime;
+	string textEndTime;
 	string textDateAndTime;
 	string textRepeat;
 	string textPriority;

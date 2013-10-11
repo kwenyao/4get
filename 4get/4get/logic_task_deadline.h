@@ -7,7 +7,9 @@
 class TaskDeadline : public Task
 {
 public:
+	TaskDeadline();
 	TaskDeadline(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *endTime);
+	virtual void setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *endTime);
 	void setTaskEnd(tm *endTask);
 	tm* getTaskEnd();
 };

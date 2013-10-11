@@ -17,7 +17,7 @@ protected:
 
 	//attributes
 	int taskId;
-	TaskType taskType;
+	//TaskType taskType;
 	string taskDescription;
 	Priority taskPriority;
 	string taskLocation;
@@ -31,7 +31,7 @@ protected:
 
 public:
 	Task();
-	virtual void setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status);
+	virtual void setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status);
 	//Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminder);
 
 	//getter functions
