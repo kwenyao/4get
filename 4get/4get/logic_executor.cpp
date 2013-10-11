@@ -31,6 +31,7 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 }
 bool Executor::adderFunction()
 {
+	
 	_task.setTaskDescription(vectorOfInputs[SLOT_DESCRIPTION]);
 	_task.setTaskLocation(vectorOfInputs[SLOT_LOCATION]);
 	_task.setTaskReminderTime(convertStringToTm());
@@ -53,7 +54,7 @@ void Executor::stringCollector(string task)
 }
 void Executor::loadListOfTasks()
 {
-	tasks.loadListFromFile();	
+	tasks.loadFromFile();	
 }
 tm* Executor::convertStringToTm()
 {
@@ -106,4 +107,9 @@ bool Executor::addToTaskList()
 list<Task> Executor::getUpdatedList(){
 	return tasks.obtainList(listToDo);
 }
-
+void Executor::clearAttributes(){
+	
+	_task.setTaskId(0);  //clear task id
+	_task.getTaskDescription().clear();  // clear task description
+	_task.setTaskPriority(normal);		
+}

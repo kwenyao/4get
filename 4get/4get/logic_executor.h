@@ -46,6 +46,8 @@ public:
 	bool isEqual(string str1, const string str2);
 	string determineListType(tm);
 	tm* convertStringToTm();
+	void clearAttributes();
+
 	
 };
 #endif
