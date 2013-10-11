@@ -311,7 +311,7 @@ void ui_display::InitializeComponent(void){
 
 void ui_display::loadList(){
 	/*list = execute->load();*/
-	this->printList();
+	this->printList(listToDo);
 }
 
 void ui_display::passUserInput(){
@@ -334,7 +334,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 		*listOfTasks = taskList;
 
 		MessageBox::Show(System::Convert::ToString(1));
-		printList();
+		printList(listToDo);
 	}
 }
 

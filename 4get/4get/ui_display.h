@@ -112,7 +112,7 @@ namespace UIDisplay {
 #pragma endregion
 
 	private: void loadList();
-	private: void printList();
+	private: void printList(ListType listType);
 	private: void passUserInput();          
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
