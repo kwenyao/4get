@@ -22,18 +22,18 @@ bool UiConvert::intToSysStringConversion(System::String^ result, int& source){
 	return true;
 }
 
-void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list)
+void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list, int taskIndex)
 {
 	Task t1 = list->front();
 	//convert to system string
-	System::String^ sys_index = System::Convert::ToString(t1.getTaskId()); //index
+	System::String^ sys_index = System::Convert::ToString(taskIndex); //index
 	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
 	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
 	System::String^ sys_time = ""; //time
 	System::String^ sys_due = ""; //due
 	System::String^ sys_priority = ""; //priority
 
-	//list->pop_front();
+	list->pop_front();
 
 	item->BeginEdit();
 

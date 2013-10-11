@@ -26,6 +26,6 @@ public:
 	bool stringSysToStdConversion(System::String^ source, string& result);
 	bool stringStdToSysConversion(System::String^ result, string& source);
 	bool intToSysStringConversion(System::String^ result, int& source);
-	void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task> *list);
+	void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task> *list, int taskIndex);
 };
 #endif

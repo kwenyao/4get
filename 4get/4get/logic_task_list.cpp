@@ -30,21 +30,25 @@ bool TaskList::addToList(Task task, ListType listToAdd){
 	return false; 
 }
 
+bool sort(ListType listType){
+	return false; //stub
+}
+
 bool TaskList::addToDoList(Task task){
 	toDoList.push_back(task);
-	sort(listToDo);
+	//sort(listToDo);
 	return 0; //stub
 }
 
 bool TaskList::addCompletedList(Task task){
 	completedList.push_back(task);
-	sort(listCompleted);
+	//sort(listCompleted);
 	return 0; //stub
 }
 
 bool TaskList::addOverdueList(Task task){
 	overdueList.push_back(task);
-	sort(listOverdue);
+	//sort(listOverdue);
 	return 0; //stub
 }
 
@@ -75,6 +79,7 @@ bool TaskList::deleteFromCompleted(int taskToDelete){
 bool TaskList::deleteFromOverdue(int taskToDelete){
 	return 0;
 }
+
 
 int TaskList::getNextID(){
 	int temp =  nextTaskID;
@@ -109,5 +114,6 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 		listToDisplay = overdueList;
 		break;
 	}
+	currentDisplayed = listToReturn;
 	return listToDisplay;
 }
