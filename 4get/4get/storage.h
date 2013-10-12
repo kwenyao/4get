@@ -11,7 +11,18 @@ using namespace std;
 
 class Storage{
 private:
+	ofstream _fileWrite;
+	ifstream _fileRead;
 	list<Task> tempList;
+
+	//constants
+	static const string FILENAME_TODO;
+	static const string FILENAME_COMPLETED;
+	static const string FILENAME_OVERDUE;
+
+	void writeFileSetup(string fileName, ios_base::openmode mode);
+	
+
 public:
 	//constructor
 	Storage();
