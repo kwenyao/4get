@@ -36,9 +36,9 @@ public:
 
 	//getter functions
 	int getTaskId();
-	string getTaskDescription();
+	string getTaskDescription() const;
 	Priority getTaskPriority();
-	string getTaskLocation();
+	string getTaskLocation() const;
 	Status getTaskStatus();
 	tm* getTaskReminderTime();
 	virtual tm* getTaskStart();

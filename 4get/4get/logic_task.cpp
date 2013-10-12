@@ -32,7 +32,7 @@ int Task::getTaskId()
 {
 	return taskId;
 }
-string Task::getTaskDescription()
+string Task::getTaskDescription() const
 {
 	return taskDescription;
 }
@@ -40,7 +40,7 @@ Priority Task::getTaskPriority()
 {
 	return taskPriority;
 }
-string Task::getTaskLocation()
+string Task::getTaskLocation() const
 {
 	return taskLocation;
 }
