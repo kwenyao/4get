@@ -43,9 +43,48 @@ Priority Converter::convertStringToPriority(string str)
 	else
 		return normal;
 }
-tm* Converter::convertStringToTm(string str)
+tm* Converter::convertStringToTm(string str)  //this function work for dates that are eg. 02/02/13
 {
 	transform(str.begin(), str.end(), str.begin(), ::tolower);
+	if(str[2] == '/')
+	{
+		char DELIMITER = '/';
+		int day, month, year;
+		istringstream stm(str);
+		stm >> day >> DELIMITER;
+		stm >> month >> DELIMITER;
+		stm >> year;
+		if(year < 100)
+		{
+			year += 2000;
+		}
+		tm* remindTime;
+		remindTime = new struct tm;
+		remindTime ->tm_mday = day;
+		remindTime ->tm_mon = month;
+		remindTime ->tm_year = year;
+
+		return remindTime;
+	}
+	else if(str[1] == ':'|| str[2] == ':')
+	{
+		int hour, mins;
+		char DELIMITER = ':';
+		char DELIMITER_MINS = 'a';
+		istringstream stm(str);
+		stm >> hour>> DELIMITER;
+		stm >> mins >> DELIMITER_MINS;
+
+		tm* remindTime;
+		
+		remindTime = new struct tm;
+		
+		remindTime ->tm_hour = hour;
+		remindTime->tm_min = mins;
+
+		return remindTime;
+
+	}
 	
 }
 bool Converter::isEqual(string str1, const string str2)
