@@ -48,7 +48,7 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
-	this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
@@ -256,21 +256,21 @@ void ui_display::InitializeComponent(void){
 	// 
 	// messageContainer
 	// 
-	this->messageContainer->Controls->Add(this->richTextBox1);
+	this->messageContainer->Controls->Add(this->messageBox);
 	this->messageContainer->Location = System::Drawing::Point(12, 48);
 	this->messageContainer->Name = L"messageContainer";
 	this->messageContainer->Size = System::Drawing::Size(800, 119);
 	this->messageContainer->TabIndex = 3;
 	// 
-	// richTextBox1
+	// messageBox
 	// 
-	this->richTextBox1->BackColor = System::Drawing::SystemColors::InactiveCaption;
-	this->richTextBox1->Location = System::Drawing::Point(3, 3);
-	this->richTextBox1->Name = L"richTextBox1";
-	this->richTextBox1->ReadOnly = true;
-	this->richTextBox1->Size = System::Drawing::Size(793, 116);
-	this->richTextBox1->TabIndex = 0;
-	this->richTextBox1->Text = L"";
+	this->messageBox->BackColor = System::Drawing::SystemColors::InactiveCaption;
+	this->messageBox->Location = System::Drawing::Point(3, 3);
+	this->messageBox->Name = L"messageBox";
+	this->messageBox->ReadOnly = true;
+	this->messageBox->Size = System::Drawing::Size(793, 116);
+	this->messageBox->TabIndex = 0;
+	this->messageBox->Text = L"";
 	// 
 	// todayContainer
 	// 
@@ -308,6 +308,7 @@ void ui_display::InitializeComponent(void){
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
+	this->KeyPreview = true;
 	this->Name = L"ui_display";
 	this->Text = L"4get";
 	this->tabContainer->ResumeLayout(false);
@@ -335,7 +336,7 @@ void ui_display::passUserInput(){
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
-	
+
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
@@ -412,7 +413,7 @@ void ui_display::printCompletedList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->completedListView->BeginUpdate();
-	
+
 
 	for (int i=0; i<size; i++)
 	{
@@ -447,7 +448,7 @@ void ui_display::printOverdueList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->overdueListView->BeginUpdate();
-	
+
 
 	for (int i=0; i<size; i++)
 	{
@@ -481,11 +482,59 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(commandKeyword->size() < 3){
 		switch(e->KeyChar){
-		case ((char)65):
-			commandKeyword += 'a';
+		case 'a':
+			*commandKeyword += 'a';
 			break;
-		case ((char)13):
+		case 'd':
+			*commandKeyword += 'd';
+			break;
+		case 'e':
+			*commandKeyword += 'e';
+			break;
+		case 'l':
+			*commandKeyword += 'l';
+			break;
+		case 'm':
+			*commandKeyword += 'm';
+			break;
+		case 'o':
+			*commandKeyword += 'o';
 			break;
 		};
 	}
+
+	if(commandKeyword->size()==3){
+		array<String ^> ^  addLines ={
+			"add <task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		array<String ^> ^  delLines ={
+			"del <task index>"
+		};
+		array<String ^> ^  modLines ={
+			"mod <taskindex>",
+			"<task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		if(*commandKeyword == "add")
+			this->messageBox->Lines= addLines;
+		else if(*commandKeyword == "del")
+			this->messageBox->Lines= delLines;
+		else if(*commandKeyword == "mod")
+			this->messageBox->Lines= modLines;
+		commandKeyword->clear();
+	}
+	
 }

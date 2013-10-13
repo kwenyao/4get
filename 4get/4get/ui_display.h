@@ -62,9 +62,10 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  oTaskTime;
 	private: System::Windows::Forms::ColumnHeader^  oTaskDate;
 	private: System::Windows::Forms::ColumnHeader^  oTaskPriority;
+	private: System::Windows::Forms::RichTextBox^  messageBox;
 
 
-	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+
 	private: System::Windows::Forms::GroupBox^  todayContainer;
 	private: System::Windows::Forms::CheckedListBox^  checkedTaskList;
 	private: System::Windows::Forms::DateTimePicker^  chooseDate;
