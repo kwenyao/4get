@@ -3,12 +3,12 @@
 TaskTimed::TaskTimed()
 {
 }
-TaskTimed::TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime) : TaskDeadline()
+TaskTimed::TaskTimed(long long id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime) : TaskDeadline()
 {
 	TaskType type = timed;
 	setupTask(id, type, description, location, reminderTime, priority, status, repeat, startTime, endTime);
 }
-void TaskTimed::setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime)
+void TaskTimed::setupTask(long long id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime)
 {
 	taskId = id;
 	taskType = type;

@@ -10,7 +10,7 @@ Task::Task(){
 }
 
 
-void Task::setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status)
+void Task::setupTask(long long id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status)
 {
 	taskId = id;
 	taskType = type;
@@ -34,7 +34,7 @@ taskRepeat = repeat;
 }
 */
 
-int Task::getTaskId() const
+long long Task::getTaskId() const
 {
 	return taskId;
 }
@@ -77,7 +77,7 @@ RepeatType Task::getTaskRepeat() const
 
 
 
-void Task::setTaskId(int id)
+void Task::setTaskId(long long id)
 {
 	taskId = id;
 }
@@ -144,9 +144,9 @@ void Task::clearAllAttr()
 	clearTimeAttr();
 }
 
-int Task::getTimeInt(TimeType type) const
+long long Task::getTimeInt(TimeType type) const
 {
-	int yearMonthDayHourMin;
+	long long yearMonthDayHourMin;
 	tm* time = NULL;
 
 	if(type==timeStart)
@@ -159,11 +159,11 @@ int Task::getTimeInt(TimeType type) const
 		time = taskReminderTime;
 
 	if(time!=NULL){
-		int min = time->tm_min;
-		int hour = time->tm_hour;
-		int day = time ->tm_mday;
-		int month = time ->tm_mon;
-		int year = time ->tm_year + CONSTANT_START_YEAR;
+		long long min = time->tm_min;
+		long long hour = time->tm_hour;
+		long long day = time ->tm_mday;
+		long long month = time ->tm_mon;
+		long long year = time ->tm_year + CONSTANT_START_YEAR;
 		hour = hour*CONVERT_MULTIPLIER_HOUR;
 		day = day*CONVERT_MULTIPLIER_DAY;
 		month = month*CONVERT_MULTIPLIER_MONTH;

@@ -8,6 +8,6 @@ class TaskFloating : public Task
 {
 public:
 	TaskFloating();
-	TaskFloating(int id, string description, string location, tm* reminderTime, Priority priority, Status status);
+	TaskFloating(long long id, string description, string location, tm* reminderTime, Priority priority, Status status);
 };
 #endif

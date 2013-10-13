@@ -23,7 +23,7 @@ protected:
 	static const int CONVERT_MULTIPLIER_HOUR;
 
 	//attributes
-	int taskId;
+	long long taskId;
 	TaskType taskType;
 	string taskDescription;
 	Priority taskPriority;
@@ -38,11 +38,11 @@ protected:
 
 public:
 	Task();
-	virtual void setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status);
+	virtual void setupTask(long long id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status);
 	//Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminder);
 
 	//getter functions
-	int getTaskId() const;
+	long long getTaskId() const;
 	TaskType getTaskType() const;
 	string getTaskDescription() const;
 	Priority getTaskPriority() const;
@@ -52,10 +52,10 @@ public:
 	virtual tm* getTaskStart() const;
 	virtual tm* getTaskEnd() const;
 	virtual RepeatType getTaskRepeat() const;
-	int getTimeInt(TimeType type) const;
+	long long getTimeInt(TimeType type) const;
 
 	//setter functions
-	void setTaskId(int id);
+	void setTaskId(long long id);
 	void setTaskType(TaskType type);
 	void setTaskDescription(string description);
 	void setTaskPriority(Priority priority);
