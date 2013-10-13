@@ -25,7 +25,7 @@ private:
 
 	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
 
-	list<Task> determineList(ListType listType);
+	list<Task>* determineList(ListType listType);
 
 public:
 	TaskList();
