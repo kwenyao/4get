@@ -58,6 +58,14 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 	return _listToDisplay;
 }
 
+Task TaskList::obtainTask(int taskToGet){
+	Task taskToReturn;
+	list<Task>::iterator iterator;
+	iterator = iterateToTask(_listToDisplay, taskToGet);
+	taskToReturn = *iterator;
+	return taskToReturn;
+}
+
 list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskToAdd){
 	long long tempTime;
 	bool isEmpty = insertionList.empty();
