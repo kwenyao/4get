@@ -42,5 +42,6 @@ public:
 	bool markDone(int taskToMark);
 
 	list<Task> obtainList(ListType listToReturn);
+	Task obtainTask(int taskToGet);
 };
 #endif
