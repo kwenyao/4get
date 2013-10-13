@@ -4,85 +4,66 @@ TaskList::TaskList(){
 }
 
 bool TaskList::loadFromFile(){
-	storage.load(toDoList, listToDo);
-	storage.load(completedList, listCompleted);
-	storage.load(overdueList, listOverdue);
+	_storage.load(_toDoList, listToDo);
+	_storage.load(_completedList, listCompleted);
+	_storage.load(_overdueList, listOverdue);
 	return 0; //stub
 }
 
 bool TaskList::saveToFile(){
-	storage.save(toDoList, listToDo, toDoListSize);
-	storage.save(completedList, listCompleted, completedListSize);
-	storage.save(overdueList, listOverdue, overdueListSize);
+	_storage.save(_toDoList, listToDo, _toDoListSize);
+	_storage.save(_completedList, listCompleted, _completedListSize);
+	_storage.save(_overdueList, listOverdue, _overdueListSize);
 	return 0; //stub
 }
 
-bool TaskList::addToList(Task task, ListType listToAdd){
-	switch (listToAdd){
-	case listToDo:
-		return addToDoList(task);
-	case listCompleted:
-		return addCompletedList(task);
-	case listOverdue:
-		return addOverdueList(task);
-	}
-	return false; 
-}
-
-bool sort(ListType listType){
-	return false; //stub
-}
-
-bool TaskList::addToDoList(Task task){
-	toDoList.push_back(task);
-	sort(listToDo);
-	return 0; //stub
-}
-
-bool TaskList::addCompletedList(Task task){
-	completedList.push_back(task);
-	sort(listCompleted);
-	return 0; //stub
-}
-
-bool TaskList::addOverdueList(Task task){
-	overdueList.push_back(task);
-	sort(listOverdue);
-	return 0; //stub
+bool TaskList::addToList(Task task, ListType listType){
+	list<Task> listToAdd;
+	list<Task>::iterator iterator;
+	listToAdd = determineList(listType);
+	iterator = getIterator(listToAdd, task);
+	listToAdd.insert(iterator, task);
+	return true;
 }
 
 bool TaskList::deleteFromList(int taskToDelete){
+	list<Task> listToDeleteFrom;
 	list<Task>::iterator iterator;
 	for(int i=0; i<taskToDelete; i++)
 		++iterator;
-	switch (currentDisplayed){
-	case listToDo:
-		toDoList.erase(iterator);
-		break;
-	case listCompleted:
-		completedList.erase(iterator);
-		break;
-	case listOverdue:
-		overdueList.erase(iterator);
-		break;
-	default:
-		return false;
-	}
+	listToDeleteFrom = determineList(_currentDisplayed);
+	listToDeleteFrom.erase(iterator);
 	return true; //stub
 }
 
 list<Task> TaskList::obtainList(ListType listToReturn){
-	switch (listToReturn){
-	case listToDo:
-		listToDisplay = toDoList;
-		break;
-	case listCompleted:
-		listToDisplay = completedList;
-		break;
-	case listOverdue:
-		listToDisplay = overdueList;
-		break;
+	_listToDisplay = determineList(listToReturn);
+	_currentDisplayed = listToReturn;
+	return _listToDisplay;
+}
+
+list<Task>::iterator TaskList::getIterator(list<Task> insertionList, Task taskToAdd){
+	int tempTime;
+	int taskEndTime = taskToAdd.getTimeInt(timeEnd);
+	list<Task>::iterator iterator = insertionList.begin();
+	int listSize = insertionList.size();
+	for(int i=0; i<listSize; i++){
+		tempTime = iterator->getTimeInt(timeEnd);
+		if(tempTime > taskEndTime){
+			return iterator;
+		}
+		++iterator;
 	}
-	currentDisplayed = listToReturn;
-	return listToDisplay;
+	return iterator;
+}
+
+list<Task> TaskList::determineList(ListType listType){
+	switch (listType){
+	case listToDo:
+		return _toDoList;
+	case listCompleted:
+		return _completedList;
+	case listOverdue:
+		return _overdueList;
+	}
 }

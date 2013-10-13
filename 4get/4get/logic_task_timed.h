@@ -1,13 +1,15 @@
 #ifndef _LOGIC_TASK_TIMED_H_
 #define _LOGIC_TASK_TIMED_H_
-#include "logic_task.h"
+#include "logic_task_deadline.h"
 
 // handled by John Kuan (A0097592M)
 
-class TaskTimed : public Task
+class TaskTimed : public TaskDeadline
 {
 public:
+	TaskTimed();
 	TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime);
+	void setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime);
 
 	void setTaskStart(tm *startTask);
 	void setTaskEnd(tm *endTask);

@@ -9,11 +9,11 @@ TEST_F(ParserTest, MethodReturnsFirstItem)
 	vector<string> inputBits3(SLOT_SIZE);
 	vector<string> inputBits4(SLOT_SIZE);
 
-	TaskDeadline Dtask(id, description, location, reminderTime, priority, status, repeat, endTime);
+	TaskTimed Ttask(id, description, location, reminderTime, priority, status, repeat, startTime, endTime);
 
 	parser.parseInput(input1,inputBits1);
 	parser.parseReset();
-	cout << Dtask.getTaskDescription() << endl;
+	cout << Ttask.getTaskDescription() << endl;
 
 	parser.parseInput(input2, inputBits2);
 	parser.parseReset();

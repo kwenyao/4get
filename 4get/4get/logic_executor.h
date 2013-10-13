@@ -49,8 +49,5 @@ public:
 	string determineListType();
 	tm* convertStringToTm();
 	int retrieveCurrentDate();
-	
-
-	
 };
 #endif

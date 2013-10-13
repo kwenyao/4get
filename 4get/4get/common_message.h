@@ -16,18 +16,9 @@ namespace Commands{
 	const string COMMAND_DEL = "del";
 	const string COMMAND_REM = "rem";
 
-	//variants of delete all
-	const string COMMAND_DELETE_ALL= "delete all";
-	const string COMMAND_REMOVE_ALL = "remove all";
-	const string COMMAND_ERASE_ALL = "erase all";
-	const string COMMAND_DEL_ALL= "del all";
-	const string COMMAND_REM_ALL = "rem all";
-
 	//variants of mark
 	const string COMMAND_MARK = "mark";
 	const string COMMAND_M = "m";
-	const string COMMAND_MARK_DONE = "mark done";
-	const string COMMAND_M_DONE = "m done";
 
 	//variants of modify
 	const string COMMAND_MODIFY = "modify";
@@ -51,6 +42,12 @@ namespace Message{
 };
 
 namespace Enum{
+	enum TimeType{
+		timeStart,
+		timeEnd,
+		timeNext,
+		timeReminder
+	};
 	enum ListType{
 		listToDo,
 		listCompleted,
@@ -78,19 +75,19 @@ namespace Enum{
 		overdued
 	};
 
+	/*
 	enum TaskType{
 		taskTypeNone,
 		floating, 
 		timed, 
 		deadline
 	};
+	*/
 
 	enum Command{
 		commandAdd, 
 		commandDelete, 
-		commandDeleteAll, 
 		commandMark, 
-		commandMarkDone, 
 		commandModify, 
 		commandUndo, 
 		commandUpdate,
@@ -118,9 +115,9 @@ namespace Constants{
 	const int SLOT_REMIND_TIME = 3;
 	const int SLOT_PRIORITY = 4;
 	const int SLOT_REPEAT = 5;
-	const int SLOT_TIME = 6;
-	const int SLOT_SLOT_NUMBER = 7;
-	const int SLOT_TASKLIST = 8;
+	const int SLOT_START_TIME = 6;
+	const int SLOT_END_TIME = 7;
+	const int SLOT_SLOT_NUMBER = 8;
 	const int SLOT_STATUS = 9;
 	const int SLOT_USER_RESPONSE = 10;
 
@@ -153,14 +150,14 @@ namespace Constants{
 	const string MARKER_FROM = ",from";
 	const std::size_t MARKER_FROM_LENGTH = 5;
 
-	const string MARKER_TO = " to ";
-	const std::size_t MARKER_TO_LENGTH = 4;
+	const string MARKER_TO = "to";
+	const std::size_t MARKER_TO_LENGTH = 2;
 
 	const string MARKER_REMIND = ",remind";
 	const std::size_t MARKER_REMIND_LENGTH = 7;
 
-	const string MARKER_ON = " on ";
-	const std::size_t MARKER_ON_LENGTH = 4;
+	const string MARKER_ON = "on";
+	const std::size_t MARKER_ON_LENGTH = 2;
 
 	const string MARKER_REPEAT = ",repeat";
 	const std::size_t MARKER_REPEAT_LENGTH = 7;
@@ -193,6 +190,11 @@ namespace Constants{
 	const int CONSTANT_MULTIPLIER_MONTH = 1000;
 	const int CONSTANT_MULTIPLIER_DAY = 10;
 
+	//multipliers for time conversion in Task
+	const int CONVERT_MULTIPLIER_YEAR = 100000000;
+	const int CONVERT_MULTIPLIER_MONTH = 1000000;
+	const int CONVERT_MULTIPLIER_DAY = 10000;
+	const int CONVERT_MULTIPLIER_HOUR = 100;
 };
 
 #endif

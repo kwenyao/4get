@@ -13,20 +13,19 @@ using namespace Constants;
 
 class TaskList{
 private:
-	list<Task> toDoList;
-	list<Task> completedList;
-	list<Task> overdueList;
-	list<Task> listToDisplay;
-	Storage storage;
-	ListType currentDisplayed;
-	int toDoListSize;
-	int completedListSize;
-	int overdueListSize;
+	list<Task> _toDoList;
+	list<Task> _completedList;
+	list<Task> _overdueList;
+	list<Task> _listToDisplay;
+	Storage _storage;
+	ListType _currentDisplayed;
+	int _toDoListSize;
+	int _completedListSize;
+	int _overdueListSize;
 
-	bool sort(ListType listType);
-	bool addToDoList(Task task);
-	bool addCompletedList(Task task);
-	bool addOverdueList(Task task);
+	list<Task>::iterator getIterator(list<Task> insertionList, Task task);
+
+	list<Task> determineList(ListType listType);
 
 public:
 	TaskList();

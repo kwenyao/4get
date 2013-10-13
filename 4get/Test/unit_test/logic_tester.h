@@ -26,6 +26,7 @@ protected:
 	Priority priority;
 	Status status;
 	RepeatType repeat;
+	tm *startTime;
 	tm *endTime;
  
   ParserTest() {
@@ -43,15 +44,16 @@ protected:
     // Code here will be called immediately after the constructor (right
     // before each test).
 	input1 = "Add HomeWork from EE2020 ,at com1 ,repeat weekly ,From Monday 2PM to Saturday 4PM ,!";
-	input2 = "delete 2" + LIST_TO_DO;
-	input3 = "mark 3 Undone" + LIST_TO_DO;
-	input4 = "modify 2 ,from 2000 to 1900 ,at com2" + LIST_TO_DO;
+	input2 = "delete 2";
+	input3 = "mark 3 Undone";
+	input4 = "modify 2 ,from 2000 to 1900 ,at com2 ,Repeat Weekly ,remind on Tuesday 2000 ,! incomplete";
 
 
 	time_t rawtime;
 	time ( &rawtime );
 	reminderTime = localtime ( &rawtime );
 	endTime = localtime( &rawtime);
+	startTime = localtime( &rawtime);
 	id = 1;
 	description = "HomeWork from EE2020";
 	location = "com1";

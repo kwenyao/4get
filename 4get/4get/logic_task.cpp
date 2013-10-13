@@ -4,10 +4,10 @@ Task::Task(){
 }
 
 
-void Task::setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status)
+void Task::setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status)
 {
 	taskId = id;
-	taskType = type;
+	//taskType = type;
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
@@ -18,12 +18,12 @@ void Task::setupTask(int id, TaskType type, string description, string location,
 /*
 Task::Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminderTime)
 {
-	taskDescription = description;
-	taskPriority = priority;
-	taskLocation = location;
-	taskReminderTime = reminderTime;
-	taskStatus = status;
-	taskRepeat = repeat;
+taskDescription = description;
+taskPriority = priority;
+taskLocation = location;
+taskReminderTime = reminderTime;
+taskStatus = status;
+taskRepeat = repeat;
 
 }
 */
@@ -32,7 +32,7 @@ int Task::getTaskId()
 {
 	return taskId;
 }
-string Task::getTaskDescription()
+string Task::getTaskDescription() const
 {
 	return taskDescription;
 }
@@ -40,7 +40,7 @@ Priority Task::getTaskPriority()
 {
 	return taskPriority;
 }
-string Task::getTaskLocation()
+string Task::getTaskLocation() const
 {
 	return taskLocation;
 }
@@ -155,10 +155,42 @@ void Task::clearTimeAttr()
 void Task::clearAllAttr()
 {
 	taskId = INITIALIZE_INT;
-	taskType = taskTypeNone;
+	//taskType = taskTypeNone;
 	taskDescription = INITIALIZE_STRING_BLANK;
 	taskPriority = normal;
 	taskLocation = INITIALIZE_STRING_BLANK;
 	taskStatus = statusNone;
 	clearTimeAttr();
+}
+
+int Task::getTimeInt(TimeType type)
+{
+	int yearMonthDayHourMin;
+	tm* time = NULL;
+
+	if(type==timeStart)
+		time = taskStart;
+	else if(type==timeEnd)
+		time = taskEnd;
+	else if(type==timeNext)
+		time = taskNextOccurance;
+	else if(type==timeReminder)
+		time = taskReminderTime;
+
+	if(time!=NULL){
+		int min = time->tm_min;
+		int hour = time->tm_hour;
+		int day = time ->tm_mday;
+		int month = time ->tm_mon;
+		int year = time ->tm_year + CONSTANT_START_YEAR;
+		hour = hour*CONVERT_MULTIPLIER_HOUR;
+		day = day*CONVERT_MULTIPLIER_DAY;
+		month = month*CONVERT_MULTIPLIER_MONTH;
+		year = year*CONVERT_MULTIPLIER_YEAR;
+		yearMonthDayHourMin = (year + month + day + hour + min);
+		return yearMonthDayHourMin;
+	}
+	else
+		return 0;
+
 }
