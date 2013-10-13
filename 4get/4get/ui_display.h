@@ -44,7 +44,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 	private: ListType activeListType;
-	
+
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 
@@ -54,7 +54,7 @@ namespace UIDisplay {
 
 
 
-	
+
 	private: System::Windows::Forms::ListView^  overdueListView;
 	private: System::Windows::Forms::ColumnHeader^  oTaskIndex;
 	private: System::Windows::Forms::ColumnHeader^  oTaskDescription;
@@ -136,8 +136,7 @@ namespace UIDisplay {
 	private: void passUserInput();          
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 };
 }

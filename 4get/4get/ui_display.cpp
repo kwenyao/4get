@@ -30,6 +30,13 @@ void ui_display::InitializeComponent(void){
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
+	this->completedListView = (gcnew System::Windows::Forms::ListView());
+	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
 	this->overdueListView = (gcnew System::Windows::Forms::ListView());
 	this->oTaskIndex = (gcnew System::Windows::Forms::ColumnHeader());
@@ -45,13 +52,6 @@ void ui_display::InitializeComponent(void){
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
-	this->completedListView = (gcnew System::Windows::Forms::ListView());
-	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -71,6 +71,7 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->SelectedIndex = 0;
 	this->tabContainer->Size = System::Drawing::Size(442, 281);
 	this->tabContainer->TabIndex = 0;
+	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
 	// 
 	// tabTodo
 	// 
@@ -96,7 +97,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->Location = System::Drawing::Point(-4, -4);
 	this->todoListView->Name = L"todoListView";
 	this->todoListView->Size = System::Drawing::Size(440, 259);
-	this->todoListView->TabIndex = 2;
+	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
 	// 
@@ -137,6 +138,48 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
 	// 
+	// completedListView
+	// 
+	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->completedListView->AutoArrange = false;
+	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
+		this->cVenue, this->cTime, this->cDue, this->cPriority});
+	this->completedListView->FullRowSelect = true;
+	this->completedListView->GridLines = true;
+	this->completedListView->LabelEdit = true;
+	this->completedListView->Location = System::Drawing::Point(-4, -4);
+	this->completedListView->Name = L"completedListView";
+	this->completedListView->Size = System::Drawing::Size(440, 259);
+	this->completedListView->TabIndex = 2;
+	this->completedListView->UseCompatibleStateImageBehavior = false;
+	// 
+	// cIndex
+	// 
+	this->cIndex->Text = L"Index No.";
+	// 
+	// cDescription
+	// 
+	this->cDescription->Text = L"Description";
+	this->cDescription->Width = 127;
+	// 
+	// cVenue
+	// 
+	this->cVenue->Text = L"Venue";
+	// 
+	// cTime
+	// 
+	this->cTime->Text = L"Time";
+	// 
+	// cDue
+	// 
+	this->cDue->Text = L"Due Date";
+	this->cDue->Width = 80;
+	// 
+	// cPriority
+	// 
+	this->cPriority->Text = L"Priority";
+	// 
 	// tabOverdue
 	// 
 	this->tabOverdue->Controls->Add(this->overdueListView);
@@ -159,10 +202,9 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->Location = System::Drawing::Point(-4, -4);
 	this->overdueListView->Name = L"overdueListView";
 	this->overdueListView->Size = System::Drawing::Size(440, 259);
-	this->overdueListView->TabIndex = 1;
+	this->overdueListView->TabIndex = 3;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
-	this->overdueListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::overdueListView_ItemActivate);
 	// 
 	// oTaskIndex
 	// 
@@ -256,49 +298,6 @@ void ui_display::InitializeComponent(void){
 	this->chooseDate->Size = System::Drawing::Size(349, 20);
 	this->chooseDate->TabIndex = 0;
 	// 
-	// completedListView
-	// 
-	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->completedListView->AutoArrange = false;
-	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
-		this->cVenue, this->cTime, this->cDue, this->cPriority});
-	this->completedListView->FullRowSelect = true;
-	this->completedListView->GridLines = true;
-	this->completedListView->LabelEdit = true;
-	this->completedListView->Location = System::Drawing::Point(-4, -4);
-	this->completedListView->Name = L"completedListView";
-	this->completedListView->Size = System::Drawing::Size(440, 259);
-	this->completedListView->TabIndex = 3;
-	this->completedListView->UseCompatibleStateImageBehavior = false;
-	this->completedListView->View = System::Windows::Forms::View::Details;
-	// 
-	// cIndex
-	// 
-	this->cIndex->Text = L"Index No.";
-	// 
-	// cDescription
-	// 
-	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 127;
-	// 
-	// cVenue
-	// 
-	this->cVenue->Text = L"Venue";
-	// 
-	// cTime
-	// 
-	this->cTime->Text = L"Time";
-	// 
-	// cDue
-	// 
-	this->cDue->Text = L"Due Date";
-	this->cDue->Width = 80;
-	// 
-	// cPriority
-	// 
-	this->cPriority->Text = L"Priority";
-	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -336,11 +335,11 @@ void ui_display::passUserInput(){
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
+	
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
 		this->textboxInput->Clear();
-		this->textboxInput->Text = L"Enter Command Here:";
 		list<Task> taskList;
 		taskList = execute->getUpdatedList(activeListType);
 		*listOfTasks = taskList;
@@ -468,18 +467,15 @@ void ui_display::printOverdueList(){
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Clear();
 }
-Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListType = listCompleted;
-	list<Task> taskList;
-	taskList = execute->getUpdatedList(activeListType);
-	*listOfTasks = taskList;
-	this->printList();
-}
-Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListType = listOverdue;
-	list<Task> taskList;
-	taskList = execute->getUpdatedList(activeListType);
-	*listOfTasks = taskList;
+Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
+	MessageBox::Show("selected");
+	if(this->tabContainer->SelectedIndex==1)
+		activeListType=listCompleted;
+	else if(this->tabContainer->SelectedIndex==2)
+		activeListType=listOverdue;
+	else
+		activeListType=listToDo;
+	*listOfTasks = execute->getUpdatedList(activeListType);
 	this->printList();
 }
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
