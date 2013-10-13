@@ -197,12 +197,12 @@ bool Parser::separateFunctionUndo(vector<string>& inputBits)
 
 bool Parser::determineVenue()
 {
-	std::size_t found = 0;
-	std::size_t foundComma = 0;
-	std::size_t extractStartPos;
-	std::size_t extractLength;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundComma = INITIALIZE_SIZE_T;
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t extractLength = INITIALIZE_SIZE_T;
 	std::size_t stringLength = textInput.size();
-	std::size_t i;
+	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	if(textInput.find(MARKER_AT)!=std::string::npos){
@@ -258,13 +258,13 @@ bool Parser::determineVenue()
 
 bool Parser::determineDateAndTime()
 {
-	std::size_t found = 0;
-	std::size_t foundComma = 0;
-	std::size_t foundTo = 0;
-	std::size_t extractStartPos;
-	std::size_t extractLength;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundComma = INITIALIZE_SIZE_T;
+	std::size_t foundTo = INITIALIZE_SIZE_T;
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t extractLength = INITIALIZE_SIZE_T;
 	std::size_t stringLength = textInput.size();
-	std::size_t i;
+	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	//If found By
@@ -328,12 +328,12 @@ bool Parser::determineDateAndTime()
 
 bool Parser::determineRepeat()
 {
-	std::size_t found = 0;
-	std::size_t foundComma = 0;
-	std::size_t extractStartPos;
-	std::size_t extractLength;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundComma = INITIALIZE_SIZE_T;
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t extractLength = INITIALIZE_SIZE_T;
 	std::size_t stringLength = textInput.size();
-	std::size_t i;
+	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 
@@ -367,10 +367,10 @@ bool Parser::determineRepeat()
 
 bool Parser::determinePriority()
 {
-	std::size_t found = 0;
-	std::size_t foundEnclose;
-	std::size_t extractStartPos;
-	std::size_t extractLength;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundEnclose = INITIALIZE_SIZE_T;
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t extractLength = INITIALIZE_SIZE_T;
 
 	if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
 		found = textInput.find(MARKER_PRIORITY);
@@ -398,12 +398,12 @@ bool Parser::determinePriority()
 //reminder is not neccessary. If user defines Reminder in input, then it will process.
 bool Parser::determineReminder()
 {
-	std::size_t found = 0;
-	std::size_t foundComma = 0;
-	std::size_t extractStartPos;
-	std::size_t extractLength;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundComma = INITIALIZE_SIZE_T;
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t extractLength = INITIALIZE_SIZE_T;
 	std::size_t stringLength = textInput.size();
-	std::size_t i;
+	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 
@@ -437,21 +437,25 @@ bool Parser::determineReminder()
 
 bool Parser::determineSlot()
 {
+	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	std::size_t found = INITIALIZE_SIZE_T;
 	int slotNumber =0;
-	//istringstream iss(_textInput);
-	string temp = _textInput;
-	//iss >> temp;
+	istringstream iss(_textInput);
+	string temp;
+	iss >> temp;
 
 	if(!isParseInt(temp, slotNumber))
 		return false;
 	textSlotNumber = std::to_string(slotNumber);
+	found = textInput.find(MARKER_ENCLOSE);
+	shortenInput(extractStartPos, ++found);
 
 	return true;
 }
 
 bool Parser::determineTaskList()
 {
-	std::size_t found = 0;
+	std::size_t found = INITIALIZE_SIZE_T;
 	std::size_t stringLength = textInput.size();
 
 	if(textInput.rfind(LIST_COMPLETED)!=std::string::npos){
@@ -479,8 +483,8 @@ bool Parser::determineTaskList()
 
 bool Parser::determineStatus()
 {
-	std::size_t found = 0;
-	std::size_t extractEndPos = 0;
+	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t extractEndPos = INITIALIZE_SIZE_T;
 
 
 	if(textInput.find(MARKER_UNDONE)!=std::string::npos){
