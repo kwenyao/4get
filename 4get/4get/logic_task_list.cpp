@@ -1,5 +1,7 @@
 #include "logic_task_list.h"
 
+const int TaskList::INDEX_CORRECTION = -1;
+
 TaskList::TaskList(){
 }
 
@@ -20,25 +22,32 @@ bool TaskList::saveToFile(){
 bool TaskList::addToList(Task task, ListType listType){
 	list<Task>* listToAdd;
 	list<Task>::iterator iterator;
-	cout<<"description of task added: "<<task.getTaskDescription()<<endl;
 	listToAdd = determineList(listType);
-	//iterator = listToAdd.begin();
 	iterator = getIterator(*listToAdd, task);
 	listToAdd->insert(iterator,task);
-	//listToAdd.insert(iterator, task);
-	cout << "list to add size:" <<listToAdd->size() <<endl;
-	cout << "todo list size:" << _toDoList.size() << endl;
+	saveToFile();
 	return true;
 }
 
 bool TaskList::deleteFromList(int taskToDelete){
 	list<Task>* listToDeleteFrom;
 	list<Task>::iterator iterator;
-	for(int i=0; i<taskToDelete; i++)
-		++iterator;
 	listToDeleteFrom = determineList(_currentDisplayed);
+	iterator = iterateToTask(*listToDeleteFrom, taskToDelete);
 	listToDeleteFrom->erase(iterator);
 	return true; //stub
+}
+
+bool TaskList::markDone(int taskToMark){
+	Task temp;
+	list<Task>* listToMark;
+	list<Task>::iterator iterator;
+	listToMark = determineList(_currentDisplayed);
+	iterator = iterateToTask(*listToMark, taskToMark);
+	temp = *iterator;
+	deleteFromList(taskToMark);
+	addToList(temp, listCompleted);
+	return true;
 }
 
 list<Task> TaskList::obtainList(ListType listToReturn){
@@ -46,14 +55,21 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 	listPtr = determineList(listToReturn);
 	_listToDisplay = *listPtr;
 	_currentDisplayed = listToReturn;
-	cout << "display list size:" << _listToDisplay.size() <<endl;
 	return _listToDisplay;
 }
 
+Task TaskList::obtainTask(int taskToGet){
+	Task taskToReturn;
+	list<Task>::iterator iterator;
+	iterator = iterateToTask(_listToDisplay, taskToGet);
+	taskToReturn = *iterator;
+	return taskToReturn;
+}
+
 list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskToAdd){
-	int tempTime;
+	long long tempTime;
 	bool isEmpty = insertionList.empty();
-	int taskEndTime = taskToAdd.getTimeInt(timeEnd);
+	long long taskEndTime = taskToAdd.getTimeInt(timeEnd);
 	list<Task>::iterator iterator = insertionList.begin();
 	if(isEmpty){
 		return iterator;
@@ -66,6 +82,15 @@ list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskT
 		}
 		++iterator;
 	}
+	return iterator;
+}
+
+list<Task>::iterator TaskList::iterateToTask(list<Task>& listToEdit, int task){
+	list<Task>::iterator iterator;
+	int indexToDelete = task + INDEX_CORRECTION;
+	iterator = listToEdit.begin();
+	for(int i=0; i<indexToDelete; i++)
+		++iterator;
 	return iterator;
 }
 

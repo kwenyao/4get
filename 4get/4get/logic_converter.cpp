@@ -40,7 +40,7 @@ RepeatType Converter::convertStringToRepeatType(string str)
 }
 Priority Converter::convertStringToPriority(string str)
 {
-	if(isEqual(str, "high"))
+	if(isEqual(str, "!"))
 		return high;
 	else
 		return normal;

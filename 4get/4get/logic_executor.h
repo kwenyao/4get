@@ -32,13 +32,15 @@ class Executor
 	string task;
 	vector<string> vectorOfInputs;
 	Parser parser;
-	int taskID;
+	long long taskID;
 	Converter convert;
 
+	bool addToTaskList();
+	
 	static const int CONSTANT_MULTIPLIER_YEAR;
 	static const int CONSTANT_MULTIPLIER_MONTH;
 	static const int CONSTANT_MULTIPLIER_DAY;
-
+	static const int CONSTANT_MONTH_ONE;
 
 public:
 	Executor();
@@ -48,16 +50,17 @@ public:
 	Command determineCommandType (string commandTypeString); 
 	void loadListOfTasks();
 	
-	int determineTaskId();
+	long long determineTaskId();
 	bool determineTaskType();
 	bool adderFunction();
-	bool addToTaskList();
+	
 	bool deleteFunction();
+	bool markFunction();
 	list<Task> getUpdatedList(ListType listType);
 
 	//helper functions
 	bool isEqual(string str1, const string str2);
 	ListType determineListType(vector<string> &input);
-	int retrieveCurrentDate();
+	long long retrieveCurrentDate();
 };
 #endif

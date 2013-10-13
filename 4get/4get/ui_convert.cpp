@@ -22,6 +22,20 @@ bool UiConvert::intToSysStringConversion(System::String^ result, int& source){
 	return true;
 }
 
+string UiConvert::enumPriorityToStdString(Priority taskPriority){
+	string result ="";
+	switch(taskPriority){
+	case high:
+		result = "high";
+		break;
+	default:
+		result = "normal";
+		break;
+	}
+	return result;
+}
+
+
 void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list, int taskIndex)
 {
 	Task t1 = list->front();
@@ -29,9 +43,11 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task>
 	System::String^ sys_index = System::Convert::ToString(taskIndex); //index
 	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
 	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
-	System::String^ sys_time = ""; //time
-	System::String^ sys_due = ""; //due
-	System::String^ sys_priority = ""; //priority
+	System::String^ sys_time = ""; //start time
+	System::String^ sys_due = "1900"; //due
+	//System::String^ sys_time = gcnew System::String(asctime(t1.getTaskStart())); //start time
+	//System::String^ sys_due = gcnew System::String(asctime(t1.getTaskEnd())); //due
+	System::String^ sys_priority = gcnew System::String(enumPriorityToStdString(t1.getTaskPriority()).c_str()); //priority
 
 	list->pop_front();
 

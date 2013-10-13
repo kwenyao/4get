@@ -180,6 +180,14 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	if(!determineReminder())
 		cout << "no reminder" << endl;
 
+	textDescription = _textInput;
+	cout << "command: <" << textCommand << ">" << endl;
+	cout << "description: <" << textDescription << ">" << endl;
+	cout << "venue: <" << textVenue << ">" << endl;
+	cout << "D&T: <" << textDateAndTime << ">" << endl;
+	cout << "repeat: <" << textRepeat << ">" << endl;
+	cout << "priority: <" << textPriority << ">" << endl;
+	cout << "reminder: <" << textRemindDateAndTime << ">" << endl;
 	return true;
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)

@@ -8,7 +8,6 @@ ui_display::ui_display(){
 	listOfTasks = new std::list<Task>;
 	commandKeyword = new string;
 	loaded = false;
-	MessageBox::Show("inside constructor before assigning active list");
 	activeListType = listToDo;
 
 	InitializeComponent();
@@ -31,11 +30,6 @@ void ui_display::InitializeComponent(void){
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
-	this->completedListView = (gcnew System::Windows::Forms::ListView());
-	this->cIndexNo = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
 	this->overdueListView = (gcnew System::Windows::Forms::ListView());
 	this->oTaskIndex = (gcnew System::Windows::Forms::ColumnHeader());
@@ -47,10 +41,17 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
-	this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
+	this->completedListView = (gcnew System::Windows::Forms::ListView());
+	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -70,6 +71,7 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->SelectedIndex = 0;
 	this->tabContainer->Size = System::Drawing::Size(442, 281);
 	this->tabContainer->TabIndex = 0;
+	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
 	// 
 	// tabTodo
 	// 
@@ -95,7 +97,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->Location = System::Drawing::Point(-4, -4);
 	this->todoListView->Name = L"todoListView";
 	this->todoListView->Size = System::Drawing::Size(440, 259);
-	this->todoListView->TabIndex = 2;
+	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
 	// 
@@ -136,41 +138,6 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
 	// 
-	// completedListView
-	// 
-	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->completedListView->AutoArrange = false;
-	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->cIndexNo, 
-		this->cDescription, this->cVenue, this->cPriority});
-	this->completedListView->FullRowSelect = true;
-	this->completedListView->GridLines = true;
-	this->completedListView->Location = System::Drawing::Point(-4, -4);
-	this->completedListView->Name = L"completedListView";
-	this->completedListView->Size = System::Drawing::Size(440, 259);
-	this->completedListView->TabIndex = 3;
-	this->completedListView->UseCompatibleStateImageBehavior = false;
-	this->completedListView->View = System::Windows::Forms::View::Details;
-	this->completedListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::completedListView_ItemActivate);
-	// 
-	// cIndexNo
-	// 
-	this->cIndexNo->Text = L"Index No.";
-	// 
-	// cDescription
-	// 
-	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 225;
-	// 
-	// cVenue
-	// 
-	this->cVenue->Text = L"Venue";
-	this->cVenue->Width = 93;
-	// 
-	// cPriority
-	// 
-	this->cPriority->Text = L"Priority";
-	// 
 	// tabOverdue
 	// 
 	this->tabOverdue->Controls->Add(this->overdueListView);
@@ -193,10 +160,9 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->Location = System::Drawing::Point(-4, -4);
 	this->overdueListView->Name = L"overdueListView";
 	this->overdueListView->Size = System::Drawing::Size(440, 259);
-	this->overdueListView->TabIndex = 1;
+	this->overdueListView->TabIndex = 3;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
-	this->overdueListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::overdueListView_ItemActivate);
 	// 
 	// oTaskIndex
 	// 
@@ -248,21 +214,21 @@ void ui_display::InitializeComponent(void){
 	// 
 	// messageContainer
 	// 
-	this->messageContainer->Controls->Add(this->richTextBox1);
+	this->messageContainer->Controls->Add(this->messageBox);
 	this->messageContainer->Location = System::Drawing::Point(12, 48);
 	this->messageContainer->Name = L"messageContainer";
 	this->messageContainer->Size = System::Drawing::Size(800, 119);
 	this->messageContainer->TabIndex = 3;
 	// 
-	// richTextBox1
+	// messageBox
 	// 
-	this->richTextBox1->BackColor = System::Drawing::SystemColors::InactiveCaption;
-	this->richTextBox1->Location = System::Drawing::Point(3, 3);
-	this->richTextBox1->Name = L"richTextBox1";
-	this->richTextBox1->ReadOnly = true;
-	this->richTextBox1->Size = System::Drawing::Size(793, 116);
-	this->richTextBox1->TabIndex = 0;
-	this->richTextBox1->Text = L"";
+	this->messageBox->BackColor = System::Drawing::SystemColors::InactiveCaption;
+	this->messageBox->Location = System::Drawing::Point(3, 3);
+	this->messageBox->Name = L"messageBox";
+	this->messageBox->ReadOnly = true;
+	this->messageBox->Size = System::Drawing::Size(793, 116);
+	this->messageBox->TabIndex = 0;
+	this->messageBox->Text = L"";
 	// 
 	// todayContainer
 	// 
@@ -290,6 +256,49 @@ void ui_display::InitializeComponent(void){
 	this->chooseDate->Size = System::Drawing::Size(349, 20);
 	this->chooseDate->TabIndex = 0;
 	// 
+	// completedListView
+	// 
+	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->completedListView->AutoArrange = false;
+	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
+		this->cVenue, this->cTime, this->cDue, this->cPriority});
+	this->completedListView->FullRowSelect = true;
+	this->completedListView->GridLines = true;
+	this->completedListView->LabelEdit = true;
+	this->completedListView->Location = System::Drawing::Point(-4, -4);
+	this->completedListView->Name = L"completedListView";
+	this->completedListView->Size = System::Drawing::Size(440, 259);
+	this->completedListView->TabIndex = 2;
+	this->completedListView->UseCompatibleStateImageBehavior = false;
+	this->completedListView->View = System::Windows::Forms::View::Details;
+	// 
+	// cIndex
+	// 
+	this->cIndex->Text = L"Index No.";
+	// 
+	// cDescription
+	// 
+	this->cDescription->Text = L"Description";
+	this->cDescription->Width = 127;
+	// 
+	// cVenue
+	// 
+	this->cVenue->Text = L"Venue";
+	// 
+	// cTime
+	// 
+	this->cTime->Text = L"Time";
+	// 
+	// cDue
+	// 
+	this->cDue->Text = L"Due Date";
+	this->cDue->Width = 80;
+	// 
+	// cPriority
+	// 
+	this->cPriority->Text = L"Priority";
+	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -300,6 +309,7 @@ void ui_display::InitializeComponent(void){
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
+	this->KeyPreview = true;
 	this->Name = L"ui_display";
 	this->Text = L"4get";
 	this->tabContainer->ResumeLayout(false);
@@ -319,34 +329,26 @@ void ui_display::loadList(){
 	this->printList();
 }
 
-void ui_display::passUserInput(){
+bool ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
 	execute->stringCollector(stdCommand);
-
+	return true;
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
+
 	if(e->KeyCode == Keys::Enter)
 	{
-		this->passUserInput();
-		MessageBox::Show("after processing");
-		this->textboxInput->Clear();
-		this->textboxInput->Text = L"Enter Command Here:";
-		MessageBox::Show("getting list");
-		if(activeListType == listToDo)
-			MessageBox::Show("to do list is active");
-		else if(activeListType == listCompleted)
-			MessageBox::Show("completed list is active");
-		else if(activeListType == listOverdue)
-			MessageBox::Show("overdue list is active");
-		list<Task> taskList;
-		taskList = execute->getUpdatedList(activeListType);
-		if(taskList.size() == 0)
-			MessageBox::Show("list is empty before printing");
-		*listOfTasks = taskList;
-		MessageBox::Show("printing list");
-		printList();
+		commandKeyword->clear();
+		if(this->passUserInput()){
+			this->textboxInput->Clear();
+			list<Task> taskList;
+			taskList = execute->getUpdatedList(activeListType);
+			*listOfTasks = taskList;
+			printList();
+		}
+
 	}
 }
 
@@ -363,15 +365,16 @@ void ui_display::printList(){
 		break;
 	}
 }
-
-
 void ui_display::printToDoList(){
 	int size = listOfTasks->size();
 
 	int j=0;
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
-
+	if(loaded)
+	{
+		this->todoListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -379,14 +382,9 @@ void ui_display::printToDoList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->todoListView->BeginUpdate();
-	if(loaded)
-	{
-		this->todoListView->Items->Clear();
-	}
 
 	for (int i=0; i<size; i++)
 	{
-		MessageBox::Show("In print loop");
 		ListViewItem^ item = gcnew ListViewItem;
 		converter->printItem(item, listOfTasks, i+1);
 		temp[j] = item;
@@ -398,7 +396,6 @@ void ui_display::printToDoList(){
 	this->todoListView->EndUpdate();
 
 }
-
 void ui_display::printCompletedList(){
 	int size = listOfTasks->size();
 
@@ -406,6 +403,10 @@ void ui_display::printCompletedList(){
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
 
+	if(loaded)
+	{
+		this->completedListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -413,10 +414,7 @@ void ui_display::printCompletedList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->completedListView->BeginUpdate();
-	if(loaded)
-	{
-		this->completedListView->Items->Clear();
-	}
+
 
 	for (int i=0; i<size; i++)
 	{
@@ -432,7 +430,6 @@ void ui_display::printCompletedList(){
 	this->completedListView->EndUpdate();
 
 }
-
 void ui_display::printOverdueList(){
 	int size = listOfTasks->size();
 
@@ -440,6 +437,10 @@ void ui_display::printOverdueList(){
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
 
+	if(loaded)
+	{
+		this->overdueListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -447,10 +448,7 @@ void ui_display::printOverdueList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->overdueListView->BeginUpdate();
-	if(loaded)
-	{
-		this->overdueListView->Items->Clear();
-	}
+
 
 	for (int i=0; i<size; i++)
 	{
@@ -470,28 +468,101 @@ void ui_display::printOverdueList(){
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Clear();
 }
-Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListType = listCompleted;
-	list<Task> taskList;
-	taskList = execute->getUpdatedList(activeListType);
-	*listOfTasks = taskList;
-	this->printList();
-}
-Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListType = listOverdue;
-	list<Task> taskList;
-	taskList = execute->getUpdatedList(activeListType);
-	*listOfTasks = taskList;
+Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
+	MessageBox::Show("selected");
+	if(this->tabContainer->SelectedIndex==1)
+		activeListType=listCompleted;
+	else if(this->tabContainer->SelectedIndex==2)
+		activeListType=listOverdue;
+	else
+		activeListType=listToDo;
+	*listOfTasks = execute->getUpdatedList(activeListType);
 	this->printList();
 }
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+
 	if(commandKeyword->size() < 3){
+		array<String ^> ^  helpLines = {
+			"type \"add\" to add a task",
+			"type \"del\" to delete a task",
+			"type \"mod\" to modify a task",
+			"type \"mark\" to change the statud of a task"
+		};
+		this->messageBox->Lines = helpLines;
 		switch(e->KeyChar){
-		case ((char)65):
-			commandKeyword += 'a';
+		case 'a':
+			*commandKeyword += 'a';
 			break;
-		case ((char)13):
+		case 'd':
+			*commandKeyword += 'd';
+			break;
+		case 'e':
+			*commandKeyword += 'e';
+			break;
+		case 'l':
+			*commandKeyword += 'l';
+			break;
+		case 'm':
+			*commandKeyword += 'm';
+			break;
+		case 'o':
+			*commandKeyword += 'o';
+			break;
+		case 'r':
+			*commandKeyword += 'r';
 			break;
 		};
 	}
+
+	if(commandKeyword->size()==3){
+		array<String ^> ^  addLines ={
+			"add <task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		array<String ^> ^  delLines ={
+			"del <task index>"
+		};
+		array<String ^> ^  modLines ={
+			"mod <taskindex> <task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		array<String ^> ^  markLines ={
+			"mark <taskindex> <status>",
+			" ",
+			"statuses available:",
+			"	done / completed",
+			"	undone / incomplete"
+		};
+		array<String ^> ^  emptyLines ={};
+		if(*commandKeyword == "add"){
+			this->messageBox->Lines=emptyLines;
+			this->messageBox->Lines= addLines;
+		}
+		else if(*commandKeyword == "del"){
+			this->messageBox->Lines=emptyLines;
+			this->messageBox->Lines= delLines;
+		}
+		else if(*commandKeyword == "mod"){
+			this->messageBox->Lines=emptyLines;
+			this->messageBox->Lines= modLines;
+		}
+		else if(*commandKeyword == "mar"){
+			this->messageBox->Lines=emptyLines;
+			this->messageBox->Lines= markLines;
+		}
+		commandKeyword->clear();
+	}
+
 }
