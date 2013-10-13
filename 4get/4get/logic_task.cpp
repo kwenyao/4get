@@ -34,11 +34,11 @@ taskRepeat = repeat;
 }
 */
 
-int Task::getTaskId()
+int Task::getTaskId() const
 {
 	return taskId;
 }
-TaskType Task::getTaskType()
+TaskType Task::getTaskType() const
 {
 	return taskType;
 }
@@ -46,7 +46,7 @@ string Task::getTaskDescription() const
 {
 	return taskDescription;
 }
-Priority Task::getTaskPriority()
+Priority Task::getTaskPriority() const
 {
 	return taskPriority;
 }
@@ -54,24 +54,23 @@ string Task::getTaskLocation() const
 {
 	return taskLocation;
 }
-Status Task::getTaskStatus()
+Status Task::getTaskStatus() const
 {
 	return taskStatus;
 }
-tm* Task::getTaskReminderTime()
+tm* Task::getTaskReminderTime() const
 {
 	return taskReminderTime;
 }
-tm* Task::getTaskStart()
+tm* Task::getTaskStart() const
 {
 	return taskStart;
 }
-
-tm* Task::getTaskEnd()
+tm* Task::getTaskEnd() const
 {
 	return taskEnd;
 }
-RepeatType Task::getTaskRepeat()
+RepeatType Task::getTaskRepeat() const
 {
 	return taskRepeat;
 }
@@ -145,7 +144,7 @@ void Task::clearAllAttr()
 	clearTimeAttr();
 }
 
-int Task::getTimeInt(TimeType type)
+int Task::getTimeInt(TimeType type) const
 {
 	int yearMonthDayHourMin;
 	tm* time = NULL;

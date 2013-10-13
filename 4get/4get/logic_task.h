@@ -42,17 +42,17 @@ public:
 	//Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminder);
 
 	//getter functions
-	int getTaskId();
-	TaskType getTaskType();
+	int getTaskId() const;
+	TaskType getTaskType() const;
 	string getTaskDescription() const;
-	Priority getTaskPriority();
+	Priority getTaskPriority() const;
 	string getTaskLocation() const;
-	Status getTaskStatus();
-	tm* getTaskReminderTime();
-	virtual tm* getTaskStart();
-	virtual tm* getTaskEnd();
-	virtual RepeatType getTaskRepeat();
-	int getTimeInt(TimeType type);
+	Status getTaskStatus() const;
+	tm* getTaskReminderTime() const;
+	virtual tm* getTaskStart() const;
+	virtual tm* getTaskEnd() const;
+	virtual RepeatType getTaskRepeat() const;
+	int getTimeInt(TimeType type) const;
 
 	//setter functions
 	void setTaskId(int id);
