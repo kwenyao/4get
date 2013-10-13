@@ -1,9 +1,14 @@
 #include "logic_executor.h"
 
+const int Executor::CONSTANT_MULTIPLIER_YEAR = 10000000;
+const int Executor::CONSTANT_MULTIPLIER_MONTH = 100000;
+const int Executor::CONSTANT_MULTIPLIER_DAY = 1000;
+
 Executor::Executor(){
 	vectorOfInputs.reserve(SLOT_SIZE);
 	taskID = retrieveCurrentDate();
 	tasks.loadFromFile();
+	
 }
 
 
@@ -31,11 +36,29 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 }
 bool Executor::adderFunction()
 {
-	_task.setTaskDescription(vectorOfInputs[SLOT_DESCRIPTION]);
-	_task.setTaskLocation(vectorOfInputs[SLOT_LOCATION]);
-	_task.setTaskReminderTime(convertStringToTm());
+	Task _task;
+	int id;
+	string description, location;
+	tm* reminderTime;
+	Priority priority;
+	Status status;
+
+	++taskID = determineTaskId();
+	id = taskID;
+	description = vectorOfInputs[SLOT_DESCRIPTION];
+	location = vectorOfInputs[SLOT_LOCATION];
+	cout << "hello" << endl;
+	cout << vectorOfInputs[SLOT_END_TIME] <<endl;
+	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
+	status = convert.convertStringToStatus(vectorOfInputs[SLOT_STATUS]);
+	cout << "bye" << endl;
+	reminderTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
+	_task.setupTask(id, description, location, reminderTime, priority, status);
+	taskGlobal = _task;
+
 	addToTaskList();
 	return true;
+
 }
 bool Executor::isEqual(string str1, const string str2)
 {
@@ -55,41 +78,6 @@ void Executor::loadListOfTasks()
 {
 	tasks.loadFromFile();	
 }
-tm* Executor::convertStringToTm()
-{
-	string date = vectorOfInputs[SLOT_REMIND_TIME];
-	string day, month, year;
-	int dayInt=0, monthInt=0, yearInt=0;
-	struct tm* remindTime;
-
-	remindTime = new struct tm;
-
-	if(date == ""){
-		remindTime->tm_mday = dayInt;
-		remindTime->tm_mon = monthInt;
-		remindTime ->tm_year = yearInt;
-		return remindTime;
-	}
-
-	day += date[0];			//enter date format as dd/m/yy for now..
-	day += date[1];
-	month += date[3];
-	year += date[5];
-	year += date[6];
-
-	stringstream sd(day);
-	sd >> dayInt;
-	stringstream sm(month);
-	sm >> monthInt;
-	stringstream sy(year);
-	sy >> yearInt;
-
-	remindTime ->tm_mday = dayInt;
-	remindTime ->tm_mon = monthInt;
-	remindTime ->tm_year = yearInt;
-
-	return remindTime;
-}
 bool Executor::deleteFunction()
 {
 	int deleteNumber;
@@ -100,7 +88,7 @@ bool Executor::deleteFunction()
 }
 bool Executor::addToTaskList()
 {
-	tasks.addToList(_task, listToDo);
+	tasks.addToList(taskGlobal, listToDo);
 	return true;
 }
 list<Task> Executor::getUpdatedList(ListType listType){
@@ -119,4 +107,14 @@ int Executor::retrieveCurrentDate(){
 	year = year*CONSTANT_MULTIPLIER_YEAR;
 	yearMonthDay = (year + month + day);
 	return yearMonthDay;
+}
+//ListType Executor::determineListType(vector<string> &input)
+//{
+//	if(input[SLOT_END_TIME].empty())
+//		return 
+//}
+
+int Executor::determineTaskId()
+{
+	return retrieveCurrentDate();
 }

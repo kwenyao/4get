@@ -19,7 +19,7 @@ Status Converter::convertStringToStatus(string str)
 		return incomplete;
 	else if(isEqual(str, "overdued"))
 		return overdued;
-	else if(str.empty())
+	else 
 		return statusNone;
 }
 RepeatType Converter::convertStringToRepeatType(string str)
@@ -35,6 +35,8 @@ RepeatType Converter::convertStringToRepeatType(string str)
 		return monthly;
 	else if(isEqual(str, "annually"))
 		return annually;
+	else
+		return repeatNone;
 }
 Priority Converter::convertStringToPriority(string str)
 {
@@ -45,6 +47,13 @@ Priority Converter::convertStringToPriority(string str)
 }
 tm* Converter::convertStringToTm(string str)  //this function work for dates that are eg. 02/02/13
 {
+	tm* Time;
+	Time = new tm;
+	Time = NULL;
+	if(str.empty())
+	{
+		return Time;
+	}
 	transform(str.begin(), str.end(), str.begin(), ::tolower);
 	if(str[2] == '/')
 	{
@@ -58,13 +67,12 @@ tm* Converter::convertStringToTm(string str)  //this function work for dates tha
 		{
 			year += 2000;
 		}
-		tm* remindTime;
-		remindTime = new struct tm;
-		remindTime ->tm_mday = day;
-		remindTime ->tm_mon = month;
-		remindTime ->tm_year = year;
+		
+		Time ->tm_mday = day;
+		Time ->tm_mon = month;
+		Time ->tm_year = year;
 
-		return remindTime;
+		return Time;
 	}
 	else if(str[1] == ':'|| str[2] == ':')
 	{
@@ -75,17 +83,11 @@ tm* Converter::convertStringToTm(string str)  //this function work for dates tha
 		stm >> hour>> DELIMITER;
 		stm >> mins >> DELIMITER_MINS;
 
-		tm* remindTime;
-		
-		remindTime = new struct tm;
-		
-		remindTime ->tm_hour = hour;
-		remindTime->tm_min = mins;
+		Time ->tm_hour = hour;
+		Time->tm_min = mins;
 
-		return remindTime;
-
+		return Time;
 	}
-	
 }
 bool Converter::isEqual(string str1, const string str2)
 {

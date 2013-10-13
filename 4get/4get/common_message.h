@@ -186,9 +186,7 @@ namespace Constants{
 	const string LIST_OVERDUED = " listoverdued";
 	const std::size_t LIST_OVERDUED_LENGTH = 13;
 	const int CONSTANT_START_YEAR = 1900;
-	const int CONSTANT_MULTIPLIER_YEAR = 100000;
-	const int CONSTANT_MULTIPLIER_MONTH = 1000;
-	const int CONSTANT_MULTIPLIER_DAY = 10;
+
 
 	//multipliers for time conversion in Task
 	const int CONVERT_MULTIPLIER_YEAR = 100000000;
