@@ -85,12 +85,20 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
 	private: System::Windows::Forms::ColumnHeader^  tPriority;
 	private: System::Windows::Forms::ListView^  completedListView;
+
 	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
 	private: System::Windows::Forms::ColumnHeader^  cVenue;
 	private: System::Windows::Forms::ColumnHeader^  cTime;
 	private: System::Windows::Forms::ColumnHeader^  cDue;
 	private: System::Windows::Forms::ColumnHeader^  cPriority;
+
+
+
+
+
+
+
 
 
 
@@ -135,7 +143,6 @@ namespace UIDisplay {
 	private: void printCompletedList();
 	private: void printOverdueList();
 	private: bool passUserInput();
-	private: void printMessage();
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
