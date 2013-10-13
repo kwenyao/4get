@@ -25,6 +25,7 @@ bool TaskList::addToList(Task task, ListType listType){
 	listToAdd = determineList(listType);
 	iterator = getIterator(*listToAdd, task);
 	listToAdd->insert(iterator,task);
+	saveToFile();
 	return true;
 }
 

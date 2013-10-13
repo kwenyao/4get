@@ -15,7 +15,7 @@ const string Storage::MARKER_REPEAT = "Repeat:";
 const string Storage::MARKER_NEXT_OCCURANCE = "Next Occurance:";
 const string Storage::MARKER_PRIORITY = "Priority:";
 const string Storage::MARKER_REMINDER_TIME = "Reminder Time:";
-const string Storage::MARKER_STATUS = "Status:";
+//const string Storage::MARKER_STATUS = "Status:";  //to be deleted if not used
 const string Storage::MARKER_TASK_END = "---------Task End---------";
 const string Storage::EMPTY_LINE = "";
 
@@ -73,12 +73,12 @@ void Storage::writeTaskAttributes(const Task& task){
 	writeID(task);
 	writeDescription(task);
 	writeLocation(task);
-	writeStartTime(task);
-	writeEndTime(task);
-	writeRepeat(task);
-	writeNextOccurance(task);
+	//writeStartTime(task);
+	//writeEndTime(task);
+	//writeRepeat(task);
+	//writeNextOccurance(task);
 	writePriority(task);
-	writeReminderTime(task);
+	//writeReminderTime(task);
 }
 
 void Storage::writeTaskType(const Task& task){
@@ -103,10 +103,12 @@ void Storage::writeLocation(const Task& task){
 
 void Storage::writeStartTime(const Task& task){
 	writeLine(MARKER_START_TIME);
+	writeLine(convertToStr(task.getTaskStart()));
 }
 
 void Storage::writeEndTime(const Task& task){
 	writeLine(MARKER_END_TIME);
+	writeLine(convertToStr(task.getTaskEnd()));
 }
 
 void Storage::writeRepeat(const Task& task){
@@ -126,10 +128,7 @@ void Storage::writePriority(const Task& task){
 
 void Storage::writeReminderTime(const Task& task){
 	writeLine(MARKER_REMINDER_TIME);
-}
-
-void Storage::writeStatus(const Task& task){
-	writeLine(MARKER_STATUS);
+	writeLine(convertToStr(task.getTaskReminderTime()));
 }
 
 void Storage::writeFileSetup(string fileName, ios_base::openmode mode){
@@ -197,4 +196,12 @@ string Storage::convertToStr(Priority priority){
 	default:
 		return PRIORITY_NORMAL;
 	}
+}
+
+string Storage::convertToStr(tm* time){
+	stringstream tempStream;
+	time_t tempTime;
+	tempTime = mktime(time);
+	tempStream << tempTime;
+	return tempStream.str();
 }
