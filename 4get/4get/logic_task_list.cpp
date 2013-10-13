@@ -58,11 +58,11 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 	return _listToDisplay;
 }
 
-Task TaskList::obtainTask(int taskToGet){
-	Task taskToReturn;
+Task* TaskList::obtainTask(int taskToGet){
+	Task* taskToReturn;
 	list<Task>::iterator iterator;
 	iterator = iterateToTask(_listToDisplay, taskToGet);
-	taskToReturn = *iterator;
+	taskToReturn = iterator;
 	return taskToReturn;
 }
 

@@ -74,7 +74,7 @@ void Storage::writeTaskAttributes(const Task& task){
 	writeDescription(task);
 	writeLocation(task);
 	//writeStartTime(task);
-	//writeEndTime(task);
+	writeEndTime(task);
 	//writeRepeat(task);
 	//writeNextOccurance(task);
 	writePriority(task);
