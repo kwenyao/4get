@@ -12,16 +12,6 @@ bool UiConvert::stringSysToStdConversion(String^ source, string& result){
 	return true;
 }
 
-bool UiConvert::stringStdToSysConversion(String^ result, string& source){
-	result = marshal_as<String^>(source);
-	return true;
-}
-
-bool UiConvert::intToSysStringConversion(System::String^ result, int& source){
-	source = Convert::ToInt32(result);
-	return true;
-}
-
 string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	string result ="";
 	switch(taskPriority){

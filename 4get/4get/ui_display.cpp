@@ -329,7 +329,7 @@ void ui_display::loadList(){
 	this->printList();
 }
 
-bool ui_display::passUserInput(){
+void ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
 	execute->stringCollector(stdCommand);
@@ -341,13 +341,12 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		commandKeyword->clear();
-		if(this->passUserInput()){
-			this->textboxInput->Clear();
-			list<Task> taskList;
-			taskList = execute->getUpdatedList(activeListType);
-			*listOfTasks = taskList;
-			printList();
-		}
+		this->passUserInput();
+		this->textboxInput->Clear();
+		list<Task> taskList;
+		taskList = execute->getUpdatedList(activeListType);
+		*listOfTasks = taskList;
+		printList();
 
 	}
 }
