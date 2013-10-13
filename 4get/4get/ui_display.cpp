@@ -7,7 +7,7 @@ ui_display::ui_display(){
 	converter = new UiConvert;
 	listOfTasks = new std::list<Task>;
 	loaded = false;
-	activeListView = UIDisplay::ui_display::todoListView;
+	MessageBox::Show("inside constructor before assigning active list");
 	activeListType = listToDo;
 
 	InitializeComponent();
@@ -349,6 +349,21 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 }
 
 void ui_display::printList(){
+	switch(activeListType){
+	case listCompleted:
+		printCompletedList();
+		break;
+	case listOverdue:
+		printOverdueList();
+		break;
+	default:
+		printToDoList();
+		break;
+	}
+}
+
+
+void ui_display::printToDoList(){
 	int size = listOfTasks->size();
 
 	int j=0;
@@ -361,10 +376,10 @@ void ui_display::printList(){
 	}
 	this->Cursor = Cursors::WaitCursor;
 
-	this->activeListView->BeginUpdate();
+	this->todoListView->BeginUpdate();
 	if(loaded)
 	{
-		this->activeListView->Items->Clear();
+		this->todoListView->Items->Clear();
 	}
 
 	for (int i=0; i<size; i++)
@@ -375,10 +390,78 @@ void ui_display::printList(){
 		temp[j] = item;
 		j++;
 	}
-	this->activeListView->Items->AddRange(temp);
+	this->todoListView->Items->AddRange(temp);
 	loaded = true;
 	this->Cursor = Cursors::Default;
-	this->activeListView->EndUpdate();
+	this->todoListView->EndUpdate();
+
+}
+
+void ui_display::printCompletedList(){
+	int size = listOfTasks->size();
+
+	int j=0;
+	array<ListViewItem^>^ temp;
+	Array::Resize(temp, size);
+
+	if(size==0){
+		MessageBox::Show("List is empty");
+		return;
+	}
+	this->Cursor = Cursors::WaitCursor;
+
+	this->completedListView->BeginUpdate();
+	if(loaded)
+	{
+		this->completedListView->Items->Clear();
+	}
+
+	for (int i=0; i<size; i++)
+	{
+		MessageBox::Show("In print loop");
+		ListViewItem^ item = gcnew ListViewItem;
+		converter->printItem(item, listOfTasks, i+1);
+		temp[j] = item;
+		j++;
+	}
+	this->completedListView->Items->AddRange(temp);
+	loaded = true;
+	this->Cursor = Cursors::Default;
+	this->completedListView->EndUpdate();
+
+}
+
+void ui_display::printOverdueList(){
+	int size = listOfTasks->size();
+
+	int j=0;
+	array<ListViewItem^>^ temp;
+	Array::Resize(temp, size);
+
+	if(size==0){
+		MessageBox::Show("List is empty");
+		return;
+	}
+	this->Cursor = Cursors::WaitCursor;
+
+	this->overdueListView->BeginUpdate();
+	if(loaded)
+	{
+		this->overdueListView->Items->Clear();
+	}
+
+	for (int i=0; i<size; i++)
+	{
+		MessageBox::Show("In print loop");
+		ListViewItem^ item = gcnew ListViewItem;
+		converter->printItem(item, listOfTasks, i+1);
+		temp[j] = item;
+		j++;
+	}
+	this->overdueListView->Items->AddRange(temp);
+	loaded = true;
+	this->Cursor = Cursors::Default;
+	this->overdueListView->EndUpdate();
 
 }
 
@@ -386,14 +469,14 @@ Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Window
 	this->textboxInput->Clear();
 }
 Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListView = UIDisplay::ui_display::completedListView;
+	activeListType = listCompleted;
 	list<Task> taskList;
 	taskList = execute->getUpdatedList(activeListType);
 	*listOfTasks = taskList;
 	this->printList();
 }
 Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	activeListView = UIDisplay::ui_display::overdueListView;
+	activeListType = listOverdue;
 	list<Task> taskList;
 	taskList = execute->getUpdatedList(activeListType);
 	*listOfTasks = taskList;
