@@ -41,6 +41,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 	private: System::Windows::Forms::ListView^ activeListView;
+	private: ListType activeListType;
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 
@@ -112,48 +113,9 @@ namespace UIDisplay {
 #pragma endregion
 
 	private: void loadList();
-	private: void printList(ListType listType);
+	private: void printList();
 	private: void passUserInput();          
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-	private: System::Void textboxInput_test(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-				 if(e->KeyCode == Keys::Enter )
-				 {
-					 MessageBox::Show("Alt pressed");
-					 array<ListViewItem^>^ temp;
-					 Array::Resize(temp, 1);
-					 ListViewItem^item = gcnew ListViewItem;
-
-					 this->todoListView->BeginUpdate();
-					 if(loaded)
-					 {
-						 this->todoListView->Items->Clear();
-					 }
-
-					 System::String^ sys_index = "1";
-					 System::String^ sys_desc = "description";
-					 System::String^ sys_venue = "location";
-					 System::String^ sys_time = "1200"; //time
-					 System::String^ sys_due = "05-10-2013"; //due
-					 System::String^ sys_priority = "high"; //priority
-					 item->BeginEdit();
-
-					 item->SubItems[0]->Text = sys_index;
-
-					 //creating item for listview
-					 item->SubItems->Add(sys_desc); //add description
-					 item->SubItems->Add(sys_venue); //add venue	 
-					 item->SubItems->Add(sys_time); //add time
-					 item->SubItems->Add(sys_due); //add due
-					 item->SubItems->Add(sys_priority); //add priority
-
-					 temp[0] = item;
-					 this->todoListView->Items->AddRange(temp);
-					 loaded = true;
-					 this->Cursor = Cursors::Default;
-					 this->todoListView->EndUpdate();
-				 }
-			 }
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);

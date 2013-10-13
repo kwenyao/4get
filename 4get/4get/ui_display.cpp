@@ -7,6 +7,8 @@ ui_display::ui_display(){
 	converter = new UiConvert;
 	listOfTasks = new std::list<Task>;
 	loaded = false;
+	activeListView = UIDisplay::ui_display::todoListView;
+	activeListType = listToDo;
 
 	InitializeComponent();
 }
@@ -296,10 +298,8 @@ void ui_display::InitializeComponent(void){
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
-	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 	this->Name = L"ui_display";
 	this->Text = L"4get";
-	this->Load += gcnew System::EventHandler(this, &ui_display::ui_display_Load);
 	this->tabContainer->ResumeLayout(false);
 	this->tabTodo->ResumeLayout(false);
 	this->tabCompleted->ResumeLayout(false);
@@ -314,7 +314,7 @@ void ui_display::InitializeComponent(void){
 
 void ui_display::loadList(){
 	/*list = execute->load();*/
-	this->printList(listToDo);
+	this->printList();
 }
 
 void ui_display::passUserInput(){
@@ -328,34 +328,20 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
+		MessageBox::Show("after processing");
 		this->textboxInput->Clear();
 		this->textboxInput->Text = L"Enter Command Here:";
-
-		MessageBox::Show("Enter pressed");
+		MessageBox::Show("getting list");
 		list<Task> taskList;
-		taskList = execute->getUpdatedList();
+		taskList = execute->getUpdatedList(activeListType);
 		*listOfTasks = taskList;
-
-		MessageBox::Show(System::Convert::ToString(1));
-		printList(listToDo);
+		MessageBox::Show("printing list");
+		printList();
 	}
 }
 
-void ui_display::printList(ListType listType){
-	listType = listCompleted;
+void ui_display::printList(){
 	int size = listOfTasks->size();
-	
-	switch(listType){
-	case listCompleted:
-		activeListView = UIDisplay::ui_display::completedListView;
-		break;
-	case listOverdue:
-		activeListView = UIDisplay::ui_display::overdueListView;
-		break;
-	default:
-		activeListView = UIDisplay::ui_display::todoListView;
-		break;
-	}
 
 	int j=0;
 	array<ListViewItem^>^ temp;
@@ -388,52 +374,20 @@ void ui_display::printList(ListType listType){
 
 }
 
-Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
-	if(e->KeyChar.ToString() == Keys::F1.ToString() )
-	{
-		MessageBox::Show("Alt pressed");
-		array<ListViewItem^>^ temp;
-
-		this->Cursor = Cursors::WaitCursor;
-
-		this->todoListView->BeginUpdate();
-		if(loaded)
-		{
-			this->todoListView->Items->Clear();
-		}
-		System::Windows::Forms::ListViewItem^ item;
-		System::String^ sys_index = "1";
-		System::String^ sys_desc = "description";
-		System::String^ sys_venue = "location";
-		System::String^ sys_time = "1200"; //time
-		System::String^ sys_due = "05-10-2013"; //due
-		System::String^ sys_priority = "high"; //priority
-		item->BeginEdit();
-
-		//item->SubItems[0]->Text = sys_index;
-
-		//creating item for listview
-		item->SubItems->Add(sys_index);
-		item->SubItems->Add(sys_desc); //add description
-		item->SubItems->Add(sys_venue); //add venue	 
-		item->SubItems->Add(sys_time); //add time
-		item->SubItems->Add(sys_due); //add due
-		item->SubItems->Add(sys_priority); //add priority
-
-		temp[0] = item;
-		this->todoListView->Items->AddRange(temp);
-		loaded = true;
-		this->Cursor = Cursors::Default;
-		this->todoListView->EndUpdate();
-	}
-}
-
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Clear();
 }
 Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	this->printList(listCompleted);
+	activeListView = UIDisplay::ui_display::completedListView;
+	list<Task> taskList;
+	taskList = execute->getUpdatedList(activeListType);
+	*listOfTasks = taskList;
+	this->printList();
 }
 Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	this->printList(listOverdue);
+	activeListView = UIDisplay::ui_display::overdueListView;
+	list<Task> taskList;
+	taskList = execute->getUpdatedList(activeListType);
+	*listOfTasks = taskList;
+	this->printList();
 }
