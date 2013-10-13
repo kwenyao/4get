@@ -1,6 +1,6 @@
 #include "logic_task_list.h"
 
-const int TaskList::DELETE_INDEX_CORRECTION = -1;
+const int TaskList::INDEX_CORRECTION = -1;
 
 TaskList::TaskList(){
 }
@@ -31,13 +31,22 @@ bool TaskList::addToList(Task task, ListType listType){
 bool TaskList::deleteFromList(int taskToDelete){
 	list<Task>* listToDeleteFrom;
 	list<Task>::iterator iterator;
-	taskToDelete = taskToDelete + DELETE_INDEX_CORRECTION;
 	listToDeleteFrom = determineList(_currentDisplayed);
-	iterator = listToDeleteFrom->begin();
-	for(int i=0; i<taskToDelete; i++)
-		++iterator;
+	iterator = iterateToTask(*listToDeleteFrom, taskToDelete);
 	listToDeleteFrom->erase(iterator);
 	return true; //stub
+}
+
+bool TaskList::markDone(int taskToMark){
+	Task temp;
+	list<Task>* listToMark;
+	list<Task>::iterator iterator;
+	listToMark = determineList(_currentDisplayed);
+	iterator = iterateToTask(*listToMark, taskToMark);
+	temp = *iterator;
+	deleteFromList(taskToMark);
+	addToList(temp, listCompleted);
+	return true;
 }
 
 list<Task> TaskList::obtainList(ListType listToReturn){
@@ -64,6 +73,15 @@ list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskT
 		}
 		++iterator;
 	}
+	return iterator;
+}
+
+list<Task>::iterator TaskList::iterateToTask(list<Task>& listToEdit, int task){
+	list<Task>::iterator iterator;
+	int indexToDelete = task + INDEX_CORRECTION;
+	iterator = listToEdit.begin();
+	for(int i=0; i<indexToDelete; i++)
+		++iterator;
 	return iterator;
 }
 

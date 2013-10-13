@@ -23,9 +23,10 @@ private:
 	int _completedListSize;
 	int _overdueListSize;
 
-	static const int DELETE_INDEX_CORRECTION;
+	static const int INDEX_CORRECTION;
 
 	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
+	list<Task>::iterator iterateToTask(list<Task>& listToEdit, int task);
 	list<Task>* determineList(ListType listType);
 
 public:
@@ -35,9 +36,10 @@ public:
 	bool loadFromFile();
 	bool saveToFile();
 
-	//list manipulation functions
+	//Public list manipulation functions
 	bool addToList(Task task, ListType listToAdd);
 	bool deleteFromList(int taskToDelete);
+	bool markDone(int taskToMark);
 
 	list<Task> obtainList(ListType listToReturn);
 };

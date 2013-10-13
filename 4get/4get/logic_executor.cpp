@@ -23,6 +23,8 @@ bool Executor::receive(string usercommand)
 		return adderFunction();
 	case commandDelete:
 		return deleteFunction();
+	case commandMark:
+		return markFunction();
 	default: return false;
 	}
 }
@@ -102,9 +104,18 @@ bool Executor::deleteFunction()
 	tasks.deleteFromList(deleteNumber);
 	return true;
 }
+bool Executor::markFunction()
+{
+	int markNumber;
+	stringstream slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	slotNumber >> markNumber;
+	tasks.markDone(markNumber);
+	return true;
+}
 bool Executor::addToTaskList()
 {
 	tasks.addToList(*taskGlobal, listToDo);
+	//tasks.addToList(*taskGlobal, listOverdue);
 	return true;
 }
 list<Task> Executor::getUpdatedList(ListType listType){
