@@ -23,7 +23,7 @@ private:
 	int _completedListSize;
 	int _overdueListSize;
 
-	list<Task>::iterator getIterator(list<Task> insertionList, Task task);
+	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
 
 	list<Task> determineList(ListType listType);
 

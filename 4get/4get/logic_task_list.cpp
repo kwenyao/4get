@@ -21,6 +21,7 @@ bool TaskList::addToList(Task task, ListType listType){
 	list<Task> listToAdd;
 	list<Task>::iterator iterator;
 	listToAdd = determineList(listType);
+	//iterator = listToAdd.begin();
 	iterator = getIterator(listToAdd, task);
 	listToAdd.insert(iterator, task);
 	return true;
@@ -42,10 +43,14 @@ list<Task> TaskList::obtainList(ListType listToReturn){
 	return _listToDisplay;
 }
 
-list<Task>::iterator TaskList::getIterator(list<Task> insertionList, Task taskToAdd){
+list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskToAdd){
 	int tempTime;
+	bool isEmpty = insertionList.empty();
 	int taskEndTime = taskToAdd.getTimeInt(timeEnd);
 	list<Task>::iterator iterator = insertionList.begin();
+	if(isEmpty){
+		return iterator;
+	}
 	int listSize = insertionList.size();
 	for(int i=0; i<listSize; i++){
 		tempTime = iterator->getTimeInt(timeEnd);
