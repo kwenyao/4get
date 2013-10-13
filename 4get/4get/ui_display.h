@@ -4,6 +4,7 @@
 #include "logic_executor.h"
 #include "logic_task.h"
 #include "common_message.h"
+#include <string>
 #include <list>
 #include <Windows.h>
 
@@ -33,6 +34,7 @@ namespace UIDisplay {
 	private: list<Task>* listOfTasks;
 
 	private: bool loaded;
+	private: string *commandKeyword;
 
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
@@ -41,6 +43,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 	private: ListType activeListType;
+	
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 
@@ -121,5 +124,6 @@ namespace UIDisplay {
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 };
 }

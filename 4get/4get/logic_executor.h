@@ -8,9 +8,12 @@
 #define _LOGIC_EXECUTOR_H_
 
 #include "logic_converter.h"
-#include "logic_task.h"
 #include "logic_parser.h"
+#include "logic_task.h"
 #include "logic_task_list.h"
+#include "logic_task_floating.h"
+#include "logic_task_deadline.h"
+#include "logic_task_timed.h"
 #include <locale.h>
 #include <vector>
 #include <string>
@@ -24,7 +27,7 @@ using namespace Constants;
 class Executor
 {
 	private:
-	Task taskGlobal;
+	Task *taskGlobal;
 	TaskList tasks;
 	string task;
 	vector<string> vectorOfInputs;

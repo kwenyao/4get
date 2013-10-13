@@ -4,9 +4,10 @@
 
 // handled by John Kuan (A0097592M)
 
-class TaskFloating : Task
+class TaskFloating : public Task
 {
 public:
-	TaskFloating(int id, string description, string location, tm *reminderTime, Priority priority, Status status);
+	TaskFloating();
+	TaskFloating(int id, string description, string location, tm* reminderTime, Priority priority, Status status);
 };
 #endif

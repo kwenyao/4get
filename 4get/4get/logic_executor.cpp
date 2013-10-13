@@ -36,10 +36,10 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 }
 bool Executor::adderFunction()
 {
-	Task _task;
 	int id;
 	string description, location;
-	tm* reminderTime;
+	tm *reminderTime, *startTime, *endTime;
+	RepeatType repeat;
 	Priority priority;
 	Status status;
 
@@ -52,9 +52,24 @@ bool Executor::adderFunction()
 	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
 	status = convert.convertStringToStatus(vectorOfInputs[SLOT_STATUS]);
 	cout << "bye" << endl;
-	reminderTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
-	_task.setupTask(id, description, location, reminderTime, priority, status);
-	taskGlobal = _task;
+	startTime = convert.convertStringToTm(vectorOfInputs[SLOT_START_TIME]);
+	endTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
+	reminderTime = convert.convertStringToTm(vectorOfInputs[SLOT_REMIND_TIME]);
+	if(vectorOfInputs[SLOT_END_TIME].empty()){
+		TaskFloating newTask(id, description, location, reminderTime, priority, status);
+		taskGlobal = new TaskFloating;
+		*taskGlobal = newTask;
+	}
+	else if(vectorOfInputs[SLOT_START_TIME].empty()){
+		TaskDeadline newTask(id, description, location, reminderTime, priority, status, repeat, endTime); 
+		taskGlobal = new TaskDeadline;
+		*taskGlobal = newTask;
+	}
+	else{
+		TaskTimed newTask(id, description, location, reminderTime, priority, status, repeat, startTime, endTime);
+		taskGlobal = new TaskTimed;
+		*taskGlobal = newTask;
+	}
 
 	addToTaskList();
 	return true;
@@ -88,7 +103,7 @@ bool Executor::deleteFunction()
 }
 bool Executor::addToTaskList()
 {
-	tasks.addToList(taskGlobal, listToDo);
+	tasks.addToList(*taskGlobal, listToDo);
 	return true;
 }
 list<Task> Executor::getUpdatedList(ListType listType){

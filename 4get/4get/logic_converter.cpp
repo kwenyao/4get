@@ -49,7 +49,6 @@ tm* Converter::convertStringToTm(string str)  //this function work for dates tha
 {
 	tm* Time;
 	Time = new tm;
-	Time = NULL;
 	if(str.empty())
 	{
 		return Time;

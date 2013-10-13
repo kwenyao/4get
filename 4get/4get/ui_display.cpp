@@ -6,6 +6,7 @@ ui_display::ui_display(){
 	execute = new Executor;
 	converter = new UiConvert;
 	listOfTasks = new std::list<Task>;
+	commandKeyword = new string;
 	loaded = false;
 	MessageBox::Show("inside constructor before assigning active list");
 	activeListType = listToDo;
@@ -243,6 +244,7 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
+	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);
 	// 
 	// messageContainer
 	// 
@@ -481,4 +483,15 @@ Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::E
 	taskList = execute->getUpdatedList(activeListType);
 	*listOfTasks = taskList;
 	this->printList();
+}
+Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+	if(commandKeyword->size() < 3){
+		switch(e->KeyChar){
+		case ((char)65):
+			commandKeyword += 'a';
+			break;
+		case ((char)13):
+			break;
+		};
+	}
 }

@@ -8,7 +8,7 @@ class TaskTimed : public TaskDeadline
 {
 public:
 	TaskTimed();
-	TaskTimed(int id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime);
+	TaskTimed(int id, string description, string location, tm* reminderTime, Priority priority, Status status, RepeatType repeat, tm* startTime, tm* endTime);
 	void setupTask(int id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime);
 
 	void setTaskStart(tm *startTask);
