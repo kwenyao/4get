@@ -6,6 +6,7 @@
 #include "common_message.h"
 #include <string>
 #include <list>
+#include <time.h>
 #include <Windows.h>
 
 namespace UIDisplay {

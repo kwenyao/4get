@@ -8,7 +8,6 @@ ui_display::ui_display(){
 	listOfTasks = new std::list<Task>;
 	commandKeyword = new string;
 	loaded = false;
-	MessageBox::Show("inside constructor before assigning active list");
 	activeListType = listToDo;
 
 	InitializeComponent();
@@ -330,22 +329,11 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		this->passUserInput();
-		MessageBox::Show("after processing");
 		this->textboxInput->Clear();
 		this->textboxInput->Text = L"Enter Command Here:";
-		MessageBox::Show("getting list");
-		if(activeListType == listToDo)
-			MessageBox::Show("to do list is active");
-		else if(activeListType == listCompleted)
-			MessageBox::Show("completed list is active");
-		else if(activeListType == listOverdue)
-			MessageBox::Show("overdue list is active");
 		list<Task> taskList;
 		taskList = execute->getUpdatedList(activeListType);
-		if(taskList.size() == 0)
-			MessageBox::Show("list is empty before printing");
 		*listOfTasks = taskList;
-		MessageBox::Show("printing list");
 		printList();
 	}
 }
@@ -371,7 +359,10 @@ void ui_display::printToDoList(){
 	int j=0;
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
-
+	if(loaded)
+	{
+		this->todoListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -379,14 +370,9 @@ void ui_display::printToDoList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->todoListView->BeginUpdate();
-	if(loaded)
-	{
-		this->todoListView->Items->Clear();
-	}
 
 	for (int i=0; i<size; i++)
 	{
-		MessageBox::Show("In print loop");
 		ListViewItem^ item = gcnew ListViewItem;
 		converter->printItem(item, listOfTasks, i+1);
 		temp[j] = item;
@@ -406,6 +392,10 @@ void ui_display::printCompletedList(){
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
 
+	if(loaded)
+	{
+		this->completedListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -413,10 +403,7 @@ void ui_display::printCompletedList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->completedListView->BeginUpdate();
-	if(loaded)
-	{
-		this->completedListView->Items->Clear();
-	}
+	
 
 	for (int i=0; i<size; i++)
 	{
@@ -440,6 +427,10 @@ void ui_display::printOverdueList(){
 	array<ListViewItem^>^ temp;
 	Array::Resize(temp, size);
 
+	if(loaded)
+	{
+		this->overdueListView->Items->Clear();
+	}
 	if(size==0){
 		MessageBox::Show("List is empty");
 		return;
@@ -447,10 +438,7 @@ void ui_display::printOverdueList(){
 	this->Cursor = Cursors::WaitCursor;
 
 	this->overdueListView->BeginUpdate();
-	if(loaded)
-	{
-		this->overdueListView->Items->Clear();
-	}
+	
 
 	for (int i=0; i<size; i++)
 	{
