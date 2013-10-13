@@ -24,9 +24,7 @@ public:
 
 	static string trim(const string& s, const string& delimiters = " \f\n\r\t\v" );
 	bool stringSysToStdConversion(System::String^ source, string& result);
-	bool stringStdToSysConversion(System::String^ result, string& source);
 	string enumPriorityToStdString(Priority priority);
-	bool intToSysStringConversion(System::String^ result, int& source);
 	void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task> *list, int taskIndex);
 };
 #endif
