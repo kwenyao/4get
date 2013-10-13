@@ -44,7 +44,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 	private: ListType activeListType;
-	
+
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 
@@ -54,7 +54,7 @@ namespace UIDisplay {
 
 
 
-	
+
 	private: System::Windows::Forms::ListView^  overdueListView;
 	private: System::Windows::Forms::ColumnHeader^  oTaskIndex;
 	private: System::Windows::Forms::ColumnHeader^  oTaskDescription;
@@ -62,9 +62,10 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  oTaskTime;
 	private: System::Windows::Forms::ColumnHeader^  oTaskDate;
 	private: System::Windows::Forms::ColumnHeader^  oTaskPriority;
+	private: System::Windows::Forms::RichTextBox^  messageBox;
 
 
-	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+
 	private: System::Windows::Forms::GroupBox^  todayContainer;
 	private: System::Windows::Forms::CheckedListBox^  checkedTaskList;
 	private: System::Windows::Forms::DateTimePicker^  chooseDate;
@@ -83,19 +84,32 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  tTime;
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
 	private: System::Windows::Forms::ColumnHeader^  tPriority;
-
-
-
-
-
-
-
-
 	private: System::Windows::Forms::ListView^  completedListView;
-	private: System::Windows::Forms::ColumnHeader^  cIndexNo;
+	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
 	private: System::Windows::Forms::ColumnHeader^  cVenue;
+	private: System::Windows::Forms::ColumnHeader^  cTime;
+	private: System::Windows::Forms::ColumnHeader^  cDue;
 	private: System::Windows::Forms::ColumnHeader^  cPriority;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -120,11 +134,11 @@ namespace UIDisplay {
 	private: void printToDoList();
 	private: void printCompletedList();
 	private: void printOverdueList();
-	private: void passUserInput();          
+	private: bool passUserInput();
+	private: void printMessage();
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 };
 }
