@@ -23,8 +23,9 @@ private:
 	int _completedListSize;
 	int _overdueListSize;
 
-	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
+	static const int DELETE_INDEX_CORRECTION;
 
+	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
 	list<Task>* determineList(ListType listType);
 
 public:

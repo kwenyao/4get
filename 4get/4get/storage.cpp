@@ -5,6 +5,7 @@ const string Storage::FILENAME_COMPLETED = "completed.txt";
 const string Storage::FILENAME_OVERDUE = "overdue.txt";
 
 const string Storage::MARKER_TASK_BEGIN = "---------Task Begin---------";
+const string Storage::MARKER_TASK_TYPE = "Task Type:";
 const string Storage::MARKER_ID = "Task ID:";
 const string Storage::MARKER_DESCRIPTION = "Description:";
 const string Storage::MARKER_LOCATION = "Location:";
@@ -17,6 +18,20 @@ const string Storage::MARKER_REMINDER_TIME = "Reminder Time:";
 const string Storage::MARKER_STATUS = "Status:";
 const string Storage::MARKER_TASK_END = "---------Task End---------";
 const string Storage::EMPTY_LINE = "";
+
+const string Storage::TASK_TYPE_FLOATING = "floating";
+const string Storage::TASK_TYPE_DEADLINE = "deadline";
+const string Storage::TASK_TYPE_TIMED = "timed";
+
+const string Storage::REPEAT_TYPE_DAILY = "daily";
+const string Storage::REPEAT_TYPE_WEEKLY = "weekly";
+const string Storage::REPEAT_TYPE_FORTNIGHTLY = "fortnightly";
+const string Storage::REPEAT_TYPE_MONTHLY = "monthly";
+const string Storage::REPEAT_TYPE_ANNUALLY = "annually";
+const string Storage::REPEAT_TYPE_NONE = "no repeat";
+
+const string Storage::PRIORITY_HIGH = "high";
+const string Storage::PRIORITY_NORMAL = "normal";
 
 Storage::Storage(){}
 
@@ -54,6 +69,7 @@ void Storage::saveTaskToFile(const Task& taskToSave){
 }
 
 void Storage::writeTaskAttributes(const Task& task){
+	writeTaskType(task);
 	writeID(task);
 	writeDescription(task);
 	writeLocation(task);
@@ -65,35 +81,53 @@ void Storage::writeTaskAttributes(const Task& task){
 	writeReminderTime(task);
 }
 
+void Storage::writeTaskType(const Task& task){
+	writeLine(MARKER_TASK_TYPE);
+	writeLine(convertToStr(task.getTaskType()));
+}
+
 void Storage::writeID(const Task& task){
 	writeLine(MARKER_ID);
+	writeLine(convertToStr(task.getTaskId()));
 }
+
 void Storage::writeDescription(const Task& task){
 	writeLine(MARKER_DESCRIPTION);
 	writeLine(task.getTaskDescription());
 }
+
 void Storage::writeLocation(const Task& task){
 	writeLine(MARKER_LOCATION);
 	writeLine(task.getTaskLocation());
 }
+
 void Storage::writeStartTime(const Task& task){
 	writeLine(MARKER_START_TIME);
 }
+
 void Storage::writeEndTime(const Task& task){
 	writeLine(MARKER_END_TIME);
 }
+
 void Storage::writeRepeat(const Task& task){
 	writeLine(MARKER_REPEAT);
+	writeLine(convertToStr(task.getTaskRepeat()));
 }
+
 void Storage::writeNextOccurance(const Task& task){
 	writeLine(MARKER_NEXT_OCCURANCE);
+
 }
+
 void Storage::writePriority(const Task& task){
 	writeLine(MARKER_PRIORITY);
+	writeLine(convertToStr(task.getTaskPriority()));
 }
+
 void Storage::writeReminderTime(const Task& task){
 	writeLine(MARKER_REMINDER_TIME);
 }
+
 void Storage::writeStatus(const Task& task){
 	writeLine(MARKER_STATUS);
 }
@@ -122,4 +156,45 @@ string Storage::determineFile(ListType listType){
 
 void Storage::writeLine(string line){
 	_fileWrite << line << endl;
+}
+
+string Storage::convertToStr(long long number){
+	return to_string(number);
+}
+
+string Storage::convertToStr(TaskType taskType){
+	switch(taskType){
+	case deadline:
+		return TASK_TYPE_DEADLINE;
+	case timed:
+		return TASK_TYPE_TIMED;
+	default:
+		return TASK_TYPE_FLOATING;
+	}
+}
+
+string Storage::convertToStr(RepeatType repeatType){
+	switch (repeatType){
+	case Enum::daily:
+		return REPEAT_TYPE_DAILY;
+	case Enum::weekly:
+		return REPEAT_TYPE_WEEKLY;
+	case Enum::fortnightly:
+		return REPEAT_TYPE_FORTNIGHTLY;
+	case Enum::monthly:
+		return REPEAT_TYPE_MONTHLY;
+	case Enum::annually:
+		return REPEAT_TYPE_ANNUALLY;
+	default:
+		return REPEAT_TYPE_NONE;
+	}
+}
+
+string Storage::convertToStr(Priority priority){
+	switch (priority){
+	case high:
+		return PRIORITY_HIGH;
+	default:
+		return PRIORITY_NORMAL;
+	}
 }
