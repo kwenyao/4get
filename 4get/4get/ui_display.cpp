@@ -328,23 +328,39 @@ void ui_display::loadList(){
 	this->printList();
 }
 
-void ui_display::passUserInput(){
+bool ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
+	if(stdCommand == "help"){
+		this->printMessage();
+		return false;
+	}
 	execute->stringCollector(stdCommand);
+	return true;
+}
 
+void ui_display::printMessage(){
+	array<String ^> ^  helpLines ={
+		"type \"add\" to add a task",
+		"type \"del\" to delete a task",
+		"type \"mod\" to modify a task",
+		"type \"mark\" to change the status of a task",
+	};
+	this->messageBox->Lines= helpLines;
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
 
 	if(e->KeyCode == Keys::Enter)
 	{
-		this->passUserInput();
-		this->textboxInput->Clear();
-		list<Task> taskList;
-		taskList = execute->getUpdatedList(activeListType);
-		*listOfTasks = taskList;
-		printList();
+		if(this->passUserInput()){
+			this->textboxInput->Clear();
+			list<Task> taskList;
+			taskList = execute->getUpdatedList(activeListType);
+			*listOfTasks = taskList;
+			printList();
+		}
+
 	}
 }
 
@@ -500,6 +516,9 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 		case 'o':
 			*commandKeyword += 'o';
 			break;
+		case 'r':
+			*commandKeyword += 'r';
+			break;
 		};
 	}
 
@@ -518,8 +537,7 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 			"del <task index>"
 		};
 		array<String ^> ^  modLines ={
-			"mod <taskindex>",
-			"<task description>",
+			"mod <taskindex> <task description>",
 			",at <venue>",
 			",from <start time of timed task>",
 			",to <end time of timed task>",
@@ -528,13 +546,22 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 			",repeat <daily, weekly or monthly>",
 			",!"
 		};
+		array<String ^> ^  markLines ={
+			"mark <taskindex> <status>",
+			" ",
+			"statuses available:",
+			"	done / completed",
+			"	undone / incomplete"
+		};
 		if(*commandKeyword == "add")
 			this->messageBox->Lines= addLines;
 		else if(*commandKeyword == "del")
 			this->messageBox->Lines= delLines;
 		else if(*commandKeyword == "mod")
 			this->messageBox->Lines= modLines;
+		else if(*commandKeyword == "mar")
+			this->messageBox->Lines= markLines;
 		commandKeyword->clear();
 	}
-	
+
 }
