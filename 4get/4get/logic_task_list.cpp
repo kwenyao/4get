@@ -18,28 +18,35 @@ bool TaskList::saveToFile(){
 }
 
 bool TaskList::addToList(Task task, ListType listType){
-	list<Task> listToAdd;
+	list<Task>* listToAdd;
 	list<Task>::iterator iterator;
+	cout<<"description of task added: "<<task.getTaskDescription()<<endl;
 	listToAdd = determineList(listType);
 	//iterator = listToAdd.begin();
-	iterator = getIterator(listToAdd, task);
-	listToAdd.insert(iterator, task);
+	iterator = getIterator(*listToAdd, task);
+	listToAdd->insert(iterator,task);
+	//listToAdd.insert(iterator, task);
+	cout << "list to add size:" <<listToAdd->size() <<endl;
+	cout << "todo list size:" << _toDoList.size() << endl;
 	return true;
 }
 
 bool TaskList::deleteFromList(int taskToDelete){
-	list<Task> listToDeleteFrom;
+	list<Task>* listToDeleteFrom;
 	list<Task>::iterator iterator;
 	for(int i=0; i<taskToDelete; i++)
 		++iterator;
 	listToDeleteFrom = determineList(_currentDisplayed);
-	listToDeleteFrom.erase(iterator);
+	listToDeleteFrom->erase(iterator);
 	return true; //stub
 }
 
 list<Task> TaskList::obtainList(ListType listToReturn){
-	_listToDisplay = determineList(listToReturn);
+	list<Task>* listPtr;
+	listPtr = determineList(listToReturn);
+	_listToDisplay = *listPtr;
 	_currentDisplayed = listToReturn;
+	cout << "display list size:" << _listToDisplay.size() <<endl;
 	return _listToDisplay;
 }
 
@@ -62,13 +69,13 @@ list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskT
 	return iterator;
 }
 
-list<Task> TaskList::determineList(ListType listType){
+list<Task>* TaskList::determineList(ListType listType){
 	switch (listType){
 	case listToDo:
-		return _toDoList;
+		return &_toDoList;
 	case listCompleted:
-		return _completedList;
+		return &_completedList;
 	case listOverdue:
-		return _overdueList;
+		return &_overdueList;
 	}
 }
