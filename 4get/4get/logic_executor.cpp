@@ -11,8 +11,6 @@ Executor::Executor(){
 	tasks.loadFromFile();
 	
 }
-
-
 bool Executor::receive(string usercommand)
 {
 	Command commandType = determineCommandType(usercommand);
@@ -25,6 +23,8 @@ bool Executor::receive(string usercommand)
 		return deleteFunction();
 	case commandMark:
 		return markFunction();
+	case commandModify:
+		return modifyFunction();
 	default: return false;
 	}
 }
@@ -36,6 +36,8 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 		return Command::commandDelete;
 	else if(isEqual(commandTypeString, COMMAND_MARK))
 		return Command::commandMark;
+	else if(isEqual(commandTypeString, COMMAND_MODIFY))
+		return Command::commandModify;
 	else
 		return Command::commandInvalid;
 }
@@ -52,7 +54,6 @@ bool Executor::adderFunction()
 	id = taskID;
 	description = vectorOfInputs[SLOT_DESCRIPTION];
 	location = vectorOfInputs[SLOT_LOCATION];
-	cout << vectorOfInputs[SLOT_END_TIME] <<endl;
 	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
 	status = convert.convertStringToStatus(vectorOfInputs[SLOT_STATUS]);
 	startTime = convert.convertStringToTm(vectorOfInputs[SLOT_START_TIME]);
@@ -104,18 +105,57 @@ bool Executor::deleteFunction()
 	tasks.deleteFromList(deleteNumber);
 	return true;
 }
-bool Executor::markFunction()
-{
+bool Executor::markFunction(){
 	int markNumber;
 	stringstream slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	slotNumber >> markNumber;
 	tasks.markDone(markNumber);
 	return true;
 }
-bool Executor::addToTaskList()
-{
+bool Executor::modifyFunction(){
+	Task* taskTemp;
+
+	string description, location;
+	tm *reminderTime, *startTime, *endTime;
+	RepeatType repeat;
+	
+
+	int modifyNumber;
+	stringstream slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	slotNumber >> modifyNumber;
+	taskTemp = tasks.obtainTask(modifyNumber);
+
+	description = vectorOfInputs[SLOT_DESCRIPTION];
+	location = vectorOfInputs[SLOT_LOCATION];
+	startTime = convert.convertStringToTm(vectorOfInputs[SLOT_START_TIME]);
+	endTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
+	reminderTime = convert.convertStringToTm(vectorOfInputs[SLOT_REMIND_TIME]);
+	
+	if(!description.empty())
+	{
+		taskTemp->setTaskDescription(description);
+	}
+	cout << taskTemp->getTaskDescription() << endl;
+	if(!location.empty())
+	{
+		taskTemp->setTaskLocation(location);
+	}
+	//if(!vectorOfInputs[SLOT_START_TIME].empty())
+	//{
+	//	taskTemp->setTaskStart(startTime);
+	//}
+	//if(!vectorOfInputs[SLOT_END_TIME].empty())
+	//{
+	//	taskTemp->setTaskEnd(endTime);
+	//}
+	//if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
+	//{
+	//	taskTemp->setTaskReminderTime(reminderTime);
+	//}
+	return true;
+}
+bool Executor::addToTaskList(){
 	tasks.addToList(*taskGlobal, listToDo);
-	//tasks.addToList(*taskGlobal, listOverdue);
 	return true;
 }
 list<Task> Executor::getUpdatedList(ListType listType){
@@ -136,12 +176,6 @@ long long Executor::retrieveCurrentDate(){
 	yearMonthDay = (year + month + day);
 	return yearMonthDay;
 }
-//ListType Executor::determineListType(vector<string> &input)
-//{
-//	if(input[SLOT_END_TIME].empty())
-//		return 
-//}
-
 long long Executor::determineTaskId()
 {
 	return retrieveCurrentDate();

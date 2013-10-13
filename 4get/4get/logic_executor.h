@@ -53,14 +53,13 @@ public:
 	long long determineTaskId();
 	bool determineTaskType();
 	bool adderFunction();
-	
+	bool modifyFunction();
 	bool deleteFunction();
 	bool markFunction();
 	list<Task> getUpdatedList(ListType listType);
 
 	//helper functions
 	bool isEqual(string str1, const string str2);
-	ListType determineListType(vector<string> &input);
 	long long retrieveCurrentDate();
 };
 #endif

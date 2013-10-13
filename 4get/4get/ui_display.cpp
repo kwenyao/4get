@@ -332,8 +332,7 @@ void ui_display::loadList(){
 void ui_display::passUserInput(){
 	string stdCommand;
 	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-	execute->stringCollector(stdCommand);
-	return true;
+	execute->stringCollector(stdCommand);	
 }
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
