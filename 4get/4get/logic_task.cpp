@@ -1,0 +1,196 @@
+#include "logic_task.h"
+Task::Task(){
+	clearAllAttr();
+}
+
+
+void Task::setupTask(int id, string description, string location, tm *reminderTime, Priority priority, Status status)
+{
+	taskId = id;
+	//taskType = type;
+	taskDescription = description;
+	taskPriority = priority;
+	taskLocation = location;
+	taskStatus = status;
+	taskReminderTime = reminderTime;
+}
+
+/*
+Task::Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminderTime)
+{
+taskDescription = description;
+taskPriority = priority;
+taskLocation = location;
+taskReminderTime = reminderTime;
+taskStatus = status;
+taskRepeat = repeat;
+
+}
+*/
+
+int Task::getTaskId()
+{
+	return taskId;
+}
+string Task::getTaskDescription() const
+{
+	return taskDescription;
+}
+Priority Task::getTaskPriority()
+{
+	return taskPriority;
+}
+string Task::getTaskLocation() const
+{
+	return taskLocation;
+}
+Status Task::getTaskStatus()
+{
+	return taskStatus;
+}
+tm* Task::getTaskReminderTime()
+{
+	return taskReminderTime;
+}
+tm* Task::getTaskStart()
+{
+	return taskStart;
+}
+
+tm* Task::getTaskEnd()
+{
+	return taskEnd;
+}
+RepeatType Task::getTaskRepeat()
+{
+	return taskRepeat;
+}
+
+
+
+void Task::setTaskId(int id)
+{
+	taskId = id;
+}
+void Task::setTaskDescription(string description)
+{
+	taskDescription = description;
+}
+void Task::setTaskPriority(Priority priority)
+{
+	taskPriority = priority;
+}
+void Task::setTaskLocation(string location)
+{
+	taskLocation = location;
+}
+void Task::setTaskStatus(Status status)
+{
+	taskStatus = status;
+}
+void Task::setTaskReminderTime(tm* remindTime)
+{
+	taskReminderTime = remindTime;
+}
+void Task::setTaskStart(tm* startTime)
+{
+	cout << "error" << endl;
+}
+void Task::setTaskEnd(tm* endTime)
+{
+	cout << "error" << endl;
+}
+void Task::setTaskRepeat(RepeatType repeat)
+{
+	switch(repeat)
+	{
+	case daily:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case weekly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case fortnightly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case monthly:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	case annually:
+		{
+			taskRepeat = repeat;
+			break;
+		}
+	}
+
+}
+
+
+
+
+
+void Task::updateAllAttr()
+{
+
+}
+
+void Task::clearTimeAttr()
+{
+	tm *initializeTime = {0};
+	taskStart = initializeTime;
+	taskEnd = initializeTime;
+	taskNextOccurance = initializeTime;
+	taskReminderTime = initializeTime;
+
+}
+
+void Task::clearAllAttr()
+{
+	taskId = INITIALIZE_INT;
+	//taskType = taskTypeNone;
+	taskDescription = INITIALIZE_STRING_BLANK;
+	taskPriority = normal;
+	taskLocation = INITIALIZE_STRING_BLANK;
+	taskStatus = statusNone;
+	clearTimeAttr();
+}
+
+int Task::getTimeInt(TimeType type)
+{
+	int yearMonthDayHourMin;
+	tm* time = NULL;
+
+	if(type==timeStart)
+		time = taskStart;
+	else if(type==timeEnd)
+		time = taskEnd;
+	else if(type==timeNext)
+		time = taskNextOccurance;
+	else if(type==timeReminder)
+		time = taskReminderTime;
+
+	if(time!=NULL){
+		int min = time->tm_min;
+		int hour = time->tm_hour;
+		int day = time ->tm_mday;
+		int month = time ->tm_mon;
+		int year = time ->tm_year + CONSTANT_START_YEAR;
+		hour = hour*CONVERT_MULTIPLIER_HOUR;
+		day = day*CONVERT_MULTIPLIER_DAY;
+		month = month*CONVERT_MULTIPLIER_MONTH;
+		year = year*CONVERT_MULTIPLIER_YEAR;
+		yearMonthDayHourMin = (year + month + day + hour + min);
+		return yearMonthDayHourMin;
+	}
+	else
+		return 0;
+
+}
