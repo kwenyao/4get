@@ -7,6 +7,7 @@
 #ifndef _LOGIC_EXECUTOR_H_
 #define _LOGIC_EXECUTOR_H_
 
+#include "logic_converter.h"
 #include "logic_task.h"
 #include "logic_parser.h"
 #include "logic_task_list.h"
@@ -23,12 +24,18 @@ using namespace Constants;
 class Executor
 {
 	private:
-	Task _task;
+	Task taskGlobal;
 	TaskList tasks;
 	string task;
 	vector<string> vectorOfInputs;
 	Parser parser;
 	int taskID;
+	Converter convert;
+
+	static const int CONSTANT_MULTIPLIER_YEAR;
+	static const int CONSTANT_MULTIPLIER_MONTH;
+	static const int CONSTANT_MULTIPLIER_DAY;
+
 
 public:
 	Executor();
@@ -38,6 +45,7 @@ public:
 	Command determineCommandType (string commandTypeString); 
 	void loadListOfTasks();
 	
+	int determineTaskId();
 	bool determineTaskType();
 	bool adderFunction();
 	bool addToTaskList();
@@ -46,8 +54,7 @@ public:
 
 	//helper functions
 	bool isEqual(string str1, const string str2);
-	string determineListType();
-	tm* convertStringToTm();
+	ListType determineListType(vector<string> &input);
 	int retrieveCurrentDate();
 };
 #endif
