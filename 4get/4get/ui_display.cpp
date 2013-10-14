@@ -30,6 +30,13 @@ void ui_display::InitializeComponent(void){
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
+	this->completedListView = (gcnew System::Windows::Forms::ListView());
+	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
 	this->overdueListView = (gcnew System::Windows::Forms::ListView());
 	this->oTaskIndex = (gcnew System::Windows::Forms::ColumnHeader());
@@ -45,13 +52,6 @@ void ui_display::InitializeComponent(void){
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
-	this->completedListView = (gcnew System::Windows::Forms::ListView());
-	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -117,11 +117,12 @@ void ui_display::InitializeComponent(void){
 	// tTime
 	// 
 	this->tTime->Text = L"Time";
+	this->tTime->Width = 68;
 	// 
 	// tDueDate
 	// 
 	this->tDueDate->Text = L"Due Date";
-	this->tDueDate->Width = 80;
+	this->tDueDate->Width = 62;
 	// 
 	// tPriority
 	// 
@@ -137,6 +138,50 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->TabIndex = 1;
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
+	// 
+	// completedListView
+	// 
+	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->completedListView->AutoArrange = false;
+	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
+		this->cVenue, this->cTime, this->cDue, this->cPriority});
+	this->completedListView->FullRowSelect = true;
+	this->completedListView->GridLines = true;
+	this->completedListView->LabelEdit = true;
+	this->completedListView->Location = System::Drawing::Point(-4, -4);
+	this->completedListView->Name = L"completedListView";
+	this->completedListView->Size = System::Drawing::Size(440, 259);
+	this->completedListView->TabIndex = 2;
+	this->completedListView->UseCompatibleStateImageBehavior = false;
+	this->completedListView->View = System::Windows::Forms::View::Details;
+	// 
+	// cIndex
+	// 
+	this->cIndex->Text = L"Index No.";
+	// 
+	// cDescription
+	// 
+	this->cDescription->Text = L"Description";
+	this->cDescription->Width = 127;
+	// 
+	// cVenue
+	// 
+	this->cVenue->Text = L"Venue";
+	// 
+	// cTime
+	// 
+	this->cTime->Text = L"Time";
+	this->cTime->Width = 66;
+	// 
+	// cDue
+	// 
+	this->cDue->Text = L"Due Date";
+	this->cDue->Width = 65;
+	// 
+	// cPriority
+	// 
+	this->cPriority->Text = L"Priority";
 	// 
 	// tabOverdue
 	// 
@@ -180,11 +225,12 @@ void ui_display::InitializeComponent(void){
 	// oTaskTime
 	// 
 	this->oTaskTime->Text = L"Time";
+	this->oTaskTime->Width = 67;
 	// 
 	// oTaskDate
 	// 
 	this->oTaskDate->Text = L"Due Date";
-	this->oTaskDate->Width = 80;
+	this->oTaskDate->Width = 64;
 	// 
 	// oTaskPriority
 	// 
@@ -229,6 +275,12 @@ void ui_display::InitializeComponent(void){
 	this->messageBox->Size = System::Drawing::Size(793, 116);
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
+	array<String ^> ^  helpLines = {
+		"type \"add\" to add a task",
+		"type \"del\" to delete a task",
+		"type \"mod\" to modify a task",
+		"type \"mark\" to change the status of a task"
+	};
 	this->messageBox->Lines = helpLines;
 	// 
 	// todayContainer
@@ -257,49 +309,6 @@ void ui_display::InitializeComponent(void){
 	this->chooseDate->Size = System::Drawing::Size(349, 20);
 	this->chooseDate->TabIndex = 0;
 	// 
-	// completedListView
-	// 
-	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->completedListView->AutoArrange = false;
-	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
-		this->cVenue, this->cTime, this->cDue, this->cPriority});
-	this->completedListView->FullRowSelect = true;
-	this->completedListView->GridLines = true;
-	this->completedListView->LabelEdit = true;
-	this->completedListView->Location = System::Drawing::Point(-4, -4);
-	this->completedListView->Name = L"completedListView";
-	this->completedListView->Size = System::Drawing::Size(440, 259);
-	this->completedListView->TabIndex = 2;
-	this->completedListView->UseCompatibleStateImageBehavior = false;
-	this->completedListView->View = System::Windows::Forms::View::Details;
-	// 
-	// cIndex
-	// 
-	this->cIndex->Text = L"Index No.";
-	// 
-	// cDescription
-	// 
-	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 127;
-	// 
-	// cVenue
-	// 
-	this->cVenue->Text = L"Venue";
-	// 
-	// cTime
-	// 
-	this->cTime->Text = L"Time";
-	// 
-	// cDue
-	// 
-	this->cDue->Text = L"Due Date";
-	this->cDue->Width = 80;
-	// 
-	// cPriority
-	// 
-	this->cPriority->Text = L"Priority";
-	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -325,6 +334,8 @@ void ui_display::InitializeComponent(void){
 
 }
 
+
+
 void ui_display::loadList(){
 	/*list = execute->load();*/
 	this->printList();
@@ -341,6 +352,12 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		commandKeyword->clear();
+		array<String ^> ^  helpLines = {
+			"type \"add\" to add a task",
+			"type \"del\" to delete a task",
+			"type \"mod\" to modify a task",
+			"type \"mark\" to change the status of a task"
+		};
 		this->messageBox->Lines = helpLines;
 		this->passUserInput();
 		this->textboxInput->Clear();
@@ -506,7 +523,37 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 	}
 
 	if(commandKeyword->size()==3){
-		
+		array<String ^> ^  addLines ={
+			"add <task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		array<String ^> ^  delLines ={
+			"del <task index>"
+		};
+		array<String ^> ^  modLines ={
+			"mod <taskindex> <task description>",
+			",at <venue>",
+			",from <start time of timed task>",
+			",to <end time of timed task>",
+			",by <due time>",
+			",remind on <reminder time>",
+			",repeat <daily, weekly or monthly>",
+			",!"
+		};
+		array<String ^> ^  markLines ={
+			"mark <taskindex> <status>",
+			" ",
+			"statuses available:",
+			"	done / completed",
+			"	undone / incomplete"
+		};
+		array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;
 		if(*commandKeyword == "add"){
 			this->messageBox->Lines= addLines;
