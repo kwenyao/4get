@@ -51,18 +51,16 @@ bool TaskList::markDone(int taskToMark){
 }
 
 list<Task> TaskList::obtainList(ListType listToReturn){
-	list<Task>* listPtr;
-	listPtr = determineList(listToReturn);
-	_listToDisplay = *listPtr;
+	_listToDisplay = determineList(listToReturn);
 	_currentDisplayed = listToReturn;
-	return _listToDisplay;
+	return *_listToDisplay;
 }
 
 Task* TaskList::obtainTask(int taskToGet){
 	Task* taskToReturn;
 	list<Task>::iterator iterator;
-	iterator = iterateToTask(_listToDisplay, taskToGet);
-	taskToReturn = iterator;
+	iterator = iterateToTask(*_listToDisplay, taskToGet);
+	taskToReturn = &*iterator;
 	return taskToReturn;
 }
 

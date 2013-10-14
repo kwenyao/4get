@@ -130,12 +130,10 @@ bool Executor::modifyFunction(){
 	startTime = convert.convertStringToTm(vectorOfInputs[SLOT_START_TIME]);
 	endTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
 	reminderTime = convert.convertStringToTm(vectorOfInputs[SLOT_REMIND_TIME]);
-	
 	if(!description.empty())
 	{
 		taskTemp->setTaskDescription(description);
 	}
-	cout << taskTemp->getTaskDescription() << endl;
 	if(!location.empty())
 	{
 		taskTemp->setTaskLocation(location);
