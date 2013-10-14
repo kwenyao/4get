@@ -29,14 +29,24 @@ string UiConvert::enumPriorityToStdString(Priority taskPriority){
 void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task> *list, int taskIndex)
 {
 	Task t1 = list->front();
+	char timeBuffer[32] = "";
 	//convert to system string
 	System::String^ sys_index = System::Convert::ToString(taskIndex); //index
 	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
 	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
-	System::String^ sys_time = ""; //start time
-	System::String^ sys_due = "1900"; //due
-	//System::String^ sys_time = gcnew System::String(asctime(t1.getTaskStart())); //start time
-	//System::String^ sys_due = gcnew System::String(asctime(t1.getTaskEnd())); //due
+	/****stub start*****/
+	time_t rawTime;
+	time(&rawTime);
+	tm *testTime = localtime(&rawTime);
+	/*****stub end*****/
+	System::String^ sys_time;
+	if(asctime_s(timeBuffer, 32, testTime)==0){
+		sys_time = gcnew System::String(timeBuffer); //start time
+	}
+	System::String^ sys_due;
+	if(asctime_s(timeBuffer, 32, testTime)==0){
+		sys_due = gcnew System::String(timeBuffer); //due
+	}
 	System::String^ sys_priority = gcnew System::String(enumPriorityToStdString(t1.getTaskPriority()).c_str()); //priority
 
 	list->pop_front();

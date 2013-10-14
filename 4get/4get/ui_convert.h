@@ -4,6 +4,7 @@
 
 #include <list>
 #include <string>
+#include <time.h>
 #include "logic_task.h"
 #include "common_message.h"
 #include <vcclr.h>
