@@ -4,14 +4,14 @@ TaskDeadline::TaskDeadline()
 {
 }
 
-TaskDeadline::TaskDeadline(long long id, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *endTime) : Task()
+TaskDeadline::TaskDeadline(long long id, string description, string location, tm *reminder, Priority priority, Status status, RepeatType repeat, tm *endTime) : Task()
 {
 	TaskType type = deadline;
-	setupTask(id, type, description, location, reminderTime, priority, status, repeat, endTime);
+	setupTask(id, type, description, location, reminder, priority, status, repeat, endTime);
 }
 
 
-void TaskDeadline::setupTask(long long id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status, RepeatType repeat, tm *endTime)
+void TaskDeadline::setupTask(long long id, TaskType type, string description, string location, tm *reminder, Priority priority, Status status, RepeatType repeat, tm *endTime)
 {
 	taskId = id;
 	taskType = type;
@@ -19,7 +19,7 @@ void TaskDeadline::setupTask(long long id, TaskType type, string description, st
 	taskPriority = priority;
 	taskLocation = location;
 	taskStatus = status;
-	taskReminderTime = reminderTime;
+	taskReminder = reminder;
 	taskRepeat = repeat;
 	taskEnd = endTime;
 }

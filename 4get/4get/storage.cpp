@@ -128,7 +128,7 @@ void Storage::writePriority(const Task& task){
 
 void Storage::writeReminderTime(const Task& task){
 	writeLine(MARKER_REMINDER_TIME);
-	writeLine(convertToStr(task.getTaskReminderTime()));
+	writeLine(convertToStr(task.getTaskReminder()));
 }
 
 void Storage::writeFileSetup(string fileName, ios_base::openmode mode){
