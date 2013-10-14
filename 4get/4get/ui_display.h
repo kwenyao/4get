@@ -5,6 +5,7 @@
 #include "logic_task.h"
 #include "common_message.h"
 #include <string>
+#include <array>
 #include <list>
 #include <time.h>
 #include <Windows.h>
@@ -44,6 +45,43 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
 	private: ListType activeListType;
+	private: static array<String ^> ^  helpLines = {
+				 "type \"add\" to add a task",
+				 "type \"del\" to delete a task",
+				 "type \"mod\" to modify a task",
+				 "type \"mark\" to change the status of a task"
+			 };
+			 static array<String ^> ^  addLines ={
+				 "add <task description>",
+				 ",at <venue>",
+				 ",from <start time of timed task>",
+				 ",to <end time of timed task>",
+				 ",by <due time>",
+				 ",remind on <reminder time>",
+				 ",repeat <daily, weekly or monthly>",
+				 ",!"
+			 };
+			 static array<String ^> ^  delLines ={
+				 "del <task index>"
+			 };
+			 static array<String ^> ^  modLines ={
+				 "mod <taskindex> <task description>",
+				 ",at <venue>",
+				 ",from <start time of timed task>",
+				 ",to <end time of timed task>",
+				 ",by <due time>",
+				 ",remind on <reminder time>",
+				 ",repeat <daily, weekly or monthly>",
+				 ",!"
+			 };
+			 static array<String ^> ^  markLines ={
+				 "mark <taskindex> <status>",
+				 " ",
+				 "statuses available:",
+				 "	done / completed",
+				 "	undone / incomplete"
+			 };
+			 static array<String ^> ^  emptyLines ={};
 
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
@@ -147,5 +185,5 @@ namespace UIDisplay {
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
-};
+	};
 }

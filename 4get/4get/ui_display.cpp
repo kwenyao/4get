@@ -229,6 +229,7 @@ void ui_display::InitializeComponent(void){
 	this->messageBox->Size = System::Drawing::Size(793, 116);
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
+	this->messageBox->Lines = helpLines;
 	// 
 	// todayContainer
 	// 
@@ -340,6 +341,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	if(e->KeyCode == Keys::Enter)
 	{
 		commandKeyword->clear();
+		this->messageBox->Lines = helpLines;
 		this->passUserInput();
 		this->textboxInput->Clear();
 		list<Task> taskList;
@@ -450,7 +452,6 @@ void ui_display::printOverdueList(){
 
 	for (int i=0; i<size; i++)
 	{
-		MessageBox::Show("In print loop");
 		ListViewItem^ item = gcnew ListViewItem;
 		converter->printItem(item, listOfTasks, i+1);
 		temp[j] = item;
@@ -467,7 +468,6 @@ Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Window
 	this->textboxInput->Clear();
 }
 Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
-	MessageBox::Show("selected");
 	if(this->tabContainer->SelectedIndex==1)
 		activeListType=listCompleted;
 	else if(this->tabContainer->SelectedIndex==2)
@@ -480,13 +480,6 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 
 	if(commandKeyword->size() < 3){
-		array<String ^> ^  helpLines = {
-			"type \"add\" to add a task",
-			"type \"del\" to delete a task",
-			"type \"mod\" to modify a task",
-			"type \"mark\" to change the status of a task"
-		};
-		this->messageBox->Lines = helpLines;
 		switch(e->KeyChar){
 		case 'a':
 			*commandKeyword += 'a';
@@ -513,37 +506,7 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 	}
 
 	if(commandKeyword->size()==3){
-		array<String ^> ^  addLines ={
-			"add <task description>",
-			",at <venue>",
-			",from <start time of timed task>",
-			",to <end time of timed task>",
-			",by <due time>",
-			",remind on <reminder time>",
-			",repeat <daily, weekly or monthly>",
-			",!"
-		};
-		array<String ^> ^  delLines ={
-			"del <task index>"
-		};
-		array<String ^> ^  modLines ={
-			"mod <taskindex> <task description>",
-			",at <venue>",
-			",from <start time of timed task>",
-			",to <end time of timed task>",
-			",by <due time>",
-			",remind on <reminder time>",
-			",repeat <daily, weekly or monthly>",
-			",!"
-		};
-		array<String ^> ^  markLines ={
-			"mark <taskindex> <status>",
-			" ",
-			"statuses available:",
-			"	done / completed",
-			"	undone / incomplete"
-		};
-		array<String ^> ^  emptyLines ={};
+		
 		this->messageBox->Lines=emptyLines;
 		if(*commandKeyword == "add"){
 			this->messageBox->Lines= addLines;
@@ -557,6 +520,5 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 		else if(*commandKeyword == "mar"){
 			this->messageBox->Lines= markLines;
 		}
-		commandKeyword->clear();
 	}
 }
