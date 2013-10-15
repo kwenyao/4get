@@ -53,7 +53,7 @@ public:
 	bool isEqual(string str1, const string str2);
 
 	bool convertStringToTime(string timeStr, time_t returnTime);
-	bool convertStringToTime(string startDate, 
+	TaskType convertStringToTime(string startDate, 
 			  				 string startTime, 
 							 string endDate, 
 							 string endTime, 
