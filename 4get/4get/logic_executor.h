@@ -9,6 +9,7 @@
 #define _LOGIC_EXECUTOR_H_
 
 #include <assert.h>
+#include "common_message.h"
 #include "logic_converter.h"
 #include "logic_parser.h"
 #include "logic_task.h"
@@ -38,6 +39,7 @@ class Executor
 	Converter convert;
 	stack<Task> taskStack;
 	stack<Command> commandStack;
+	ListType listType;
 	
 	bool addToTaskList();
 	
@@ -55,7 +57,7 @@ public:
 	void loadListOfTasks();
 	bool storeTask(Task taskTemp);
 	bool storeCommands(Command command);
-	ListType getListType(ListType listType);
+	bool setListType(ListType listType);
 	
 	bool determineTaskType();
 	bool adderFunction(vector<string> vectorOfInputs);

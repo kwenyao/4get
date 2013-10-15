@@ -213,9 +213,10 @@ bool Executor::undoFunction(){
 
 	return true;
 }
-ListType Executor::getListType(ListType listType)
+bool Executor::setListType(ListType uiListType)
 {
-	return listType;
+	listType = uiListType;
+	return true;
 }
 
 

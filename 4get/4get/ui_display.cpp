@@ -9,6 +9,7 @@ ui_display::ui_display(){
 	commandKeyword = new string;
 	loaded = false;
 	activeListType = listToDo;
+	execute->setListType(activeListType);
 
 	InitializeComponent();
 }
@@ -491,6 +492,7 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 		activeListType=listOverdue;
 	else
 		activeListType=listToDo;
+	execute->setListType(activeListType);
 	*listOfTasks = execute->getUpdatedList(activeListType);
 	this->printList();
 }
