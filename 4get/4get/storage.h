@@ -6,7 +6,6 @@
 #include <fstream>
 #include <sstream>
 #include "logic_task.h"
-#include "common_message.h"
 
 using namespace std;
 

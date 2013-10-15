@@ -4,7 +4,6 @@
 #include <list>
 #include <time.h>
 #include "logic_task.h"
-#include "common_message.h"
 #include "storage.h"
 
 using namespace std;
@@ -27,6 +26,7 @@ private:
 
 	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
 	list<Task>::iterator iterateToTask(list<Task>& listToEdit, int task);
+	bool findID(list<Task>& listToEdit, int IDNumber, list<Task>::iterator& iterator);
 	list<Task>* determineList(ListType listType);
 
 public:
@@ -39,8 +39,10 @@ public:
 	//Public list manipulation functions
 	bool addToList(Task task, ListType listToAdd);
 	bool deleteFromList(int taskToDelete);
+	bool deleteIDFromList(int IDNumber);
 	bool markDone(int taskToMark);
 
+	//Getter functions
 	list<Task> obtainList(ListType listToReturn);
 	Task* obtainTask(int taskToGet);
 };

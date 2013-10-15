@@ -68,7 +68,12 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw MESSAGE_ERROR_COMMAND_UNDO;
 			}
 		}
-		
+		else if(commandString.compare(COMMAND_SHOW)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAY)==COMPARE_SUCCESS){
+			inputBits[SLOT_COMMAND] = COMMAND_SHOW;
+			if(!separateInput(commandShow, inputBits)){
+				throw MESSAGE_ERROR_COMMAND_SHOW;
+			}
+		}
 	}
 	catch(string error)
 	{
@@ -85,7 +90,7 @@ void Parser::parseInput(string input, vector<string>& inputBits)
 
 	processCommand(textCommand, inputBits);
 	populateContainer(inputBits);
-
+	
 }
 
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
@@ -102,6 +107,8 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 		return separateFunctionModify(inputBits);
 	case commandUndo:
 		return separateFunctionUndo(inputBits);
+	case commandShow:
+		return separateFunctionShow(inputBits);
 	default:
 		return false;
 	}
@@ -192,6 +199,15 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
 {
+	return true;
+}
+
+bool Parser::separateFunctionShow(vector<string>& inputBits)
+{
+	if(!determineDateAndTime())												//if user specified with formats, startTime or endTime will have the time 
+		cout << "no date and time" << endl;
+	else
+		textStartTime = _textInput;											//else whatever the user input after show will be assumed to be strings indicating time.
 	return true;
 }
 

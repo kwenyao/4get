@@ -38,6 +38,16 @@ bool TaskList::deleteFromList(int taskToDelete){
 	return true; //stub
 }
 
+bool TaskList::deleteIDFromList(int IDNumber){
+	list<Task>::iterator iterator;
+	if(findID(_toDoList, IDNumber, iterator)){
+		_toDoList.erase(iterator);
+		return true;
+	}
+	else
+		return false;
+}
+
 bool TaskList::markDone(int taskToMark){
 	Task temp;
 	list<Task>* listToMark;
@@ -90,6 +100,19 @@ list<Task>::iterator TaskList::iterateToTask(list<Task>& listToEdit, int task){
 	for(int i=0; i<indexToDelete; i++)
 		++iterator;
 	return iterator;
+}
+
+bool TaskList::findID(list<Task>& listToSearch, int IDNumber, list<Task>::iterator& iterator){
+	int tempID;
+	iterator = listToSearch.begin();
+	int listSize = listToSearch.size();
+	for(int i=0; i <listSize; i++){
+		tempID = iterator->getTaskId();
+		if(tempID == IDNumber)
+			return true;
+		++iterator;
+	}
+	return false;
 }
 
 list<Task>* TaskList::determineList(ListType listType){

@@ -23,12 +23,14 @@ namespace Commands{
 	//variants of modify
 	const string COMMAND_MODIFY = "modify";
 	const string COMMAND_MOD = "mod";
+	const string COMMAND_UPDATE = "update";
 
 	//variants of undo
 	const string COMMAND_UNDO = "undo";
 
-	//variants of update
-	const string COMMAND_UPDATE = "update";
+	//variants of show
+	const string COMMAND_SHOW = "show";
+	const string COMMAND_DISPLAY = "display";
 }
 
 namespace Message{
@@ -38,6 +40,8 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_MARK = "System was unable to mark your task.";
 	const string MESSAGE_ERROR_COMMAND_MODIFY = "System was unable to modify your task.";
 	const string MESSAGE_ERROR_COMMAND_UNDO = "System was unable to undo to your previous task.";
+	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
+
 };
 
 namespace Enum{
@@ -78,7 +82,8 @@ namespace Enum{
 	enum TaskType{
 		floating, 
 		timed, 
-		deadline
+		deadline,
+		taskInvalid
 	};
 	
 
@@ -88,6 +93,7 @@ namespace Enum{
 		commandMark, 
 		commandModify, 
 		commandUndo, 
+		commandShow,
 		commandInvalid
 	};
 };

@@ -6,25 +6,29 @@ const int Executor::CONSTANT_MULTIPLIER_DAY = 100;
 const int Executor::CONSTANT_MONTH_ONE = 1;
 
 Executor::Executor(){
-	vectorOfInputs.reserve(SLOT_SIZE);
+
 	taskID = retrieveCurrentDate();
 	tasks.loadFromFile();
-	
-}
-bool Executor::receive(string usercommand)
-{
-	Command commandType = determineCommandType(usercommand);
 
+}
+bool Executor::receive(string usercommand, vector<string> vectorOfInputs)
+{
+
+	//storeCommands(usercommand);
+	Command commandType = determineCommandType(usercommand);
+	storeCommands(commandType);          //to store the commands into the stack of commands
 	switch(commandType)
 	{
 	case commandAdd:
-		return adderFunction();
+		return adderFunction(vectorOfInputs);
 	case commandDelete:
-		return deleteFunction();
+		return deleteFunction(vectorOfInputs);
 	case commandMark:
-		return markFunction();
+		return markFunction(vectorOfInputs);
 	case commandModify:
-		return modifyFunction();
+		return modifyFunction(vectorOfInputs);
+	case commandUndo:
+		return undoFunction();
 	default: return false;
 	}
 }
@@ -38,10 +42,12 @@ Enum::Command Executor::determineCommandType (string commandTypeString)
 		return Command::commandMark;
 	else if(isEqual(commandTypeString, COMMAND_MODIFY))
 		return Command::commandModify;
+	else if(isEqual(commandTypeString, COMMAND_UNDO))
+		return Command::commandUndo;
 	else
 		return Command::commandInvalid;
 }
-bool Executor::adderFunction()
+bool Executor::adderFunction(vector<string> vectorOfInputs)
 {
 	long long id;
 	string description, location;
@@ -50,8 +56,8 @@ bool Executor::adderFunction()
 	Priority priority;
 	Status status;
 
-	++taskID = determineTaskId();
 	id = taskID;
+	taskID++;
 	description = vectorOfInputs[SLOT_DESCRIPTION];
 	location = vectorOfInputs[SLOT_LOCATION];
 	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
@@ -74,7 +80,7 @@ bool Executor::adderFunction()
 		taskGlobal = new TaskTimed;
 		*taskGlobal = newTask;
 	}
-
+	storeTask(*taskGlobal);
 	addToTaskList();
 	return true;
 
@@ -87,42 +93,37 @@ bool Executor::isEqual(string str1, const string str2)
 }
 void Executor::stringCollector(string task)
 {
-	vector<string> temp(SLOT_SIZE);
-	parser.parseInput(task, (temp));
-	vectorOfInputs.clear();
-	vectorOfInputs = temp;
-	receive(temp[SLOT_COMMAND]);
+	vector<string> vectorOfInputs(SLOT_SIZE);
+	parser.parseInput(task, (vectorOfInputs));
+	receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs);
 }
 void Executor::loadListOfTasks()
 {
 	tasks.loadFromFile();	
 }
-bool Executor::deleteFunction()
+bool Executor::deleteFunction(vector<string> vectorOfInputs)
 {
 	int deleteNumber;
-	stringstream  slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
-	slotNumber >> deleteNumber;
+	deleteNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	storeTask(*tasks.obtainTask(deleteNumber));
 	tasks.deleteFromList(deleteNumber);
 	return true;
 }
-bool Executor::markFunction(){
+bool Executor::markFunction(vector<string> vectorOfInputs){
 	int markNumber;
-	stringstream slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
-	slotNumber >> markNumber;
+	markNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	storeTask(*tasks.obtainTask(markNumber));
 	tasks.markDone(markNumber);
 	return true;
 }
-bool Executor::modifyFunction(){
+bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	Task* taskTemp;
 
 	string description, location;
 	tm *reminderTime, *startTime, *endTime;
-	RepeatType repeat;
-	
 
 	int modifyNumber;
-	stringstream slotNumber(vectorOfInputs[SLOT_SLOT_NUMBER]);
-	slotNumber >> modifyNumber;
+	modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	taskTemp = tasks.obtainTask(modifyNumber);
 
 	description = vectorOfInputs[SLOT_DESCRIPTION];
@@ -138,18 +139,18 @@ bool Executor::modifyFunction(){
 	{
 		taskTemp->setTaskLocation(location);
 	}
-	//if(!vectorOfInputs[SLOT_START_TIME].empty())
-	//{
-	//	taskTemp->setTaskStart(startTime);
-	//}
-	//if(!vectorOfInputs[SLOT_END_TIME].empty())
-	//{
-	//	taskTemp->setTaskEnd(endTime);
-	//}
-	//if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
-	//{
-	//	taskTemp->setTaskReminderTime(reminderTime);
-	//}
+	if(!vectorOfInputs[SLOT_START_TIME].empty())
+	{
+		taskTemp->setTaskStart(startTime);
+	}
+	if(!vectorOfInputs[SLOT_END_TIME].empty())
+	{
+		taskTemp->setTaskEnd(endTime);
+	} // need to change the tasktype if the user add endtime. eg. from floating to todo
+	/*if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
+	{
+	taskTemp->setTaskReminderTime(reminderTime);
+	}*/
 	return true;
 }
 bool Executor::addToTaskList(){
@@ -174,7 +175,67 @@ long long Executor::retrieveCurrentDate(){
 	yearMonthDay = (year + month + day);
 	return yearMonthDay;
 }
-long long Executor::determineTaskId()
+bool Executor::storeTask(Task taskTemp)
 {
-	return retrieveCurrentDate();
+	taskStack.push(taskTemp);
+	return true;
 }
+bool Executor::storeCommands(Command command)
+{
+	commandStack.push(command);
+	return true;
+}
+bool Executor::undoFunction(){
+
+	Task taskTemp;
+	Command commandType;
+	bool flag = true;
+
+	commandStack.pop();
+	if(commandStack.empty())
+		return false;
+	commandType = commandStack.top();
+	taskTemp = taskStack.top();
+
+	switch(commandType)
+	{
+	case commandAdd: 
+		tasks.deleteIDFromList(taskTemp.getTaskId());
+		break;
+	case commandDelete:
+		tasks.addToList(taskTemp, listToDo);
+		break;
+	default:
+		return false;
+	}
+	commandStack.pop();
+	taskStack.pop();
+
+	return true;
+}
+bool Executor::setListType(ListType uiListType)
+{
+	listType = uiListType;
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

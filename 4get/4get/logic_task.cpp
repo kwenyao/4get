@@ -10,7 +10,7 @@ Task::Task(){
 }
 
 
-void Task::setupTask(long long id, TaskType type, string description, string location, tm *reminderTime, Priority priority, Status status)
+void Task::setupTask(long long id, TaskType type, string description, string location, tm *reminder, Priority priority, Status status)
 {
 	taskId = id;
 	taskType = type;
@@ -18,7 +18,7 @@ void Task::setupTask(long long id, TaskType type, string description, string loc
 	taskPriority = priority;
 	taskLocation = location;
 //	taskStatus = status;
-	taskReminderTime = reminderTime;
+	taskReminder = reminder;
 }
 
 /*
@@ -58,9 +58,9 @@ Status Task::getTaskStatus() const
 {
 	return taskStatus;
 }
-tm* Task::getTaskReminderTime() const
+tm* Task::getTaskReminder() const
 {
-	return taskReminderTime;
+	return taskReminder;
 }
 tm* Task::getTaskStart() const
 {
@@ -101,9 +101,9 @@ void Task::setTaskStatus(Status status)
 {
 	taskStatus = status;
 }
-void Task::setTaskReminderTime(tm* remindTime)
+void Task::setTaskReminder(tm* reminder)
 {
-	taskReminderTime = remindTime;
+	taskReminder = reminder;
 }
 void Task::setTaskStart(tm* startTime)
 {
@@ -129,7 +129,7 @@ void Task::clearTimeAttr()
 	taskStart = initializeTime;
 	taskEnd = initializeTime;
 	taskNextOccurance = initializeTime;
-	taskReminderTime = initializeTime;
+	taskReminder = initializeTime;
 
 }
 
@@ -156,7 +156,7 @@ long long Task::getTimeInt(TimeType type) const
 	else if(type==timeNext)
 		time = taskNextOccurance;
 	else if(type==timeReminder)
-		time = taskReminderTime;
+		time = taskReminder;
 
 	if(time!=NULL){
 		long long min = time->tm_min;

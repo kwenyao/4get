@@ -42,7 +42,6 @@ public:
 	// callable by executor
 	void parseReset();
 	void parseInput(string input, vector<string>& inputBits);
-	void parseTime(string timeString, vector<int>& timeBits);
 
 private:	
 	void processCommand(string commandString, vector<string>& inputBits);
@@ -52,12 +51,12 @@ private:
 	bool separateInput(Command userCommand, vector<string>& inputBits);
 	bool separateFunctionAdd(vector<string>& inputBits);
 	bool separateFunctionDelete(vector<string>& inputBits);
-	bool separateFunctionDeleteAll(vector<string>& inputBits);
+	//bool separateFunctionDeleteAll(vector<string>& inputBits);
 	bool separateFunctionMark(vector<string>& inputBits);
-	bool separateFunctionMarkDone(vector<string>& inputBits);
+	//bool separateFunctionMarkDone(vector<string>& inputBits);
 	bool separateFunctionModify(vector<string>& inputBits);
 	bool separateFunctionUndo(vector<string>& inputBits);
-
+	bool separateFunctionShow(vector<string>& inputBits); // Show, Display, GoTo. This show user task in a timespan.
 
 	bool determineVenue();
 	bool determineDateAndTime();
