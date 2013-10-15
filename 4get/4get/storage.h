@@ -51,6 +51,7 @@ private:
 	static const string PRIORITY_NORMAL;
 
 	void writeFileSetup(string fileName, ios_base::openmode mode);
+	void readFileSetup(string fileName);
 	string determineFile(ListType listType);
 
 	bool saveList(const list<Task>& listToSave);
@@ -72,8 +73,9 @@ private:
 	//void writeStatus(const Task& task);  //to be deleted if not used
 
 	//Functions to convert to string
-	string convertToStr(long long number);
+	//string convertToStr(long long number);
 	string convertToStr(tm* time);
+	string convertToStr(time_t time);
 	string convertToStr(TaskType taskType);
 	string convertToStr(RepeatType repeatType);
 	string convertToStr(Priority priority);
@@ -83,6 +85,6 @@ public:
 	Storage();
 
 	bool save(const list<Task>& list,ListType listType, int listSize);
-	int load(list<Task>& list, ListType listType);
+	bool load(list<Task>& listToLoadTo, ListType listType);
 };
 #endif

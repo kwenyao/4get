@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <chrono>
+#include <vector>
 
 using namespace std;
 using namespace Enum;
@@ -27,6 +28,19 @@ private:
 	static const int DEFAULT_START_HOUR;
 	static const int DEFAULT_START_MIN;
 	static const int YEAR_21_CENTURY;
+	static const int SLOT_DAY;
+	static const int SLOT_MONTH;
+	static const int SLOT_YEAR;
+	static const int SLOT_HOUR;
+	static const int SLOT_MIN;
+	static const int TIME_SPECIFIER_LENGTH;
+	static const int TIME_PM_CORRECTION;
+	static const string DATE_DELIMITER_1;
+	static const string DATE_DELIMITER_2;
+	static const string TIME_DELIMITER_1;
+	static const string TIME_DELIMITER_2;
+	static const string TIME_ANTE_MERIDIAN;
+	static const string TIME_POST_MERIDIAN;
 
 	void getEndDate(bool isNoEndDate, int& year, int& month, int& day, string endDate);
 	void getEndTime(bool isNoEndTime, int& hour, int& min, string endTime);
@@ -42,6 +56,10 @@ private:
 	void extractTime(string timeStr, int& hour, int& min);
 
 	time_t createTime(int year, int month, int day, int hour, int min);
+
+	void splitString(string str, const string delimiter, vector<string>& strVector);
+
+	void toLowerCase(string &str);
 
 public:
 	Converter();

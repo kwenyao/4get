@@ -135,13 +135,6 @@ void Storage::writeFileSetup(string fileName, ios_base::openmode mode){
 	_fileWrite.open(fileName, mode);
 }
 
-int Storage::load(list<Task>& list,ListType listType ){
-	string fileName;
-	determineFile(listType);
-
-	return 0; //stub
-}
-
 string Storage::determineFile(ListType listType){
 	switch (listType){
 	case listToDo:
@@ -157,9 +150,9 @@ void Storage::writeLine(string line){
 	_fileWrite << line << endl;
 }
 
-string Storage::convertToStr(long long number){
-	return to_string(number);
-}
+//string Storage::convertToStr(long long number){
+//	return to_string(number);
+//}
 
 string Storage::convertToStr(TaskType taskType){
 	switch(taskType){
@@ -198,10 +191,23 @@ string Storage::convertToStr(Priority priority){
 	}
 }
 
+string Storage::convertToStr(time_t time){
+	stringstream tempStream;
+	tempStream << time;
+	return tempStream.str();
+}
+
 string Storage::convertToStr(tm* time){
 	stringstream tempStream;
 	time_t tempTime;
 	tempTime = mktime(time);
 	tempStream << tempTime;
 	return tempStream.str();
+}
+
+
+bool Storage::load(list<Task>& list,ListType listType ){
+	string fileName = determineFile(listType);
+	
+	return 0; //stub
 }

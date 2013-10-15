@@ -7,6 +7,19 @@ const int Converter::DEFAULT_END_MIN = 59;
 const int Converter::DEFAULT_START_HOUR = 0;
 const int Converter::DEFAULT_START_MIN = 0;
 const int Converter::YEAR_21_CENTURY = 2000;
+const int Converter::SLOT_DAY = 0;
+const int Converter::SLOT_MONTH = 1;
+const int Converter::SLOT_YEAR = 2;
+const int Converter::SLOT_HOUR = 0;
+const int Converter::SLOT_MIN = 1;
+const int Converter::TIME_SPECIFIER_LENGTH = 2;
+const int Converter::TIME_PM_CORRECTION = 12;
+const string Converter::DATE_DELIMITER_1 = "/";
+const string Converter::DATE_DELIMITER_2 = "-";
+const string Converter::TIME_DELIMITER_1 = ":";
+const string Converter::TIME_DELIMITER_2 = ".";
+const string Converter::TIME_ANTE_MERIDIAN = "am";
+const string Converter::TIME_POST_MERIDIAN = "pm";
 
 Converter::Converter(){}
 
@@ -140,15 +153,53 @@ TaskType Converter::convertStringToTime(string startDate, string startTime, stri
 }
 
 void Converter::extractDate(string dateStr, int& year, int& month, int& day){
-	day = convertStringToInt(dateStr.substr(0,2));
-	month = convertStringToInt(dateStr.substr(3,2));
-	year = convertStringToInt(dateStr.substr(6,2));
-	year = year + YEAR_21_CENTURY;
+	vector<string> dateVector;
+	if(dateStr.find(DATE_DELIMITER_1) != string::npos){
+		splitString(dateStr, DATE_DELIMITER_1, dateVector);
+	}
+	else if(dateStr.find(DATE_DELIMITER_2) != string::npos){
+		splitString(dateStr, DATE_DELIMITER_2, dateVector);
+	}
+	day = convertStringToInt(dateVector[SLOT_DAY]);
+	month = convertStringToInt(dateVector[SLOT_MONTH]);
+	year = convertStringToInt(dateVector[SLOT_YEAR]);
+	if(year < YEAR_21_CENTURY)
+		year = year + YEAR_21_CENTURY;
 }
 
 void Converter::extractTime(string timeStr, int& hour, int& min){
-	hour = convertStringToInt(timeStr.substr(0,2));
-	min = convertStringToInt(timeStr.substr(3,2));
+	vector<string> timeVector;
+	bool isAM;
+	bool isPM;
+	bool is24HR;
+	int stringLength = timeStr.size();
+	string timeAMPM = timeStr.substr(stringLength - TIME_SPECIFIER_LENGTH);
+	toLowerCase(timeAMPM);
+	isAM = (timeAMPM == TIME_ANTE_MERIDIAN);
+	isPM = (timeAMPM == TIME_POST_MERIDIAN);
+	is24HR = (!isAM && !isPM);
+	if(is24HR){
+		hour = convertStringToInt(timeStr.substr(0,2));
+		min = convertStringToInt(timeStr.substr(2,2));
+	}
+	else if(stringLength == 3){ //e.g. 8pm
+		hour = convertStringToInt(timeStr.substr(0,1));
+		min = 0;
+	}
+	else if(stringLength == 4){ //e.g. 11am
+		hour = convertStringToInt(timeStr.substr(0,2));
+		min = 0;
+	}
+	else{ //e.g. 11:31pm OR 11.31pm
+		if(timeStr.find(TIME_DELIMITER_1) != string::npos)
+			splitString(timeStr, TIME_DELIMITER_1, timeVector);
+		else if(timeStr.find(TIME_DELIMITER_2) != string::npos)
+			splitString(timeStr, TIME_DELIMITER_2, timeVector);
+		hour = convertStringToInt(timeVector[SLOT_HOUR]);
+		min = convertStringToInt(timeVector[SLOT_MIN]);
+	}
+	if(isPM)
+		hour = hour + TIME_PM_CORRECTION;
 }
 
 void Converter::getTodayDate(int& year, int& month, int& day){
@@ -207,4 +258,21 @@ void Converter::getStartTime(bool isNoStartTime, int& hour, int& min, string sta
 		getDefaultStartTime(hour, min);
 	else
 		extractTime(startTime, hour, min);
+}
+
+void Converter::splitString(string str,const string delimiter, vector<string>& strVector){
+	string::size_type lastPos = str.find_first_not_of(delimiter, 0);
+	string::size_type pos = str.find_first_of(delimiter, lastPos);
+	while (string::npos != pos || string::npos != lastPos){
+		strVector.push_back(str.substr(lastPos, pos - lastPos));
+		lastPos = str.find_first_not_of(delimiter, pos);
+		pos = str.find_first_of(delimiter, lastPos);
+	}
+}
+
+void Converter::toLowerCase(string &str){
+	const int length = str.length();
+	for(int i=0; i < length; ++i){
+		str[i] = tolower(str[i]);
+	}
 }
