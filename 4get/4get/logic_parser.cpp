@@ -229,7 +229,7 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 		cout << "no date and time" << endl;
 	else
 		textStartTime = _textInput;											//else whatever the user input after show will be assumed to be strings indicating time.
-	
+
 	return true;
 }
 
@@ -689,22 +689,24 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					return false;
 			}
 		}
-		else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
-			stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){
-				strTime = _stringcheck;
-		}
-		else if(stringcheck.size()==TIMER_24HR_LENGTH) {
-			int i = 0;
-			bool is24hr = true;
-			while(i<TIMER_24HR_LENGTH){
-				if(!isdigit(stringcheck[i]))
-					is24hr = false;
-				i++;
+		else if(stringcheck.size()>TIMER_TIME_LOWER_LENGTH && stringcheck.size()<TIMER_TIME_UPPER_LENGTH && stringcheck.size()!=TIMER_TIME_EXCLUDED_LENGTH){
+			if(stringcheck.size()==TIMER_24HR_LENGTH) {
+				int i = 0;
+				bool is24hr = true;
+				while(i<TIMER_24HR_LENGTH){
+					if(!isdigit(stringcheck[i]))
+						is24hr = false;
+					i++;
+				}
+				if(is24hr)
+					strTime = _stringcheck;
+				else 
+					return false;
 			}
-			if(is24hr)
-				strTime = _stringcheck;
-			else 
-				return false;
+			else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
+				stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){
+					strTime = _stringcheck;
+			}
 		}
 		else
 			strDate = _stringcheck;

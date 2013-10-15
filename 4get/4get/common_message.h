@@ -209,7 +209,9 @@ namespace Constants{
 	const string TIMER_SUN = "sun";
 	const string TIMER_NEXT = "next";
 	const std::size_t TIMER_24HR_LENGTH = 4;
-	//const std::size_t TIMER_DATE_LENGTH = 8;
+	const std::size_t TIMER_TIME_LOWER_LENGTH = 2;
+	const std::size_t TIMER_TIME_UPPER_LENGTH = 8;
+	const std::size_t TIMER_TIME_EXCLUDED_LENGTH = 5;
 
 
 	//tasklist constants
