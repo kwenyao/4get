@@ -104,7 +104,7 @@ bool Converter::isEqual(string str1, const string str2)
 	return false;
 }
 
-bool Converter::convertStringToTime(string startDate, string startTime, string endDate, string endTime, time_t& returnStart, time_t& returnEnd){
+TaskType Converter::convertStringToTime(string startDate, string startTime, string endDate, string endTime, time_t& returnStart, time_t& returnEnd){
 	int startYear, endYear;
 	int startMonth, endMonth;
 	int startDay, endDay;
