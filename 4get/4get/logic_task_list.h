@@ -4,7 +4,6 @@
 #include <list>
 #include <time.h>
 #include "logic_task.h"
-#include "common_message.h"
 #include "storage.h"
 
 using namespace std;
