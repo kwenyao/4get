@@ -82,7 +82,8 @@ namespace Enum{
 	enum TaskType{
 		floating, 
 		timed, 
-		deadline
+		deadline,
+		taskInvalid
 	};
 	
 
