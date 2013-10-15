@@ -26,15 +26,19 @@ private:
 	string textCommand;
 	string textDescription;
 	string textVenue;
+	string textStart;
+	string textStartDate;
 	string textStartTime;
+	string textEnd;
+	string textEndDate;
 	string textEndTime;
-	string textDateAndTime;
 	string textRepeat;
 	string textPriority;
-	string textStatus;
-	string textRemindDateAndTime;
+	//string textStatus;
+	string textRemind;
+	string textRemindDate;
+	string textRemindTime;
 	string textSlotNumber;
-	string textTaskList;
 
 public:
 	Parser();
@@ -64,12 +68,15 @@ private:
 	bool determinePriority();
 	bool determineRepeat();
 	bool determineSlot();
-	bool determineTaskList();
+	//bool determineTaskList();
 	bool determineStatus();
 	std::size_t determindExtractLength(std::size_t found, std::size_t foundComma, string markerConstant, std::size_t& extractStart);
 
 	void shortenInput(std::size_t partitionStart, std::size_t partitionEnd);
-
+	void removeAllBorderSpace();
+	void removeBorderSpaces(string& str);
+	void parseAllTimeAndDate();
+	bool parseTimeAndDate(string& str, string& strDate, string& strTime);
 
 	//int separateInput(int state);
 	void toLowerCase(string &string);

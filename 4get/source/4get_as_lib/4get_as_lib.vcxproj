@@ -81,7 +81,6 @@
     <ClInclude Include="..\..\4get\logic_task_deadline.h" />
     <ClInclude Include="..\..\4get\logic_task_floating.h" />
     <ClInclude Include="..\..\4get\logic_task_list.h" />
-    <ClInclude Include="..\..\4get\logic_task_repeat.h" />
     <ClInclude Include="..\..\4get\logic_task_timed.h" />
     <ClInclude Include="..\..\4get\storage.h" />
   </ItemGroup>
@@ -91,7 +90,6 @@
     <ClCompile Include="..\..\4get\logic_task_deadline.cpp" />
     <ClCompile Include="..\..\4get\logic_task_floating.cpp" />
     <ClCompile Include="..\..\4get\logic_task_list.cpp" />
-    <ClCompile Include="..\..\4get\logic_task_repeat.cpp" />
     <ClCompile Include="..\..\4get\logic_task_timed.cpp" />
     <ClCompile Include="..\..\4get\storage.cpp" />
   </ItemGroup>

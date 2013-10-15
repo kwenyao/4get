@@ -24,6 +24,7 @@ namespace Commands{
 	const string COMMAND_MODIFY = "modify";
 	const string COMMAND_MOD = "mod";
 	const string COMMAND_UPDATE = "update";
+	const string COMMAND_DONE = "done";
 
 	//variants of undo
 	const string COMMAND_UNDO = "undo";
@@ -78,14 +79,14 @@ namespace Enum{
 		overdued
 	};
 
-	
+
 	enum TaskType{
 		floating, 
 		timed, 
 		deadline,
 		taskInvalid
 	};
-	
+
 
 	enum Command{
 		commandAdd, 
@@ -115,14 +116,17 @@ namespace Constants{
 	const int SLOT_COMMAND = 0;
 	const int SLOT_DESCRIPTION = 1;
 	const int SLOT_LOCATION = 2;
-	const int SLOT_REMIND_TIME = 3;
-	const int SLOT_PRIORITY = 4;
-	const int SLOT_REPEAT = 5;
-	const int SLOT_START_TIME = 6;
-	const int SLOT_END_TIME = 7;
-	const int SLOT_SLOT_NUMBER = 8;
-	const int SLOT_STATUS = 9;
-	const int SLOT_USER_RESPONSE = 10;
+	const int SLOT_REMIND_DATE = 3;
+	const int SLOT_REMIND_TIME = 4;
+	const int SLOT_PRIORITY = 5;
+	const int SLOT_REPEAT = 6;
+	const int SLOT_START_DATE = 7;
+	const int SLOT_START_TIME = 8;
+	const int SLOT_END_DATE = 9;
+	const int SLOT_END_TIME = 10;
+	const int SLOT_SLOT_NUMBER = 11;
+	const int SLOT_STATUS = 12;
+	const int SLOT_USER_RESPONSE = 13;
 
 	//Time Container slots;
 	const int TIME_SLOT_SIZE = 10;
@@ -180,7 +184,34 @@ namespace Constants{
 	const string MARKER_INCOMPLETE = "incomplete";
 	const std::size_t MARKER_INCOMPLETE_LENGTH = 10;
 
-	
+	//parser timer constants
+	const string TIMER_SLASH = "/";
+	const string TIMER_DASH = "-";
+	const string TIMER_COLON = ":";
+	const string TIMER_DOT = ".";
+	const string TIMER_AM = "am";
+	const string TIMER_PM = "pm";
+	const string TIMER_TOMORROW = "tommorrow";
+	const string TIMER_TML = "tml";
+	const string TIMER_MONDAY = "monday";
+	const string TIMER_MON = "mon";
+	const string TIMER_TUESDAY = "tuesday";
+	const string TIMER_TUES = "tues";
+	const string TIMER_WEDNESDAY = "wednesday";
+	const string TIMER_WED = "wed";
+	const string TIMER_THURSDAY = "thursday";
+	const string TIMER_THURS = "thurs";
+	const string TIMER_FRIDAY = "friday";
+	const string TIMER_FRI = "fri";
+	const string TIMER_SATURDAY = "saturday";
+	const string TIMER_SAT = "sat";
+	const string TIMER_SUNDAY = "sunday";
+	const string TIMER_SUN = "sun";
+	const string TIMER_NEXT = "next";
+	const std::size_t TIMER_24HR_LENGTH = 4;
+	//const std::size_t TIMER_DATE_LENGTH = 8;
+
+
 	//tasklist constants
 	const string LIST_COMPLETED = " listcompleted";
 	const std::size_t LIST_COMPLETED_LENGTH = 14;
