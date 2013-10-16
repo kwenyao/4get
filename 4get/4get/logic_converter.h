@@ -21,6 +21,13 @@ private:
 	int extractHour(string timeStr);
 	int extractMin(string timeStr);
 
+	static const string REPEAT_DAILY;
+	static const string REPEAT_WEEKLY;
+	static const string REPEAT_FORGHTNIGHTLY;
+	static const string REPEAT_MONTHLY;
+	static const string REPEAT_ANNUALLY;
+	static const string PRIORITY_HIGH;
+
 	static const int MONTH_CORRECTION;
 	static const int YEAR_CORRECTION;
 	static const int DEFAULT_END_HOUR;
@@ -35,20 +42,15 @@ private:
 	static const int SLOT_MIN;
 	static const int TIME_SPECIFIER_LENGTH;
 	static const int TIME_PM_CORRECTION;
-	static const string DATE_DELIMITER_1;
-	static const string DATE_DELIMITER_2;
-	static const string TIME_DELIMITER_1;
-	static const string TIME_DELIMITER_2;
+	static const string DATE_DELIMITER;
+	static const string TIME_DELIMITER;
 	static const string TIME_ANTE_MERIDIAN;
 	static const string TIME_POST_MERIDIAN;
 
-	void getEndDate(bool isNoEndDate, int& year, int& month, int& day, string endDate);
+	void getDate(bool isNoDate, int& year, int& month, int& day, string endDate);
 	void getEndTime(bool isNoEndTime, int& hour, int& min, string endTime);
-	void getStartDate(bool isNoStartDate, int& year, int& month, int& day, string startDate);
 	void getStartTime(bool isNoStartTime, int& hour, int& min, string startTime);
-
 	void getTodayDate(int& year, int& month, int& day);
-
 	void getDefaultEndTime(int& hour, int& min);
 	void getDefaultStartTime(int& hour, int& min);
 
@@ -58,24 +60,22 @@ private:
 	time_t createTime(int year, int month, int day, int hour, int min);
 
 	void splitString(string str, const string delimiter, vector<string>& strVector);
-
 	void toLowerCase(string &str);
 
 public:
 	Converter();
 	int convertStringToInt(string);
 	tm* convertStringToTm(string);
-	Status convertStringToStatus(string);
 	RepeatType convertStringToRepeatType(string);
 	Priority convertStringToPriority(string);
-	bool isEqual(string str1, const string str2);
+	bool isEqual(string string1, const string string2);
 
 	bool convertStringToTime(string timeStr, time_t returnTime);
 	TaskType convertStringToTime(string startDate, 
-			  				 string startTime, 
-							 string endDate, 
-							 string endTime, 
-							 time_t& returnStart, 
-							 time_t& returnEnd);
+			  				     string startTime, 
+							     string endDate, 
+							     string endTime, 
+							     time_t& returnStart, 
+							     time_t& returnEnd);
 };
 #endif
