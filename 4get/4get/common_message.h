@@ -43,6 +43,8 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_UNDO = "System was unable to undo to your previous task.";
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
 
+	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
+	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 };
 
 namespace Enum{

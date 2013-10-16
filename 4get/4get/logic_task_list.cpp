@@ -29,24 +29,29 @@ bool TaskList::addToList(Task task, ListType listType){
 	return true;
 }
 
-bool TaskList::deleteFromList(int taskToDelete){
+void TaskList::deleteFromList(int taskToDelete){
 	list<Task>* listToDeleteFrom;
 	list<Task>::iterator iterator;
 	listToDeleteFrom = determineList(_currentDisplayed);
-	iterator = iterateToTask(*listToDeleteFrom, taskToDelete);
-	listToDeleteFrom->erase(iterator);
-	return true; //stub
+	try{
+		if (listToDeleteFrom->empty())
+			throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+		iterator = iterateToTask(*listToDeleteFrom, taskToDelete);
+		listToDeleteFrom->erase(iterator);
+	} catch(string e){
+		cout << e << endl;
+	}
 }
 
-bool TaskList::deleteIDFromList(int IDNumber, ListType listToDelete){
+void TaskList::deleteIDFromList(int IDNumber, ListType listToDelete){
 	list<Task>::iterator iterator;
 	list<Task>* listPtr = determineList(listToDelete);
-	if(findID(listPtr, IDNumber, iterator)){
+	try{
+		findID(listPtr, IDNumber, iterator);
 		listPtr->erase(iterator);
-		return true;
+	} catch(string e){
+		cout << e << endl;
 	}
-	else
-		return false;
 }
 
 bool TaskList::markDone(int taskToMark){
@@ -86,9 +91,8 @@ list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskT
 	int listSize = insertionList.size();
 	for(int i=0; i<listSize; i++){
 		tempTime = iterator->getTimeInt(timeEnd);
-		if(tempTime > taskEndTime){
+		if(tempTime > taskEndTime)
 			return iterator;
-		}
 		++iterator;
 	}
 	return iterator;
@@ -103,17 +107,17 @@ list<Task>::iterator TaskList::iterateToTask(list<Task>& listToEdit, int task){
 	return iterator;
 }
 
-bool TaskList::findID(list<Task>* listToSearch, int IDNumber, list<Task>::iterator& iterator){
+void TaskList::findID(list<Task>* listToSearch, int IDNumber, list<Task>::iterator& iterator){
 	int tempID;
 	iterator = listToSearch->begin();
 	int listSize = listToSearch->size();
 	for(int i=0; i <listSize; i++){
 		tempID = iterator->getTaskId();
 		if(tempID == IDNumber)
-			return true;
+			return;
 		++iterator;
 	}
-	return false;
+	throw string(Message::MESSAGE_ERROR_INVALID_ID);
 }
 
 list<Task>* TaskList::determineList(ListType listType){

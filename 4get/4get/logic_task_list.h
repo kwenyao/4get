@@ -26,7 +26,7 @@ private:
 
 	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
 	list<Task>::iterator iterateToTask(list<Task>& listToEdit, int task);
-	bool findID(list<Task>* listToEdit, int IDNumber, list<Task>::iterator& iterator);
+	void findID(list<Task>* listToEdit, int IDNumber, list<Task>::iterator& iterator);
 	list<Task>* determineList(ListType listType);
 
 public:
@@ -38,8 +38,8 @@ public:
 
 	//Public list manipulation functions
 	bool addToList(Task task, ListType listToAdd);
-	bool deleteFromList(int taskToDelete);
-	bool deleteIDFromList(int IDNumber, ListType listToDelete);
+	void deleteFromList(int taskToDelete);
+	void deleteIDFromList(int IDNumber, ListType listToDelete);
 	bool markDone(int taskToMark);
 
 	//Getter functions
