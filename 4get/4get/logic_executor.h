@@ -34,8 +34,11 @@ private:
 	TaskList taskList;
 	Parser parser;
 	Converter convert;
-	stack<Task> taskStack;
-	stack<Command> commandStack;
+	stack<Task> undoTaskStack;
+	stack<Command> undoCommandStack;
+	stack<Task> redoTaskStack;
+	stack<Command> redoCommandStack;
+	stack<Task> redoModifiedTaskStack;
 	ListType listType;
 	long long taskID;
 
@@ -60,6 +63,7 @@ public:
 	bool deleteFunction(vector<string> vectorOfInputs);
 	bool markFunction(vector<string> vectorOfInputs);
 	bool undoFunction();
+	bool redoFunction();
 	
 	//helper functions
 	bool isEqual(string str1, const string str2);
