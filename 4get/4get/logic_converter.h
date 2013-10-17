@@ -71,6 +71,7 @@ public:
 	bool isEqual(string string1, const string string2);
 
 	bool convertStringToTime(string timeStr, time_t returnTime);
+	time_t convertStringToTime(string dateStr, string timeStr);
 	TaskType convertStringToTime(string startDate, 
 			  				     string startTime, 
 							     string endDate, 

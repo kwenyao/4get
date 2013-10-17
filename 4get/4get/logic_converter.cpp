@@ -109,6 +109,25 @@ bool Converter::isEqual(string string1, const string string2){
 	return false;
 }
 
+time_t Converter::convertStringToTime(string dateStr, string timeStr){
+	int year = 0;
+	int month = 0;
+	int day = 0;
+	int hour = 0;
+	int min = 0;
+	time_t returnTime = 0;
+	bool isNoDate = dateStr.empty();
+	bool isNoTime = dateStr.empty();
+	if(isNoDate && isNoTime)
+		return returnTime;
+	if(!isNoDate)
+		extractDate(dateStr, year, month, day);
+	if(!isNoTime)
+		extractTime(timeStr, hour, min);
+	returnTime = createTime(year, month, day, hour, min);
+	return returnTime;
+}
+
 TaskType Converter::convertStringToTime(string startDate, 
 										string startTime, 
 										string endDate, 

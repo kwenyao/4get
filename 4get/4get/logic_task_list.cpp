@@ -51,6 +51,7 @@ void TaskList::deleteIDFromList(int IDNumber, ListType listToDelete){
 		listPtr->erase(iterator);
 	} catch(string e){
 		cout << e << endl;
+		throw;
 	}
 }
 
