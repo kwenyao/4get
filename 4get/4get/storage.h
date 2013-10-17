@@ -6,6 +6,9 @@
 #include <fstream>
 #include <sstream>
 #include "logic_task.h"
+#include "logic_task_floating.h"
+#include "logic_task_deadline.h"
+#include "logic_task_timed.h"
 
 using namespace std;
 
@@ -51,7 +54,6 @@ private:
 	static const string PRIORITY_NORMAL;
 
 	void writeFileSetup(string fileName, ios_base::openmode mode);
-	void readFileSetup(string fileName);
 	string determineFile(ListType listType);
 
 	bool saveList(const list<Task>& listToSave);
@@ -79,6 +81,24 @@ private:
 	string convertToStr(TaskType taskType);
 	string convertToStr(RepeatType repeatType);
 	string convertToStr(Priority priority);
+	
+
+	//load functions
+	void readFileSetup(string fileName);
+	void loadIntoList(list<Task>& listToLoad);
+	bool isLoadIncomplete();
+	bool foundNextTask();
+	string getNextLine();
+	Task getNewTask();
+	Task constructTask(TaskType taskType, string IDString);
+	void insertTaskIntoList (list<Task>& listToInsert, Task task);
+	list<Task>::iterator getIterator(list<Task>& insertionList, Task task);
+
+	TaskType convertToTaskType(string str);
+	int convertToInt(string str);
+	time_t convertToTime(string str);
+	RepeatType convertToRepeatType(string str);
+	Priority convertToPriority(string str);
 
 public:
 	//constructor
