@@ -67,5 +67,8 @@ public:
 	bool storeTask(Task taskTemp);
 	bool storeCommands(Command command);
 	bool setListType(ListType listType);
+
+	//assertions
+	void empty_task();
 };
 #endif
