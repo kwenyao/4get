@@ -65,7 +65,7 @@ private:
 public:
 	Converter();
 	int convertStringToInt(string);
-	tm* convertStringToTm(string);
+	//tm* convertStringToTm(string);
 	RepeatType convertStringToRepeatType(string);
 	Priority convertStringToPriority(string);
 	bool isEqual(string string1, const string string2);

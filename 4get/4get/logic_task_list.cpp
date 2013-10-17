@@ -40,10 +40,11 @@ void TaskList::deleteFromList(int taskToDelete){
 		listToDeleteFrom->erase(iterator);
 	} catch(string e){
 		cout << e << endl;
+		throw;
 	}
 }
 
-void TaskList::deleteIDFromList(int IDNumber, ListType listToDelete){
+void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete){
 	list<Task>::iterator iterator;
 	list<Task>* listPtr = determineList(listToDelete);
 	try{
@@ -84,14 +85,14 @@ Task* TaskList::obtainTask(int taskToGet){
 list<Task>::iterator TaskList::getIterator(list<Task>& insertionList, Task taskToAdd){
 	long long tempTime;
 	bool isEmpty = insertionList.empty();
-	long long taskEndTime = taskToAdd.getTimeInt(timeEnd);
+	long long taskEndTime = taskToAdd.getTimeLong(timeEnd);
 	list<Task>::iterator iterator = insertionList.begin();
 	if(isEmpty){
 		return iterator;
 	}
 	int listSize = insertionList.size();
 	for(int i=0; i<listSize; i++){
-		tempTime = iterator->getTimeInt(timeEnd);
+		tempTime = iterator->getTimeLong(timeEnd);
 		if(tempTime > taskEndTime)
 			return iterator;
 		++iterator;
@@ -108,8 +109,8 @@ list<Task>::iterator TaskList::iterateToTask(list<Task>& listToEdit, int task){
 	return iterator;
 }
 
-void TaskList::findID(list<Task>* listToSearch, int IDNumber, list<Task>::iterator& iterator){
-	int tempID;
+void TaskList::findID(list<Task>* listToSearch, long long IDNumber, list<Task>::iterator& iterator){
+	long long tempID;
 	iterator = listToSearch->begin();
 	int listSize = listToSearch->size();
 	for(int i=0; i <listSize; i++){
@@ -123,11 +124,11 @@ void TaskList::findID(list<Task>* listToSearch, int IDNumber, list<Task>::iterat
 
 list<Task>* TaskList::determineList(ListType listType){
 	switch (listType){
-	case listToDo:
-		return &_toDoList;
 	case listCompleted:
 		return &_completedList;
 	case listOverdue:
 		return &_overdueList;
+	default:
+		return &_toDoList;
 	}
 }
