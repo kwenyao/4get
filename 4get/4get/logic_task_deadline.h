@@ -8,10 +8,10 @@ class TaskDeadline : public Task
 {
 public:
 	TaskDeadline();
-	TaskDeadline(long long id, string description, string location, tm* reminder, Priority priority, Status status, RepeatType repeat, tm* endTime);
-	virtual void setupTask(long long id, TaskType type, string description, string location, tm *reminder, Priority priority, Status status, RepeatType repeat, tm *endTime);
-	void setTaskEnd(tm *endTask);
-	tm* getTaskEnd();
+	TaskDeadline(long long id, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t endTime);
+	virtual void setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t endTime);
+	void setTaskEnd(time_t endTask);
+	time_t getTaskEnd();
 };
 
 #endif

@@ -44,10 +44,11 @@ public:
 	Parser();
 
 	// callable by executor
-	void parseReset();
+	
 	void parseInput(string input, vector<string>& inputBits);
 
 private:	
+	void parseReset();
 	void processCommand(string commandString, vector<string>& inputBits);
 	void populateContainer(vector<string>& inputBits);
 

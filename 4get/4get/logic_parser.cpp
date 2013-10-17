@@ -87,13 +87,14 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 	}
 	catch(string error)
 	{
-		cout << error << endl;
+		throw error;
 	}
 
 }
 
 void Parser::parseInput(string input, vector<string>& inputBits)
 {
+	parseReset();
 	removeFirstWord(input);
 	_textInput = textInput = input;
 	toLowerCase(textInput);

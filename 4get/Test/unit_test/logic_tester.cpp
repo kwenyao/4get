@@ -22,4 +22,6 @@ TEST_F(ParserTest, MethodReturnsFirstItem)
 	parser.parseInput(input4, inputBits4);
 	parser.parseReset();
 
+	time_t timer;
+	time(&timer);
 }

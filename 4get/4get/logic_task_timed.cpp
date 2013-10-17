@@ -3,12 +3,12 @@
 TaskTimed::TaskTimed()
 {
 }
-TaskTimed::TaskTimed(long long id, string description, string location, tm *reminder, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime) : TaskDeadline()
+TaskTimed::TaskTimed(long long id, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t startTime, time_t endTime) : TaskDeadline()
 {
 	TaskType type = timed;
 	setupTask(id, type, description, location, reminder, priority, status, repeat, startTime, endTime);
 }
-void TaskTimed::setupTask(long long id, TaskType type, string description, string location, tm *reminder, Priority priority, Status status, RepeatType repeat, tm *startTime, tm *endTime)
+void TaskTimed::setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t startTime, time_t endTime)
 {
 	taskId = id;
 	taskType = type;
@@ -23,22 +23,22 @@ void TaskTimed::setupTask(long long id, TaskType type, string description, strin
 }
 
 
-void TaskTimed::setTaskStart(tm* startTime)
+void TaskTimed::setTaskStart(time_t startTime)
 {
 	taskStart = startTime;
 }
 
-void TaskTimed::setTaskEnd(tm* endTime)
+void TaskTimed::setTaskEnd(time_t endTime)
 {
 	taskEnd = endTime;
 }
 
-tm* TaskTimed::getTaskStart()
+time_t TaskTimed::getTaskStart()
 {
 	return taskStart;
 }
 
-tm* TaskTimed::getTaskEnd()
+time_t TaskTimed::getTaskEnd()
 {
 	return taskEnd;
 }

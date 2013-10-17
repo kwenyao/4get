@@ -10,14 +10,14 @@ Task::Task(){
 }
 
 
-void Task::setupTask(long long id, TaskType type, string description, string location, tm *reminder, Priority priority, Status status)
+void Task::setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority, Status status)
 {
 	taskId = id;
 	taskType = type;
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
-//	taskStatus = status;
+	//	taskStatus = status;
 	taskReminder = reminder;
 }
 
@@ -58,15 +58,15 @@ Status Task::getTaskStatus() const
 {
 	return taskStatus;
 }
-tm* Task::getTaskReminder() const
+time_t Task::getTaskReminder() const
 {
 	return taskReminder;
 }
-tm* Task::getTaskStart() const
+time_t Task::getTaskStart() const
 {
 	return taskStart;
 }
-tm* Task::getTaskEnd() const
+time_t Task::getTaskEnd() const
 {
 	return taskEnd;
 }
@@ -101,15 +101,15 @@ void Task::setTaskStatus(Status status)
 {
 	taskStatus = status;
 }
-void Task::setTaskReminder(tm* reminder)
+void Task::setTaskReminder(time_t reminder)
 {
 	taskReminder = reminder;
 }
-void Task::setTaskStart(tm* startTime)
+void Task::setTaskStart(time_t startTime)
 {
 	taskStart = startTime;
 }
-void Task::setTaskEnd(tm* endTime)
+void Task::setTaskEnd(time_t endTime)
 {
 	taskEnd = endTime;
 }
@@ -125,7 +125,7 @@ void Task::updateAllAttr()
 
 void Task::clearTimeAttr()
 {
-	tm *initializeTime = NULL;
+	time_t initializeTime = 0;
 	taskStart = initializeTime;
 	taskEnd = initializeTime;
 	taskNextOccurance = initializeTime;
@@ -144,34 +144,52 @@ void Task::clearAllAttr()
 	clearTimeAttr();
 }
 
-long long Task::getTimeInt(TimeType type) const
+long long Task::getTimeLong(TimeType type)
 {
 	long long yearMonthDayHourMin;
-	tm* time = NULL;
+	//tm* time = NULL;
+	tm* time = {0};
+	time_t temp = 0;
+	if(type==timeStart){
+		temp = taskStart;	
+		//time = taskStart;
 
-	if(type==timeStart)
-		time = taskStart;
-	else if(type==timeEnd)
-		time = taskEnd;
-	else if(type==timeNext)
-		time = taskNextOccurance;
-	else if(type==timeReminder)
-		time = taskReminder;
-
-	if(time!=NULL){
-		long long min = time->tm_min;
-		long long hour = time->tm_hour;
-		long long day = time ->tm_mday;
-		long long month = time ->tm_mon;
-		long long year = time ->tm_year + CONSTANT_START_YEAR;
-		hour = hour*CONVERT_MULTIPLIER_HOUR;
-		day = day*CONVERT_MULTIPLIER_DAY;
-		month = month*CONVERT_MULTIPLIER_MONTH;
-		year = year*CONVERT_MULTIPLIER_YEAR;
-		yearMonthDayHourMin = (year + month + day + hour + min);
-		return yearMonthDayHourMin;
 	}
+	else if(type==timeEnd){
+		temp = taskEnd;
+		//time = taskEnd;
+	}
+	else if(type==timeNext){
+		temp = taskNextOccurance;
+		//time = taskNextOccurance;
+	}
+	else if(type==timeReminder){
+		temp = taskReminder;
+		//time = taskReminder;
+	}
+
 	else
 		return 0;
+
+
+	time = localtime(&temp);
+	long long min = time->tm_min;
+	long long hour = time->tm_hour;
+	long long day = time->tm_mday;
+	long long month = time->tm_mon;
+	long long year = time->tm_year + CONSTANT_START_YEAR;
+	/*
+	long long min = time->tm_min;
+	long long hour = time->tm_hour;
+	long long day = time ->tm_mday;
+	long long month = time ->tm_mon;
+	long long year = time ->tm_year + CONSTANT_START_YEAR;
+	*/
+	hour = hour*CONVERT_MULTIPLIER_HOUR;
+	day = day*CONVERT_MULTIPLIER_DAY;
+	month = month*CONVERT_MULTIPLIER_MONTH;
+	year = year*CONVERT_MULTIPLIER_YEAR;
+	yearMonthDayHourMin = (year + month + day + hour + min);
+	return yearMonthDayHourMin;
 
 }
