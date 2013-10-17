@@ -67,10 +67,10 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->Controls->Add(this->tabTodo);
 	this->tabContainer->Controls->Add(this->tabCompleted);
 	this->tabContainer->Controls->Add(this->tabOverdue);
-	this->tabContainer->Location = System::Drawing::Point(370, 173);
+	this->tabContainer->Location = System::Drawing::Point(370, 195);
 	this->tabContainer->Name = L"tabContainer";
 	this->tabContainer->SelectedIndex = 0;
-	this->tabContainer->Size = System::Drawing::Size(442, 281);
+	this->tabContainer->Size = System::Drawing::Size(442, 250);
 	this->tabContainer->TabIndex = 0;
 	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
 	// 
@@ -80,7 +80,7 @@ void ui_display::InitializeComponent(void){
 	this->tabTodo->Location = System::Drawing::Point(4, 22);
 	this->tabTodo->Name = L"tabTodo";
 	this->tabTodo->Padding = System::Windows::Forms::Padding(3);
-	this->tabTodo->Size = System::Drawing::Size(434, 255);
+	this->tabTodo->Size = System::Drawing::Size(434, 224);
 	this->tabTodo->TabIndex = 0;
 	this->tabTodo->Text = L"To Do";
 	this->tabTodo->UseVisualStyleBackColor = true;
@@ -89,9 +89,12 @@ void ui_display::InitializeComponent(void){
 	// 
 	this->todoListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
 	this->todoListView->AutoArrange = false;
+	this->todoListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->todoListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->tIndexNo, this->tDescription, 
 		this->tVenue, this->tTime, this->tDueDate, this->tPriority});
+	this->todoListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
 	this->todoListView->FullRowSelect = true;
 	this->todoListView->GridLines = true;
 	this->todoListView->LabelEdit = true;
@@ -104,16 +107,18 @@ void ui_display::InitializeComponent(void){
 	// 
 	// tIndexNo
 	// 
-	this->tIndexNo->Text = L"Index No.";
+	this->tIndexNo->Text = L"#";
+	this->tIndexNo->Width = 29;
 	// 
 	// tDescription
 	// 
 	this->tDescription->Text = L"Description";
-	this->tDescription->Width = 127;
+	this->tDescription->Width = 139;
 	// 
 	// tVenue
 	// 
 	this->tVenue->Text = L"Venue";
+	this->tVenue->Width = 79;
 	// 
 	// tTime
 	// 
@@ -135,7 +140,7 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->Location = System::Drawing::Point(4, 22);
 	this->tabCompleted->Name = L"tabCompleted";
 	this->tabCompleted->Padding = System::Windows::Forms::Padding(3);
-	this->tabCompleted->Size = System::Drawing::Size(434, 255);
+	this->tabCompleted->Size = System::Drawing::Size(434, 224);
 	this->tabCompleted->TabIndex = 1;
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
@@ -189,7 +194,7 @@ void ui_display::InitializeComponent(void){
 	this->tabOverdue->Controls->Add(this->overdueListView);
 	this->tabOverdue->Location = System::Drawing::Point(4, 22);
 	this->tabOverdue->Name = L"tabOverdue";
-	this->tabOverdue->Size = System::Drawing::Size(434, 255);
+	this->tabOverdue->Size = System::Drawing::Size(434, 224);
 	this->tabOverdue->TabIndex = 2;
 	this->tabOverdue->Text = L"Overdue";
 	this->tabOverdue->UseVisualStyleBackColor = true;
@@ -243,16 +248,19 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer->Controls->Add(this->textboxInput);
 	this->inputContainer->Location = System::Drawing::Point(12, 12);
 	this->inputContainer->Name = L"inputContainer";
-	this->inputContainer->Size = System::Drawing::Size(800, 30);
+	this->inputContainer->Size = System::Drawing::Size(800, 22);
 	this->inputContainer->TabIndex = 2;
 	// 
 	// textboxInput
 	// 
-	this->textboxInput->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+	this->textboxInput->BackColor = System::Drawing::Color::DarkCyan;
+	this->textboxInput->BorderStyle = System::Windows::Forms::BorderStyle::None;
+	this->textboxInput->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
+	this->textboxInput->ForeColor = System::Drawing::SystemColors::Info;
 	this->textboxInput->Location = System::Drawing::Point(3, 3);
 	this->textboxInput->Name = L"textboxInput";
-	this->textboxInput->Size = System::Drawing::Size(793, 22);
+	this->textboxInput->Size = System::Drawing::Size(793, 16);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
@@ -262,27 +270,20 @@ void ui_display::InitializeComponent(void){
 	// messageContainer
 	// 
 	this->messageContainer->Controls->Add(this->messageBox);
-	this->messageContainer->Location = System::Drawing::Point(12, 48);
+	this->messageContainer->Location = System::Drawing::Point(12, 40);
 	this->messageContainer->Name = L"messageContainer";
-	this->messageContainer->Size = System::Drawing::Size(800, 119);
+	this->messageContainer->Size = System::Drawing::Size(800, 127);
 	this->messageContainer->TabIndex = 3;
 	// 
 	// messageBox
 	// 
-	this->messageBox->BackColor = System::Drawing::SystemColors::InactiveCaption;
+	this->messageBox->BackColor = System::Drawing::Color::IndianRed;
 	this->messageBox->Location = System::Drawing::Point(3, 3);
 	this->messageBox->Name = L"messageBox";
 	this->messageBox->ReadOnly = true;
-	this->messageBox->Size = System::Drawing::Size(793, 116);
+	this->messageBox->Size = System::Drawing::Size(793, 124);
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
-	array<String ^> ^  helpLines = {
-		"type \"add\" to add a task",
-		"type \"del\" to delete a task",
-		"type \"mod\" to modify a task",
-		"type \"mark\" to change the status of a task"
-	};
-	this->messageBox->Lines = helpLines;
 	// 
 	// todayContainer
 	// 
@@ -300,7 +301,7 @@ void ui_display::InitializeComponent(void){
 	this->checkedTaskList->FormattingEnabled = true;
 	this->checkedTaskList->Location = System::Drawing::Point(-3, 42);
 	this->checkedTaskList->Name = L"checkedTaskList";
-	this->checkedTaskList->Size = System::Drawing::Size(349, 139);
+	this->checkedTaskList->Size = System::Drawing::Size(352, 139);
 	this->checkedTaskList->TabIndex = 1;
 	// 
 	// chooseDate
@@ -314,12 +315,13 @@ void ui_display::InitializeComponent(void){
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-	this->BackColor = System::Drawing::SystemColors::Control;
+	this->BackColor = System::Drawing::SystemColors::InactiveCaptionText;
 	this->ClientSize = System::Drawing::Size(824, 466);
 	this->Controls->Add(this->todayContainer);
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
+	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 	this->KeyPreview = true;
 	this->Name = L"ui_display";
 	this->Text = L"4get";
