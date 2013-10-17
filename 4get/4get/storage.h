@@ -85,6 +85,7 @@ private:
 
 	//load functions
 	void readFileSetup(string fileName);
+	void closeFileRead();
 	void loadIntoList(list<Task>& listToLoad);
 	bool isLoadIncomplete();
 	bool foundNextTask();

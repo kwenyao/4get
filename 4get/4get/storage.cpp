@@ -216,11 +216,16 @@ bool Storage::load(list<Task>& list,ListType listType ){
 	string fileName = determineFile(listType);
 	readFileSetup(fileName);
 	loadIntoList(list);
+	closeFileRead();
 	return 0; //stub
 }
 
 void Storage::readFileSetup(string fileName){
 	_fileRead.open(fileName);
+}
+
+void Storage::closeFileRead(){
+	_fileRead.close();
 }
 
 void Storage::loadIntoList(list<Task>& listToLoad){
