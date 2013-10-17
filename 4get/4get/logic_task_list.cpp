@@ -3,6 +3,9 @@
 const int TaskList::INDEX_CORRECTION = -1;
 
 TaskList::TaskList(){
+	_storage.load(_toDoList, listToDo);
+	_storage.load(_completedList, listCompleted);
+	_storage.load(_overdueList, listOverdue);
 }
 
 bool TaskList::loadFromFile(){
