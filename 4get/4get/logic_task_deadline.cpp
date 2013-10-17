@@ -3,6 +3,11 @@
 TaskDeadline::TaskDeadline()
 {
 }
+TaskDeadline::TaskDeadline(long long id)
+{
+	clearAllAttr();
+	taskId = id;
+}
 
 TaskDeadline::TaskDeadline(long long id, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t endTime) : Task()
 {

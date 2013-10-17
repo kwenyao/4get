@@ -1,6 +1,7 @@
 #include "logic_task_timed.h"
 
-TaskTimed::TaskTimed()
+
+TaskTimed::TaskTimed(long long id) : TaskDeadline(id)
 {
 }
 TaskTimed::TaskTimed(long long id, string description, string location, time_t reminder, Priority priority, Status status, RepeatType repeat, time_t startTime, time_t endTime) : TaskDeadline()

@@ -201,6 +201,7 @@ namespace Constants{
 	const string TIMER_PM = "pm";
 	const string TIMER_TOMORROW = "tommorrow";
 	const string TIMER_TML = "tml";
+	const string TIMER_TMR = "tmr";
 	const string TIMER_MONDAY = "monday";
 	const string TIMER_MON = "mon";
 	const string TIMER_TUESDAY = "tuesday";
