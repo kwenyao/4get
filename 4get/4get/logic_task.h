@@ -51,11 +51,9 @@ public:
 	Priority getTaskPriority() const;
 	string getTaskLocation() const;
 	Status getTaskStatus() const;
-	//tm* getTaskReminder() const;
 	time_t getTaskReminder() const;
-	//virtual tm* getTaskStart() const;
+	time_t getTaskNextOccurance() const;
 	virtual time_t getTaskStart() const;
-	//virtual tm* getTaskEnd() const;
 	virtual time_t getTaskEnd() const;
 	virtual RepeatType getTaskRepeat() const;
 	virtual long long getTimeLong(TimeType type);
@@ -67,11 +65,9 @@ public:
 	void setTaskPriority(Priority priority);
 	void setTaskLocation(string location);
 	void setTaskStatus(Status status);
-	//void setTaskReminder(tm* reminder);
 	void setTaskReminder(time_t reminder);
-	//virtual void setTaskStart(tm *startTask);
+	void setTaskNextOccurance(time_t next);
 	virtual void setTaskStart(time_t startTask);
-	//virtual void setTaskEnd(tm *endTask);
 	virtual void setTaskEnd(time_t endTask);
 	virtual void setTaskRepeat(RepeatType repeat); 
 

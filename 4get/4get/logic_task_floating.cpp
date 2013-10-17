@@ -1,5 +1,9 @@
 #include "logic_task_floating.h"
 
+TaskFloating::TaskFloating(): Task()
+{
+}
+
 TaskFloating::TaskFloating(long long id): Task()
 {
 	clearAllAttr();

@@ -57,6 +57,10 @@ time_t Task::getTaskReminder() const
 {
 	return taskReminder;
 }
+time_t Task::getTaskNextOccurance() const
+{
+	return taskNextOccurance;
+}
 time_t Task::getTaskStart() const
 {
 	return taskStart;
@@ -97,6 +101,10 @@ void Task::setTaskStatus(Status status)
 void Task::setTaskReminder(time_t reminder)
 {
 	taskReminder = reminder;
+}
+void Task::setTaskNextOccurance(time_t next)
+{
+	taskNextOccurance = next;
 }
 void Task::setTaskStart(time_t startTime)
 {

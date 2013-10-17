@@ -1,6 +1,8 @@
 #include "logic_task_timed.h"
 
-
+TaskTimed::TaskTimed() : TaskDeadline()
+{
+}
 TaskTimed::TaskTimed(long long id) : TaskDeadline(id)
 {
 }
