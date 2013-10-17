@@ -57,13 +57,12 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		*endTime;
 	RepeatType repeat;
 	Priority priority;
-	Status status;
+	Status status = statusNone;
 
 	id = taskID;
 	description = vectorOfInputs[SLOT_DESCRIPTION];
 	location = vectorOfInputs[SLOT_LOCATION];
 	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
-	/*status = convert.convertStringToStatus(vectorOfInputs[SLOT_STATUS]);*/
 	repeat = convert.convertStringToRepeatType(vectorOfInputs[SLOT_REPEAT]);
 	startTime = convert.convertStringToTm(vectorOfInputs[SLOT_START_TIME]);
 	endTime = convert.convertStringToTm(vectorOfInputs[SLOT_END_TIME]);
@@ -171,7 +170,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			priority, 
 			status, 
 			repeat, 
-			endTime); 
+			endTime);
+		taskList.deleteIDFromList(id, listToDo);
+		taskList.addToList(taskTemp, listToDo);
 	} 
 	//if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
 	//{
@@ -252,4 +253,7 @@ bool Executor::setListType(ListType uiListType)
 {
 	listType = uiListType;
 	return true;
+}
+void Executor::empty_task(){
+	assert(taskGlobal != NULL);
 }

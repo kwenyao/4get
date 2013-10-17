@@ -29,6 +29,9 @@ namespace Commands{
 	//variants of undo
 	const string COMMAND_UNDO = "undo";
 
+	//variants of redo
+	const string COMMAND_REDO = "redo";
+
 	//variants of show
 	const string COMMAND_SHOW = "show";
 	const string COMMAND_DISPLAY = "display";
@@ -41,6 +44,7 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_MARK = "System was unable to mark your task.";
 	const string MESSAGE_ERROR_COMMAND_MODIFY = "System was unable to modify your task.";
 	const string MESSAGE_ERROR_COMMAND_UNDO = "System was unable to undo to your previous task.";
+	const string MESSAGE_ERROR_COMMAND_REDO = "System was unable to redo your previous task.";
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
 
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
@@ -97,6 +101,7 @@ namespace Enum{
 		commandMark, 
 		commandModify, 
 		commandUndo, 
+		commandRedo,
 		commandShow,
 		commandInvalid
 	};
