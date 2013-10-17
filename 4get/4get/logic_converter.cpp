@@ -59,49 +59,49 @@ Priority Converter::convertStringToPriority(string str){
 		return normal;
 }
 
-tm* Converter::convertStringToTm(string str)  //this function work for dates that are eg. 02/02/13
-{
-	tm* Time;
-	Time = new tm;
-	if(str.empty())
-	{
-		return Time;
-	}
-	transform(str.begin(), str.end(), str.begin(), ::tolower);
-	if(str[2] == '/')
-	{
-		char DELIMITER = '/';
-		int day, month, year;
-		istringstream stm(str);
-		stm >> day >> DELIMITER;
-		stm >> month >> DELIMITER;
-		stm >> year;
-		if(year < 100)
-		{
-			year += 2000;
-		}
-
-		Time ->tm_mday = day;
-		Time ->tm_mon = month;
-		Time ->tm_year = year;
-
-		return Time;
-	}
-	else if(str[1] == ':'|| str[2] == ':')
-	{
-		int hour, mins;
-		char DELIMITER = ':';
-		char DELIMITER_MINS = 'a';
-		istringstream stm(str);
-		stm >> hour>> DELIMITER;
-		stm >> mins >> DELIMITER_MINS;
-
-		Time ->tm_hour = hour;
-		Time->tm_min = mins;
-
-		return Time;
-	}
-}
+//tm* Converter::convertStringToTm(string str)  //this function work for dates that are eg. 02/02/13
+//{
+//	tm* Time;
+//	Time = new tm;
+//	if(str.empty())
+//	{
+//		return Time;
+//	}
+//	transform(str.begin(), str.end(), str.begin(), ::tolower);
+//	if(str[2] == '/')
+//	{
+//		char DELIMITER = '/';
+//		int day, month, year;
+//		istringstream stm(str);
+//		stm >> day >> DELIMITER;
+//		stm >> month >> DELIMITER;
+//		stm >> year;
+//		if(year < 100)
+//		{
+//			year += 2000;
+//		}
+//
+//		Time ->tm_mday = day;
+//		Time ->tm_mon = month;
+//		Time ->tm_year = year;
+//
+//		return Time;
+//	}
+//	else if(str[1] == ':'|| str[2] == ':')
+//	{
+//		int hour, mins;
+//		char DELIMITER = ':';
+//		char DELIMITER_MINS = 'a';
+//		istringstream stm(str);
+//		stm >> hour>> DELIMITER;
+//		stm >> mins >> DELIMITER_MINS;
+//
+//		Time ->tm_hour = hour;
+//		Time->tm_min = mins;
+//
+//		return Time;
+//	}
+//}
 
 bool Converter::isEqual(string string1, const string string2){
 	if(string1 == string2)
@@ -192,12 +192,13 @@ void Converter::getStartTime(bool isNoStartTime, int& hour, int& min, string sta
 
 void Converter::getTodayDate(int& year, int& month, int& day){
 	time_t temp;
-	tm* currentTime;
+	struct tm currentTime;
 	time(&temp);
-	currentTime = localtime(&temp);
-	day = currentTime->tm_mday;
-	month = currentTime->tm_mon + MONTH_CORRECTION;
-	year = currentTime->tm_year + YEAR_CORRECTION;
+	localtime_s(&currentTime,&temp);
+	//currentTime = localtime(&temp);
+	day = currentTime.tm_mday;
+	month = currentTime.tm_mon + MONTH_CORRECTION;
+	year = currentTime.tm_year + YEAR_CORRECTION;
 }
 
 void Converter::getDefaultEndTime(int& hour, int& min){
