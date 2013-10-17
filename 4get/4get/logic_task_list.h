@@ -2,7 +2,7 @@
 #define _LOGIC_TASK_LIST_H_
 
 #include <list>
-#include <time.h>
+#include <ctime>
 #include "logic_task.h"
 #include "storage.h"
 

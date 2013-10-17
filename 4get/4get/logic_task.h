@@ -58,7 +58,7 @@ public:
 	//virtual tm* getTaskEnd() const;
 	virtual time_t getTaskEnd() const;
 	virtual RepeatType getTaskRepeat() const;
-	long long getTimeLong(TimeType type);
+	virtual long long getTimeLong(TimeType type);
 
 	//setter functions
 	void setTaskId(long long id);

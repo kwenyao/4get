@@ -1,6 +1,5 @@
 #include "logic_parser.h"
 
-
 Parser::Parser()
 {
 	textInput = INITIALIZE_STRING_BLANK;
@@ -22,7 +21,6 @@ Parser::Parser()
 	textRemindTime = INITIALIZE_STRING_BLANK;
 	textSlotNumber = INITIALIZE_STRING_BLANK;
 }
-
 void Parser::parseReset()
 {
 	textInput = INITIALIZE_STRING_BLANK;
@@ -44,7 +42,6 @@ void Parser::parseReset()
 	textRemindTime = INITIALIZE_STRING_BLANK;
 	textSlotNumber = INITIALIZE_STRING_BLANK;
 }
-
 void Parser::processCommand(string commandString, vector<string>& inputBits)
 {
 	try{
@@ -84,6 +81,12 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw MESSAGE_ERROR_COMMAND_SHOW;
 			}
 		}
+		else if(commandString.compare(COMMAND_REDO)==COMPARE_SUCCESS) {
+			inputBits[SLOT_COMMAND] = COMMAND_REDO;
+			if(!separateInput(commandRedo, inputBits)){
+				throw MESSAGE_ERROR_COMMAND_REDO;
+			}
+		}
 	}
 	catch(string error)
 	{
@@ -91,7 +94,6 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 	}
 
 }
-
 void Parser::parseInput(string input, vector<string>& inputBits)
 {
 	parseReset();
@@ -104,7 +106,6 @@ void Parser::parseInput(string input, vector<string>& inputBits)
 	populateContainer(inputBits);
 
 }
-
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 {
 
@@ -121,6 +122,8 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 		return separateFunctionUndo(inputBits);
 	case commandShow:
 		return separateFunctionShow(inputBits);
+	case commandRedo:
+		return separateFunctionRedo(inputBits);
 	default:
 		return false;
 	}
@@ -128,7 +131,6 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 
 
 }
-
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 
@@ -223,7 +225,6 @@ bool Parser::separateFunctionUndo(vector<string>& inputBits)
 {
 	return true;
 }
-
 bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
 	if(!determineDateAndTime())												//if user specified with formats, startTime or endTime will have the time 
@@ -233,7 +234,10 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 
 	return true;
 }
-
+bool Parser::separateFunctionRedo(vector<string>& inputBits)
+{
+	return true;
+}
 bool Parser::determineVenue()
 {
 	std::size_t found = INITIALIZE_SIZE_T;
@@ -294,7 +298,6 @@ bool Parser::determineVenue()
 	else
 		return false; 
 }
-
 bool Parser::determineDateAndTime()
 {
 	std::size_t found = INITIALIZE_SIZE_T;
@@ -368,7 +371,6 @@ bool Parser::determineDateAndTime()
 	else																						//not specified date aka. Floating
 		return true; 
 }
-
 bool Parser::determineRepeat()
 {
 	std::size_t found = INITIALIZE_SIZE_T;
@@ -407,7 +409,6 @@ bool Parser::determineRepeat()
 	else
 		return false; 
 }
-
 bool Parser::determinePriority()
 {
 	std::size_t found = INITIALIZE_SIZE_T;
@@ -437,7 +438,6 @@ bool Parser::determinePriority()
 		return false;
 
 }
-
 //reminder is not neccessary. If user defines Reminder in input, then it will process.
 bool Parser::determineReminder()
 {
@@ -477,7 +477,6 @@ bool Parser::determineReminder()
 	else
 		return true; 
 }
-
 bool Parser::determineSlot()
 {
 	std::size_t extractStartPos = INITIALIZE_SIZE_T;
@@ -579,7 +578,6 @@ else
 return false;
 }
 */
-
 std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundComma, string markConstant, std::size_t& extractStartPos)
 {
 	extractStartPos = INITIALIZE_SIZE_T;
@@ -604,7 +602,6 @@ std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundC
 
 	return extractEndPos - extractStartPos;
 }
-
 void Parser::shortenInput(std::size_t partitionStart, std::size_t partitionEnd)
 {
 	std::size_t partitionLength = partitionEnd-partitionStart;
@@ -612,7 +609,6 @@ void Parser::shortenInput(std::size_t partitionStart, std::size_t partitionEnd)
 	textInput.erase(partitionStart, partitionLength);
 	_textInput.erase(partitionStart, partitionLength);
 }
-
 void Parser::removeAllBorderSpace()
 {
 	removeBorderSpaces(_textInput);
@@ -642,14 +638,11 @@ void Parser::removeBorderSpaces(string& str)
 		str.pop_back();
 	}
 }
-
-
 void Parser::parseAllTimeAndDate()
 {
 	parseTimeAndDate(textStart, textStartDate, textStartTime);
 	parseTimeAndDate(textEnd, textEndDate, textEndTime);
 }
-
 bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 {
 	stringstream buffer(str);
@@ -714,7 +707,6 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 	}
 	return true;
 }
-
 /*
 int Parser::separateInput(int state)
 {
@@ -747,7 +739,6 @@ textDescription += temp + " ";
 }
 }
 */
-
 void Parser::populateContainer(vector<string>& inputBits)
 {
 	inputBits[SLOT_DESCRIPTION] = textDescription;
@@ -763,7 +754,6 @@ void Parser::populateContainer(vector<string>& inputBits)
 	inputBits[SLOT_SLOT_NUMBER] = textSlotNumber;
 	//inputBits[SLOT_STATUS] = textStatus;
 }
-
 void Parser::toLowerCase(string &str)
 {
 	const int length = str.length();
@@ -772,7 +762,6 @@ void Parser::toLowerCase(string &str)
 		str[i] = tolower(str[i]);
 	}
 }
-
 //To retrieve the first word which is the command.
 string Parser::getFirstWord(string input)
 {
@@ -781,7 +770,6 @@ string Parser::getFirstWord(string input)
 	streamInput >> firstword;
 	return firstword;
 }
-
 //Remove the command from _input after retrieving it, change command to lower case
 void Parser::removeFirstWord(string &input)
 {
@@ -790,7 +778,6 @@ void Parser::removeFirstWord(string &input)
 	toLowerCase(textCommand);
 	input.replace(0, found+textCommand.length()+1, "");
 }
-
 //Check if the first character is a valid digit
 bool Parser::isParseInt(string input, int &value)
 {	

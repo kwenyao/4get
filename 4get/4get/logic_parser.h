@@ -62,6 +62,7 @@ private:
 	bool separateFunctionModify(vector<string>& inputBits);
 	bool separateFunctionUndo(vector<string>& inputBits);
 	bool separateFunctionShow(vector<string>& inputBits); // Show, Display, GoTo. This show user task in a timespan.
+	bool separateFunctionRedo(vector<string>& inputBits);
 
 	bool determineVenue();
 	bool determineDateAndTime();
