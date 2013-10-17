@@ -69,7 +69,7 @@ void Storage::saveTaskToFile(const Task& taskToSave){
 }
 
 void Storage::writeTaskAttributes(const Task& task){
-	TaskType taskType = task.getTaskType;
+	TaskType taskType = task.getTaskType();
 	bool isTimed = (taskType == timed);
 	bool isDeadLineORTimed = (taskType == deadline) || isTimed;
 	writeTaskType(task);
@@ -311,7 +311,7 @@ Task Storage::constructTask(TaskType taskType, string IDString){
 		return newTask;
 	}
 	else if(taskType == timed){
-		TaskTimed newTask(IDnumber);
+		TaskTimed newTask(IDNumber);
 		return newTask;
 	}
 }
