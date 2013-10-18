@@ -56,8 +56,27 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task>
 	//}
 
 	//for when time becomes time_t
-	System::String^ sys_time = gcnew System::String(timetToStdString(t1.getTaskStart()).c_str());
-	System::String^ sys_due = gcnew System::String(timetToStdString(t1.getTaskEnd()).c_str());
+	time_t timeAsTimeT;
+	tm*  timeAsTm=NULL;
+	System::String^ sys_time = "";
+	System::String^ sys_due = "";
+
+	timeAsTimeT = t1.getTaskStart();
+	if(timeAsTimeT != 0){
+		timeAsTm = localtime(&timeAsTimeT);
+		asctime_s(timeBuffer, 32, timeAsTm);
+		sys_time = gcnew System::String(timeBuffer);
+	}
+
+	timeAsTm = NULL;
+	timeAsTimeT = t1.getTaskEnd();
+	if(timeAsTimeT != 0){
+		timeAsTm = localtime(&timeAsTimeT);
+		asctime_s(timeBuffer, 32, timeAsTm);
+		sys_due = gcnew System::String(timeBuffer);
+	}
+	/*System::String^ sys_time = gcnew System::String(timetToStdString(t1.getTaskStart()).c_str());
+	System::String^ sys_due = gcnew System::String(timetToStdString(t1.getTaskEnd()).c_str());*/
 
 	System::String^ sys_priority = gcnew System::String(enumPriorityToStdString(t1.getTaskPriority()).c_str()); //priority
 
