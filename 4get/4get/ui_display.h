@@ -55,13 +55,13 @@ namespace UIDisplay {
 
 
 
-	private: System::Windows::Forms::ListView^  overdueListView;
-	private: System::Windows::Forms::ColumnHeader^  oTaskIndex;
-	private: System::Windows::Forms::ColumnHeader^  oTaskDescription;
-	private: System::Windows::Forms::ColumnHeader^  oTaskVenue;
-	private: System::Windows::Forms::ColumnHeader^  oTaskTime;
-	private: System::Windows::Forms::ColumnHeader^  oTaskDate;
-	private: System::Windows::Forms::ColumnHeader^  oTaskPriority;
+
+
+
+
+
+
+
 	private: System::Windows::Forms::RichTextBox^  messageBox;
 
 
@@ -78,20 +78,47 @@ namespace UIDisplay {
 
 
 	private: System::Windows::Forms::ListView^  todoListView;
-	private: System::Windows::Forms::ColumnHeader^  tIndexNo;
+	private: System::Windows::Forms::ColumnHeader^  tIndex;
+
 	private: System::Windows::Forms::ColumnHeader^  tDescription;
 	private: System::Windows::Forms::ColumnHeader^  tVenue;
 	private: System::Windows::Forms::ColumnHeader^  tTime;
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
 	private: System::Windows::Forms::ColumnHeader^  tPriority;
 	private: System::Windows::Forms::ListView^  completedListView;
-
 	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
 	private: System::Windows::Forms::ColumnHeader^  cVenue;
 	private: System::Windows::Forms::ColumnHeader^  cTime;
-	private: System::Windows::Forms::ColumnHeader^  cDue;
+	private: System::Windows::Forms::ColumnHeader^  cDueDate;
 	private: System::Windows::Forms::ColumnHeader^  cPriority;
+
+
+
+
+
+
+	private: System::Windows::Forms::ListView^  overdueListView;
+	private: System::Windows::Forms::ColumnHeader^  oIndex;
+	private: System::Windows::Forms::ColumnHeader^  oDescription;
+	private: System::Windows::Forms::ColumnHeader^  oVenue;
+	private: System::Windows::Forms::ColumnHeader^  oTime;
+	private: System::Windows::Forms::ColumnHeader^  oDueDate;
+	private: System::Windows::Forms::ColumnHeader^  oPriority;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -148,5 +175,6 @@ namespace UIDisplay {
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
-	};
+	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+};
 }

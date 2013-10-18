@@ -7,7 +7,7 @@ using namespace msclr::interop;
 
 UiConvert::UiConvert(){};
 
-string timetToStdString(time_t* time){
+string UiConvert::timetToStdString(time_t time){
 	stringstream timeStream;
 	timeStream << time;
 	return timeStream.str();
@@ -37,29 +37,27 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task>
 	Task t1 = list->front();
 	char timeBuffer[32] = "";
 	/****stub start*****/
-	time_t rawTime;
+	/*time_t rawTime;
 	time(&rawTime);
-	tm *testTime = localtime(&rawTime);
+	tm *testTime = localtime(&rawTime);*/
 	/*****stub end*****/
 
 	System::String^ sys_index = System::Convert::ToString(taskIndex); //index
 	System::String^ sys_desc = gcnew System::String(t1.getTaskDescription().c_str()); //description
 	System::String^ sys_venue = gcnew System::String(t1.getTaskLocation().c_str()); //venue
-	
-	System::String^ sys_time;
-	if(t1.getTaskStart() != NULL){
-		asctime_s(timeBuffer, 32, testTime);
-		sys_time = gcnew System::String(timeBuffer); //start time
-	}
-	System::String^ sys_due;
-	if(t1.getTaskEnd() != NULL){
-		asctime_s(timeBuffer, 32, testTime);
-		sys_due = gcnew System::String(timeBuffer); //due
-	}
+
+	//if(t1.getTaskStart() != NULL){
+	//	asctime_s(timeBuffer, 32, testTime);
+	//	sys_time = gcnew System::String(timeBuffer); //start time
+	//}
+	//if(t1.getTaskEnd() != NULL){
+	//	asctime_s(timeBuffer, 32, testTime);
+	//	sys_due = gcnew System::String(timeBuffer); //due
+	//}
 
 	//for when time becomes time_t
-	/*sys_time = gcnew System::String(timetToStdString(t1.getTaskStart()).c_str());
-	sys_due = gcnew System::String(timetToStdString(t1.getTaskEnd()).c_str());*/
+	System::String^ sys_time = gcnew System::String(timetToStdString(t1.getTaskStart()).c_str());
+	System::String^ sys_due = gcnew System::String(timetToStdString(t1.getTaskEnd()).c_str());
 
 	System::String^ sys_priority = gcnew System::String(enumPriorityToStdString(t1.getTaskPriority()).c_str()); //priority
 
