@@ -135,11 +135,11 @@ TaskType Converter::convertStringToTime(string startDate,
 										time_t& returnStart, 
 										time_t& returnEnd)
 {
-	int startYear,  endYear;
-	int startMonth, endMonth;
-	int startDay,   endDay;
-	int startHour,  endHour;
-	int startMin,   endMin;
+	int startYear=0,  endYear=0;
+	int startMonth=0, endMonth=0;
+	int startDay=0,   endDay=0;
+	int startHour=0,  endHour=0;
+	int startMin=0,   endMin=0;
 	bool isNoStartDate = startDate.empty();
 	bool isNoStartTime = startTime.empty();
 	bool isNoEndDate   = endDate.empty();
@@ -254,10 +254,10 @@ void Converter::extractTime(string timeStr, int& hour, int& min){
 }
 
 time_t Converter::createTime(int year, int month, int day, int hour, int min){
-	struct tm  time={0,0,0,0,0,0};
+	struct tm  time = {0,0,0,0,0,0};
 	time_t returnTime;
-	time.tm_year=year;
-	time.tm_mon=month;
+	time.tm_year=year - YEAR_CORRECTION;
+	time.tm_mon=month - MONTH_CORRECTION;
 	time.tm_mday=day;
 	time.tm_hour=hour;
 	time.tm_min=min;
