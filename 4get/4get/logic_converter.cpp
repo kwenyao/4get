@@ -117,7 +117,7 @@ time_t Converter::convertStringToTime(string dateStr, string timeStr){
 	int min = 0;
 	time_t returnTime = 0;
 	bool isNoDate = dateStr.empty();
-	bool isNoTime = dateStr.empty();
+	bool isNoTime = timeStr.empty();
 	if(isNoDate && isNoTime)
 		return returnTime;
 	if(!isNoDate)

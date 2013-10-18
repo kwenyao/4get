@@ -7,7 +7,6 @@ const int Executor::CONSTANT_MONTH_ONE = 1;
 
 Executor::Executor(){
 	taskID = retrieveCurrentDate();
-	taskList.loadFromFile();
 }
 void Executor::stringCollector(string task){
 	vector<string> vectorOfInputs(SLOT_SIZE);
@@ -57,7 +56,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	long long id;
 	string description, location;
 	time_t reminderTime, startTime, endTime;
-	time_t timeStart, timeEnd;
 	RepeatType repeat;
 	Priority priority;
 	Status status = statusNone;
@@ -74,15 +72,13 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	location = vectorOfInputs[SLOT_LOCATION];
 	priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
 	repeat = convert.convertStringToRepeatType(vectorOfInputs[SLOT_REPEAT]);
-	startTime = convert.convertStringToTime(startDatet, startTimet);
-	endTime = convert.convertStringToTime(endDatet, endTimet);
 	reminderTime = convert.convertStringToTime(vectorOfInputs[SLOT_REMIND_DATE], vectorOfInputs[SLOT_REMIND_TIME]);
 	taskTypeToCreate = convert.convertStringToTime(startDatet, 
 		startTimet, 
 		endDatet, 
 		endTimet, 
-		timeStart, 
-		timeEnd);
+		startTime, 
+		endTime);
 
 	taskID++;
 
@@ -165,9 +161,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		startTime, 
 		endTime;
 	int modifyNumber;
+	Priority priority;
+	TaskType typeOfTask, typeOfOldTask;
 
 	modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	taskTemp = taskList.obtainTask(modifyNumber);
+	typeOfOldTask = taskTemp->getTaskType();
+
 	storeTask(*taskTemp);
 
 	description = vectorOfInputs[SLOT_DESCRIPTION];
@@ -175,14 +175,28 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	startTime = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME]);
 	endTime = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME]);
 	reminderTime = convert.convertStringToTime(vectorOfInputs[SLOT_REMIND_DATE], vectorOfInputs[SLOT_REMIND_TIME]);
-
+	typeOfTask = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME], vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME], startTime, endTime);
+	bool isNoEndTime = (endTime == 0);
+	bool isNoStartTime = (startTime == 0);
 	if(!description.empty()){
 		taskTemp->setTaskDescription(description);
 	}
 	if(!location.empty()){
 		taskTemp->setTaskLocation(location);
 	}
-	if(!vectorOfInputs[SLOT_START_TIME].empty()){
+	//change floating to deadline task
+	if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
+		
+	}
+	//change floating to timed task
+	if(typeOfOldTask == floating && !isNoEndTime && !isNoStartTime){
+	
+	}
+	//change deadline task to timed
+	if(typeOfOldTask == deadline && !isNoStartTime){
+	}
+
+	if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
 		taskTemp->setTaskStart(startTime);
 	}
 	if(!vectorOfInputs[SLOT_END_TIME].empty()){    //unsure
