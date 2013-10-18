@@ -255,12 +255,15 @@ void Converter::extractTime(string timeStr, int& hour, int& min){
 
 time_t Converter::createTime(int year, int month, int day, int hour, int min){
 	struct tm  time={0,0,0,0,0,0};
+	time_t returnTime;
 	time.tm_year=year;
 	time.tm_mon=month;
 	time.tm_mday=day;
 	time.tm_hour=hour;
 	time.tm_min=min;
-	return mktime(&time);
+	returnTime = mktime(&time);
+	cout << "Converter time_t:" << returnTime;
+	return returnTime;
 }
 
 void Converter::splitString(string str,const string delimiter, vector<string>& strVector){
