@@ -71,7 +71,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		reminderTime,
 		taskTypeToCreate,
 		vectorOfInputs);
-	taskID++;
 
 	if(taskTypeToCreate == floating){
 		TaskFloating newTask(id,
@@ -145,6 +144,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 }
 bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	Task* taskTemp;
+	Task* taskNew;
 	Task taskModified;
 	long long id;
 	int modifyNumber;
@@ -188,13 +188,15 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	}
 	//change floating to deadline task
 	if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
+		id = taskTemp->getTaskId();									//set another task
 		taskTemp->setTaskEnd(endTime);
-		id = taskTemp->getTaskId();
-		taskList.deleteIDFromList(id, listType);
+		string description = taskTemp->getTaskDescription();
+		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
 		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
-		TaskDeadline taskTemp(id,
+		time_t reminderTime = taskTemp->getTaskReminder();
+		taskNew = new TaskDeadline(id,
 			description, 
 			location, 
 			reminderTime, 
@@ -203,7 +205,8 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			endTime);
 		try{
-			taskList.addToList(taskTemp, listType);
+			taskList.deleteIDFromList(id, listType);
+			taskList.addToList(taskNew, listType);
 		} catch(string error){
 			throw;
 		}
@@ -213,11 +216,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		taskTemp->setTaskEnd(endTime);
 		taskTemp->setTaskStart(startTime);
 		id = taskTemp->getTaskId();
-		taskList.deleteIDFromList(id, listType);
+		string description = taskTemp->getTaskDescription();
+		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
 		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
-		TaskTimed taskTemp(id, 
+		time_t reminderTime = taskTemp->getTaskReminder();
+		taskNew = new TaskTimed(id, 
 			description, 
 			location, 
 			reminderTime, 
@@ -226,11 +231,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			startTime, 
 			endTime);
-
-		taskGlobal = new TaskTimed;
-		*taskGlobal = taskTemp;
 		try{
-			taskList.addToList(taskTemp, listType);
+			taskList.deleteIDFromList(id, listType);
+			taskList.addToList(taskNew, listType);
 		} catch(string error){
 			throw;
 		}
@@ -239,11 +242,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	if(typeOfOldTask == deadline && !isNoStartTime){
 		taskTemp->setTaskStart(startTime);
 		id = taskTemp->getTaskId();
-		taskList.deleteIDFromList(id, listType);
+		string description = taskTemp->getTaskDescription();
+		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
 		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
-		TaskTimed taskTemp(id, 
+		time_t reminderTime = taskTemp->getTaskReminder();		
+		taskNew = new TaskTimed(id, 
 			description, 
 			location, 
 			reminderTime, 
@@ -252,37 +257,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			startTime, 
 			endTime);
-
-		taskGlobal = new TaskTimed;
-		*taskGlobal = taskTemp;
 		try{
-			taskList.addToList(taskTemp, listType);
-			taskList.addToList(&taskTemp, listToDo);
+			taskList.deleteIDFromList(id, listType);
+			taskList.addToList(taskNew, listType);
 		} catch(string error){
 			throw;
 		}
 	}
-	//if(!vectorOfInputs[SLOT_END_TIME].empty()){    //unsure
-	//	taskTemp->setTaskEnd(endTime);
-	//	int id = taskTemp->getTaskId();
-	//	Priority priority = taskTemp->getTaskPriority();
-	//	Status status = taskTemp->getTaskStatus();
-	//	RepeatType repeat = taskTemp->getTaskRepeat();
-	//	TaskDeadline taskTemp(id,
-	//		description, 
-	//		location, 
-	//		reminderTime, 
-	//		priority, 
-	//		status, 
-	//		repeat, 
-	//		endTime);
-	//	try{
-	//		taskList.deleteIDFromList(id, listToDo);
-	//		taskList.addToList(taskTemp, listToDo);
-	//	} catch(string error){
-	//		throw;
-	//	}
-	//} 
 	redoModifiedTaskStack.push(*taskTemp);
 	return true;
 }
@@ -372,23 +353,28 @@ bool Executor::isEqual(string str1, const string str2){
 	return false;
 }
 long long Executor::retrieveCurrentDate(){
+	/*time_t timeTemp;
 	time_t timeTemp;
 	long long yearMonthDay;
 	tm* currentTime;
+*/
+	//time(&timeTemp);
+	//currentTime = localtime(&timeTemp);
 
-	time(&timeTemp);
-	currentTime = localtime(&timeTemp);
+	//long long day = currentTime ->tm_mday;
+	//long long month = CONSTANT_MONTH_ONE + currentTime ->tm_mon;
+	//long long year = currentTime ->tm_year + CONSTANT_START_YEAR;
 
-	long long day = currentTime ->tm_mday;
-	long long month = CONSTANT_MONTH_ONE + currentTime ->tm_mon;
-	long long year = currentTime ->tm_year + CONSTANT_START_YEAR;
+	//day = day*CONSTANT_MULTIPLIER_DAY;
+	//month = month*CONSTANT_MULTIPLIER_MONTH;
+	//year = year*CONSTANT_MULTIPLIER_YEAR;
+	//yearMonthDay = (year + month + day);
 
-	day = day*CONSTANT_MULTIPLIER_DAY;
-	month = month*CONSTANT_MULTIPLIER_MONTH;
-	year = year*CONSTANT_MULTIPLIER_YEAR;
-	yearMonthDay = (year + month + day);
+	//return yearMonthDay;
+	time_t timeTemp;
+	long long yearMonthDay;
 
-	return yearMonthDay;
+	return yearMonthDay = time(&timeTemp);
 }
 bool Executor::storeTask(Task taskTemp){
 	undoTaskStack.push(taskTemp);
