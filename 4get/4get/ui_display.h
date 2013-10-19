@@ -150,6 +150,33 @@ namespace UIDisplay {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private:
 		/// <summary>
 		/// Required designer variable.

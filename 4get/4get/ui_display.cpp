@@ -32,21 +32,7 @@ void ui_display::InitializeComponent(void){
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
-	this->completedListView = (gcnew System::Windows::Forms::ListView());
-	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
-	this->overdueListView = (gcnew System::Windows::Forms::ListView());
-	this->oIndex = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oTime = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->inputContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
@@ -54,6 +40,20 @@ void ui_display::InitializeComponent(void){
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
+	this->completedListView = (gcnew System::Windows::Forms::ListView());
+	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cDueDate = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
+	this->overdueListView = (gcnew System::Windows::Forms::ListView());
+	this->oIndex = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oVenue = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oDueDate = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -68,10 +68,10 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->Controls->Add(this->tabTodo);
 	this->tabContainer->Controls->Add(this->tabCompleted);
 	this->tabContainer->Controls->Add(this->tabOverdue);
-	this->tabContainer->Location = System::Drawing::Point(370, 195);
+	this->tabContainer->Location = System::Drawing::Point(386, 189);
 	this->tabContainer->Name = L"tabContainer";
 	this->tabContainer->SelectedIndex = 0;
-	this->tabContainer->Size = System::Drawing::Size(442, 250);
+	this->tabContainer->Size = System::Drawing::Size(677, 342);
 	this->tabContainer->TabIndex = 0;
 	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
 	// 
@@ -81,7 +81,7 @@ void ui_display::InitializeComponent(void){
 	this->tabTodo->Location = System::Drawing::Point(4, 22);
 	this->tabTodo->Name = L"tabTodo";
 	this->tabTodo->Padding = System::Windows::Forms::Padding(3);
-	this->tabTodo->Size = System::Drawing::Size(434, 224);
+	this->tabTodo->Size = System::Drawing::Size(669, 316);
 	this->tabTodo->TabIndex = 0;
 	this->tabTodo->Text = L"To Do";
 	this->tabTodo->UseVisualStyleBackColor = true;
@@ -101,7 +101,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->LabelEdit = true;
 	this->todoListView->Location = System::Drawing::Point(-4, -4);
 	this->todoListView->Name = L"todoListView";
-	this->todoListView->Size = System::Drawing::Size(440, 259);
+	this->todoListView->Size = System::Drawing::Size(677, 317);
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
@@ -114,7 +114,7 @@ void ui_display::InitializeComponent(void){
 	// tDescription
 	// 
 	this->tDescription->Text = L"Description";
-	this->tDescription->Width = 139;
+	this->tDescription->Width = 160;
 	// 
 	// tVenue
 	// 
@@ -124,12 +124,12 @@ void ui_display::InitializeComponent(void){
 	// tTime
 	// 
 	this->tTime->Text = L"Time";
-	this->tTime->Width = 68;
+	this->tTime->Width = 172;
 	// 
 	// tDueDate
 	// 
 	this->tDueDate->Text = L"Due Date";
-	this->tDueDate->Width = 62;
+	this->tDueDate->Width = 171;
 	// 
 	// tPriority
 	// 
@@ -141,118 +141,20 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->Location = System::Drawing::Point(4, 22);
 	this->tabCompleted->Name = L"tabCompleted";
 	this->tabCompleted->Padding = System::Windows::Forms::Padding(3);
-	this->tabCompleted->Size = System::Drawing::Size(434, 224);
+	this->tabCompleted->Size = System::Drawing::Size(669, 316);
 	this->tabCompleted->TabIndex = 1;
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
-	// 
-	// completedListView
-	// 
-	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->completedListView->AutoArrange = false;
-	this->completedListView->BackColor = System::Drawing::Color::SandyBrown;
-	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
-		this->cVenue, this->cTime, this->cDueDate, this->cPriority});
-	this->completedListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
-		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-	this->completedListView->FullRowSelect = true;
-	this->completedListView->GridLines = true;
-	this->completedListView->LabelEdit = true;
-	this->completedListView->Location = System::Drawing::Point(-4, -4);
-	this->completedListView->Name = L"completedListView";
-	this->completedListView->Size = System::Drawing::Size(440, 259);
-	this->completedListView->TabIndex = 2;
-	this->completedListView->UseCompatibleStateImageBehavior = false;
-	this->completedListView->View = System::Windows::Forms::View::Details;
-	// 
-	// cIndex
-	// 
-	this->cIndex->Text = L"#";
-	this->cIndex->Width = 29;
-	// 
-	// cDescription
-	// 
-	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 139;
-	// 
-	// cVenue
-	// 
-	this->cVenue->Text = L"Venue";
-	this->cVenue->Width = 79;
-	// 
-	// cTime
-	// 
-	this->cTime->Text = L"Time";
-	this->cTime->Width = 68;
-	// 
-	// cDueDate
-	// 
-	this->cDueDate->Text = L"Due Date";
-	this->cDueDate->Width = 62;
-	// 
-	// cPriority
-	// 
-	this->cPriority->Text = L"Priority";
 	// 
 	// tabOverdue
 	// 
 	this->tabOverdue->Controls->Add(this->overdueListView);
 	this->tabOverdue->Location = System::Drawing::Point(4, 22);
 	this->tabOverdue->Name = L"tabOverdue";
-	this->tabOverdue->Size = System::Drawing::Size(434, 224);
+	this->tabOverdue->Size = System::Drawing::Size(669, 316);
 	this->tabOverdue->TabIndex = 2;
 	this->tabOverdue->Text = L"Overdue";
 	this->tabOverdue->UseVisualStyleBackColor = true;
-	// 
-	// overdueListView
-	// 
-	this->overdueListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
-	this->overdueListView->AutoArrange = false;
-	this->overdueListView->BackColor = System::Drawing::Color::SandyBrown;
-	this->overdueListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->oIndex, this->oDescription, 
-		this->oVenue, this->oTime, this->oDueDate, this->oPriority});
-	this->overdueListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
-		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-	this->overdueListView->FullRowSelect = true;
-	this->overdueListView->GridLines = true;
-	this->overdueListView->LabelEdit = true;
-	this->overdueListView->Location = System::Drawing::Point(-4, -4);
-	this->overdueListView->Name = L"overdueListView";
-	this->overdueListView->Size = System::Drawing::Size(440, 259);
-	this->overdueListView->TabIndex = 2;
-	this->overdueListView->UseCompatibleStateImageBehavior = false;
-	this->overdueListView->View = System::Windows::Forms::View::Details;
-	// 
-	// oIndex
-	// 
-	this->oIndex->Text = L"#";
-	this->oIndex->Width = 29;
-	// 
-	// oDescription
-	// 
-	this->oDescription->Text = L"Description";
-	this->oDescription->Width = 139;
-	// 
-	// oVenue
-	// 
-	this->oVenue->Text = L"Venue";
-	this->oVenue->Width = 79;
-	// 
-	// oTime
-	// 
-	this->oTime->Text = L"Time";
-	this->oTime->Width = 68;
-	// 
-	// oDueDate
-	// 
-	this->oDueDate->Text = L"Due Date";
-	this->oDueDate->Width = 62;
-	// 
-	// oPriority
-	// 
-	this->oPriority->Text = L"Priority";
 	// 
 	// inputContainer
 	// 
@@ -260,7 +162,7 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer->Controls->Add(this->textboxInput);
 	this->inputContainer->Location = System::Drawing::Point(12, 12);
 	this->inputContainer->Name = L"inputContainer";
-	this->inputContainer->Size = System::Drawing::Size(800, 22);
+	this->inputContainer->Size = System::Drawing::Size(1047, 24);
 	this->inputContainer->TabIndex = 2;
 	// 
 	// textboxInput
@@ -272,7 +174,7 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->ForeColor = System::Drawing::SystemColors::Info;
 	this->textboxInput->Location = System::Drawing::Point(3, 3);
 	this->textboxInput->Name = L"textboxInput";
-	this->textboxInput->Size = System::Drawing::Size(793, 16);
+	this->textboxInput->Size = System::Drawing::Size(1047, 16);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
@@ -282,9 +184,9 @@ void ui_display::InitializeComponent(void){
 	// messageContainer
 	// 
 	this->messageContainer->Controls->Add(this->messageBox);
-	this->messageContainer->Location = System::Drawing::Point(12, 40);
+	this->messageContainer->Location = System::Drawing::Point(12, 42);
 	this->messageContainer->Name = L"messageContainer";
-	this->messageContainer->Size = System::Drawing::Size(800, 127);
+	this->messageContainer->Size = System::Drawing::Size(1047, 125);
 	this->messageContainer->TabIndex = 3;
 	// 
 	// messageBox
@@ -293,7 +195,7 @@ void ui_display::InitializeComponent(void){
 	this->messageBox->Location = System::Drawing::Point(3, 3);
 	this->messageBox->Name = L"messageBox";
 	this->messageBox->ReadOnly = true;
-	this->messageBox->Size = System::Drawing::Size(793, 124);
+	this->messageBox->Size = System::Drawing::Size(1044, 122);
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
 	// 
@@ -301,7 +203,7 @@ void ui_display::InitializeComponent(void){
 	// 
 	this->todayContainer->Controls->Add(this->checkedTaskList);
 	this->todayContainer->Controls->Add(this->chooseDate);
-	this->todayContainer->Location = System::Drawing::Point(15, 218);
+	this->todayContainer->Location = System::Drawing::Point(15, 277);
 	this->todayContainer->Name = L"todayContainer";
 	this->todayContainer->Size = System::Drawing::Size(349, 194);
 	this->todayContainer->TabIndex = 4;
@@ -323,12 +225,110 @@ void ui_display::InitializeComponent(void){
 	this->chooseDate->Size = System::Drawing::Size(349, 20);
 	this->chooseDate->TabIndex = 0;
 	// 
+	// completedListView
+	// 
+	this->completedListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->completedListView->AutoArrange = false;
+	this->completedListView->BackColor = System::Drawing::Color::SandyBrown;
+	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
+		this->cVenue, this->cTime, this->cDueDate, this->cPriority});
+	this->completedListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->completedListView->FullRowSelect = true;
+	this->completedListView->GridLines = true;
+	this->completedListView->LabelEdit = true;
+	this->completedListView->Location = System::Drawing::Point(-4, 0);
+	this->completedListView->Name = L"completedListView";
+	this->completedListView->Size = System::Drawing::Size(677, 317);
+	this->completedListView->TabIndex = 2;
+	this->completedListView->UseCompatibleStateImageBehavior = false;
+	this->completedListView->View = System::Windows::Forms::View::Details;
+	// 
+	// cIndex
+	// 
+	this->cIndex->Text = L"#";
+	this->cIndex->Width = 29;
+	// 
+	// cDescription
+	// 
+	this->cDescription->Text = L"Description";
+	this->cDescription->Width = 160;
+	// 
+	// cVenue
+	// 
+	this->cVenue->Text = L"Venue";
+	this->cVenue->Width = 79;
+	// 
+	// cTime
+	// 
+	this->cTime->Text = L"Time";
+	this->cTime->Width = 172;
+	// 
+	// cDueDate
+	// 
+	this->cDueDate->Text = L"Due Date";
+	this->cDueDate->Width = 171;
+	// 
+	// cPriority
+	// 
+	this->cPriority->Text = L"Priority";
+	// 
+	// overdueListView
+	// 
+	this->overdueListView->Activation = System::Windows::Forms::ItemActivation::OneClick;
+	this->overdueListView->AutoArrange = false;
+	this->overdueListView->BackColor = System::Drawing::Color::SandyBrown;
+	this->overdueListView->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->oIndex, this->oDescription, 
+		this->oVenue, this->oTime, this->oDueDate, this->oPriority});
+	this->overdueListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->overdueListView->FullRowSelect = true;
+	this->overdueListView->GridLines = true;
+	this->overdueListView->LabelEdit = true;
+	this->overdueListView->Location = System::Drawing::Point(-4, 0);
+	this->overdueListView->Name = L"overdueListView";
+	this->overdueListView->Size = System::Drawing::Size(677, 317);
+	this->overdueListView->TabIndex = 2;
+	this->overdueListView->UseCompatibleStateImageBehavior = false;
+	this->overdueListView->View = System::Windows::Forms::View::Details;
+	// 
+	// oIndex
+	// 
+	this->oIndex->Text = L"#";
+	this->oIndex->Width = 29;
+	// 
+	// oDescription
+	// 
+	this->oDescription->Text = L"Description";
+	this->oDescription->Width = 160;
+	// 
+	// oVenue
+	// 
+	this->oVenue->Text = L"Venue";
+	this->oVenue->Width = 79;
+	// 
+	// oTime
+	// 
+	this->oTime->Text = L"Time";
+	this->oTime->Width = 172;
+	// 
+	// oDueDate
+	// 
+	this->oDueDate->Text = L"Due Date";
+	this->oDueDate->Width = 171;
+	// 
+	// oPriority
+	// 
+	this->oPriority->Text = L"Priority";
+	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackColor = System::Drawing::SystemColors::InactiveCaptionText;
-	this->ClientSize = System::Drawing::Size(824, 466);
+	this->ClientSize = System::Drawing::Size(1075, 543);
 	this->Controls->Add(this->todayContainer);
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);

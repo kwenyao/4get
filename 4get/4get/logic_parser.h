@@ -1,5 +1,6 @@
 #ifndef _LOGIC_PARSER_H_
 #define _LOGIC_PARSER_H_
+#define PROGRAM_NAME "4get"
 #include <stdio.h>
 #include <iostream>
 #include <string>

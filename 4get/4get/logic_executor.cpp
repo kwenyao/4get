@@ -63,14 +63,14 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 
 	id = taskID;
 	setParameters(description,
-				  location,
-				  priority,
-				  repeat,
-				  startTime,
-				  endTime,
-				  reminderTime,
-				  taskTypeToCreate,
-				  vectorOfInputs);
+		location,
+		priority,
+		repeat,
+		startTime,
+		endTime,
+		reminderTime,
+		taskTypeToCreate,
+		vectorOfInputs);
 	taskID++;
 
 	if(taskTypeToCreate == floating){
@@ -146,6 +146,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	Task* taskTemp;
 	Task taskModified;
+	long long id;
 	int modifyNumber;
 	string description, 
 		location;
@@ -161,14 +162,14 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	typeOfOldTask = taskTemp->getTaskType();
 	storeTask(*taskTemp);
 	setParameters(description,
-				  location,
-				  priority,
-				  repeat,
-				  startTime,
-				  endTime,
-				  reminderTime,
-				  typeOfTask,
-				  vectorOfInputs);
+		location,
+		priority,
+		repeat,
+		startTime,
+		endTime,
+		reminderTime,
+		typeOfTask,
+		vectorOfInputs);
 
 	bool isNoEndTime = (endTime == 0);
 	bool isNoStartTime = (startTime == 0);
@@ -178,24 +179,18 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	if(!location.empty()){
 		taskTemp->setTaskLocation(location);
 	}
-	//change floating to deadline task
-	if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
-		
+	if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
+	{
+		taskTemp->setTaskReminder(reminderTime);
 	}
-	//change floating to timed task
-	if(typeOfOldTask == floating && !isNoEndTime && !isNoStartTime){
-	
-	}
-	//change deadline task to timed
-	if(typeOfOldTask == deadline && !isNoStartTime){
-	}
-
 	if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
 		taskTemp->setTaskStart(startTime);
 	}
-	if(!vectorOfInputs[SLOT_END_TIME].empty()){    //unsure
+	//change floating to deadline task
+	if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
 		taskTemp->setTaskEnd(endTime);
-		int id = taskTemp->getTaskId();
+		id = taskTemp->getTaskId();
+		taskList.deleteIDFromList(id, listType);
 		Priority priority = taskTemp->getTaskPriority();
 		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
@@ -208,16 +203,86 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			endTime);
 		try{
-			taskList.deleteIDFromList(id, listToDo);
+			taskList.addToList(taskTemp, listType);
+		} catch(string error){
+			throw;
+		}
+	}
+	//change floating to timed task
+	if(typeOfOldTask == floating && !isNoEndTime && !isNoStartTime){
+		taskTemp->setTaskEnd(endTime);
+		taskTemp->setTaskStart(startTime);
+		id = taskTemp->getTaskId();
+		taskList.deleteIDFromList(id, listType);
+		Priority priority = taskTemp->getTaskPriority();
+		Status status = taskTemp->getTaskStatus();
+		RepeatType repeat = taskTemp->getTaskRepeat();
+		TaskTimed taskTemp(id, 
+			description, 
+			location, 
+			reminderTime, 
+			priority, 
+			status, 
+			repeat, 
+			startTime, 
+			endTime);
+
+		taskGlobal = new TaskTimed;
+		*taskGlobal = taskTemp;
+		try{
+			taskList.addToList(taskTemp, listType);
+		} catch(string error){
+			throw;
+		}
+	}
+	//change deadline task to timed
+	if(typeOfOldTask == deadline && !isNoStartTime){
+		taskTemp->setTaskStart(startTime);
+		id = taskTemp->getTaskId();
+		taskList.deleteIDFromList(id, listType);
+		Priority priority = taskTemp->getTaskPriority();
+		Status status = taskTemp->getTaskStatus();
+		RepeatType repeat = taskTemp->getTaskRepeat();
+		TaskTimed taskTemp(id, 
+			description, 
+			location, 
+			reminderTime, 
+			priority, 
+			status, 
+			repeat, 
+			startTime, 
+			endTime);
+
+		taskGlobal = new TaskTimed;
+		*taskGlobal = taskTemp;
+		try{
+			taskList.addToList(taskTemp, listType);
 			taskList.addToList(&taskTemp, listToDo);
 		} catch(string error){
 			throw;
 		}
-	} 
-	if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
-	{
-		taskTemp->setTaskReminder(reminderTime);
 	}
+	//if(!vectorOfInputs[SLOT_END_TIME].empty()){    //unsure
+	//	taskTemp->setTaskEnd(endTime);
+	//	int id = taskTemp->getTaskId();
+	//	Priority priority = taskTemp->getTaskPriority();
+	//	Status status = taskTemp->getTaskStatus();
+	//	RepeatType repeat = taskTemp->getTaskRepeat();
+	//	TaskDeadline taskTemp(id,
+	//		description, 
+	//		location, 
+	//		reminderTime, 
+	//		priority, 
+	//		status, 
+	//		repeat, 
+	//		endTime);
+	//	try{
+	//		taskList.deleteIDFromList(id, listToDo);
+	//		taskList.addToList(taskTemp, listToDo);
+	//	} catch(string error){
+	//		throw;
+	//	}
+	//} 
 	redoModifiedTaskStack.push(*taskTemp);
 	return true;
 }
@@ -347,39 +412,39 @@ bool Executor::setParameters(string &description,
 							 time_t &reminderTime,
 							 TaskType &typeOfTask,
 							 vector<string> &vectorOfInputs){
-	string descriptionSlot,
-		   locationSlot,
-		   prioritySlot,
-		   repeatSlot,
-		   startDateSlot,
-		   startTimeSlot, 
-		   endDateSlot, 
-		   endTimeSlot, 
-		   reminderDateSlot, 
-		   reminderTimeSlot;
+								 string descriptionSlot,
+									 locationSlot,
+									 prioritySlot,
+									 repeatSlot,
+									 startDateSlot,
+									 startTimeSlot, 
+									 endDateSlot, 
+									 endTimeSlot, 
+									 reminderDateSlot, 
+									 reminderTimeSlot;
 
-	descriptionSlot = vectorOfInputs[SLOT_DESCRIPTION];
-	locationSlot = vectorOfInputs[SLOT_LOCATION];
-	prioritySlot = vectorOfInputs[SLOT_PRIORITY];
-	repeatSlot = vectorOfInputs[SLOT_REPEAT];
-	startDateSlot = vectorOfInputs[SLOT_START_DATE];
-	startTimeSlot = vectorOfInputs[SLOT_START_TIME];
-	endDateSlot = vectorOfInputs[SLOT_END_DATE];
-	endTimeSlot = vectorOfInputs[SLOT_END_TIME];
-	reminderDateSlot = vectorOfInputs[SLOT_REMIND_DATE];
-	reminderTimeSlot = vectorOfInputs[SLOT_REMIND_TIME];
-	description = descriptionSlot;
-	location = locationSlot;
-	priority = convert.convertStringToPriority(prioritySlot);
-	repeat = convert.convertStringToRepeatType(repeatSlot);
-	reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot);
-	typeOfTask = convert.convertStringToTime(startDateSlot, 
-											startTimeSlot, 
-											endDateSlot, 
-											endTimeSlot, 
-											startTime, 
-											endTime);
-	return true;
+								 descriptionSlot = vectorOfInputs[SLOT_DESCRIPTION];
+								 locationSlot = vectorOfInputs[SLOT_LOCATION];
+								 prioritySlot = vectorOfInputs[SLOT_PRIORITY];
+								 repeatSlot = vectorOfInputs[SLOT_REPEAT];
+								 startDateSlot = vectorOfInputs[SLOT_START_DATE];
+								 startTimeSlot = vectorOfInputs[SLOT_START_TIME];
+								 endDateSlot = vectorOfInputs[SLOT_END_DATE];
+								 endTimeSlot = vectorOfInputs[SLOT_END_TIME];
+								 reminderDateSlot = vectorOfInputs[SLOT_REMIND_DATE];
+								 reminderTimeSlot = vectorOfInputs[SLOT_REMIND_TIME];
+								 description = descriptionSlot;
+								 location = locationSlot;
+								 priority = convert.convertStringToPriority(prioritySlot);
+								 repeat = convert.convertStringToRepeatType(repeatSlot);
+								 reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot);
+								 typeOfTask = convert.convertStringToTime(startDateSlot, 
+									 startTimeSlot, 
+									 endDateSlot, 
+									 endTimeSlot, 
+									 startTime, 
+									 endTime);
+								 return true;
 }
 void Executor::empty_task(){
 	assert(taskGlobal != NULL);
