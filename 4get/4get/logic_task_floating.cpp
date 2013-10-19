@@ -8,6 +8,7 @@ TaskFloating::TaskFloating(long long id): Task()
 {
 	clearAllAttr();
 	taskId = id;
+	taskType = floating;
 }
 TaskFloating::TaskFloating(long long id, string description, string location, time_t reminderTime, Priority priority, Status status) : Task()
 {

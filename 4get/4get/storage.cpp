@@ -284,7 +284,7 @@ Task* Storage::getNewTask(){
 		}
 		else if(marker == MARKER_END_TIME){
 			time_t endTime = convertToTime(newAttribute);
-			newTask->setTaskStart(endTime);
+			newTask->setTaskEnd(endTime);
 		}
 		else if(marker == MARKER_REPEAT){
 			RepeatType repeatType = convertToRepeatType(newAttribute);
