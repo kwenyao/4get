@@ -134,8 +134,9 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 
-	if(!determineVenue())
+	if(!determineVenue()){
 		cout << "no venue" << endl;
+	}
 
 	if(!determineDateAndTime())
 		cout << "no date and time" << endl;
