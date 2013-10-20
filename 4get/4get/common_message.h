@@ -46,7 +46,7 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_UNDO = "System was unable to undo to your previous task.";
 	const string MESSAGE_ERROR_COMMAND_REDO = "System was unable to redo your previous task.";
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
-
+	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";

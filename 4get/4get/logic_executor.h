@@ -8,6 +8,7 @@
 
 #include <assert.h>
 #include "common_message.h"
+#include "log.h"
 #include "logic_converter.h"
 #include "logic_parser.h"
 #include "logic_task.h"
@@ -52,7 +53,7 @@ public:
 	Executor();
 
 	//UI call these functions
-	void stringCollector(string task);
+	bool stringCollector(string task);
 	bool receive(string command, vector<string> vectorOfInputs);
 	Command determineCommandType (string commandTypeString); 
 	list<Task*> getUpdatedList(ListType listType);

@@ -8,10 +8,20 @@ const int Executor::CONSTANT_MONTH_ONE = 1;
 Executor::Executor(){
 	taskID = retrieveCurrentDate();
 }
-void Executor::stringCollector(string task){
+bool Executor::stringCollector(string task){
 	vector<string> vectorOfInputs(SLOT_SIZE);
-	parser.parseInput(task, (vectorOfInputs));
-	receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs);
+	try{
+		parser.parseInput(task, (vectorOfInputs));
+		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs))
+		{
+			logging("Number of times UI call stringColletor", Info, Pass);
+			return true;
+		}
+		else
+			return false;
+	} catch(string Error){
+		throw;
+	}
 }
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	Command commandType = determineCommandType(usercommand);
@@ -340,7 +350,7 @@ bool Executor::redoFunction(){
 		break;
 					   }
 	default:
-		throw string("error");
+		throw string(MESSAGE_ERROR_NOTHING_TO_REDO);
 	}
 	redoCommandStack.pop();
 	redoTaskStack.pop();
@@ -357,7 +367,7 @@ long long Executor::retrieveCurrentDate(){
 	time_t timeTemp;
 	long long yearMonthDay;
 	tm* currentTime;
-*/
+	*/
 	//time(&timeTemp);
 	//currentTime = localtime(&timeTemp);
 
