@@ -191,7 +191,6 @@ namespace UIDisplay {
 		void InitializeComponent(void);
 #pragma endregion
 
-	private: void loadList();
 	private: void printList();
 	private: void printToDoList();
 	private: void printCompletedList();
@@ -201,6 +200,12 @@ namespace UIDisplay {
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+	private: System::Void checkInput();
+	private: System::Void printAddMessage();
+	private: System::Void printDelMessage();
+	private: System::Void printModMessage();
+	private: System::Void printMarMessage();
+	private: System::Void printHelpMessage();
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 };
