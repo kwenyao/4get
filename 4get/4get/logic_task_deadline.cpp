@@ -1,7 +1,7 @@
 #include "logic_task_deadline.h"
 
-TaskDeadline::TaskDeadline()
-{
+TaskDeadline::TaskDeadline(){
+	taskType = deadline;
 }
 TaskDeadline::TaskDeadline(long long id)
 {

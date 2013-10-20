@@ -1,7 +1,7 @@
 #include "logic_task_floating.h"
 
-TaskFloating::TaskFloating(): Task()
-{
+TaskFloating::TaskFloating(): Task(){
+	taskType = floating;
 }
 
 TaskFloating::TaskFloating(long long id): Task()

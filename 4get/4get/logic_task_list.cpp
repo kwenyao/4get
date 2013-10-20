@@ -3,9 +3,7 @@
 const int TaskList::INDEX_CORRECTION = -1;
 
 TaskList::TaskList(){
-	_storage.load(_toDoList, listToDo);
-	_storage.load(_completedList, listCompleted);
-	_storage.load(_overdueList, listOverdue);
+	loadFromFile();
 }
 
 TaskList::~TaskList(){
@@ -18,25 +16,24 @@ void TaskList::clearList(ListType listType){
 	list<Task*>* listToClear;
 	list<Task*>::iterator iterator;
 	listToClear = determineList(listType);
-	 for (iterator = listToClear->begin();
-        iterator != listToClear->end();
-        iterator++){
-      delete *iterator;
-   }
-	 listToClear->clear();
+	for (iterator = listToClear->begin();
+		iterator != listToClear->end();
+		iterator++){
+			delete *iterator;
+	}
+	listToClear->clear();
 }
 
-bool TaskList::loadFromFile(){
+void TaskList::loadFromFile(){
 	_storage.load(_toDoList, listToDo);
 	_storage.load(_completedList, listCompleted);
 	_storage.load(_overdueList, listOverdue);
-	return 0; //stub
 }
 
-bool TaskList::saveToFile(){
-	_storage.save(_toDoList, listToDo, _toDoListSize);
-	_storage.save(_completedList, listCompleted, _completedListSize);
-	_storage.save(_overdueList, listOverdue, _overdueListSize);
+bool TaskList::saveAll(){
+	_storage.save(_toDoList, listToDo);
+	_storage.save(_completedList, listCompleted);
+	_storage.save(_overdueList, listOverdue);
 	return 0; //stub
 }
 
@@ -46,11 +43,11 @@ bool TaskList::addToList(Task* task, ListType listType){
 	listToAdd = determineList(listType);
 	iterator = getIterator(*listToAdd, task);
 	listToAdd->insert(iterator,task);
-	saveToFile();
+	_storage.save(*listToAdd, listType);
 	return true;
 }
 
-void TaskList::deleteFromList(int taskToDelete){
+void TaskList::deleteFromList(int taskToDelete, bool isDelete){
 	list<Task*>* listToDeleteFrom;
 	list<Task*>::iterator iterator;
 	listToDeleteFrom = determineList(_currentDisplayed);
@@ -58,7 +55,8 @@ void TaskList::deleteFromList(int taskToDelete){
 		if (listToDeleteFrom->empty())
 			throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
 		iterator = iterateToTask(*listToDeleteFrom, taskToDelete);
-		delete *iterator;
+		if(isDelete)
+			delete *iterator;
 		listToDeleteFrom->erase(iterator);
 	} catch(string e){
 		cout << e << endl;
@@ -66,12 +64,13 @@ void TaskList::deleteFromList(int taskToDelete){
 	}
 }
 
-void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete){
+void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete){
 	list<Task*>::iterator iterator;
 	list<Task*>* listPtr = determineList(listToDelete);
 	try{
 		findID(listPtr, IDNumber, iterator);
-		delete *iterator;
+		if(isDelete)
+			delete *iterator;
 		listPtr->erase(iterator);
 	} catch(string e){
 		cout << e << endl;
@@ -86,7 +85,7 @@ bool TaskList::markDone(int taskToMark){
 	listToMark = determineList(_currentDisplayed);
 	iterator = iterateToTask(*listToMark, taskToMark);
 	temp = *iterator;
-	deleteFromList(taskToMark);
+	deleteFromList(taskToMark, false);
 	addToList(temp, listCompleted);
 	return true;
 }
@@ -109,7 +108,6 @@ list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* ta
 	long long tempTime;
 	bool isEmpty = insertionList.empty();
 	long long taskEndTime = taskToAdd->getTimeLong(timeEnd);
-	cout << "task to add long time:"<<taskEndTime << endl;
 	list<Task*>::iterator iterator = insertionList.begin();
 	if(isEmpty){
 		return iterator;
@@ -117,7 +115,6 @@ list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* ta
 	int listSize = insertionList.size();
 	for(int i=0; i<listSize; i++){
 		tempTime = (*iterator)->getTimeLong(timeEnd);
-		cout << "task compare long time:"<<tempTime << endl;
 		if(tempTime > taskEndTime)
 			return iterator;
 		++iterator;

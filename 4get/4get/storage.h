@@ -35,7 +35,6 @@ private:
 	static const string MARKER_NEXT_OCCURANCE;
 	static const string MARKER_PRIORITY;
 	static const string MARKER_REMINDER_TIME;
-	//static const string MARKER_STATUS; //to be deleted if not used
 	static const string MARKER_TASK_END;
 	static const string EMPTY_LINE;
 
@@ -72,7 +71,6 @@ private:
 	void writeNextOccurance(const Task& task);
 	void writePriority(const Task& task);
 	void writeReminderTime(const Task& task);
-	//void writeStatus(const Task& task);  //to be deleted if not used
 
 	//Functions to convert to string
 	//string convertToStr(long long number);
@@ -105,7 +103,7 @@ public:
 	//constructor
 	Storage();
 
-	bool save(const list<Task*>& list,ListType listType, int listSize);
+	bool save(const list<Task*>& list,ListType listType);
 	bool load(list<Task*>& listToLoadTo, ListType listType);
 };
 #endif

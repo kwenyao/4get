@@ -18,9 +18,6 @@ private:
 	list<Task*>* _listToDisplay;
 	Storage _storage;
 	ListType _currentDisplayed;
-	int _toDoListSize;
-	int _completedListSize;
-	int _overdueListSize;
 
 	static const int INDEX_CORRECTION;
 
@@ -36,13 +33,13 @@ public:
 	~TaskList();
 
 	//storage functions
-	bool loadFromFile();
-	bool saveToFile();
+	void loadFromFile();
+	bool saveAll();
 
 	//Public list manipulation functions
 	bool addToList(Task* task, ListType listToAdd);
-	void deleteFromList(int taskToDelete);
-	void deleteIDFromList(long long IDNumber, ListType listToDelete);
+	void deleteFromList(int taskToDelete, bool isDelete);
+	void deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete);
 	bool markDone(int taskToMark);
 
 	//Getter functions

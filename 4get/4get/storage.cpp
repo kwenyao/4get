@@ -15,7 +15,6 @@ const string Storage::MARKER_REPEAT = "Repeat:";
 const string Storage::MARKER_NEXT_OCCURANCE = "Next Occurance:";
 const string Storage::MARKER_PRIORITY = "Priority:";
 const string Storage::MARKER_REMINDER_TIME = "Reminder Time:";
-//const string Storage::MARKER_STATUS = "Status:";  //to be deleted if not used
 const string Storage::MARKER_TASK_END = "---------Task End---------";
 const string Storage::EMPTY_LINE = "";
 
@@ -35,7 +34,7 @@ const string Storage::PRIORITY_NORMAL = "normal";
 
 Storage::Storage(){}
 
-bool Storage::save(const list<Task*>& list, ListType listType, int listSize){
+bool Storage::save(const list<Task*>& list, ListType listType){
 	string fileName;
 	fileName = determineFile(listType);
 	writeFileSetup(fileName, ios_base::trunc);
