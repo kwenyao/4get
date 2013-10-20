@@ -468,7 +468,6 @@ void ui_display::printCompletedList(){
 
 		for (int i=0; i<size; i++)
 		{
-			MessageBox::Show("In print loop");
 			ListViewItem^ item = gcnew ListViewItem;
 			converter->printItem(item, listOfTasks, i+1);
 			temp[j] = item;
