@@ -123,7 +123,7 @@ void Storage::writeRepeat(const Task& task){
 
 void Storage::writeNextOccurance(const Task& task){
 	writeLine(MARKER_NEXT_OCCURANCE);
-
+	writeLine(convertToStr(task.getTaskNextOccurance()));
 }
 
 void Storage::writePriority(const Task& task){
@@ -231,7 +231,6 @@ void Storage::loadIntoList(list<Task*>& listToLoad){
 	while(isLoadIncomplete()){
 		Task* newTask = getNewTask();
 		listToLoad.push_back(newTask);
-		//insertTaskIntoList(listToLoad, newTask);
 	}
 }
 
@@ -277,9 +276,13 @@ Task* Storage::getNewTask(){
 			newTask->setTaskDescription(newAttribute);
 		else if(marker == MARKER_LOCATION)
 			newTask->setTaskLocation(newAttribute);
-		else if(marker == MARKER_START_TIME){
-			time_t startTime = convertToTime(newAttribute);
-			newTask->setTaskStart(startTime);
+		else if(marker == MARKER_PRIORITY){
+			Priority priority = convertToPriority(newAttribute);
+			newTask->setTaskPriority(priority);
+		}
+		else if(marker == MARKER_REMINDER_TIME){
+			time_t remindTime = convertToTime(newAttribute);
+			newTask->setTaskReminder(remindTime);
 		}
 		else if(marker == MARKER_END_TIME){
 			time_t endTime = convertToTime(newAttribute);
@@ -293,13 +296,9 @@ Task* Storage::getNewTask(){
 			time_t nextOccurance = convertToTime(newAttribute);
 			newTask->setTaskNextOccurance(nextOccurance);
 		}
-		else if(marker == MARKER_PRIORITY){
-			Priority priority = convertToPriority(newAttribute);
-			newTask->setTaskPriority(priority);
-		}
-		else if(marker == MARKER_REMINDER_TIME){
-			time_t remindTime = convertToTime(newAttribute);
-			newTask->setTaskReminder(remindTime);
+		else if(marker == MARKER_START_TIME){
+			time_t startTime = convertToTime(newAttribute);
+			newTask->setTaskStart(startTime);
 		}
 	}
 	return newTask;
