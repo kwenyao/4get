@@ -10,7 +10,7 @@ ui_display::ui_display(){
 	loaded = false;
 	activeListType = listToDo;
 	execute->setListType(activeListType);
-	
+
 	InitializeComponent();
 	this->printList();
 }
@@ -361,10 +361,6 @@ void ui_display::InitializeComponent(void){
 
 
 
-void ui_display::loadList(){
-	this->printList();
-}
-
 void ui_display::printError(string error){
 	String ^ error_sys_string=gcnew String(error.c_str());
 	array<String ^> ^ errorLines = {error_sys_string};
@@ -381,20 +377,23 @@ void ui_display::passUserInput(){
 
 Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
 
-	if(e->KeyCode == Keys::Enter){
-		commandKeyword->clear();
-		array<String ^> ^  helpLines = {
-			"type \"add\" to add a task",
-			"type \"del\" to delete a task",
-			"type \"mod\" to modify a task",
-			"type \"mark\" to change the status of a task"
-		};
-		this->messageBox->Lines = helpLines;
-		this->passUserInput();
-		this->textboxInput->Clear();
-		
-		printList();
+	try{
+		if(e->KeyCode == Keys::Enter){
+			commandKeyword->clear();
+			this->printHelpMessage();
+			this->passUserInput();
 
+			this->textboxInput->Clear();
+			this->printList();
+		}
+		else if(e->KeyCode == Keys::Back){
+			commandKeyword->clear();
+			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
+			this->checkInput();
+		}
+	}
+	catch(string error){
+		this->printError(error);
 	}
 }
 
@@ -525,13 +524,19 @@ void ui_display::printOverdueList(){
 		this->Cursor = Cursors::Default;
 		this->overdueListView->EndUpdate();
 	}
-	
+
 	catch(string error){
 		this->printError(error);
 	}
 	this->overdueListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
 }
 
+Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	if(e->Control && e->KeyCode==Keys::Tab){
+		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
+		this->tabContainer->SelectedIndex = nextPage;
+	}
+}
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Enabled = true;
 	this->textboxInput->Clear();
@@ -581,60 +586,75 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 			break;
 		};
 	}
-
+	this->checkInput();
+}
+Void ui_display::checkInput(){
 	if(commandKeyword->size()==3){
-		array<String ^> ^  addLines ={
-			"add <task description>",
-			",at <venue>",
-			",from <start time of timed task>",
-			",to <end time of timed task>",
-			",by <due time>",
-			",remind on <reminder time>",
-			",repeat <daily, weekly or monthly>",
-			",!"
-		};
-		array<String ^> ^  delLines ={
-			"del <task index>"
-		};
-		array<String ^> ^  modLines ={
-			"mod <taskindex> <task description>",
-			",at <venue>",
-			",from <start time of timed task>",
-			",to <end time of timed task>",
-			",by <due time>",
-			",remind on <reminder time>",
-			",repeat <daily, weekly or monthly>",
-			",!"
-		};
-		array<String ^> ^  markLines ={
-			"mark <taskindex> <status>",
-			" ",
-			"statuses available:",
-			"	done / completed",
-			"	undone / incomplete"
-		};
 		array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;
 		if(*commandKeyword == "add"){
-			this->messageBox->Lines= addLines;
+			this->printAddMessage();
 		}
 		else if(*commandKeyword == "del"){
-			this->messageBox->Lines= delLines;
+			this->printDelMessage();
 		}
 		else if(*commandKeyword == "mod"){
-			this->messageBox->Lines= modLines;
+			this->printModMessage();
 		}
 		else if(*commandKeyword == "mar"){
-			this->messageBox->Lines= markLines;
+			this->printMarMessage();
 		}
 	}
 }
-Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-	if(e->Control && e->KeyCode==Keys::Tab){
-		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
-		this->tabContainer->SelectedIndex = nextPage;
-	}
-	else if(e->KeyCode==Keys::Enter){
-		this->textboxInput->Enabled = true;
-	}
+
+Void ui_display::printAddMessage(){
+	array<String ^> ^  addLines ={
+		"add <task description>",
+		",at <venue>",
+		",from <start time of timed task>",
+		",to <end time of timed task>",
+		",by <due time>",
+		",remind on <reminder time>",
+		",repeat <daily, weekly or monthly>",
+		",!"
+	};
+	this->messageBox->Lines= addLines;
+}
+Void ui_display::printDelMessage(){
+	array<String ^> ^  delLines ={
+		"del <task index>"
+	};
+	this->messageBox->Lines= delLines;
+}
+Void ui_display::printModMessage(){
+	array<String ^> ^  modLines ={
+		"mod <taskindex> <task description>",
+		",at <venue>",
+		",from <start time of timed task>",
+		",to <end time of timed task>",
+		",by <due time>",
+		",remind on <reminder time>",
+		",repeat <daily, weekly or monthly>",
+		",!"
+	};
+	this->messageBox->Lines= modLines;
+}
+Void ui_display::printMarMessage(){
+	array<String ^> ^  markLines ={
+		"mark <taskindex> <status>",
+		" ",
+		"statuses available:",
+		"	done / completed",
+		"	undone / incomplete"
+	};
+	this->messageBox->Lines = markLines;
+}
+Void ui_display::printHelpMessage(){
+	array<String ^> ^  helpLines = {
+		"type \"add\" to add a task",
+		"type \"del\" to delete a task",
+		"type \"mod\" to modify a task",
+		"type \"mark\" to change the status of a task"
+	};
+	this->messageBox->Lines = helpLines;
 }
