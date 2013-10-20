@@ -167,8 +167,10 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 }
 bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
-	if(!determineSlot())
+	if(!determineSlot()){
 		cout << "no slot" << endl;
+		return false;
+	}
 
 	cout << "slot number: <" << textSlotNumber << ">" << endl;
 
@@ -178,8 +180,10 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 {
 	//if(!determineStatus())
 	//	cout << "no status" << endl;
-	if(!determineSlot())
+	if(!determineSlot()){
 		cout << "no slot" << endl;
+		return false;
+	}
 
 	cout << "slot number: <" << textSlotNumber << ">" << endl;
 	//cout << "TaskStatus: <" << textStatus <<  ">" << endl;
@@ -188,8 +192,10 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 }
 bool Parser::separateFunctionModify(vector<string>& inputBits)
 {
-	if(!determineSlot())
+	if(!determineSlot()) {
 		cout << "no slot" << endl;
+		return false;
+	}
 
 	if(!determineVenue())
 		cout << "no venue" << endl;
