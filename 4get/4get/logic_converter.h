@@ -28,8 +28,6 @@ private:
 	static const string REPEAT_ANNUALLY;
 	static const string PRIORITY_HIGH;
 
-	static const int MONTH_CORRECTION;
-	static const int YEAR_CORRECTION;
 	static const int DEFAULT_END_HOUR;
 	static const int DEFAULT_END_MIN;
 	static const int DEFAULT_START_HOUR;
@@ -44,8 +42,6 @@ private:
 	static const int TIME_PM_CORRECTION;
 	static const string DATE_DELIMITER;
 	static const string TIME_DELIMITER;
-	static const string TIME_ANTE_MERIDIAN;
-	static const string TIME_POST_MERIDIAN;
 
 	void getDate(bool isNoDate, int& year, int& month, int& day, string endDate);
 	void getEndTime(bool isNoEndTime, int& hour, int& min, string endTime);

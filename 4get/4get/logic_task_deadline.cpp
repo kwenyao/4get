@@ -71,7 +71,7 @@ long long TaskDeadline::getTimeLong(TimeType type)
 	long long hour = time->tm_hour;
 	long long day = time->tm_mday;
 	long long month = time->tm_mon;
-	long long year = time->tm_year + CONSTANT_START_YEAR;
+	long long year = time->tm_year + YEAR_CORRECTION;
 	/*
 	long long min = time->tm_min;
 	long long hour = time->tm_hour;

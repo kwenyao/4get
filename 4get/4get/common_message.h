@@ -50,6 +50,7 @@ namespace Message{
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
+
 };
 
 namespace Enum{
@@ -224,7 +225,7 @@ namespace Constants{
 	const std::size_t TIMER_TIME_LOWER_LENGTH = 2;
 	const std::size_t TIMER_TIME_UPPER_LENGTH = 8;
 	const std::size_t TIMER_TIME_EXCLUDED_LENGTH = 5;
-	
+
 	//tasklist constants
 	const string LIST_COMPLETED = " listcompleted";
 	const std::size_t LIST_COMPLETED_LENGTH = 14;
@@ -232,10 +233,11 @@ namespace Constants{
 	const std::size_t LIST_TO_DO_LENGTH = 9;
 	const string LIST_OVERDUED = " listoverdued";
 	const std::size_t LIST_OVERDUED_LENGTH = 13;
-	const int CONSTANT_START_YEAR = 1900;
 
-
-
+	const string TIME_ANTE_MERIDIAN = "am";
+	const string TIME_POST_MERIDIAN = "pm";
+	const int MONTH_CORRECTION = 1;
+	const int YEAR_CORRECTION = 1900;
 };
 
 #endif

@@ -7,8 +7,6 @@ const string Converter::REPEAT_MONTHLY = "monthly";
 const string Converter::REPEAT_ANNUALLY = "annually";
 const string Converter::PRIORITY_HIGH = "!";
 
-const int Converter::MONTH_CORRECTION = 1;
-const int Converter::YEAR_CORRECTION = 1900;
 const int Converter::DEFAULT_END_HOUR = 23;
 const int Converter::DEFAULT_END_MIN = 59;
 const int Converter::DEFAULT_START_HOUR = 0;
@@ -23,8 +21,6 @@ const int Converter::TIME_SPECIFIER_LENGTH = 2;
 const int Converter::TIME_PM_CORRECTION = 12;
 const string Converter::DATE_DELIMITER = "/-";
 const string Converter::TIME_DELIMITER = ":.";
-const string Converter::TIME_ANTE_MERIDIAN = "am";
-const string Converter::TIME_POST_MERIDIAN = "pm";
 
 Converter::Converter(){}
 
