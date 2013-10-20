@@ -392,9 +392,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 		this->messageBox->Lines = helpLines;
 		this->passUserInput();
 		this->textboxInput->Clear();
-		list<Task*> taskList;
-		taskList = execute->getUpdatedList(activeListType);
-		*listOfTasks = taskList;
+		
 		printList();
 
 	}
@@ -402,6 +400,9 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 
 void ui_display::printList(){
 	try{
+		list<Task*> taskList;
+		taskList = execute->getUpdatedList(activeListType);
+		*listOfTasks = taskList;
 		switch(activeListType){
 		case listCompleted:
 			printCompletedList();
