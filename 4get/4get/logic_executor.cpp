@@ -68,7 +68,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	time_t reminderTime, startTime, endTime;
 	RepeatType repeat;
 	Priority priority;
-	Status status = statusNone;
 	TaskType taskTypeToCreate;
 
 	id = taskID;
@@ -87,8 +86,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			description,
 			location,
 			reminderTime,
-			priority,
-			status);
+			priority);
 
 		taskGlobal = new TaskFloating;
 		*taskGlobal = newTask;
@@ -99,13 +97,13 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,  
 			repeat, 
 			endTime); 
 		cout << "deadline task" <<endl;
 		taskGlobal = new TaskDeadline;
-		*taskGlobal = newTask;
+		*taskGlobal 
+			= newTask;
 	}
 
 	else if(taskTypeToCreate == timed){
@@ -113,8 +111,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,  
 			repeat, 
 			startTime, 
 			endTime);
@@ -205,15 +202,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		string description = taskTemp->getTaskDescription();
 		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
-		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
 		time_t reminderTime = taskTemp->getTaskReminder();
 		taskNew = new TaskDeadline(id,
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,
 			repeat, 
 			endTime);
 		redoModifiedTaskStack.push(*taskNew);
@@ -233,15 +228,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		string description = taskTemp->getTaskDescription();
 		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
-		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
 		time_t reminderTime = taskTemp->getTaskReminder();
 		taskNew = new TaskTimed(id, 
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,  
 			repeat, 
 			startTime, 
 			endTime);
@@ -261,15 +254,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		string description = taskTemp->getTaskDescription();
 		string location = taskTemp->getTaskLocation();
 		Priority priority = taskTemp->getTaskPriority();
-		Status status = taskTemp->getTaskStatus();
 		RepeatType repeat = taskTemp->getTaskRepeat();
 		time_t reminderTime = taskTemp->getTaskReminder();		
 		taskNew = new TaskTimed(id, 
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,  
 			repeat, 
 			startTime, 
 			endTime);
@@ -328,37 +319,40 @@ bool Executor::undoFunction(){
 	return true;
 }
 bool Executor::redoFunction(){
-	Task* taskTemp;
+	Task taskTemp;
 	Command commandType;
+	Task* taskPtrToAdd;
 
 	if(redoCommandStack.empty()){
 		return false;
 	}
-
 	commandType = redoCommandStack.top();
 	switch(commandType)
 	{
 	case commandAdd:{
-		taskTemp = &redoTaskStack.top();
-		cout << taskTemp->getTaskDescription() << endl;
-		taskList.addToList(taskTemp, listType);
+		taskTemp = redoTaskStack.top();
+		taskPtrToAdd = createTaskPtr(taskTemp);
+		taskList.addToList(taskPtrToAdd, listType);
 		break;
 					}
 	case commandDelete:{
-		taskTemp = &redoTaskStack.top();
-		taskList.deleteIDFromList(taskTemp->getTaskId(), listType, true);
+		taskTemp = redoTaskStack.top();
+		taskPtrToAdd = createTaskPtr(taskTemp);
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 		break;
 					   }
 	case commandMark:{
-		taskTemp = &redoTaskStack.top();
-		taskList.addToList(taskTemp, listCompleted);
-		taskList.deleteIDFromList(taskTemp->getTaskId(), listToDo, true);
+		taskTemp = redoTaskStack.top();
+		taskPtrToAdd = createTaskPtr(taskTemp);
+		taskList.addToList(taskPtrToAdd, listCompleted);
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listToDo, true);
 		break;
 					 }
 	case commandModify:{
-		taskTemp = &redoModifiedTaskStack.top();
-		taskList.addToList(taskTemp, listType);
-		taskList.deleteIDFromList(taskTemp->getTaskId(), listType, true);
+		taskTemp = redoModifiedTaskStack.top();
+		taskPtrToAdd = createTaskPtr(taskTemp);
+		taskList.addToList(taskPtrToAdd, listType);
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 		redoModifiedTaskStack.pop();
 		break;
 					   }
@@ -448,7 +442,6 @@ Task Executor::tempTaskCreator(Task* task)
 	time_t reminderTime, startTime, endTime;
 	RepeatType repeat;
 	Priority priority;
-	Status status;
 	TaskType taskType;
 
 	id = task -> getTaskId();
@@ -459,7 +452,6 @@ Task Executor::tempTaskCreator(Task* task)
 	endTime = task -> getTaskEnd();
 	repeat = task -> getTaskRepeat();
 	priority = task -> getTaskPriority();
-	status = task -> getTaskStatus();
 	taskType = task -> getTaskType();
 
 	if(taskType == floating){
@@ -467,8 +459,7 @@ Task Executor::tempTaskCreator(Task* task)
 			description,
 			location,
 			reminderTime,
-			priority,
-			status);
+			priority);
 		return newTask;
 	}
 	else if(taskType == deadline){
@@ -476,8 +467,7 @@ Task Executor::tempTaskCreator(Task* task)
 			description, 
 			location, 
 			reminderTime, 
-			priority, 
-			status, 
+			priority,  
 			repeat, 
 			endTime); 
 		cout << "deadline task" <<endl;
@@ -489,7 +479,6 @@ Task Executor::tempTaskCreator(Task* task)
 			location, 
 			reminderTime, 
 			priority, 
-			status, 
 			repeat, 
 			startTime, 
 			endTime);
