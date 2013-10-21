@@ -44,6 +44,8 @@ private:
 	ListType listType;
 	long long taskID;
 
+	Task* createTaskPtr(Task taskToCreate);
+
 	static const int CONSTANT_MULTIPLIER_YEAR;
 	static const int CONSTANT_MULTIPLIER_MONTH;
 	static const int CONSTANT_MULTIPLIER_DAY;

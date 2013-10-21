@@ -288,9 +288,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	return true;
 }
 bool Executor::undoFunction(){
-	//	Task taskTemp;
+	Task taskTemp;
 	Command commandType;
-	Task* taskPtr;
+	Task* taskPtrToAdd;
 
 	undoCommandStack.pop();
 	if(undoCommandStack.empty()){
@@ -298,27 +298,26 @@ bool Executor::undoFunction(){
 	}
 
 	commandType = undoCommandStack.top();
-	taskPtr = &undoTaskStack.top();
-	cout << taskPtr->getTaskDescription() << endl;
+	taskTemp = undoTaskStack.top();
+	taskPtrToAdd = createTaskPtr(taskTemp);
 	redoCommandStack.push(commandType);
-	redoTaskStack.push(*taskPtr);
+	redoTaskStack.push(taskTemp);
 
 	switch(commandType)
 	{
-	case commandAdd: 
-		taskList.deleteIDFromList(taskPtr->getTaskId(), listType, true);
+	case commandAdd:
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 		break;
 	case commandDelete:
-		cout <<"task to add undo :  "<< taskPtr ->getTaskDescription() << endl;
-		taskList.addToList(taskPtr, listType);
+		taskList.addToList(taskPtrToAdd, listType);
 		break;
 	case commandMark:
-		taskList.deleteIDFromList(taskPtr->getTaskId(), listCompleted, true);
-		taskList.addToList(taskPtr, listToDo);
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listCompleted, true);
+		taskList.addToList(taskPtrToAdd, listToDo);
 		break;
 	case commandModify:
-		taskList.deleteIDFromList(taskPtr->getTaskId(), listType, true);
-		taskList.addToList(taskPtr, listType);
+		taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
+		taskList.addToList(taskPtrToAdd, listType);
 		break;
 	default:
 		return false;
@@ -377,24 +376,6 @@ bool Executor::isEqual(string str1, const string str2){
 	return false;
 }
 long long Executor::retrieveCurrentDate(){
-	/*time_t timeTemp;
-	time_t timeTemp;
-	long long yearMonthDay;
-	tm* currentTime;
-	*/
-	//time(&timeTemp);
-	//currentTime = localtime(&timeTemp);
-
-	//long long day = currentTime ->tm_mday;
-	//long long month = CONSTANT_MONTH_ONE + currentTime ->tm_mon;
-	//long long year = currentTime ->tm_year + CONSTANT_START_YEAR;
-
-	//day = day*CONSTANT_MULTIPLIER_DAY;
-	//month = month*CONSTANT_MULTIPLIER_MONTH;
-	//year = year*CONSTANT_MULTIPLIER_YEAR;
-	//yearMonthDay = (year + month + day);
-
-	//return yearMonthDay;
 	time_t timeTemp;
 	long long yearMonthDay;
 
@@ -518,4 +499,52 @@ Task Executor::tempTaskCreator(Task* task)
 		throw string(Message::MESSAGE_ERROR_COMMAND_ADD);
 	}
 
+}
+
+Task* Executor::createTaskPtr(Task taskToCreate){
+	Task* taskPtr;
+	TaskType taskType = taskToCreate.getTaskType();
+	long long ID = taskToCreate.getTaskId();
+	string desc = taskToCreate.getTaskDescription();
+	string location = taskToCreate.getTaskLocation();
+	Priority priority = taskToCreate.getTaskPriority();
+	time_t reminderTime = taskToCreate.getTaskReminder();
+	//deadline variable
+	time_t endTime = taskToCreate.getTaskEnd();
+	RepeatType repeat = taskToCreate.getTaskRepeat();
+	time_t nextOccurance = taskToCreate.getTaskNextOccurance();
+	//timed variable
+	time_t startTime = taskToCreate.getTaskStart();
+	
+	if(taskType == floating){
+		taskPtr = new TaskFloating(ID);
+		taskPtr->setTaskDescription(desc);
+		taskPtr->setTaskLocation(location);
+		taskPtr->setTaskPriority(priority);
+		taskPtr->setTaskReminder(reminderTime);
+		return taskPtr;
+	}
+	else if(taskType == deadline){
+		taskPtr = new TaskDeadline(ID);
+		taskPtr->setTaskDescription(desc);
+		taskPtr->setTaskLocation(location);
+		taskPtr->setTaskPriority(priority);
+		taskPtr->setTaskReminder(reminderTime);
+		taskPtr->setTaskEnd(endTime);
+		taskPtr->setTaskRepeat(repeat);
+		taskPtr->setTaskNextOccurance(nextOccurance);
+		return taskPtr;
+	}
+	else if(taskType == timed){
+		taskPtr = new TaskTimed(ID);
+		taskPtr->setTaskDescription(desc);
+		taskPtr->setTaskLocation(location);
+		taskPtr->setTaskPriority(priority);
+		taskPtr->setTaskReminder(reminderTime);
+		taskPtr->setTaskEnd(endTime);
+		taskPtr->setTaskRepeat(repeat);
+		taskPtr->setTaskNextOccurance(nextOccurance);
+		taskPtr->setTaskStart(startTime);
+		return taskPtr;
+	}
 }
