@@ -169,6 +169,7 @@ bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
 	if(!determineSlot()){
 		cout << "no slot" << endl;
+		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
 		return false;
 	}
 
@@ -182,6 +183,7 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 	//	cout << "no status" << endl;
 	if(!determineSlot()){
 		cout << "no slot" << endl;
+		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
 		return false;
 	}
 
@@ -194,6 +196,7 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 {
 	if(!determineSlot()) {
 		cout << "no slot" << endl;
+		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
 		return false;
 	}
 
@@ -268,8 +271,10 @@ bool Parser::determineVenue()
 				shortenInput(found, foundComma);
 				return true;
 			}
-			else
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				return false;
+			}
 		}
 		else{
 			extractLength = determindExtractLength(found, stringLength, MARKER_AT, extractStartPos);
@@ -291,9 +296,10 @@ bool Parser::determineVenue()
 				shortenInput(found, foundComma);
 				return true;
 			}
-			else
-
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				return false;
+			}
 		}
 		else{
 			extractLength = determindExtractLength(found, stringLength, MARKER_NEAR, extractStartPos);
@@ -331,8 +337,10 @@ bool Parser::determineDateAndTime()
 				parseAllTimeAndDate();
 				return true;
 			}
-			else
-				return false;																	//wrong keyword definition
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+				return false;
+			}//wrong keyword definition
 		}
 		else{																					//by keyword is the last key input
 			extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
@@ -360,8 +368,10 @@ bool Parser::determineDateAndTime()
 					parseAllTimeAndDate();
 					return true;
 				}
-				else
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 					return false;
+				}
 			}
 			else{																				//from and to combination keyword is the last keyword  
 				extractLength = determindExtractLength(foundTo, stringLength, MARKER_TO, extractStartPos);
@@ -371,9 +381,10 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else																					//wrong keyword definition
+		else{																					//wrong keyword definition
+			logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 			return false;
-
+		}
 	}
 	else																						//not specified date aka. Floating
 		return true; 
@@ -402,8 +413,10 @@ bool Parser::determineRepeat()
 				shortenInput(found, foundComma);
 				return true;
 			}
-			else
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				return false;
+			}
 		}
 		else{
 			extractLength = determindExtractLength(found, stringLength, MARKER_REPEAT, extractStartPos);
@@ -470,8 +483,10 @@ bool Parser::determineReminder()
 				shortenInput(found, foundComma);
 				return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
 			}
-			else
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				return false;
+			}
 		}
 		else{
 			extractLength = determindExtractLength(found, stringLength, MARKER_REMIND, extractStartPos);
@@ -671,11 +686,15 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					foundRight = stringcheck.rfind(TIMER_SLASH);
 					if(foundRight!=foundLeft)
 						strDate = _stringcheck;
-					else
+					else{
+						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 						return false;
+					}
 				}
-				else
+				else{
+					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 					return false;
+				}
 			}
 			else{
 				foundLeft = stringcheck.find(TIMER_DASH);
@@ -683,11 +702,15 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					foundRight = stringcheck.rfind(TIMER_DASH);
 					if(foundRight!=foundLeft)
 						strDate = _stringcheck;
-					else
+					else{
+						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 						return false;
+					}
 				}
-				else
+				else{
+					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 					return false;
+				}
 			}
 		}
 		else if(stringcheck.size()>TIMER_TIME_LOWER_LENGTH && stringcheck.size()<TIMER_TIME_UPPER_LENGTH && stringcheck.size()!=TIMER_TIME_EXCLUDED_LENGTH){
@@ -701,8 +724,10 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				}
 				if(is24hr)
 					strTime = _stringcheck;
-				else 
+				else{
+					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 					return false;
+				}
 			}
 			else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
 				stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){

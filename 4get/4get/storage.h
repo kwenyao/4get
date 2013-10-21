@@ -9,6 +9,7 @@
 #include "logic_task_floating.h"
 #include "logic_task_deadline.h"
 #include "logic_task_timed.h"
+#include "Log.h"
 
 using namespace std;
 

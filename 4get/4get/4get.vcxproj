@@ -80,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="log.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="logic_converter.cpp" />
     <ClCompile Include="logic_executor.cpp" />
     <ClCompile Include="logic_parser.cpp" />
@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_message.h" />
-    <ClInclude Include="log.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="logic_converter.h" />
     <ClInclude Include="logic_executor.h" />
     <ClInclude Include="logic_parser.h" />

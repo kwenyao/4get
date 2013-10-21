@@ -14,7 +14,7 @@ bool Executor::stringCollector(string task){
 		parser.parseInput(task, (vectorOfInputs));
 		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs))
 		{
-			logging("Number of times UI call stringColletor", Info, Pass);
+			//logging("Number of times UI call stringColletor", Info, Pass);
 			return true;
 		}
 		else

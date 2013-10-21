@@ -8,7 +8,6 @@
 
 #include <assert.h>
 #include "common_message.h"
-#include "log.h"
 #include "logic_converter.h"
 #include "logic_parser.h"
 #include "logic_task.h"
@@ -20,6 +19,7 @@
 #include <locale.h>
 #include <vector>
 #include <string>
+
 
 using namespace std;
 using namespace Message;

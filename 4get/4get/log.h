@@ -1,3 +1,5 @@
+#ifndef LOG_H_
+#define LOG_H_
 #include <fstream>
 #include <ctime>
 #include <string>
@@ -5,15 +7,12 @@
 #include "common_message.h"
 #undef logging
 
-#define logging(string, LogType, LogStatus) Log::logging(string, LogType, LogStatus)
-
-enum LogType {Info, Debug, Warning, Error};
-enum LogStatus {None, Pass, Fail};
-enum LogTime {New, Current};
-#define APP_NAME "4get"
-
 using namespace std;
 using namespace Constants;
+using namespace Enum;
+
+#define logging(string, LogType, LogStatus) Log::logging(string, LogType, LogStatus)
+#define APP_NAME "4get"
 
 class Log 
 {
@@ -46,3 +45,4 @@ private:
 public:
 	static void logging(std::string, LogType, LogStatus);
 };
+#endif

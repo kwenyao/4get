@@ -1,4 +1,4 @@
-#include "log.h"
+#include "Log.h"
 
 const string Log::LOGGING_NEW = " Log data on ";
 const string Log::LOGGING_EXT = ".txt";

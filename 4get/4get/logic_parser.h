@@ -9,6 +9,7 @@
 #include <vector>
 #include <assert.h>
 #include "common_message.h"
+#include "Log.h"
 
 // handled by John Kuan (A0097592M)
 

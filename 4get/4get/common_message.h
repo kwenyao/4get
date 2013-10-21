@@ -50,6 +50,9 @@ namespace Message{
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
+	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
+	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
+	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
 
 };
 
@@ -106,6 +109,24 @@ namespace Enum{
 		commandShow,
 		commandInvalid
 	};
+
+	enum LogType {
+		Info,
+		Debug,
+		Warning,
+		Error
+	};
+
+	enum LogStatus {
+		None,
+		Pass,
+		Fail
+	};
+
+	enum LogTime {New,
+		Current
+	};
+
 };
 
 namespace Constants{
