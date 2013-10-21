@@ -10,18 +10,18 @@ Executor::Executor(){
 }
 bool Executor::stringCollector(string task){
 	vector<string> vectorOfInputs(SLOT_SIZE);
-	try{
+//try{
 		parser.parseInput(task, (vectorOfInputs));
 		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs))
-		{
-			//logging("Number of times UI call stringColletor", Info, Pass);
+	//	{
+		//	logging("Number of times UI call stringColletor", Info, Pass);
 			return true;
-		}
+		//}
 		else
 			return false;
-	} catch(string Error){
-		throw;
-	}
+//	} catch(string Error){
+	//	throw;
+//	}
 }
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	Command commandType = determineCommandType(usercommand);
@@ -134,7 +134,8 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 	int deleteNumber;
 	deleteNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	try{
-		storeTask(*taskList.obtainTask(deleteNumber));
+		storeTask(tempTaskCreator(taskList.obtainTask(deleteNumber)));
+		//storeTask(*taskList.obtainTask(deleteNumber));
 		taskList.deleteFromList(deleteNumber, true);
 	} catch (string errorStr){
 		throw;
@@ -280,6 +281,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 bool Executor::undoFunction(){
 	Task taskTemp;
 	Command commandType;
+	Task* taskPtr;
 
 	undoCommandStack.pop();
 	if(undoCommandStack.empty()){
@@ -288,6 +290,7 @@ bool Executor::undoFunction(){
 
 	commandType = undoCommandStack.top();
 	taskTemp = undoTaskStack.top();
+	cout << taskTemp.getTaskDescription() << endl;
 	redoCommandStack.push(commandType);
 	redoTaskStack.push(taskTemp);
 
@@ -297,7 +300,9 @@ bool Executor::undoFunction(){
 		taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 		break;
 	case commandDelete:
-		taskList.addToList(&taskTemp, listType);
+		taskPtr = &taskTemp;
+		cout <<"task to add undo :  "<< taskPtr ->getTaskDescription() << endl;
+		taskList.addToList(taskPtr, listType);
 		break;
 	case commandMark:
 		taskList.deleteIDFromList(taskTemp.getTaskId(), listCompleted, true);
@@ -444,4 +449,64 @@ bool Executor::setParameters(string &description,
 }
 void Executor::empty_task(){
 	assert(taskGlobal != NULL);
+}
+
+Task Executor::tempTaskCreator(Task* task)
+{
+	long long id;
+	string description, location;
+	time_t reminderTime, startTime, endTime;
+	RepeatType repeat;
+	Priority priority;
+	Status status;
+	TaskType taskType;
+
+	id = task -> getTaskId();
+	description = task -> getTaskDescription();
+	location = task -> getTaskLocation();
+	reminderTime = task -> getTaskReminder();
+	startTime = task -> getTaskStart();
+	endTime = task -> getTaskEnd();
+	repeat = task -> getTaskRepeat();
+	priority = task -> getTaskPriority();
+	status = task -> getTaskStatus();
+	taskType = task -> getTaskType();
+
+	if(taskType == floating){
+		TaskFloating newTask(id,
+			description,
+			location,
+			reminderTime,
+			priority,
+			status);
+		return newTask;
+	}
+	else if(taskType == deadline){
+		TaskDeadline newTask(id,
+			description, 
+			location, 
+			reminderTime, 
+			priority, 
+			status, 
+			repeat, 
+			endTime); 
+		cout << "deadline task" <<endl;
+		return newTask;
+	}
+	else if(taskType == timed){
+		TaskTimed newTask(id, 
+			description, 
+			location, 
+			reminderTime, 
+			priority, 
+			status, 
+			repeat, 
+			startTime, 
+			endTime);
+		return newTask;
+	}
+	else{
+		throw string(Message::MESSAGE_ERROR_COMMAND_ADD);
+	}
+
 }

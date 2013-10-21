@@ -60,7 +60,6 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	tm*  timeAsTm=NULL;
 	System::String^ sys_time = "";
 	System::String^ sys_due = "";
-
 	timeAsTimeT = t1->getTaskStart();
 	if(timeAsTimeT != 0){
 		timeAsTm = localtime(&timeAsTimeT);

@@ -21,9 +21,12 @@ TEST_F(ParserTest, MethodReturnsFirstItem)
 	time_t timer;
 	time(&timer);
 }
-
 TEST_F(LogTest, TestLog)
 {
 	logging(inputMessage, type, status);
 	logging(inputMessage2, type2, status2);
 }
+TEST_F(ExecutorTest, TestExecutorAdd){
+	EXPECT_TRUE(ExecutorTester.stringCollector(taskAdd));
+}
+

@@ -93,15 +93,24 @@ bool TaskList::markDone(int taskToMark){
 }
 
 list<Task*> TaskList::obtainList(ListType listToReturn){
-	_listToDisplay = determineList(listToReturn);
+	_listToDisplay = *determineList(listToReturn);
 	_currentDisplayed = listToReturn;
-	return *_listToDisplay;
+	Task* debug;
+	if(!_listToDisplay.empty()){
+	list<Task*>::iterator iterator = _listToDisplay.begin();
+	debug = (*iterator);
+	cout << "task id" << debug->getTaskId() << endl;
+	iterator = _toDoList.begin();
+	debug = (*iterator);
+	cout << "task id todo" << debug->getTaskId() << endl;
+	}
+	return _listToDisplay;
 }
 
 Task* TaskList::obtainTask(int taskToGet){
 	Task* taskToReturn;
 	list<Task*>::iterator iterator;
-	iterator = iterateToTask(*_listToDisplay, taskToGet);
+	iterator = iterateToTask(_listToDisplay, taskToGet);
 	taskToReturn = (*iterator);
 	return taskToReturn;
 }
