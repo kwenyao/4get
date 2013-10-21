@@ -8,6 +8,7 @@
 
 #include <assert.h>
 #include "common_message.h"
+#include "log.h"
 #include "logic_converter.h"
 #include "logic_parser.h"
 #include "logic_task.h"
@@ -20,7 +21,6 @@
 #include <vector>
 #include <string>
 
-
 using namespace std;
 using namespace Message;
 using namespace Enum;
@@ -32,6 +32,7 @@ class Executor
 private:
 	string task;
 	Task *taskGlobal;
+//	Task *taskTempGlobal;
 	TaskList taskList;
 	Parser parser;
 	Converter convert;
@@ -81,6 +82,7 @@ public:
 						time_t &reminderTime, 
 						TaskType &typeOfTask,
 						vector<string> &vectorOfInputs);
+	Task tempTaskCreator(Task* task);
 
 	//assertions
 	void empty_task();

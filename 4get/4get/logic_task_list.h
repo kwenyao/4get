@@ -15,7 +15,7 @@ private:
 	list<Task*> _toDoList;
 	list<Task*> _completedList;
 	list<Task*> _overdueList;
-	list<Task*>* _listToDisplay;
+	list<Task*> _listToDisplay;
 	Storage _storage;
 	ListType _currentDisplayed;
 
