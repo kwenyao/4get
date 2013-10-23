@@ -522,7 +522,7 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
-		//this->textboxInput->SelectionLength = 1;
+		this->textboxInput->SelectionStart = 1;
 		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
 	}
 }
