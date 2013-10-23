@@ -48,6 +48,8 @@ public:
 	// callable by executor
 	
 	void parseInput(string input, vector<string>& inputBits);
+	// function for testing validity of command
+	string getCommand();
 
 private:	
 	void parseReset();
@@ -87,5 +89,6 @@ private:
 	string getFirstWord(string input);
 	void removeFirstWord(string &input);
 	bool isParseInt(string input, int &value);
+	
 };
 #endif
