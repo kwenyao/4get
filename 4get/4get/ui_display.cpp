@@ -579,6 +579,10 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 			this->printList();
 		}
 		else if(e->KeyCode == Keys::Back){
+			if(this->textboxInput->Text==""){
+				this->printHelpMessage();
+				return;
+			}
 			commandKeyword->clear();
 			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
 			commandKeyword->pop_back();
@@ -609,7 +613,6 @@ Void ui_display::checkInput(){
 	}
 	else return;
 }
-
 Void ui_display::printAddMessage(){
 	array<String ^> ^  addLines ={
 		"add <task description>",
