@@ -348,6 +348,7 @@ void ui_display::InitializeComponent(void){
 	this->Opacity = 0.95;
 	this->Text = L"4get";
 	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::ui_display_KeyDown);
+	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::ui_display_KeyPress);
 	this->tabContainer->ResumeLayout(false);
 	this->tabTodo->ResumeLayout(false);
 	this->tabCompleted->ResumeLayout(false);
@@ -518,6 +519,23 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 		this->tabContainer->SelectedIndex = nextPage;
 	}
 }
+Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+	if(SetFocus(textboxInput)){
+		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
+		//this->textboxInput->SelectionLength = 1;
+		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
+	}
+}
+
+bool ui_display::SetFocus(Control ^ control){
+	if(!(control->Focused)){
+		control->Focus();
+		return true;
+	}
+	else
+		return false;
+}
+
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Enabled = true;
 	this->textboxInput->Clear();

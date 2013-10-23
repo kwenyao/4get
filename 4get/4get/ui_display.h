@@ -206,7 +206,9 @@ namespace UIDisplay {
 	private: System::Void printModMessage();
 	private: System::Void printMarMessage();
 	private: System::Void printHelpMessage();
+	private: bool SetFocus(Control ^ control);
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+	private: System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 };
 }
