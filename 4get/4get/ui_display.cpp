@@ -375,27 +375,7 @@ void ui_display::passUserInput(){
 	execute->stringCollector(stdCommand);	
 }
 
-Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
 
-	try{
-		if(e->KeyCode == Keys::Enter){
-			commandKeyword->clear();
-			this->printHelpMessage();
-			this->passUserInput();
-
-			this->textboxInput->Clear();
-			this->printList();
-		}
-		else if(e->KeyCode == Keys::Back){
-			commandKeyword->clear();
-			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
-			this->checkInput();
-		}
-	}
-	catch(string error){
-		this->printError(error);
-	}
-}
 
 void ui_display::printList(){
 	try{
@@ -560,7 +540,6 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 	}
 }
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
-
 	if(commandKeyword->size() < 3){
 		switch(e->KeyChar){
 		case 'a':
@@ -588,6 +567,29 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 	}
 	this->checkInput();
 }
+Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
+
+	try{
+		if(e->KeyCode == Keys::Enter){
+			commandKeyword->clear();
+			this->printHelpMessage();
+			this->passUserInput();
+
+			this->textboxInput->Clear();
+			this->printList();
+		}
+		else if(e->KeyCode == Keys::Back){
+			commandKeyword->clear();
+			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
+			commandKeyword->pop_back();
+			this->checkInput();
+		}
+	}
+	catch(string error){
+		this->printError(error);
+	}
+}
+
 Void ui_display::checkInput(){
 	if(commandKeyword->size()==3){
 		array<String ^> ^  emptyLines ={};
@@ -605,6 +607,7 @@ Void ui_display::checkInput(){
 			this->printMarMessage();
 		}
 	}
+	else return;
 }
 
 Void ui_display::printAddMessage(){
