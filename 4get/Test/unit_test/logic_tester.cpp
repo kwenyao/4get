@@ -37,6 +37,6 @@ TEST_F(LogTest, TestLog)
 	logging(inputMessage2, type2, status2);
 }
 TEST_F(ExecutorTest, TestExecutorAdd){
-	EXPECT_TRUE(ExecutorTester.stringCollector(taskAdd));
+	EXPECT_EQ(true,ExecutorTester.stringCollector(taskAdd));
 }
 
