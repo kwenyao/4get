@@ -145,6 +145,6 @@ void Task::clearAllAttr()
 }
 long long Task::getTimeLong(TimeType type)
 {
-	cout << "in parent class long long" <<endl;
+	//cout << "in parent class long long" <<endl;
 	return 0;
 }

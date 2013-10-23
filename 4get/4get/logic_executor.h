@@ -41,8 +41,10 @@ private:
 	stack<Task> redoTaskStack;
 	stack<Command> redoCommandStack;
 	stack<Task> redoModifiedTaskStack;
+	stack<Task> undoAfterRedoTaskStack;    //undo redo
 	ListType listType;
-	long long taskID;
+	bool redoStackModifier;
+	bool undoStackModifier;
 
 	Task* createTaskPtr(Task taskToCreate);
 
@@ -71,7 +73,7 @@ public:
 	
 	//helper functions
 	bool isEqual(string str1, const string str2);
-	long long retrieveCurrentDate();
+	long long retrieveID();
 	bool storeTask(Task taskTemp);
 	bool storeCommands(Command command);
 	bool setListType(ListType listType);

@@ -47,44 +47,93 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 	try{
 		if(commandString.compare(COMMAND_A)==COMPARE_SUCCESS || commandString.compare(COMMAND_ADD)==COMPARE_SUCCESS || commandString.compare(COMMAND_CREATE)==COMPARE_SUCCESS){
 			inputBits[SLOT_COMMAND] = COMMAND_ADD;
-			if(!separateInput(commandAdd, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_ADD;
+			try{
+				if(!separateInput(commandAdd, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_ADD;
+				}
 			}
+			catch(string error){
+				throw;
+			}
+
 		}
+
 		else if(commandString.compare(COMMAND_DEL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE)==COMPARE_SUCCESS) {
 			inputBits[SLOT_COMMAND] = COMMAND_DELETE;
-			if(!separateInput(commandDelete, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_DELETE;
+			try{
+				if(!separateInput(commandDelete, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_DELETE;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
 		else if(commandString.compare(COMMAND_M)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK)==COMPARE_SUCCESS || commandString.compare(COMMAND_DONE)==COMPARE_SUCCESS) {
 			inputBits[SLOT_COMMAND] = COMMAND_MARK;
-			if(!separateInput(commandMark, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_MARK;
+			try{
+				if(!separateInput(commandMark, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_MARK;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
 		else if(commandString.compare(COMMAND_MOD)==COMPARE_SUCCESS || commandString.compare(COMMAND_MODIFY)==COMPARE_SUCCESS || commandString.compare(COMMAND_UPDATE)==COMPARE_SUCCESS) {
 			inputBits[SLOT_COMMAND] = COMMAND_MODIFY;
-			if(!separateInput(commandModify, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_MODIFY;
+			try{
+				if(!separateInput(commandModify, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_MODIFY;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
 		else if(commandString.compare(COMMAND_UNDO)==COMPARE_SUCCESS) {
 			inputBits[SLOT_COMMAND] = COMMAND_UNDO;
-			if(!separateInput(commandUndo, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_UNDO;
+			try{
+				if(!separateInput(commandUndo, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_UNDO;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
 		else if(commandString.compare(COMMAND_SHOW)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAY)==COMPARE_SUCCESS){
 			inputBits[SLOT_COMMAND] = COMMAND_SHOW;
-			if(!separateInput(commandShow, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_SHOW;
+			try{
+				if(!separateInput(commandShow, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_SHOW;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
+		/*else if(commandString.compare(COMMAND_WHAT)==COMPARE_SUCCESS){
+		inputBits[SLOT_COMMAND] = COMMAND_WHAT;
+		if(!separateInput(commandQuery, inputBits)){
+		throw MESSAGE_ERROR_COMMAND_QUERY;
+		}
+		}
+		else if(commandString.compare(COMMAND_WHEN)==COMPARE_SUCCESS){
+		inputBits[SLOT_COMMAND] = COMMAND_WHEN;
+		if(!separateInput(commandQuery, inputBits)){
+		throw MESSAGE_ERROR_COMMAND_QUERY;
+		}
+		}*/
 		else if(commandString.compare(COMMAND_REDO)==COMPARE_SUCCESS) {
 			inputBits[SLOT_COMMAND] = COMMAND_REDO;
-			if(!separateInput(commandRedo, inputBits)){
-				throw MESSAGE_ERROR_COMMAND_REDO;
+			try{
+				if(!separateInput(commandRedo, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_REDO;
+				}
+			}
+			catch(string error){
+				throw;
 			}
 		}
 	}
@@ -133,24 +182,21 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 }
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
-
-	if(!determineVenue()){
-		cout << "no venue" << endl;
-	}
-
-	if(!determineDateAndTime())
-		cout << "no date and time" << endl;
-
-	if(!determineRepeat())
-		cout << "no repeat" << endl;
-
-	if(!determinePriority())
-		cout << "no priority" << endl;
-
-	if(!determineReminder())
-		cout << "no reminder" << endl;
-
+	determineVenue();
+		//cout << "no venue" << endl;
+	determineDateAndTime();
+		//cout << "no date and time" << endl;
+	determineRepeat();
+		//cout << "no repeat" << endl;
+	determinePriority();
+		//cout << "no priority" << endl;
+	determineReminder();
+		//cout << "no reminder" << endl;
 	textDescription = _textInput;
+	if(textDescription.empty())
+		throw MESSAGE_ERROR_NO_DESCRIPTION;
+	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+	/*
 	cout << "command: <" << textCommand << ">" << endl;
 	cout << "description: <" << textDescription << ">" << endl;
 	cout << "venue: <" << textVenue << ">" << endl;
@@ -162,6 +208,7 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 	cout << "priority: <" << textPriority << ">" << endl;
 	cout << "reminder date: <" << textRemindDate << ">" << endl;
 	cout << "reminder time: <" << textRemindTime << ">" << endl;
+	*/
 
 	return true;
 }
@@ -170,11 +217,10 @@ bool Parser::separateFunctionDelete(vector<string>& inputBits)
 	if(!determineSlot()){
 		cout << "no slot" << endl;
 		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
-		return false;
+		throw MESSAGE_ERROR_NO_SLOT_NUM;
 	}
 
-	cout << "slot number: <" << textSlotNumber << ">" << endl;
-
+	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 	return true;
 }
 bool Parser::separateFunctionMark(vector<string>& inputBits)
@@ -184,12 +230,12 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 	if(!determineSlot()){
 		cout << "no slot" << endl;
 		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
-		return false;
+		throw MESSAGE_ERROR_NO_SLOT_NUM;
 	}
 
-	cout << "slot number: <" << textSlotNumber << ">" << endl;
+	//cout << "slot number: <" << textSlotNumber << ">" << endl;
 	//cout << "TaskStatus: <" << textStatus <<  ">" << endl;
-
+	logging(MESSAGE_SUCCESS_PARSED,Info,None);
 	return true;
 }
 bool Parser::separateFunctionModify(vector<string>& inputBits)
@@ -197,27 +243,29 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	if(!determineSlot()) {
 		cout << "no slot" << endl;
 		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
-		return false;
+		throw MESSAGE_ERROR_NO_SLOT_NUM;
 	}
 
-	if(!determineVenue())
-		cout << "no venue" << endl;
+	determineVenue();
+		//cout << "no venue" << endl;
 
-	if(!determineDateAndTime())
-		cout << "no date and time" << endl;
+	determineDateAndTime();
+		//cout << "no date and time" << endl;
 
-	if(!determineRepeat())
-		cout << "no repeat" << endl;
+	determineRepeat();
+		//cout << "no repeat" << endl;
 
-	if(!determinePriority())
-		cout << "no priority" << endl;
+	determinePriority();
+		//cout << "no priority" << endl;
 
-	if(!determineReminder())
-		cout << "no reminder" << endl;
+	determineReminder();
+		//cout << "no reminder" << endl;
 
 	parseAllTimeAndDate();
 
 	textDescription = _textInput;
+	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+	/*
 	cout << "command: <" << textCommand << ">" << endl;
 	cout << "description: <" << textDescription << ">" << endl;
 	cout << "venue: <" << textVenue << ">" << endl;
@@ -229,6 +277,7 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	cout << "priority: <" << textPriority << ">" << endl;
 	cout << "reminder date: <" << textRemindDate << ">" << endl;
 	cout << "reminder time: <" << textRemindTime << ">" << endl;
+	*/
 	return true;
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
@@ -238,10 +287,9 @@ bool Parser::separateFunctionUndo(vector<string>& inputBits)
 bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
 	if(!determineDateAndTime())												//if user specified with formats, startTime or endTime will have the time 
-		cout << "no date and time" << endl;
-	else
-		textStartTime = _textInput;											//else whatever the user input after show will be assumed to be strings indicating time.
-
+		textStartTime = _textInput;										//else whatever the user input after show will be assumed to be strings indicating time.
+												
+	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 	return true;
 }
 bool Parser::separateFunctionRedo(vector<string>& inputBits)
@@ -273,7 +321,7 @@ bool Parser::determineVenue()
 			}
 			else{
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				return false;
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
 			}
 		}
 		else{
@@ -298,7 +346,7 @@ bool Parser::determineVenue()
 			}
 			else{
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				return false;
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
 			}
 		}
 		else{
@@ -309,7 +357,7 @@ bool Parser::determineVenue()
 		}
 	}
 	else
-		return false; 
+		return false;																			//No location keywords found
 }
 bool Parser::determineDateAndTime()
 {
@@ -339,7 +387,7 @@ bool Parser::determineDateAndTime()
 			}
 			else{
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				return false;
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
 			}//wrong keyword definition
 		}
 		else{																					//by keyword is the last key input
@@ -370,7 +418,7 @@ bool Parser::determineDateAndTime()
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-					return false;
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
 				}
 			}
 			else{																				//from and to combination keyword is the last keyword  
@@ -383,7 +431,7 @@ bool Parser::determineDateAndTime()
 		}
 		else{																					//wrong keyword definition
 			logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-			return false;
+			throw MESSAGE_ERROR_WRONG_KEYWORD;
 		}
 	}
 	else																						//not specified date aka. Floating
@@ -415,7 +463,7 @@ bool Parser::determineRepeat()
 			}
 			else{
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				return false;
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
 			}
 		}
 		else{
@@ -688,12 +736,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						strDate = _stringcheck;
 					else{
 						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-						return false;
+						throw MESSAGE_ERROR_WRONG_FORMAT;
 					}
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					return false;
+					throw MESSAGE_ERROR_WRONG_FORMAT;
 				}
 			}
 			else{
@@ -704,12 +752,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						strDate = _stringcheck;
 					else{
 						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-						return false;
+						throw MESSAGE_ERROR_WRONG_FORMAT;
 					}
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					return false;
+					throw MESSAGE_ERROR_WRONG_FORMAT;
 				}
 			}
 		}
@@ -726,7 +774,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					strTime = _stringcheck;
 				else{
 					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					return false;
+					throw MESSAGE_ERROR_WRONG_FORMAT;
 				}
 			}
 			else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
@@ -816,8 +864,12 @@ bool Parser::isParseInt(string input, int &value)
 	if (isdigit(input[0]))
 	{
 		value = atoi(input.c_str());
-		return 1;
+		return true;
 	}
 	else
-		return 0;
+		return false;
+}
+string Parser::getCommand()
+{
+	return textCommand;
 }

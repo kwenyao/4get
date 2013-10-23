@@ -35,6 +35,10 @@ namespace Commands{
 	//variants of show
 	const string COMMAND_SHOW = "show";
 	const string COMMAND_DISPLAY = "display";
+
+	//variants of query
+	const string COMMAND_WHAT = "what";
+	const string COMMAND_WHEN = "when";
 }
 
 namespace Message{
@@ -47,12 +51,17 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_REDO = "System was unable to redo your previous task.";
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
 	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
+	const string MESSAGE_ERROR_COMMAND_QUERY = "System was unable to process your query.";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
+	const string MESSAGE_ERROR_NO_DESCRIPTION = "Error: No description indicated";
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
+
+	//error messages
+	const string MESSAGE_SUCCESS_PARSED = "Input has been parsed.";
 
 };
 
@@ -82,14 +91,14 @@ namespace Enum{
 		normal,
 		high, 
 	};
-
+	/*
 	enum Status{
 		statusNone,
 		completed, 
 		incomplete, 
 		overdued
 	};
-
+	*/
 
 	enum TaskType{
 		floating, 
