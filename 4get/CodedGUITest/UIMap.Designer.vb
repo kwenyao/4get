@@ -40,6 +40,48 @@ Namespace CodedGUITest
             Keyboard.SendKeys(uITextboxInputEdit, Me.TestAddTimedTaskParams.UITextboxInputEditSendKeys, ModifierKeys.None)
         End Sub
         
+        '''<summary>
+        '''delete a task
+        '''</summary>
+        Public Sub TestDeleteTask()
+            Dim uITextboxInputEdit As WinEdit = Me.UIItem4getWindow.UIEnterCommandHereWindow.UITextboxInputEdit
+
+            'Type 'delete 4' in 'textboxInput' text box
+            uITextboxInputEdit.Text = Me.TestDeleteTaskParams.UITextboxInputEditText
+
+            'Type '{Enter}' in 'textboxInput' text box
+            Keyboard.SendKeys(uITextboxInputEdit, Me.TestDeleteTaskParams.UITextboxInputEditSendKeys, ModifierKeys.None)
+        End Sub
+        
+        '''<summary>
+        '''mark a task as done and task is added to completed list
+        '''</summary>
+        Public Sub TestMarkTaskDone()
+            Dim uITextboxInputEdit As WinEdit = Me.UIItem4getWindow.UIEnterCommandHereWindow.UITextboxInputEdit
+
+            'Type 'mark 7 done' in 'textboxInput' text box
+            uITextboxInputEdit.Text = Me.TestMarkTaskDoneParams.UITextboxInputEditText
+
+            'Type '{Enter}' in 'textboxInput' text box
+            Keyboard.SendKeys(uITextboxInputEdit, Me.TestMarkTaskDoneParams.UITextboxInputEditSendKeys, ModifierKeys.None)
+
+            'Type 'Control + {Tab}' in 'textboxInput' text box
+            Keyboard.SendKeys(uITextboxInputEdit, Me.TestMarkTaskDoneParams.UITextboxInputEditSendKeys1, ModifierKeys.Control)
+        End Sub
+        
+        '''<summary>
+        '''modify a task
+        '''</summary>
+        Public Sub TestModifyTask()
+            Dim uITextboxInputEdit As WinEdit = Me.UIItem4getWindow.UIEnterCommandHereWindow.UITextboxInputEdit
+
+            'Type 'mod 1 something ,at place ,by 24/12/13 2pm' in 'textboxInput' text box
+            uITextboxInputEdit.Text = Me.TestModifyTaskParams.UITextboxInputEditText
+
+            'Type '{Enter}' in 'textboxInput' text box
+            Keyboard.SendKeys(uITextboxInputEdit, Me.TestModifyTaskParams.UITextboxInputEditSendKeys, ModifierKeys.None)
+        End Sub
+        
         #Region "Properties"
         Public Overridable ReadOnly Property TestAddTimedTaskParams() As TestAddTimedTaskParams
             Get
@@ -47,6 +89,33 @@ Namespace CodedGUITest
                     Me.mTestAddTimedTaskParams = New TestAddTimedTaskParams()
                 End If
                 Return Me.mTestAddTimedTaskParams
+            End Get
+        End Property
+        
+        Public Overridable ReadOnly Property TestDeleteTaskParams() As TestDeleteTaskParams
+            Get
+                If (Me.mTestDeleteTaskParams Is Nothing) Then
+                    Me.mTestDeleteTaskParams = New TestDeleteTaskParams()
+                End If
+                Return Me.mTestDeleteTaskParams
+            End Get
+        End Property
+        
+        Public Overridable ReadOnly Property TestMarkTaskDoneParams() As TestMarkTaskDoneParams
+            Get
+                If (Me.mTestMarkTaskDoneParams Is Nothing) Then
+                    Me.mTestMarkTaskDoneParams = New TestMarkTaskDoneParams()
+                End If
+                Return Me.mTestMarkTaskDoneParams
+            End Get
+        End Property
+        
+        Public Overridable ReadOnly Property TestModifyTaskParams() As TestModifyTaskParams
+            Get
+                If (Me.mTestModifyTaskParams Is Nothing) Then
+                    Me.mTestModifyTaskParams = New TestModifyTaskParams()
+                End If
+                Return Me.mTestModifyTaskParams
             End Get
         End Property
         
@@ -63,6 +132,12 @@ Namespace CodedGUITest
         #Region "Fields"
         Private mTestAddTimedTaskParams As TestAddTimedTaskParams
         
+        Private mTestDeleteTaskParams As TestDeleteTaskParams
+        
+        Private mTestMarkTaskDoneParams As TestMarkTaskDoneParams
+        
+        Private mTestModifyTaskParams As TestModifyTaskParams
+        
         Private mUIItem4getWindow As UIItem4getWindow
         #End Region
     End Class
@@ -78,6 +153,68 @@ Namespace CodedGUITest
         '''Type 'add tuition ,at crown centre ,from 1900 ,to 2100 ,!' in 'textboxInput' text box
         '''</summary>
         Public UITextboxInputEditText As String = "add tuition ,at crown centre ,from 1900 ,to 2100 ,!"
+        
+        '''<summary>
+        '''Type '{Enter}' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditSendKeys As String = "{Enter}"
+        #End Region
+    End Class
+    
+    '''<summary>
+    '''Parameters to be passed into 'TestDeleteTask'
+    '''</summary>
+    <GeneratedCode("Coded UITest Builder", "11.0.60315.1")>  _
+    Public Class TestDeleteTaskParams
+        
+        #Region "Fields"
+        '''<summary>
+        '''Type 'delete 4' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditText As String = "delete 4"
+        
+        '''<summary>
+        '''Type '{Enter}' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditSendKeys As String = "{Enter}"
+        #End Region
+    End Class
+    
+    '''<summary>
+    '''Parameters to be passed into 'TestMarkTaskDone'
+    '''</summary>
+    <GeneratedCode("Coded UITest Builder", "11.0.60315.1")>  _
+    Public Class TestMarkTaskDoneParams
+        
+        #Region "Fields"
+        '''<summary>
+        '''Type 'mark 7 done' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditText As String = "mark 7 done"
+        
+        '''<summary>
+        '''Type '{Enter}' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditSendKeys As String = "{Enter}"
+        
+        '''<summary>
+        '''Type 'Control + {Tab}' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditSendKeys1 As String = "{Tab}"
+        #End Region
+    End Class
+    
+    '''<summary>
+    '''Parameters to be passed into 'TestModifyTask'
+    '''</summary>
+    <GeneratedCode("Coded UITest Builder", "11.0.60315.1")>  _
+    Public Class TestModifyTaskParams
+        
+        #Region "Fields"
+        '''<summary>
+        '''Type 'mod 1 something ,at place ,by 24/12/13 2pm' in 'textboxInput' text box
+        '''</summary>
+        Public UITextboxInputEditText As String = "mod 1 something ,at place ,by 24/12/13 2pm"
         
         '''<summary>
         '''Type '{Enter}' in 'textboxInput' text box

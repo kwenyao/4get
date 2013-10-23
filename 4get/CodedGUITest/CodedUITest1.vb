@@ -19,6 +19,33 @@ Public Class CodedUITest1
         Me.UIMap.TestAddTimedTask()
     End Sub
 
+    <TestMethod()>
+    Public Sub CodedUITestMethod2()
+        '            
+        ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        ' For more information on generated code, see http://go.microsoft.com/fwlink/?LinkId=179463
+        '
+        Me.UIMap.TestDeleteTask()
+    End Sub
+
+    <TestMethod()>
+    Public Sub CodedUITestMethod3()
+        '            
+        ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        ' For more information on generated code, see http://go.microsoft.com/fwlink/?LinkId=179463
+        '
+        Me.UIMap.TestModifyTask()
+    End Sub
+
+    <TestMethod()>
+    Public Sub CodedUITestMethod4()
+        '            
+        ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        ' For more information on generated code, see http://go.microsoft.com/fwlink/?LinkId=179463
+        '
+        Me.UIMap.TestMarkTaskDone()
+    End Sub
+
 #Region "Additional test attributes"
         '
         ' You can use the following additional attributes as you write your tests:
