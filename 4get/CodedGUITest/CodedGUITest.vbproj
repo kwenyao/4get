@@ -7,7 +7,7 @@
     </ProductVersion>
     <SchemaVersion>
     </SchemaVersion>
-    <ProjectGuid>{36F5978E-B4A7-409F-B035-DB8EADFD1F37}</ProjectGuid>
+    <ProjectGuid>{726F177A-8525-4FC1-BC7D-694943EC593E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>CodedGUITest</RootNamespace>
     <AssemblyName>CodedGUITest</AssemblyName>
@@ -80,7 +80,16 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="4getUIMap.Designer.vb">
+      <DependentUpon>4getUIMap.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="4getUIMap.vb">
+      <DependentUpon>4getUIMap.uitest</DependentUpon>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="4getUIMap.uitest" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

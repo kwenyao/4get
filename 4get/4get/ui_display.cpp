@@ -13,6 +13,7 @@ ui_display::ui_display(){
 
 	InitializeComponent();
 	this->printList();
+	this->printHelpMessage();
 }
 
 ui_display::~ui_display(){
