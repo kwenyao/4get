@@ -88,15 +88,6 @@ protected:
 	Parser parser;
 	string input1, input2, input3, input4;
 
-	int id;
-	string description;
-	string location;
-	time_t reminderTime;
-	Priority priority;
-	RepeatType repeat;
-	time_t startTime;
-	time_t endTime;
-
 	ParserTest() {
 		// You can do set-up work for each test here.
 	}
@@ -113,13 +104,8 @@ protected:
 		// before each test).
 		input1 = "Add HomeWork from EE2020 ,at com1 ,repeat weekly ,From Monday 2PM to Saturday 4PM ,!";
 		input2 = "delete 2";
-		input3 = "mark 3 Undone";
+		input3 = "mark 3";
 		input4 = "modify 2 ,from 2000 to 1900 ,at com2 ,Repeat Weekly ,remind on Tuesday 2000 ,! incomplete";
-		id = 1;
-		description = "HomeWork from EE2020";
-		location = "com1";
-		priority = high;
-		repeat = repeatNone;
 	}
 
 	virtual void TearDown() {
