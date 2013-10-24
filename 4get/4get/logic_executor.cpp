@@ -8,13 +8,9 @@ const int Executor::CONSTANT_MONTH_ONE = 1;
 Executor::Executor(){}
 bool Executor::stringCollector(string task){
 	try{
-		bool isSucceeded = false;
 		vector<string> vectorOfInputs(SLOT_SIZE);
-		//try{
 		parser.parseInput(task, (vectorOfInputs));
-		isSucceeded = receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs);
-
-		if(isSucceeded){
+		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs)){
 			logging("Number of times UI call stringCollector", Info, Pass);
 			return true;
 		}
@@ -27,8 +23,9 @@ bool Executor::stringCollector(string task){
 }
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	Command commandType = determineCommandType(usercommand);
-	if(!(commandType == commandRedo || commandType == commandUndo))
-		storeCommands(commandType);          
+	if(!(commandType == commandRedo || commandType == commandUndo)){
+		storeIntoUndoCommandStack(commandType); 
+	}
 	switch(commandType)
 	{
 	case commandAdd:
@@ -104,8 +101,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			repeat, 
 			endTime); 
 		taskGlobal = new TaskDeadline;
-		*taskGlobal 
-			= newTask;
+		*taskGlobal = newTask;
 	}
 
 	else if(taskTypeToCreate == timed){
@@ -125,7 +121,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		throw string(Message::MESSAGE_ERROR_COMMAND_ADD);
 	}
 
-	storeTask(*taskGlobal);
+	storeIntoUndoTaskStack(*taskGlobal);
 	taskList.addToList(taskGlobal, listType);
 	return true;
 }
@@ -137,8 +133,7 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 	}
 
 	try{
-		storeTask(tempTaskCreator(taskList.obtainTask(deleteNumber)));
-		//storeTask(*taskList.obtainTask(deleteNumber));
+		storeIntoUndoTaskStack(*taskList.obtainTask(deleteNumber));
 		taskList.deleteFromList(deleteNumber, true);
 	} catch (string errorStr){
 		throw;
@@ -152,7 +147,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		throw string(MESSAGE_ERROR_COMMAND_MARK);
 	}
 	try{
-		storeTask(*taskList.obtainTask(markNumber));
+		storeIntoUndoTaskStack(*taskList.obtainTask(markNumber));
 		taskList.markDone(markNumber);
 	}catch (string errorStr){
 		throw;
@@ -160,7 +155,6 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 	return true;
 }
 bool Executor::modifyFunction(vector<string> vectorOfInputs){
-	bool oldTask = true;
 	Task* taskTemp;
 	Task* taskNew;
 	Task taskModified;
@@ -175,15 +169,13 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	RepeatType repeat;
 	TaskType typeOfTask, typeOfOldTask;
 
-	//redoStackModifier = false;
-	//undoStackModifier = false;
 	modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
 	if(modifyNumber < 1){
 		throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 	}
 	taskTemp = taskList.obtainTask(modifyNumber);
 	typeOfOldTask = taskTemp->getTaskType();
-	storeTask(*taskTemp);
+	storeIntoUndoTaskStack(*taskTemp);
 	setParameters(description,
 		location,
 		priority,
@@ -224,9 +216,6 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			priority,
 			repeat, 
 			endTime);
-		redoModifiedTaskStack.push(*taskNew);
-		//		redoTaskStack.push(*taskNew); //test
-		oldTask = false;
 		try{
 			taskList.deleteIDFromList(id, listType,true);
 			taskList.addToList(taskNew, listType);
@@ -252,9 +241,6 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			startTime, 
 			endTime);
-		redoModifiedTaskStack.push(*taskNew);
-		//	redoTaskStack.push(*taskNew); //test
-		oldTask = false;
 		try{
 			taskList.deleteIDFromList(id, listType, true);
 			taskList.addToList(taskNew, listType);
@@ -279,9 +265,6 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			repeat, 
 			startTime, 
 			endTime);
-		redoModifiedTaskStack.push(*taskNew);
-		//		redoTaskStack.push(*taskNew);  //test
-		oldTask = false;
 		try{
 			taskList.deleteIDFromList(id, listType, true);
 			taskList.addToList(taskNew, listType);
@@ -289,11 +272,6 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			throw;
 		}
 	}
-	if(oldTask){
-		redoModifiedTaskStack.push(*taskTemp);
-	}
-	//		redoTaskStack.push(*taskTemp);
-	//	}
 	return true;
 }
 bool Executor::undoFunction(){
@@ -302,23 +280,17 @@ bool Executor::undoFunction(){
 	Task* taskPtrToAdd;
 
 	if(undoCommandStack.empty()){
-		return false;
+		throw string(MESSAGE_ERROR_COMMAND_UNDO);
 	}
 
 	commandType = undoCommandStack.top();
 
-	//if(!redoStackModifier){
-	if(undoTaskStack.empty() && (commandType == commandModify)){
-		undoTaskStack.push(undoAfterRedoTaskStack.top());
-		undoAfterRedoTaskStack.pop();
-	}
 	taskTemp = undoTaskStack.top();
 	taskPtrToAdd = createTaskPtr(taskTemp);
-	//}
 
-	redoCommandStack.push(commandType);
+	storeIntoRedoCommandStack(commandType);
 	if(!(commandType == commandModify)){
-		redoTaskStack.push(taskTemp);
+		storeIntoRedoTaskStack(taskTemp);
 	}
 
 	switch(commandType)
@@ -346,19 +318,10 @@ bool Executor::undoFunction(){
 		}
 		break;
 	case commandModify:
-		/*if(redoStackModifier){
-		redoModifiedTaskStack.push(tempTaskCreator(taskList.obtainTask(taskTemp.getTaskId())));
-		}*/	
-
-		//redoStackModifier = false;
-		//taskUnModified = tempTaskCreator(&taskTemp);
-		//undoAfterRedoTaskStack.push(taskUnModified);
-		//if(redoStackModifier){
-		//	undoStackModifier = true;
-		//}
+		storeIntoRedoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));  //get the task currently in the list
 		try{
-			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
-			taskList.addToList(taskPtrToAdd, listType);
+			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);     //delete away the task current in the list
+			taskList.addToList(taskPtrToAdd, listType);								//add the task.
 		}catch(string Error){
 			throw;
 		}
@@ -367,10 +330,6 @@ bool Executor::undoFunction(){
 		throw string(MESSAGE_ERROR_COMMAND_UNDO);
 	}
 	undoCommandStack.pop();
-	//if(!(commandType == commandModify))
-	if(commandType == commandModify){
-		undoAfterRedoTaskStack.push(undoTaskStack.top());
-	}
 	undoTaskStack.pop();
 
 	return true;
@@ -382,35 +341,33 @@ bool Executor::redoFunction(){
 	Task* taskPtrToAdd;
 
 	if(redoCommandStack.empty()){
-		return false;
+		throw string(MESSAGE_ERROR_COMMAND_REDO);
 	}
 	commandType = redoCommandStack.top();
+	taskTemp = redoTaskStack.top();
 	switch(commandType)
 	{
 	case commandAdd:{
-		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		try{	
 			taskList.addToList(taskPtrToAdd, listType);
 		}catch(string Error){
 			throw;
 		}
-		undoTaskStack.push(taskTemp);
+		storeIntoUndoTaskStack(taskTemp);
 		break;
 					}
 	case commandDelete:{
-		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		try{
 			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 		}catch(string Error){
 			throw;
 		}
-		undoTaskStack.push(taskTemp);
+		storeIntoUndoTaskStack(taskTemp);
 		break;
 					   }
 	case commandMark:{
-		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		try{
 			taskList.addToList(taskPtrToAdd, listCompleted);
@@ -418,54 +375,27 @@ bool Executor::redoFunction(){
 		}catch(string Error){
 			throw;
 		}
-		undoTaskStack.push(taskTemp);
+		storeIntoUndoTaskStack(taskTemp);
 		break;
 					 }
 	case commandModify:{
-		//if(!undoStackModifier){
-		//taskTemp = redoModifiedTaskStack.top();
-		/*taskTemp = redoTaskStack.top();
-		taskPtrToAdd = createTaskPtr(taskTemp);*/ //2:36am 24/10/2013 last changed
-		if(!redoModifiedTaskStack.empty()){
-			taskTemp = redoModifiedTaskStack.top();
-			redoAfterUndoTaskStack.push(taskTemp);
-			redoModifiedTaskStack.pop();
-		}
-		else{
-			taskTemp = redoAfterUndoTaskStack.top();
-			redoModifiedTaskStack.push(taskTemp);
-			redoAfterUndoTaskStack.pop();
-		}
-		//redoAfterUndoTaskStack.push(taskTemp);
-		//redoModifiedTaskStack.pop();    // if i take away this i can do it repeatedly with only one task
 		taskPtrToAdd = createTaskPtr(taskTemp);
-		undoTaskStack.push(undoAfterRedoTaskStack.top());
-		undoAfterRedoTaskStack.pop();
-		//	}
-		//else{
-		/*		taskTemp = undoAfterRedoTaskStack.top();
-		taskPtrToAdd = createTaskPtr(taskTemp);
-		}*/
-		//redoStackModifier = true;
-
+		storeIntoUndoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));
 		try{
 			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
 			taskList.addToList(taskPtrToAdd, listType);
 		}catch(string Error){
 			throw;
 		}
-		//		undoAfterRedoTaskStack.pop();
 		break;
 					   }
 	default:
 		throw string(MESSAGE_ERROR_NOTHING_TO_REDO);
 	}
-	undoCommandStack.push(commandType);
+	storeIntoUndoCommandStack(commandType);
 	redoCommandStack.pop();
-	if(!(commandType == commandModify))
-		redoTaskStack.pop();
-	//if(commandType == commandModify)
-	//	redoModifiedTaskStack.pop();
+	redoTaskStack.pop();
+
 	return true;
 }
 bool Executor::isEqual(string str1, const string str2){
@@ -480,12 +410,20 @@ long long Executor::retrieveID(){
 
 	return ID = time(&msec);
 }
-bool Executor::storeTask(Task taskTemp){
+bool Executor::storeIntoUndoTaskStack(Task taskTemp){
 	undoTaskStack.push(taskTemp);
 	return true;
 }
-bool Executor::storeCommands(Command command){
+bool Executor::storeIntoUndoCommandStack(Command command){
 	undoCommandStack.push(command);
+	return true;
+}
+bool Executor::storeIntoRedoTaskStack(Task taskTemp){
+	redoTaskStack.push(taskTemp);
+	return true;
+}
+bool Executor::storeIntoRedoCommandStack(Command command){
+	redoCommandStack.push(command);
 	return true;
 }
 bool Executor::setListType(ListType uiListType)
@@ -502,41 +440,42 @@ bool Executor::setParameters(string &description,
 							 time_t &reminderTime,
 							 TaskType &typeOfTask,
 							 vector<string> &vectorOfInputs){
-								 string descriptionSlot,
-									 locationSlot,
-									 prioritySlot,
-									 repeatSlot,
-									 startDateSlot,
-									 startTimeSlot, 
-									 endDateSlot, 
-									 endTimeSlot, 
-									 reminderDateSlot, 
-									 reminderTimeSlot;
+	string descriptionSlot,
+		   locationSlot,
+		   prioritySlot,
+	       repeatSlot,
+		   startDateSlot,
+		   startTimeSlot, 
+		   endDateSlot, 
+		   endTimeSlot, 
+		   reminderDateSlot, 
+		   reminderTimeSlot;
 
-								 descriptionSlot = vectorOfInputs[SLOT_DESCRIPTION];
-								 locationSlot = vectorOfInputs[SLOT_LOCATION];
-								 prioritySlot = vectorOfInputs[SLOT_PRIORITY];
-								 repeatSlot = vectorOfInputs[SLOT_REPEAT];
-								 startDateSlot = vectorOfInputs[SLOT_START_DATE];
-								 startTimeSlot = vectorOfInputs[SLOT_START_TIME];
-								 endDateSlot = vectorOfInputs[SLOT_END_DATE];
-								 endTimeSlot = vectorOfInputs[SLOT_END_TIME];
-								 reminderDateSlot = vectorOfInputs[SLOT_REMIND_DATE];
-								 reminderTimeSlot = vectorOfInputs[SLOT_REMIND_TIME];
-								 description = descriptionSlot;
-								 location = locationSlot;
-								 priority = convert.convertStringToPriority(prioritySlot);
-								 repeat = convert.convertStringToRepeatType(repeatSlot);
-								 reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot);
-								 typeOfTask = convert.convertStringToTime(startDateSlot, 
-									 startTimeSlot, 
-									 endDateSlot, 
-									 endTimeSlot, 
-									 startTime, 
-									 endTime);
-								 return true;
+		   descriptionSlot = vectorOfInputs[SLOT_DESCRIPTION];
+		   locationSlot = vectorOfInputs[SLOT_LOCATION];
+		   prioritySlot = vectorOfInputs[SLOT_PRIORITY];
+		   repeatSlot = vectorOfInputs[SLOT_REPEAT];
+		   startDateSlot = vectorOfInputs[SLOT_START_DATE];
+		   startTimeSlot = vectorOfInputs[SLOT_START_TIME];
+		   endDateSlot = vectorOfInputs[SLOT_END_DATE];
+		   endTimeSlot = vectorOfInputs[SLOT_END_TIME];
+		   reminderDateSlot = vectorOfInputs[SLOT_REMIND_DATE];
+		   reminderTimeSlot = vectorOfInputs[SLOT_REMIND_TIME];
+								 
+		   description = descriptionSlot;
+		   location = locationSlot;
+		   priority = convert.convertStringToPriority(prioritySlot);
+		   repeat = convert.convertStringToRepeatType(repeatSlot);
+		   reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot);
+		   typeOfTask = convert.convertStringToTime(startDateSlot, 
+			                                        startTimeSlot, 
+									                endDateSlot, 
+									                endTimeSlot, 
+									                startTime, 
+									                endTime);
+		   return true;
 }
-void Executor::empty_task(){
+void Executor::assertNotEmptyTask(){
 	assert(taskGlobal != NULL);
 }
 
@@ -593,7 +532,6 @@ Task Executor::tempTaskCreator(Task* task)
 	}
 
 }
-
 Task* Executor::createTaskPtr(Task taskToCreate){
 	Task* taskPtr;
 	TaskType taskType = taskToCreate.getTaskType();
@@ -639,5 +577,8 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 		taskPtr->setTaskNextOccurance(nextOccurance);
 		taskPtr->setTaskStart(startTime);
 		return taskPtr;
+	}
+	else{
+		throw string(MESSAGE_ERROR_INVALID_TASKTYPE);
 	}
 }

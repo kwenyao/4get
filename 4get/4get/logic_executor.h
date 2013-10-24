@@ -32,7 +32,6 @@ class Executor
 private:
 	string task;
 	Task *taskGlobal;
-//	Task *taskTempGlobal;
 	TaskList taskList;
 	Parser parser;
 	Converter convert;
@@ -40,12 +39,7 @@ private:
 	stack<Command> undoCommandStack;
 	stack<Task> redoTaskStack;
 	stack<Command> redoCommandStack;
-	stack<Task> undoAfterRedoTaskStack; 
-	stack<Task> redoAfterUndoTaskStack; //undo redo
-	stack<Task> redoModifiedTaskStack;
 	ListType listType;
-	bool redoStackModifier;
-	bool undoStackModifier;
 
 	Task* createTaskPtr(Task taskToCreate);
 
@@ -75,8 +69,10 @@ public:
 	//helper functions
 	bool isEqual(string str1, const string str2);
 	long long retrieveID();
-	bool storeTask(Task taskTemp);
-	bool storeCommands(Command command);
+	bool storeIntoUndoTaskStack(Task taskTemp);
+	bool storeIntoUndoCommandStack(Command command);
+	bool storeIntoRedoTaskStack(Task taskTemp);
+	bool storeIntoRedoCommandStack(Command command);
 	bool setListType(ListType listType);
 	bool setParameters(string &description, 
 						string &location, 
@@ -90,6 +86,6 @@ public:
 	Task tempTaskCreator(Task* task);
 
 	//assertions
-	void empty_task();
+	void assertNotEmptyTask();
 };
 #endif

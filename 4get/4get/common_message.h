@@ -59,7 +59,7 @@ namespace Message{
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
-	
+	const string MESSAGE_ERROR_INVALID_TASKTYPE = "Error: Type of task do not exist.";
 
 	//error messages
 	const string MESSAGE_SUCCESS_PARSED = "Input has been parsed.";
