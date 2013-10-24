@@ -6,6 +6,7 @@ const string Converter::REPEAT_FORGHTNIGHTLY = "fortnightly";
 const string Converter::REPEAT_MONTHLY = "monthly";
 const string Converter::REPEAT_ANNUALLY = "annually";
 const string Converter::PRIORITY_HIGH = "!";
+const string Converter::PRIORITY_HIGH2 = "high";
 
 const int Converter::DEFAULT_END_HOUR = 23;
 const int Converter::DEFAULT_END_MIN = 59;
@@ -49,7 +50,7 @@ RepeatType Converter::convertStringToRepeatType(string str){
 }
 
 Priority Converter::convertStringToPriority(string str){
-	if(isEqual(str, PRIORITY_HIGH))
+	if(isEqual(str, PRIORITY_HIGH) || isEqual(str,PRIORITY_HIGH2))
 		return high;
 	else
 		return normal;

@@ -27,6 +27,7 @@ private:
 	static const string REPEAT_MONTHLY;
 	static const string REPEAT_ANNUALLY;
 	static const string PRIORITY_HIGH;
+	static const string PRIORITY_HIGH2;
 
 	static const int DEFAULT_END_HOUR;
 	static const int DEFAULT_END_MIN;

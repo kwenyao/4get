@@ -200,6 +200,10 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
 		taskTemp->setTaskStart(startTime);
 	}
+	if(!vectorOfInputs[SLOT_PRIORITY].empty())
+	{
+		taskTemp->setTaskPriority(priority);
+	}
 	//change floating to deadline task
 	if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
 		id = taskTemp->getTaskId();									//set another task

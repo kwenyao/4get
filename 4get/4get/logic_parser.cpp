@@ -1,5 +1,57 @@
 #include "logic_parser.h"
 
+const char Parser::MARKER_COMMA = ',';
+const std::size_t Parser::MARKER_COMMA_LENGTH = 1;
+
+const char Parser::MARKER_ENCLOSE = ' ';
+const std::size_t Parser::MARKER_ENCLOSE_LENGTH = 1;
+
+const string Parser::MARKER_AT = ",at";
+const std::size_t Parser::MARKER_AT_LENGTH = 3;
+
+const string Parser::MARKER_NEAR = ",near";
+const std::size_t Parser::MARKER_NEAR_LENGTH = 3;
+
+const string Parser::MARKER_BY = ",by";
+const std::size_t Parser::MARKER_BY_LENGTH = 3;
+
+const string Parser::MARKER_FROM = ",from";
+const std::size_t Parser::MARKER_FROM_LENGTH = 5;
+
+const string Parser::MARKER_TO = "to";
+const std::size_t Parser::MARKER_TO_LENGTH = 2;
+
+const string Parser::MARKER_REMIND = ",remind";
+const std::size_t Parser::MARKER_REMIND_LENGTH = 7;
+
+const string Parser::MARKER_ON = "on";
+const std::size_t Parser::MARKER_ON_LENGTH = 2;
+
+const string Parser::MARKER_REPEAT = ",repeat";
+const std::size_t Parser::MARKER_REPEAT_LENGTH = 7;
+
+const string Parser::MARKER_PRIORITY = ",!";
+const std::size_t Parser::MARKER_PRIORITY_LENGTH = 2;
+
+const string Parser::MARKER_PRIORITY_HIGH = ",high";
+const std::size_t Parser::MARKER_PRIORITY_HIGH_LENGTH = 5;
+
+const string Parser::MARKER_PRIORITY_NORMAL = ",normal";
+const std::size_t Parser::MARKER_PRIORITY_NORMAL_LENGTH = 7;
+
+const string Parser::MARKER_DONE = "done";
+const std::size_t Parser::MARKER_DONE_LENGTH = 4;
+
+const string Parser::MARKER_COMPLETED = "completed";
+const std::size_t Parser::MARKER_COMPLETED_LENGTH = 9;
+
+const string Parser::MARKER_UNDONE = "undone";
+const std::size_t Parser::MARKER_UNDONE_LENGTH = 6;
+
+const string Parser::MARKER_INCOMPLETE = "incomplete";
+const std::size_t Parser::MARKER_INCOMPLETE_LENGTH = 10;
+
+
 Parser::Parser()
 {
 	textInput = INITIALIZE_STRING_BLANK;
@@ -183,15 +235,15 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 	determineVenue();
-		//cout << "no venue" << endl;
+	//cout << "no venue" << endl;
 	determineDateAndTime();
-		//cout << "no date and time" << endl;
+	//cout << "no date and time" << endl;
 	determineRepeat();
-		//cout << "no repeat" << endl;
+	//cout << "no repeat" << endl;
 	determinePriority();
-		//cout << "no priority" << endl;
+	//cout << "no priority" << endl;
 	determineReminder();
-		//cout << "no reminder" << endl;
+	//cout << "no reminder" << endl;
 	textDescription = _textInput;
 	if(textDescription.empty())
 		throw MESSAGE_ERROR_NO_DESCRIPTION;
@@ -247,19 +299,19 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	}
 
 	determineVenue();
-		//cout << "no venue" << endl;
+	//cout << "no venue" << endl;
 
 	determineDateAndTime();
-		//cout << "no date and time" << endl;
+	//cout << "no date and time" << endl;
 
 	determineRepeat();
-		//cout << "no repeat" << endl;
+	//cout << "no repeat" << endl;
 
 	determinePriority();
-		//cout << "no priority" << endl;
+	//cout << "no priority" << endl;
 
 	determineReminder();
-		//cout << "no reminder" << endl;
+	//cout << "no reminder" << endl;
 
 	parseAllTimeAndDate();
 
@@ -288,7 +340,7 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
 	if(!determineDateAndTime())												//if user specified with formats, startTime or endTime will have the time 
 		textStartTime = _textInput;										//else whatever the user input after show will be assumed to be strings indicating time.
-												
+
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 	return true;
 }
@@ -314,7 +366,7 @@ bool Parser::determineVenue()
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
+			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
 				textVenue = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return true;
@@ -339,7 +391,7 @@ bool Parser::determineVenue()
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
+			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
 				textVenue = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return true;
@@ -379,7 +431,7 @@ bool Parser::determineDateAndTime()
 			i = foundComma; 
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
 				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
+			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
 				textEnd = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				parseAllTimeAndDate();
@@ -410,7 +462,7 @@ bool Parser::determineDateAndTime()
 				i = foundComma; 
 				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)							//try forming keyword
 					marker += textInput[i++];
-				if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
+				if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
 					textEnd = _textInput.substr(extractStartPos, extractLength);
 					shortenInput(found, foundComma);
 					parseAllTimeAndDate();
@@ -456,7 +508,7 @@ bool Parser::determineRepeat()
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY){
+			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
 				textRepeat = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return true;
@@ -480,9 +532,14 @@ bool Parser::determineRepeat()
 bool Parser::determinePriority()
 {
 	std::size_t found = INITIALIZE_SIZE_T;
+	std::size_t foundComma = INITIALIZE_SIZE_T;
 	std::size_t foundEnclose = INITIALIZE_SIZE_T;
 	std::size_t extractStartPos = INITIALIZE_SIZE_T;
 	std::size_t extractLength = INITIALIZE_SIZE_T;
+	std::size_t stringLength = textInput.size();
+	std::size_t i = INITIALIZE_SIZE_T;
+	string marker = INITIALIZE_STRING_BLANK;
+
 
 	if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
 		found = textInput.find(MARKER_PRIORITY);
@@ -498,6 +555,58 @@ bool Parser::determinePriority()
 			extractStartPos = found;
 			textPriority = _textInput.substr(++extractStartPos);
 			shortenInput(found, MARKER_PRIORITY_LENGTH);
+			return true;
+		}
+	}
+
+	else if(textInput.find(MARKER_PRIORITY_HIGH)!=std::string::npos){
+		found = textInput.find(MARKER_PRIORITY_HIGH);
+		if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH)!=std::string::npos){
+			foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH);
+			extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_HIGH, extractStartPos);
+			i = foundComma;
+			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+				marker += textInput[i++];
+			if(marker==MARKER_AT || marker==MARKER_NEAR ||marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT){
+				textPriority = _textInput.substr(extractStartPos, extractLength);
+				shortenInput(found, foundComma);
+				return true;
+			}
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
+			}
+		}
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_HIGH, extractStartPos);
+			textPriority = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
+			return true;
+		}
+	}
+
+	else if(textInput.find(MARKER_PRIORITY_NORMAL)!=std::string::npos){
+		found = textInput.find(MARKER_PRIORITY_NORMAL);
+		if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH)!=std::string::npos){
+			foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH);
+			extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_NORMAL, extractStartPos);
+			i = foundComma;
+			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+				marker += textInput[i++];
+			if(marker==MARKER_AT || marker==MARKER_NEAR ||marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT){
+				textPriority = _textInput.substr(extractStartPos, extractLength);
+				shortenInput(found, foundComma);
+				return true;
+			}
+			else{
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
+			}
+		}
+		else{
+			extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_NORMAL, extractStartPos);
+			textPriority = _textInput.substr(extractStartPos, ++extractLength);
+			shortenInput(found, stringLength);
 			return true;
 		}
 	}
@@ -526,7 +635,7 @@ bool Parser::determineReminder()
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REPEAT || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY && textInput.find(MARKER_ON, found)!=std::string::npos){
+			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REPEAT || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL && textInput.find(MARKER_ON, found)!=std::string::npos){
 				textRemind = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
@@ -654,7 +763,7 @@ std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundC
 	std::size_t extractEndPos;
 	std::size_t shiftPos = INITIALIZE_SIZE_T;
 
-	if(markConstant == MARKER_PRIORITY){
+	if(markConstant == MARKER_PRIORITY || markConstant == MARKER_PRIORITY_HIGH || markConstant == MARKER_PRIORITY_NORMAL){
 		shiftPos = shiftPos;
 	}
 	else if(markConstant == MARKER_REMIND){
@@ -873,3 +982,40 @@ string Parser::getCommand()
 {
 	return textCommand;
 }
+/*
+bool Parser::determineDateAndTime()
+{
+std::size_t found = INITIALIZE_SIZE_T;
+std::size_t foundComma = INITIALIZE_SIZE_T;
+std::size_t foundTo = INITIALIZE_SIZE_T;
+
+if(textInput.find(MARKER_BY)!=std::string::npos){
+found = textInput.find(MARKER_BY);
+
+if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
+foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
+extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
+i = foundComma; 
+while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+marker += textInput[i++];
+if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
+textEnd = _textInput.substr(extractStartPos, extractLength);
+shortenInput(found, foundComma);
+parseAllTimeAndDate();
+return true;
+}
+else{
+logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+throw MESSAGE_ERROR_WRONG_KEYWORD;
+}//wrong keyword definition
+}
+else{																					//by keyword is the last key input
+extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
+textEnd = _textInput.substr(extractStartPos, ++extractLength);
+shortenInput(found, stringLength);
+parseAllTimeAndDate();
+return true;
+}
+}
+
+}*/

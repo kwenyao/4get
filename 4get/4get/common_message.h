@@ -178,7 +178,7 @@ namespace Constants{
 	const int TIME_SLOT_DAY = 5;
 
 
-	//parser markers
+	/*parser markers
 	const char MARKER_COMMA = ',';
 	const std::size_t MARKER_COMMA_LENGTH = 1;
 
@@ -212,6 +212,12 @@ namespace Constants{
 	const string MARKER_PRIORITY = ",!";
 	const std::size_t MARKER_PRIORITY_LENGTH = 2;
 
+	const string MARKER_PRIORITY_HIGH = ",high";
+	const std::size_t MARKER_PRIORITY_HIGH_LENGTH = 5;
+
+	const string MARKER_PRIORITY_NORMAL = ",normal";
+	const std::size_t MARKER_PRIORITY_NORMAL_LENGTH = 7;
+
 	const string MARKER_DONE = "done";
 	const std::size_t MARKER_DONE_LENGTH = 4;
 
@@ -223,7 +229,7 @@ namespace Constants{
 
 	const string MARKER_INCOMPLETE = "incomplete";
 	const std::size_t MARKER_INCOMPLETE_LENGTH = 10;
-
+	*/
 	//parser timer constants
 	const string TIMER_SLASH = "/";
 	const string TIMER_SPACE = " ";
