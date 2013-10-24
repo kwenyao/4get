@@ -130,7 +130,12 @@ class ExecutorTest : public ::testing::Test{
 protected:
 
 	Executor ExecutorTester;
-	string taskAdd;
+	string taskAdd,
+		   taskDelete,
+		   taskMark,
+		   taskModify,
+		   taskUndo,
+		   taskRedo;
 	
 	
 
@@ -151,7 +156,10 @@ protected:
 		// Code here will be called immediately after the constructor (right
 		// before each test).
 		taskAdd = "add hello";
-		
+		taskDelete = "delete 1";
+		taskMark = "mark 1";
+		taskModify = "mod 1 YOLO";
+		//ExecutorTester.stringCollector("add roar");
 	}
 
 	virtual void TearDown() {

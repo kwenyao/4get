@@ -40,8 +40,9 @@ private:
 	stack<Command> undoCommandStack;
 	stack<Task> redoTaskStack;
 	stack<Command> redoCommandStack;
+	stack<Task> undoAfterRedoTaskStack; 
+	stack<Task> redoAfterUndoTaskStack; //undo redo
 	stack<Task> redoModifiedTaskStack;
-	stack<Task> undoAfterRedoTaskStack;    //undo redo
 	ListType listType;
 	bool redoStackModifier;
 	bool undoStackModifier;

@@ -37,6 +37,13 @@ TEST_F(LogTest, TestLog)
 	logging(inputMessage2, type2, status2);
 }
 TEST_F(ExecutorTest, TestExecutorAdd){
-	EXPECT_EQ(true,ExecutorTester.stringCollector(taskAdd));
+	ExecutorTester.setListType(listToDo);
+	bool result = ExecutorTester.stringCollector(taskAdd);
+	EXPECT_EQ(true,result);
 }
+//TEST_F(ExecutorTest, TestExecutorDelete){
+//	ExecutorTester.setListType(listToDo);
+//	bool result = ExecutorTester.stringCollector(taskDelete);
+//	EXPECT_EQ(true,result);
+//}
 
