@@ -84,6 +84,6 @@ long long TaskDeadline::getTimeLong(TimeType type)
 	month = month*CONVERT_MULTIPLIER_MONTH;
 	year = year*CONVERT_MULTIPLIER_YEAR;
 	yearMonthDayHourMin = (year + month + day + hour + min);
-	cout << "yearmonthdayhourmin:"<< yearMonthDayHourMin <<endl;
+	//cout << "yearmonthdayhourmin:"<< yearMonthDayHourMin <<endl;
 	return yearMonthDayHourMin;
 }

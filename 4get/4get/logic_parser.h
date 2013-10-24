@@ -22,6 +22,42 @@ class Parser
 {
 private:
 
+	static const char MARKER_COMMA;
+	static const std::size_t MARKER_COMMA_LENGTH;
+	static const char MARKER_ENCLOSE;
+	static const std::size_t MARKER_ENCLOSE_LENGTH;
+	static const string MARKER_AT;
+	static const std::size_t MARKER_AT_LENGTH;
+	static const string MARKER_NEAR;
+	static const std::size_t MARKER_NEAR_LENGTH;
+	static const string MARKER_BY;
+	static const std::size_t MARKER_BY_LENGTH;
+	static const string MARKER_FROM;
+	static const std::size_t MARKER_FROM_LENGTH;
+	static const string MARKER_TO;
+	static const std::size_t MARKER_TO_LENGTH;
+	static const string MARKER_REMIND;
+	static const std::size_t MARKER_REMIND_LENGTH;
+	static const string MARKER_ON;
+	static const std::size_t MARKER_ON_LENGTH;
+	static const string MARKER_REPEAT;
+	static const std::size_t MARKER_REPEAT_LENGTH;
+	static const string MARKER_PRIORITY;
+	static const std::size_t MARKER_PRIORITY_LENGTH;
+	static const string MARKER_PRIORITY_HIGH;
+	static const std::size_t MARKER_PRIORITY_HIGH_LENGTH;
+	static const string MARKER_PRIORITY_NORMAL;
+	static const std::size_t MARKER_PRIORITY_NORMAL_LENGTH;
+	static const string MARKER_DONE;
+	static const std::size_t MARKER_DONE_LENGTH;
+	static const string MARKER_COMPLETED;
+	static const std::size_t MARKER_COMPLETED_LENGTH;
+	static const string MARKER_UNDONE;
+	static const std::size_t MARKER_UNDONE_LENGTH;
+	static const string MARKER_INCOMPLETE;
+	static const std::size_t MARKER_INCOMPLETE_LENGTH;
+
+
 	//istringstream iss;
 	string _textInput; // Main input
 	string textInput; // lower case input
