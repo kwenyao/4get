@@ -103,7 +103,7 @@ private:
 public:
 	//constructor
 	Storage();
-
+	void clearFile(ListType);
 	bool save(const list<Task*>& list,ListType listType);
 	bool load(list<Task*>& listToLoadTo, ListType listType);
 };

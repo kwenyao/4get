@@ -5,6 +5,7 @@
 #include <ctime>
 #include "logic_task.h"
 #include "storage.h"
+#include "log.h"
 
 using namespace std;
 using namespace Enum;
@@ -19,9 +20,12 @@ private:
 	Storage _storage;
 	ListType _currentDisplayed;
 
-	static const int INDEX_CORRECTION;
-
 	void clearList(ListType listType);
+
+	static const int INDEX_CORRECTION;
+	static const string LOG_TASK_ADDED;
+	static const string LOG_TASK_DELETED;
+	static const string LOG_TASK_MARKED;
 
 	list<Task*>::iterator getIterator(list<Task*>& insertionList, Task* task);
 	list<Task*>::iterator iterateToTask(list<Task*>& listToEdit, int task);
@@ -34,16 +38,18 @@ public:
 
 	//storage functions
 	void loadFromFile();
-	bool saveAll();
+	void saveAll();
 
 	//Public list manipulation functions
 	bool addToList(Task* task, ListType listToAdd);
-	void deleteFromList(int taskToDelete, bool isDelete);
+	void deleteFromList(int indexUI, bool isDelete);
 	void deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete);
 	bool markDone(int taskToMark);
 
 	//Getter functions
 	list<Task*> obtainList(ListType listToReturn);
-	Task* obtainTask(int taskToGet);
+	Task* obtainTask(int indexUI);
+
+	void setCurrentDisplayed(ListType listType);
 };
 #endif

@@ -371,3 +371,9 @@ Priority Storage::convertToPriority(string str){
 	else
 		return normal;
 }
+
+void Storage::clearFile(ListType listType){
+	string fileName = determineFile(listType);
+	ofstream write(fileName);
+	write.close();
+}

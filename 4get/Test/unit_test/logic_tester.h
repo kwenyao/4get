@@ -36,6 +36,49 @@ protected:
 	// Objects declared here can be used by all tests in the test case for Foo.
 };
 
+class TaskListTest : public ::testing::Test {
+protected:
+
+	TaskList TaskListTester;
+	Storage storage;
+	Task* task1;
+	Task* task2;
+	Task* task3;
+
+	TaskListTest() {
+		// You can do set-up work for each test here.
+	}
+
+	virtual ~TaskListTest() {
+		// You can do clean-up work that doesn't throw exceptions here.
+	}
+
+	// If the constructor and destructor are not enough for setting up
+	// and cleaning up each test, you can define the following methods:
+
+	virtual void SetUp() {
+		// Code here will be called immediately after the constructor (right
+		// before each test).
+		task1 = new TaskFloating(1);
+		task2 = new TaskDeadline(2);
+		task3 = new TaskTimed(3);
+		task2->setTaskEnd(1383148740);
+		task3->setTaskEnd(1382526000);
+		TaskListTester.addToList(task1,listToDo);
+		TaskListTester.addToList(task2,listToDo);
+		TaskListTester.addToList(task3,listToDo);
+	}
+
+	virtual void TearDown() {
+		// Code here will be called immediately after each test (right
+		// before the destructor).
+		storage.clearFile(listToDo);
+		storage.clearFile(listCompleted);
+		storage.clearFile(listOverdue);
+	}
+
+	// Objects declared here can be used by all tests in the test case for Foo.
+};
 
 class ParserTest : public ::testing::Test {
 protected:
@@ -117,8 +160,8 @@ protected:
 
 	Executor ExecutorTester;
 	string taskAdd;
-	
-	
+
+
 
 	ExecutorTest() {
 		// You can do set-up work for each test here.
@@ -137,7 +180,7 @@ protected:
 		// Code here will be called immediately after the constructor (right
 		// before each test).
 		taskAdd = "add hello";
-		
+
 	}
 
 	virtual void TearDown() {
