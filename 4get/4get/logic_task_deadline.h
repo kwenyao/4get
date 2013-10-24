@@ -6,6 +6,8 @@
 
 class TaskDeadline : public Task
 {
+protected:
+	long long convertToLong(time_t rawTime);
 public:
 	TaskDeadline();
 	TaskDeadline(long long id);

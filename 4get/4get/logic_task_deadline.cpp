@@ -6,8 +6,8 @@ TaskDeadline::TaskDeadline(){
 TaskDeadline::TaskDeadline(long long id)
 {
 	clearAllAttr();
-	taskId = id;
 	taskType = deadline;
+	taskId = id;
 }
 
 TaskDeadline::TaskDeadline(long long id, string description, string location, time_t reminder, Priority priority, RepeatType repeat, time_t endTime) : Task()
@@ -24,66 +24,44 @@ void TaskDeadline::setupTask(long long id, TaskType type, string description, st
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
-	//taskStatus = status;
 	taskReminder = reminder;
 	taskRepeat = repeat;
 	taskEnd = endTime;
 }
-void TaskDeadline::setTaskEnd(time_t endTime)
-{
-	taskEnd = endTime;
-}
+void TaskDeadline::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
 
-time_t TaskDeadline::getTaskEnd()
-{
-	return taskEnd;
-}
+time_t TaskDeadline::getTaskEnd() {	return taskEnd; }
 
-long long TaskDeadline::getTimeLong(TimeType type)
-{
-	long long yearMonthDayHourMin;
-	//tm* time = NULL;
-	tm* time = {0};
+long long TaskDeadline::getTimeLong(TimeType type){
 	time_t temp = 0;
-	if(type==timeStart){
-		temp = taskStart;	
-		//time = taskStart;
-
-	}
-	else if(type==timeEnd){
+	switch (type){
+	case Enum::timeEnd:
 		temp = taskEnd;
-		//time = taskEnd;
-	}
-	else if(type==timeNext){
+		break;
+	case Enum::timeNext:
 		temp = taskNextOccurance;
-		//time = taskNextOccurance;
-	}
-	else if(type==timeReminder){
+		break;
+	case Enum::timeReminder:
 		temp = taskReminder;
-		//time = taskReminder;
-	}
-
-	else
+		break;
+	default:
 		return 0;
+	}
+}
 
-	time = localtime(&temp);
+long long TaskDeadline::convertToLong(time_t rawTime){
+	long long yearMonthDayHourMin;
+	tm* time = {0};
+	time = localtime(&rawTime);
 	long long min = time->tm_min;
 	long long hour = time->tm_hour;
 	long long day = time->tm_mday;
 	long long month = time->tm_mon;
 	long long year = time->tm_year + YEAR_CORRECTION;
-	/*
-	long long min = time->tm_min;
-	long long hour = time->tm_hour;
-	long long day = time ->tm_mday;
-	long long month = time ->tm_mon;
-	long long year = time ->tm_year + CONSTANT_START_YEAR;
-	*/
 	hour = hour*CONVERT_MULTIPLIER_HOUR;
 	day = day*CONVERT_MULTIPLIER_DAY;
 	month = month*CONVERT_MULTIPLIER_MONTH;
 	year = year*CONVERT_MULTIPLIER_YEAR;
 	yearMonthDayHourMin = (year + month + day + hour + min);
-	//cout << "yearmonthdayhourmin:"<< yearMonthDayHourMin <<endl;
 	return yearMonthDayHourMin;
 }

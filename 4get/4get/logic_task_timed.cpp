@@ -5,6 +5,7 @@ TaskTimed::TaskTimed() : TaskDeadline(){
 }
 TaskTimed::TaskTimed(long long id) : TaskDeadline(id)
 {
+	clearAllAttr();
 	taskType = timed;
 	taskId = id;
 }
@@ -20,7 +21,6 @@ void TaskTimed::setupTask(long long id, TaskType type, string description, strin
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
-	//taskStatus = status;
 	taskReminder = reminder;
 	taskRepeat = repeat;
 	taskStart = startTime;
@@ -28,22 +28,25 @@ void TaskTimed::setupTask(long long id, TaskType type, string description, strin
 }
 
 
-void TaskTimed::setTaskStart(time_t startTime)
-{
-	taskStart = startTime;
-}
+void TaskTimed::setTaskStart(time_t startTime) { taskStart = startTime; }
+time_t TaskTimed::getTaskStart() { return taskStart; }
 
-void TaskTimed::setTaskEnd(time_t endTime)
-{
-	taskEnd = endTime;
-}
-
-time_t TaskTimed::getTaskStart()
-{
-	return taskStart;
-}
-
-time_t TaskTimed::getTaskEnd()
-{
-	return taskEnd;
+long long TaskTimed::getTimeLong(TimeType type){
+	time_t temp = 0;
+	switch (type){
+	case Enum::timeStart:
+		temp = taskStart;	
+		break;
+	case Enum::timeEnd:
+		temp = taskEnd;
+		break;
+	case Enum::timeNext:
+		temp = taskNextOccurance;
+		break;
+	case Enum::timeReminder:
+		temp = taskReminder;
+		break;
+	default:
+		return 0;
+	}
 }

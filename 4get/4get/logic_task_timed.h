@@ -13,9 +13,8 @@ public:
 	void setupTask(long long id, TaskType type, string description, string location, time_t reminderTime, Priority priority, RepeatType repeat, time_t startTime, time_t endTime);
 
 	void setTaskStart(time_t startTask);
-	void setTaskEnd(time_t endTask);
 
 	time_t getTaskStart();
-	time_t getTaskEnd();
+	long long getTimeLong(TimeType type);
 };
 #endif
