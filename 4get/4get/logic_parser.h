@@ -1,7 +1,7 @@
 #ifndef _LOGIC_PARSER_H_
 #define _LOGIC_PARSER_H_
 #define PROGRAM_NAME "4get"
-#include <stdio.h>
+#include <ctype.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -86,6 +86,7 @@ public:
 	void parseInput(string input, vector<string>& inputBits);
 	// function for testing validity of command
 	string getCommand();
+	bool parseTimeAndDate(string& str, string& strDate, string& strTime);
 
 private:	
 	void parseReset();
@@ -118,7 +119,6 @@ private:
 	void removeAllBorderSpace();
 	void removeBorderSpaces(string& str);
 	void parseAllTimeAndDate();
-	bool parseTimeAndDate(string& str, string& strDate, string& strTime);
 
 	//int separateInput(int state);
 	void toLowerCase(string &string);

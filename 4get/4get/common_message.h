@@ -59,6 +59,10 @@ namespace Message{
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT ="Error: Wrong date format.";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT ="Error: Wrong time format."; 
+	const string MESSAGE_ERROR_WRONG_DATE = "Error: No such date exists";
+	const string MESSAGE_ERROR_WRONG_MONTH = "Error: No such month exists";
 	const string MESSAGE_ERROR_INVALID_TASKTYPE = "Error: Type of task do not exist.";
 
 	//error messages
@@ -170,52 +174,6 @@ namespace Constants{
 	const int TIME_SLOT_DAY = 5;
 
 
-	//parser markers
-	const char MARKER_COMMA = ',';
-	const std::size_t MARKER_COMMA_LENGTH = 1;
-
-	const char MARKER_ENCLOSE = ' ';
-	const std::size_t MARKER_ENCLOSE_LENGTH = 1;
-
-	const string MARKER_AT = ",at";
-	const std::size_t MARKER_AT_LENGTH = 3;
-
-	const string MARKER_NEAR = ",near";
-	const std::size_t MARKER_NEAR_LENGTH = 3;
-
-	const string MARKER_BY = ",by";
-	const std::size_t MARKER_BY_LENGTH = 3;
-
-	const string MARKER_FROM = ",from";
-	const std::size_t MARKER_FROM_LENGTH = 5;
-
-	const string MARKER_TO = "to";
-	const std::size_t MARKER_TO_LENGTH = 2;
-
-	const string MARKER_REMIND = ",remind";
-	const std::size_t MARKER_REMIND_LENGTH = 7;
-
-	const string MARKER_ON = "on";
-	const std::size_t MARKER_ON_LENGTH = 2;
-
-	const string MARKER_REPEAT = ",repeat";
-	const std::size_t MARKER_REPEAT_LENGTH = 7;
-
-	const string MARKER_PRIORITY = ",!";
-	const std::size_t MARKER_PRIORITY_LENGTH = 2;
-
-	const string MARKER_DONE = "done";
-	const std::size_t MARKER_DONE_LENGTH = 4;
-
-	const string MARKER_COMPLETED = "completed";
-	const std::size_t MARKER_COMPLETED_LENGTH = 9;
-
-	const string MARKER_UNDONE = "undone";
-	const std::size_t MARKER_UNDONE_LENGTH = 6;
-
-	const string MARKER_INCOMPLETE = "incomplete";
-	const std::size_t MARKER_INCOMPLETE_LENGTH = 10;
-
 	//parser timer constants
 	const string TIMER_SLASH = "/";
 	const string TIMER_SPACE = " ";
@@ -244,7 +202,36 @@ namespace Constants{
 	const string TIMER_SUNDAY = "sunday";
 	const string TIMER_SUN = "sun";
 	const string TIMER_NEXT = "next";
-	const std::size_t TIMER_24HR_LENGTH = 4;
+
+	const string MONTH_JANUARY = "january";
+	const string MONTH_JAN = "jan";
+	const string MONTH_FEBRUARY = "february";
+	const string MONTH_FEB = "feb";
+	const string MONTH_MARCH = "march";
+	const string MONTH_MAR = "mar";
+	const string MONTH_APRIL = "april";
+	const string MONTH_APR = "apr";
+	const string MONTH_MAY = "may";
+	const string MONTH_JUNE = "june";
+	const string MONTH_JUN = "jun";
+	const string MONTH_JULY = "july";
+	const string MONTH_JUL = "jul";
+	const string MONTH_AUGUST = "august";
+	const string MONTH_AUG = "aug";
+	const string MONTH_SEPTEMBER = "september";
+	const string MONTH_SEPT = "sept";
+	const string MONTH_SEP = "sep";
+	const string MONTH_OCTOBER = "october";
+	const string MONTH_OCT = "oct";
+	const string MONTH_NOVEMBER = "november";
+	const string MONTH_NOV = "nov";
+	const string MONTH_DECEMBER = "december";
+	const string MONTH_DEC = "dec";
+
+
+
+	const std::size_t TIMER_24HR_LENGTH = 6;
+	const std::size_t TIMER_24_LENGTH = 4;
 	const std::size_t TIMER_TIME_LOWER_LENGTH = 2;
 	const std::size_t TIMER_TIME_UPPER_LENGTH = 8;
 	const std::size_t TIMER_TIME_EXCLUDED_LENGTH = 5;

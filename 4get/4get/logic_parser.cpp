@@ -822,80 +822,81 @@ void Parser::parseAllTimeAndDate()
 	parseTimeAndDate(textStart, textStartDate, textStartTime);
 	parseTimeAndDate(textEnd, textEndDate, textEndTime);
 }
+/*
 bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 {
-	stringstream buffer(str);
-	string stringcheck;
-	string _stringcheck;
-	std::size_t foundLeft;
-	std::size_t foundRight;
+stringstream buffer(str);
+string stringcheck;
+string _stringcheck;
+std::size_t foundLeft;
+std::size_t foundRight;
 
-	if(str.empty())
-		return true;
-	while(!buffer.eof()){
-		buffer >> _stringcheck;
-		stringcheck = _stringcheck;
-		toLowerCase(stringcheck);
-		if(stringcheck.find(TIMER_SLASH)!=std::string::npos || stringcheck.find(TIMER_DASH)!=std::string::npos){
-			if(stringcheck.find(TIMER_SLASH)!=std::string::npos){
-				foundLeft = stringcheck.find(TIMER_SLASH);
-				if(stringcheck.rfind(TIMER_SLASH)!=std::string::npos){
-					foundRight = stringcheck.rfind(TIMER_SLASH);
-					if(foundRight!=foundLeft)
-						strDate = _stringcheck;
-					else{
-						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_FORMAT;
-					}
-				}
-				else{
-					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_FORMAT;
-				}
-			}
-			else{
-				foundLeft = stringcheck.find(TIMER_DASH);
-				if(stringcheck.rfind(TIMER_DASH)!=std::string::npos){
-					foundRight = stringcheck.rfind(TIMER_DASH);
-					if(foundRight!=foundLeft)
-						strDate = _stringcheck;
-					else{
-						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_FORMAT;
-					}
-				}
-				else{
-					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_FORMAT;
-				}
-			}
-		}
-		else if(stringcheck.size()>TIMER_TIME_LOWER_LENGTH && stringcheck.size()<TIMER_TIME_UPPER_LENGTH && stringcheck.size()!=TIMER_TIME_EXCLUDED_LENGTH){
-			if(stringcheck.size()==TIMER_24HR_LENGTH) {
-				int i = 0;
-				bool is24hr = true;
-				while(i<TIMER_24HR_LENGTH){
-					if(!isdigit(stringcheck[i]))
-						is24hr = false;
-					i++;
-				}
-				if(is24hr)
-					strTime = _stringcheck;
-				else{
-					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_FORMAT;
-				}
-			}
-			else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
-				stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){
-					strTime = _stringcheck;
-			}
-		}
-		else
-			strDate = _stringcheck;
-	}
-	return true;
+if(str.empty())
+return true;
+while(!buffer.eof()){
+buffer >> _stringcheck;
+stringcheck = _stringcheck;
+toLowerCase(stringcheck);
+if(stringcheck.find(TIMER_SLASH)!=std::string::npos || stringcheck.find(TIMER_DASH)!=std::string::npos){
+if(stringcheck.find(TIMER_SLASH)!=std::string::npos){
+foundLeft = stringcheck.find(TIMER_SLASH);
+if(stringcheck.rfind(TIMER_SLASH)!=std::string::npos){
+foundRight = stringcheck.rfind(TIMER_SLASH);
+if(foundRight!=foundLeft)
+strDate = _stringcheck;
+else{
+logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+throw MESSAGE_ERROR_WRONG_FORMAT;
 }
+}
+else{
+logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+throw MESSAGE_ERROR_WRONG_FORMAT;
+}
+}
+else{
+foundLeft = stringcheck.find(TIMER_DASH);
+if(stringcheck.rfind(TIMER_DASH)!=std::string::npos){
+foundRight = stringcheck.rfind(TIMER_DASH);
+if(foundRight!=foundLeft)
+strDate = _stringcheck;
+else{
+logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+throw MESSAGE_ERROR_WRONG_FORMAT;
+}
+}
+else{
+logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+throw MESSAGE_ERROR_WRONG_FORMAT;
+}
+}
+}
+else if(stringcheck.size()>TIMER_TIME_LOWER_LENGTH && stringcheck.size()<TIMER_TIME_UPPER_LENGTH && stringcheck.size()!=TIMER_TIME_EXCLUDED_LENGTH){
+if(stringcheck.size()==TIMER_24HR_LENGTH) {
+int i = 0;
+bool is24hr = true;
+while(i<TIMER_24HR_LENGTH){
+if(!isdigit(stringcheck[i]))
+is24hr = false;
+i++;
+}
+if(is24hr)
+strTime = _stringcheck;
+else{
+logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+throw MESSAGE_ERROR_WRONG_FORMAT;
+}
+}
+else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
+stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){
+strTime = _stringcheck;
+}
+}
+else
+strDate = _stringcheck;
+}
+return true;
+}*/
 /*
 int Parser::separateInput(int state)
 {
@@ -1019,3 +1020,277 @@ return true;
 }
 
 }*/
+
+
+bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
+{
+	stringstream buffer(str);
+	string stringCheck;
+	string _stringCheck;
+	std::size_t foundLeft;
+	std::size_t foundRight;
+	bool dateDetermined = false;
+	bool dateDayDetermine = false;
+	bool dateMonthDetermined = false;
+	bool dateYearDetermine = false;
+
+	bool timeDetermined = false;
+	size_t stringLength;
+	bool isChar = false;
+	bool isDigit = false;
+
+	if(str.empty())
+		return true;
+	while(!buffer.eof()){
+		buffer >> _stringCheck;
+		stringCheck = _stringCheck;
+		toLowerCase(stringCheck);
+		stringLength = stringCheck.size();
+
+		if(dateDayDetermine && dateMonthDetermined && dateYearDetermine)
+			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine;
+
+
+		if(!dateDetermined){
+			if(stringLength > 0 && stringLength < 3){					// Date Format: 7 or 07  => Date day fragment, expect Date month fragment 
+				int i = 0;
+				while(i != stringLength){
+					isDigit = isdigit(stringCheck[i]) != 0;
+					if(!isDigit){
+						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+						throw MESSAGE_ERROR_WRONG_FORMAT;
+					}
+					i++;
+				}
+				if(atoi(stringCheck.c_str()) > 31){						// Date Format: Date cannot be more than 31
+					logging(MESSAGE_ERROR_WRONG_DATE,Error,None);
+					throw MESSAGE_ERROR_WRONG_DATE;
+				}
+				if(!strDate.empty()){									
+					strDate += TIMER_SPACE +_stringCheck;				// Date Format: YYYY MONTH DD
+				}
+				else													
+					strDate = _stringCheck;								// Date Format: DD
+				dateDayDetermine = true;
+			}
+			else if(stringLength >= 3 && stringLength < 6) {				// Date Format: 1/2 || 01/02 || 1/2/3 || MONTH_SHORT_WORD || YYYY
+				if(stringCheck.find(TIMER_SLASH)!=std::string::npos){	
+					foundLeft = stringCheck.find(TIMER_SLASH);
+					if(stringCheck.rfind(TIMER_SLASH)!=std::string::npos){	
+						foundRight = stringCheck.rfind(TIMER_SLASH);
+						if(foundRight!=foundLeft){
+							strDate = _stringCheck;							// Date Format: 1/2/3 => Unusual representation of date, but implies 1st Feb 2003. 
+							dateDetermined = true;
+						}
+						else{
+							strDate = _stringCheck;							// Date Format: 1/2 == 01/02 => year is implied to be current year and ommited. 
+							dateDetermined = true;
+						}
+					}
+				}
+				else if(stringCheck.find(TIMER_DASH)!=std::string::npos){
+					foundLeft = stringCheck.find(TIMER_DASH);
+					if(stringCheck.rfind(TIMER_DASH)!=std::string::npos){	
+						foundRight = stringCheck.rfind(TIMER_DASH);
+						if(foundRight!=foundLeft){
+							strDate = _stringCheck;							// Date Format: 1-2-3 => Unusual representation of date, but implies 1st Feb 2003. 
+							dateDetermined = true;
+						}
+						else{
+							strDate = _stringCheck;							// Date Format: 1-2 == 01-02 => year is implied to be current year and ommited. 
+							dateDetermined = true;
+						}
+					}
+				}
+				else if (stringLength < 5 && isalpha(stringCheck.front())){								// Date Format: May or Sept  => Date month fragment, expect Date day fragment
+					int i = 0;
+					while(i != stringLength){
+						isChar = isalpha(stringCheck[i]) != 0;
+						if(!isChar){
+							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+							throw MESSAGE_ERROR_WRONG_FORMAT;
+						}
+						i++;
+					}
+					if(!strDate.empty()){								
+						strDate += TIMER_SPACE +_stringCheck;			// Date Format: DD YYYY MONTH
+					}
+					else												
+						strDate = _stringCheck;							// Date Format: MONTH
+					dateMonthDetermined = true;
+				}
+				else if(stringLength == 4 && isdigit(stringCheck.front())){
+					int i = 0;
+					while(i != stringLength){
+						isDigit = isdigit(stringCheck[i]) != 0;
+						if(!isDigit){
+							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+							throw MESSAGE_ERROR_WRONG_FORMAT;
+						}
+						i++;
+					}
+					if(!strDate.empty()){									
+						strDate += TIMER_SPACE +_stringCheck;				// Date Format: MONTH DD YYYY
+					}
+					else													
+						strDate = _stringCheck;								// Date Format: YYYY
+					dateYearDetermine = true;
+				}
+				else {
+					logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
+					throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+				}
+			}
+			else if(stringLength >= 6 && stringLength < 11){				// Date Format: 1/2/13 == 01/02/2013 || MONTH_FULL_WORD
+				if(stringCheck.find(TIMER_SLASH)!=std::string::npos){	
+					foundLeft = stringCheck.find(TIMER_SLASH);
+					if(stringCheck.rfind(TIMER_SLASH)!=std::string::npos){	
+						foundRight = stringCheck.rfind(TIMER_SLASH);
+						if(foundRight!=foundLeft){
+							strDate = _stringCheck;							// Date Format: 1/2/13 => Shorter representation of date with year
+							dateDetermined = true;
+						}
+						else{
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+						}
+					}
+				}
+				else if(stringCheck.find(TIMER_DASH)!=std::string::npos){
+					foundLeft = stringCheck.find(TIMER_DASH);
+					if(stringCheck.rfind(TIMER_DASH)!=std::string::npos){	
+						foundRight = stringCheck.rfind(TIMER_DASH);
+						if(foundRight!=foundLeft){
+							strDate = _stringCheck;							// Date Format: 1-2-13 => Shorter representation of date
+							dateDetermined = true;
+						}
+						else{
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+						}
+					}
+				}
+				else if (stringLength < 10){								// Date Format: January or September  => Date month fragment, expect Date day fragment
+					int i = 0;
+					while(i != stringLength){
+						isChar = isalpha(stringCheck[i]) != 0;
+						if(!isChar){
+							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+							throw MESSAGE_ERROR_WRONG_FORMAT;
+						}
+						i++;
+					}
+					if(!strDate.empty()){								
+						strDate += TIMER_SPACE +_stringCheck;			// Date Format: YYYY DD MONTH
+					}
+					else												
+						strDate = _stringCheck;							// Date Format: MONTH
+					dateMonthDetermined = true;
+				}
+				else {
+					logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
+					throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+				}
+			}
+		}
+
+		else if(!timeDetermined){
+			if(stringCheck.find(TIMER_COLON)!=std::string::npos){
+				if(stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
+					foundLeft = stringCheck.find(TIMER_COLON);
+					foundRight = stringCheck.rfind(TIMER_COLON);
+					if(foundLeft==foundRight){
+						strTime = _stringCheck;								// Time Format: 09:00AM
+						timeDetermined = true;
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+					}
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+				}
+			}
+			else if(stringCheck.find(TIMER_DOT)!=std::string::npos){
+				if(stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
+					foundLeft = stringCheck.find(TIMER_DOT);
+					foundRight = stringCheck.rfind(TIMER_DOT);
+					if(foundLeft==foundRight){
+						strTime = _stringCheck;								// Time Format: 09.00AM
+						timeDetermined = true;
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+					}
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+				}
+			}
+			else if(stringLength==TIMER_24HR_LENGTH) {
+				int i = 0;
+				bool is24hr = true;
+				while(i<TIMER_24_LENGTH){
+					if(!isdigit(stringCheck[i]))
+						is24hr = false;
+					i++;
+				}
+				if(is24hr){
+					strTime = _stringCheck;
+					timeDetermined = true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+					throw MESSAGE_ERROR_WRONG_FORMAT;
+				}
+			}
+			else if(stringCheck==TIME_ANTE_MERIDIAN || stringCheck==TIME_POST_MERIDIAN){
+				logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+				throw MESSAGE_ERROR_WRONG_FORMAT;									// Time Format : Cannot be 10 PM => only 10PM works
+			}
+			else if((stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
+				strTime = _stringCheck;
+				timeDetermined = true;
+			}
+		}
+
+
+
+		/*
+		else if(stringLength>TIMER_TIME_LOWER_LENGTH && stringLength<TIMER_TIME_UPPER_LENGTH && stringLength!=TIMER_TIME_EXCLUDED_LENGTH){
+		if(stringLength==TIMER_24HR_LENGTH) {
+		int i = 0;
+		bool is24hr = true;
+		while(i<TIMER_24HR_LENGTH){
+		if(!isdigit(stringCheck[i]))
+		is24hr = false;
+		i++;
+		}
+		if(is24hr)
+		strTime = _stringCheck;
+		else{
+		logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+		throw MESSAGE_ERROR_WRONG_FORMAT;
+		}
+		}
+		else if(stringCheck.find(TIMER_COLON)!=std::string::npos || stringCheck.find(TIMER_DOT)!=std::string::npos || 
+		stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
+		strTime = _stringCheck;
+		}
+		}
+		else
+		strDate = _stringCheck;
+		*/
+	}
+
+	if(dateYearDetermine && !dateMonthDetermined && !dateDayDetermine){
+		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+	}
+
+	return true;
+}
