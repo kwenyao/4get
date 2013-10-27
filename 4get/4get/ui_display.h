@@ -105,6 +105,8 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  oTime;
 	private: System::Windows::Forms::ColumnHeader^  oDueDate;
 	private: System::Windows::Forms::ColumnHeader^  oPriority;
+	private: System::Windows::Forms::NotifyIcon^  notifyIcon1;
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -181,7 +183,7 @@ namespace UIDisplay {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -210,5 +212,7 @@ namespace UIDisplay {
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+private: System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
+private: System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
 };
 }

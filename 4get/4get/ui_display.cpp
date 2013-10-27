@@ -23,6 +23,8 @@ ui_display::~ui_display(){
 }
 
 void ui_display::InitializeComponent(void){
+	this->components = (gcnew System::ComponentModel::Container());
+	System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(ui_display::typeid));
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
@@ -55,6 +57,7 @@ void ui_display::InitializeComponent(void){
 	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
 	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
 	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
+	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -331,6 +334,13 @@ void ui_display::InitializeComponent(void){
 	this->chooseDate->Size = System::Drawing::Size(337, 20);
 	this->chooseDate->TabIndex = 0;
 	// 
+	// notifyIcon1
+	// 
+	this->notifyIcon1->Icon = gcnew System::Drawing::Icon("favicon.ico");
+	this->notifyIcon1->Text = L"notifyIcon1";
+	this->notifyIcon1->Visible = true;
+	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
+	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -349,6 +359,7 @@ void ui_display::InitializeComponent(void){
 	this->Text = L"4get";
 	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::ui_display_KeyDown);
 	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::ui_display_KeyPress);
+	this->Resize += gcnew System::EventHandler(this, &ui_display::ui_display_Resize);
 	this->tabContainer->ResumeLayout(false);
 	this->tabTodo->ResumeLayout(false);
 	this->tabCompleted->ResumeLayout(false);
@@ -361,7 +372,20 @@ void ui_display::InitializeComponent(void){
 
 }
 
-
+Void ui_display::notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e){
+	this->Show();
+	this->WindowState = FormWindowState::Normal;
+}
+Void ui_display::ui_display_Resize(System::Object^  sender, System::EventArgs^  e){
+	if(this->WindowState == FormWindowState::Minimized){
+		this->notifyIcon1->Visible =true;
+		this->notifyIcon1->ShowBalloonTip(500);
+		this->Hide();
+	}
+	else if (this->WindowState == FormWindowState::Normal){
+		notifyIcon1->Visible = false;
+	}
+}
 
 void ui_display::printError(string error){
 	String ^ error_sys_string=gcnew String(error.c_str());
@@ -369,6 +393,7 @@ void ui_display::printError(string error){
 	array<String ^> ^  emptyLines ={};
 	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
+	this->printHelpMessage();
 }
 
 void ui_display::passUserInput(){
