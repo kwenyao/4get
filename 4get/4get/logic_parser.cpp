@@ -771,6 +771,9 @@ std::size_t Parser::determindExtractLength(std::size_t found, std::size_t foundC
 			found = textInput.find(MARKER_ON,found);
 			shiftPos = MARKER_ON_LENGTH;
 		}
+		else{
+			shiftPos = MARKER_REMIND_LENGTH;
+		}
 	}
 
 	else
@@ -1047,8 +1050,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		toLowerCase(stringCheck);
 		stringLength = stringCheck.size();
 
+		if(dateDetermined && timeDetermined && !stringCheck.empty()){
+			logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
+			throw MESSAGE_ERROR_WRONG_FORMAT;							// If Date and Time has been determined and stringCheck still has a new word, it is an error
+		}
 		if(dateDayDetermine && dateMonthDetermined && dateYearDetermine)
-			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine;
+			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine; // if components of date are determined, turn dateDetermined as true
 
 
 		if(!dateDetermined){
@@ -1137,8 +1144,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateYearDetermine = true;
 				}
 				else {
-					logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+					strDate = _stringCheck;									//Date Format: Tml, today etc.
+					dateDetermined = true;
 				}
 			}
 			else if(stringLength >= 6 && stringLength < 11){				// Date Format: 1/2/13 == 01/02/2013 || MONTH_FULL_WORD
@@ -1188,8 +1195,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateMonthDetermined = true;
 				}
 				else {
-					logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+					strDate = _stringCheck;									//Date Format: Tomorrow, 
+					dateDetermined = true;
 				}
 			}
 		}
@@ -1205,12 +1212,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					}
 					else{
 						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;				// Time Format: error, 09:00:00AM
 					}
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;					// Time Format: error, 09:00, use 24hr format instead or put AM/PM
 				}
 			}
 			else if(stringCheck.find(TIMER_DOT)!=std::string::npos){
@@ -1223,24 +1230,24 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					}
 					else{
 						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;				// Time Format: error, 09.00.00AM
 					}
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;					// Time Format: error, 09.00, use 24hr format instead or put AM/PM
 				}
 			}
 			else if(stringLength==TIMER_24HR_LENGTH) {
 				int i = 0;
-				bool is24hr = true;
-				while(i<TIMER_24_LENGTH){
+				bool is24hr = stringCheck.find(TIMER_HR)!=std::string::npos;
+				while(i<TIMER_24_LENGTH && is24hr){
 					if(!isdigit(stringCheck[i]))
 						is24hr = false;
 					i++;
 				}
 				if(is24hr){
-					strTime = _stringCheck;
+					strTime = _stringCheck;									// Time Format: 0900hr
 					timeDetermined = true;
 				}
 				else{
