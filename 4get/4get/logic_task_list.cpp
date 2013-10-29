@@ -186,3 +186,35 @@ Task* TaskList::obtainTask(long long taskID, ListType listType){
 	findID(listToFind, taskID, iterator);
 	return (*iterator);
 }
+
+void TaskList::searchList(string searchStr){
+	list<Task*> *listToFilter = determineList(_currentDisplayed);;
+	if(listToFilter->empty())
+		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	int listSize = listToFilter->size();
+	_filteredList.clear();
+	list<Task*>::iterator iterator = listToFilter->begin();
+	for(int i=0; i<listSize; i++){
+		if( (*iterator)->getTaskDescription() == searchStr)
+			_filteredList.push_back(*iterator);
+		else if( (*iterator)->getTaskLocation() == searchStr)
+			_filteredList.push_back(*iterator);
+		++iterator;
+	}
+}
+
+void TaskList::searchList(time_t searchTime){
+		list<Task*> *listToFilter = determineList(_currentDisplayed);;
+	if(listToFilter->empty())
+		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	int listSize = listToFilter->size();
+	_filteredList.clear();
+	list<Task*>::iterator iterator = listToFilter->begin();
+	for(int i=0; i<listSize; i++){
+		if( (*iterator)->getTaskEnd() == searchTime)
+			_filteredList.push_back(*iterator);
+		else if( (*iterator)->getTaskStart() == searchTime)
+			_filteredList.push_back(*iterator);
+		++iterator;
+	}
+}

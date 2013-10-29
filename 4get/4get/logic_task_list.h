@@ -17,6 +17,7 @@ private:
 	list<Task*> _completedList;
 	list<Task*> _overdueList;
 	list<Task*> _listToDisplay;
+	list<Task*> _filteredList;
 	Storage _storage;
 	ListType _currentDisplayed;
 
@@ -51,6 +52,11 @@ public:
 	Task* obtainTask(int indexUI);
 	Task* obtainTask(long long taskID, ListType listType);
 
+	//Search functions
+	void searchList(string searchStr);
+	void searchList(time_t searchTime);
+
+	//Functions used in testing only
 	void setCurrentDisplayed(ListType listType);
 };
 #endif
