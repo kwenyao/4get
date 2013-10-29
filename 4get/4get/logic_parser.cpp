@@ -1059,7 +1059,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 
 
 		if(!dateDetermined){
-			if(stringLength > 0 && stringLength < 3){					// Date Format: 7 or 07  => Date day fragment, expect Date month fragment 
+			if(stringLength > 0 && stringLength < 3 && !dateDayDetermine){					// Date Format: 7 or 07  => Date day fragment, expect Date month fragment 
 				int i = 0;
 				while(i != stringLength){
 					isDigit = isdigit(stringCheck[i]) != 0;
@@ -1199,6 +1199,10 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateDetermined = true;
 				}
 			}
+			else{
+				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+				throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+			}
 		}
 
 		else if(!timeDetermined){
@@ -1264,9 +1268,10 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				timeDetermined = true;
 			}
 		}
-
-
-
+		else{
+			logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+			throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+		}
 		/*
 		else if(stringLength>TIMER_TIME_LOWER_LENGTH && stringLength<TIMER_TIME_UPPER_LENGTH && stringLength!=TIMER_TIME_EXCLUDED_LENGTH){
 		if(stringLength==TIMER_24HR_LENGTH) {
@@ -1295,6 +1300,16 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 	}
 
 	if(dateYearDetermine && !dateMonthDetermined && !dateDayDetermine){
+		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+	}
+
+	if(!dateYearDetermine && dateMonthDetermined && !dateDayDetermine){
+		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+	}
+
+	if(!dateYearDetermine && !dateMonthDetermined && dateDayDetermine){
 		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
 		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 	}
