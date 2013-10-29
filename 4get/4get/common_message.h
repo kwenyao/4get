@@ -1,6 +1,7 @@
 #ifndef _COMMON_MESSAGE_H_
 #define _COMMON_MESSAGE_H_
 #include <iostream>
+#include <vector>
 
 using namespace std;
 namespace Commands{
@@ -190,10 +191,12 @@ namespace Constants{
 	const string TIMER_MONDAY = "monday";
 	const string TIMER_MON = "mon";
 	const string TIMER_TUESDAY = "tuesday";
+	const string TIMER_TUE = "tue";
 	const string TIMER_TUES = "tues";
 	const string TIMER_WEDNESDAY = "wednesday";
 	const string TIMER_WED = "wed";
 	const string TIMER_THURSDAY = "thursday";
+	const string TIMER_THU = "thu";
 	const string TIMER_THURS = "thurs";
 	const string TIMER_FRIDAY = "friday";
 	const string TIMER_FRI = "fri";
@@ -202,6 +205,7 @@ namespace Constants{
 	const string TIMER_SUNDAY = "sunday";
 	const string TIMER_SUN = "sun";
 	const string TIMER_NEXT = "next";
+	const string TIMER_HR = "hr";
 
 	const string MONTH_JANUARY = "january";
 	const string MONTH_JAN = "jan";
