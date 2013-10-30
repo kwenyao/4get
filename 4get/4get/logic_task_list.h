@@ -37,6 +37,10 @@ private:
 	void deleteFromFiltered(int indexUI);
 	long long obtainTaskID(int indexUI, list<Task*> taskList);
 
+	//compare functions for search
+	bool isEqual(long long searchDate, list<Task*>::iterator iterator);
+	bool isEqual(string searchStr, list<Task*>::iterator iterator);
+
 public:
 	TaskList();
 	~TaskList();
@@ -58,7 +62,8 @@ public:
 
 	//Search functions
 	void searchList(string searchStr);
-	void searchList(time_t searchTime);
+	//void searchList(time_t searchTime);
+	void searchList(long long searchDate);
 
 	//Functions used in testing only
 	void setCurrentDisplayed(ListType listType);

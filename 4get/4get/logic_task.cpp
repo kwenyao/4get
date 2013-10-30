@@ -1,8 +1,8 @@
 #include "logic_task.h"
 
-const long long Task::CONVERT_MULTIPLIER_YEAR = 100000000;
-const long long Task::CONVERT_MULTIPLIER_MONTH = 1000000;
-const long long Task::CONVERT_MULTIPLIER_DAY = 10000;
+const long long Task::CONVERT_MULTIPLIER_YEAR = 10000;
+const long long Task::CONVERT_MULTIPLIER_MONTH = 100;
+const long long Task::CONVERT_MULTIPLIER_DAY = 1;
 const long long Task::CONVERT_MULTIPLIER_HOUR = 100;
 
 Task::Task(){

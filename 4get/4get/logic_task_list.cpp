@@ -222,29 +222,65 @@ void TaskList::searchList(string searchStr){
 	_filteredList.clear();
 	list<Task*>::iterator iterator = listToFilter->begin();
 	for(int i=0; i<listSize; i++){
-		if( (*iterator)->getTaskDescription() == searchStr)
-			_filteredList.push_back(*iterator);
-		else if( (*iterator)->getTaskLocation() == searchStr)
+		if(isEqual(searchStr, iterator))
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
 	_isFiltered = true;
 }
 
-void TaskList::searchList(time_t searchTime){
-	list<Task*> *listToFilter = determineList(_currentDisplayed);
-	_actualList = _currentDisplayed;
+//void TaskList::searchList(time_t searchTime){
+//	list<Task*> *listToFilter = determineList(_currentDisplayed);
+//	_actualList = _currentDisplayed;
+//	if(listToFilter->empty())
+//		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+//	int listSize = listToFilter->size();
+//	_filteredList.clear();
+//	list<Task*>::iterator iterator = listToFilter->begin();
+//	for(int i=0; i<listSize; i++){
+//		if( (*iterator)->getTaskEnd() == searchTime)
+//			_filteredList.push_back(*iterator);
+//		else if( (*iterator)->getTaskStart() == searchTime)
+//			_filteredList.push_back(*iterator);
+//		++iterator;
+//	}
+//	_isFiltered = true;
+//}
+
+void TaskList::searchList(long long searchDate){
+	list<Task*>* listToFilter = determineList(_currentDisplayed);
 	if(listToFilter->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	_actualList = _currentDisplayed;
 	int listSize = listToFilter->size();
 	_filteredList.clear();
 	list<Task*>::iterator iterator = listToFilter->begin();
 	for(int i=0; i<listSize; i++){
-		if( (*iterator)->getTaskEnd() == searchTime)
-			_filteredList.push_back(*iterator);
-		else if( (*iterator)->getTaskStart() == searchTime)
+		if(isEqual(searchDate,iterator))
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
 	_isFiltered = true;
+}
+
+bool TaskList::isEqual(long long searchDate, list<Task*>::iterator iterator){
+	long long tempStart;
+	long long tempEnd;
+	tempStart = (*iterator)->getTimeLong(timeStart);
+	tempEnd = (*iterator)->getTimeLong(timeEnd);
+	if(tempEnd == searchDate)
+		return true;
+	else if(tempStart == searchDate)
+		return true;
+	else
+		return false;
+}
+
+bool TaskList::isEqual(string searchStr, list<Task*>::iterator iterator){
+	if( (*iterator)->getTaskDescription() == searchStr)
+		return true;
+	else if( (*iterator)->getTaskLocation() == searchStr)
+		return true;
+	else 
+		return false;
 }
