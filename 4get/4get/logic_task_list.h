@@ -20,6 +20,8 @@ private:
 	list<Task*> _filteredList;
 	Storage _storage;
 	ListType _currentDisplayed;
+	ListType _actualList;
+	bool _isFiltered;
 
 	void clearList(ListType listType);
 
@@ -32,6 +34,8 @@ private:
 	list<Task*>::iterator iterateToTask(list<Task*>& listToEdit, int task);
 	void findID(list<Task*>* listToEdit, long long IDNumber, list<Task*>::iterator& iterator);
 	list<Task*>* determineList(ListType listType);
+	void deleteFromFiltered(int indexUI);
+	long long obtainTaskID(int indexUI, list<Task*> taskList);
 
 public:
 	TaskList();

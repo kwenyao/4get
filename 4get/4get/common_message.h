@@ -81,7 +81,8 @@ namespace Enum{
 	enum ListType{
 		listToDo,
 		listCompleted,
-		listOverdue
+		listOverdue,
+		listFiltered
 	};
 
 	enum RepeatType{

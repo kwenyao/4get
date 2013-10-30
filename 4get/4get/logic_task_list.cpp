@@ -7,6 +7,7 @@ const string TaskList::LOG_TASK_MARKED = "Task marked";
 
 TaskList::TaskList(){
 	loadFromFile();
+	_isFiltered = false;
 }
 
 TaskList::~TaskList(){
@@ -29,9 +30,9 @@ void TaskList::clearList(ListType listType){
 
 void TaskList::loadFromFile(){
 	try{
-	_storage.load(_toDoList, listToDo);
-	_storage.load(_completedList, listCompleted);
-	_storage.load(_overdueList, listOverdue);
+		_storage.load(_toDoList, listToDo);
+		_storage.load(_completedList, listCompleted);
+		_storage.load(_overdueList, listOverdue);
 	} catch (string errorStr){
 		throw;
 	}
@@ -39,9 +40,9 @@ void TaskList::loadFromFile(){
 
 void TaskList::saveAll(){
 	try{
-	_storage.save(_toDoList, listToDo);
-	_storage.save(_completedList, listCompleted);
-	_storage.save(_overdueList, listOverdue);
+		_storage.save(_toDoList, listToDo);
+		_storage.save(_completedList, listCompleted);
+		_storage.save(_overdueList, listOverdue);
 	} catch (string errorStr){
 		throw;
 	}
@@ -60,11 +61,13 @@ bool TaskList::addToList(Task* task, ListType listType){
 }
 
 void TaskList::deleteFromList(int indexUI, bool isDelete){
-	assert(indexUI > 0); 
+	assert(indexUI > 0);
 	list<Task*>* listToDeleteFrom;
 	list<Task*>::iterator iterator;
-	listToDeleteFrom = determineList(_currentDisplayed);
 	try{
+		if(_currentDisplayed = listFiltered)
+			deleteFromFiltered(indexUI;
+		listToDeleteFrom = determineList(_currentDisplayed);
 		if (listToDeleteFrom->empty())
 			throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
 		iterator = iterateToTask(*listToDeleteFrom, indexUI);
@@ -74,9 +77,25 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 		logging(LOG_TASK_DELETED, Info, Pass);
 		_storage.save(*listToDeleteFrom, _currentDisplayed);
 	} catch(string e){
-		cout << e << endl;
 		throw;
 	}
+}
+
+void TaskList::deleteFromFiltered(int indexUI){
+	long long taskID;
+	list<Task*>::iterator iterator;
+	list<Task*>* listToDeleteFrom = determineList(_actualList);
+	try{
+		taskID = obtainTaskID(indexUI, _filteredList);
+		deleteIDFromList(taskID, _actualList, false);
+	} catch(string e){
+		throw;
+	}
+}
+
+long long TaskList::obtainTaskID(int indexUI, list<Task*> taskList){
+	list<Task*>::iterator iterator = iterateToTask(taskList, indexUI);
+	return (*iterator)->getTaskId();
 }
 
 void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete){
@@ -110,6 +129,11 @@ bool TaskList::markDone(int indexUI){
 }
 
 list<Task*> TaskList::obtainList(ListType listToReturn){
+	if(_isFiltered){
+		_isFiltered = false;
+		_currentDisplayed = listFiltered;
+		return _filteredList;
+	}
 	_listToDisplay = *determineList(listToReturn);
 	_currentDisplayed = listToReturn;
 	return _listToDisplay;
@@ -170,6 +194,8 @@ list<Task*>* TaskList::determineList(ListType listType){
 		return &_completedList;
 	case listOverdue:
 		return &_overdueList;
+	case listFiltered:
+		return &_filteredList;
 	default:
 		return &_toDoList;
 	}
@@ -188,7 +214,8 @@ Task* TaskList::obtainTask(long long taskID, ListType listType){
 }
 
 void TaskList::searchList(string searchStr){
-	list<Task*> *listToFilter = determineList(_currentDisplayed);;
+	list<Task*> *listToFilter = determineList(_currentDisplayed);
+	_actualList = _currentDisplayed;
 	if(listToFilter->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
 	int listSize = listToFilter->size();
@@ -201,10 +228,12 @@ void TaskList::searchList(string searchStr){
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
+	_isFiltered = true;
 }
 
 void TaskList::searchList(time_t searchTime){
-		list<Task*> *listToFilter = determineList(_currentDisplayed);;
+	list<Task*> *listToFilter = determineList(_currentDisplayed);
+	_actualList = _currentDisplayed;
 	if(listToFilter->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
 	int listSize = listToFilter->size();
@@ -217,4 +246,5 @@ void TaskList::searchList(time_t searchTime){
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
+	_isFiltered = true;
 }
