@@ -66,7 +66,7 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 	list<Task*>::iterator iterator;
 	try{
 		if(_currentDisplayed = listFiltered)
-			deleteFromFiltered(indexUI;
+			deleteFromFiltered(indexUI);
 		listToDeleteFrom = determineList(_currentDisplayed);
 		if (listToDeleteFrom->empty())
 			throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
@@ -148,16 +148,16 @@ Task* TaskList::obtainTask(int indexUI){
 }
 
 list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* taskToAdd){
-	long long tempTime;
+	time_t tempTime;
 	bool isEmpty = insertionList.empty();
-	long long taskEndTime = taskToAdd->getTimeLong(timeEnd);
+	time_t taskEndTime = taskToAdd->getTaskEnd();
 	list<Task*>::iterator iterator = insertionList.begin();
 	if(isEmpty){
 		return iterator;
 	}
 	int listSize = insertionList.size();
 	for(int i=0; i<listSize; i++){
-		tempTime = (*iterator)->getTimeLong(timeEnd);
+		tempTime = (*iterator)->getTaskEnd();
 		if(tempTime > taskEndTime)
 			return iterator;
 		++iterator;

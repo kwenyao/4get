@@ -65,8 +65,11 @@ namespace Message{
 	const string MESSAGE_ERROR_WRONG_DATE = "Error: No such date exists";
 	const string MESSAGE_ERROR_WRONG_MONTH = "Error: No such month exists";
 	const string MESSAGE_ERROR_INVALID_TASKTYPE = "Error: Type of task do not exist.";
-
-	//error messages
+	const string MESSAGE_ERROR_INVALID_YEAR = "Error: Year input is invalid.";
+	const string MESSAGE_ERROR_INVALID_MONTH = "Error: Month input is invalid.";
+	const string MESSAGE_ERROR_INVALID_DAY = "Error: Day input is invalid.";
+	const string MESSAGE_ERROR_START_AFTER_END = "Error: Start time is before end time.";
+	const string MESSAGE_ERROR_NO_END_TIME = "Error: Please enter end time for task.";
 	const string MESSAGE_SUCCESS_PARSED = "Input has been parsed.";
 
 };

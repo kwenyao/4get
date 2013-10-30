@@ -81,6 +81,9 @@ const int Converter::MONTH_NUMBER_DEC = 12;
 
 const int Converter::TIME_SPECIFIER_LENGTH = 2;
 const int Converter::TIME_PM_CORRECTION = 12;
+const int Converter::YEAR_INT_MULTIPLIER = 10000;
+const int Converter::MONTH_INT_MULTIPLIER = 100;
+const int Converter::DAY_INT_MULTIPLIER = 1;
 const string Converter::DATE_DELIMITER = "/-";
 const string Converter::TIME_DELIMITER = ":.";
 
@@ -173,6 +176,23 @@ bool Converter::isEqual(string string1, const string string2){
 	return false;
 }
 
+long long Converter::convertDateToInt(string dateStr){
+	assert(!dateStr.empty());
+	int year = 0;
+	int month = 0;
+	int day = 0;
+	int hour = 0;
+	int min = 0;
+	long long timeInt;
+	time_t returnTime = 0;
+	extractDate(dateStr, year, month, day);
+	year = year * YEAR_INT_MULTIPLIER;
+	month = month * MONTH_INT_MULTIPLIER;
+	day = day * DAY_INT_MULTIPLIER;
+	timeInt = year + month + day;
+	return timeInt;
+}
+
 time_t Converter::convertStringToTime(string dateStr, string timeStr){
 	int year = 0;
 	int month = 0;
@@ -214,7 +234,7 @@ TaskType Converter::convertStringToTime(string startDate,
 	if(isNoStartDate && isNoStartTime && isNoEndDate &&isNoEndTime)
 		return floating;
 	if(isNoEndDate && isNoEndTime)
-		return taskInvalid;
+		throw string(Message::MESSAGE_ERROR_NO_END_TIME);
 
 	getDate(isNoEndDate, endYear, endMonth, endDay, endDate);
 	getEndTime(isNoEndTime, endHour, endMin, endTime);
@@ -230,7 +250,7 @@ TaskType Converter::convertStringToTime(string startDate,
 	if(difftime(returnEnd, returnStart) > 0)
 		return timed;
 	else
-		return taskInvalid;
+		throw string(Message::MESSAGE_ERROR_START_AFTER_END);
 }
 
 void Converter::getDate(bool isNoDate, int& year, int& month, int& day, string dateStr){
@@ -280,8 +300,10 @@ int Converter::getToday(DateType dateType){
 	time(&temp);
 	localtime_s(&currentTime,&temp);
 	switch (dateType){
-	case Converter::dayEnum:
+	case Converter::weekDayEnum:
 		return currentTime.tm_wday;
+	case Converter::monthDayEnum:
+		return currentTime.tm_mday;
 	case Converter::monthEnum:
 		return currentTime.tm_mon;
 	case Converter::yearEnum:
@@ -306,15 +328,36 @@ void Converter::extractDate(string dateStr, int& year, int& month, int& day){
 	int index;
 	int dayDigit = 0, yearDigit = 0;
 	bool isWordFormat = determineFormat(dateEnum, dateStr, index, dayDigit, yearDigit);
-	if(isWordFormat){
-		determineDate(index, dayDigit, yearDigit, year, month, day);
+	try{
+		if(isWordFormat){
+			determineDate(index, dayDigit, yearDigit, year, month, day);
+		}
+		else{
+			splitString(dateStr, DATE_DELIMITER, dateVector);
+			declareDate(dateVector, year, month, day);
+		}
+		if(year < YEAR_21_CENTURY)
+			year = year + YEAR_21_CENTURY;
+		verifyDate(year,month,day);
+	} catch (string errStr){
+		throw;
 	}
-	else{
-		splitString(dateStr, DATE_DELIMITER, dateVector);
-		declareDate(dateVector, year, month, day);
-	}
-	if(year < YEAR_21_CENTURY)
-		year = year + YEAR_21_CENTURY;
+}
+
+bool Converter::verifyDate(int year, int month, int day){
+	int todayYear = getToday(yearEnum);
+	int todayMonth = getToday(monthEnum);
+	int todayDay = getToday(monthDayEnum);
+	bool isYearEqual = todayYear == year;
+	bool isMonthEqual = todayMonth == month;
+	if(year < todayYear)
+		throw string(Message::MESSAGE_ERROR_INVALID_YEAR);
+	else if(isYearEqual && month<todayMonth)
+		throw string(Message::MESSAGE_ERROR_INVALID_MONTH);
+	else if(isYearEqual && isMonthEqual && day<todayDay)
+		throw string(Message::MESSAGE_ERROR_INVALID_DAY);
+	else
+		return true;
 }
 
 void Converter::determineDate(int index, int dayDigit, int yearDigit, int& year, int& month, int& day){
@@ -372,7 +415,7 @@ void Converter::monthCorrection(int index, int dayDigit, int yearDigit, int& yea
 }
 
 void Converter::dayCorrection(int index, int& year, int& month, int& day){
-	int dayToday = getToday(dayEnum);
+	int dayToday = getToday(weekDayEnum);
 	int correction;
 	if( index >= INDEX_TOMORROW_START && index <= INDEX_TOMORROW_END)
 		correction = 1;
@@ -464,7 +507,6 @@ time_t Converter::createTime(int year, int month, int day, int hour, int min){
 	time.tm_hour=hour;
 	time.tm_min=min;
 	returnTime = mktime(&time);
-	cout << "Converter time_t:" << returnTime;
 	return returnTime;
 }
 

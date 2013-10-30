@@ -7,6 +7,7 @@
 #include <chrono>
 #include <vector>
 #include <cctype>
+#include <assert.h>
 
 using namespace std;
 using namespace Enum;
@@ -25,7 +26,8 @@ private:
 	};
 
 	enum DateType{
-		dayEnum,
+		weekDayEnum,
+		monthDayEnum,
 		monthEnum,
 		yearEnum
 	};
@@ -118,6 +120,9 @@ private:
 	static const int MONTH_NUMBER_DEC;
 	static const int TIME_SPECIFIER_LENGTH;
 	static const int TIME_PM_CORRECTION;
+	static const int YEAR_INT_MULTIPLIER;
+	static const int MONTH_INT_MULTIPLIER;
+	static const int DAY_INT_MULTIPLIER;
 	static const string DATE_DELIMITER;
 	static const string TIME_DELIMITER;
 
@@ -149,6 +154,7 @@ private:
 	void extractDate(string dateStr, int& year, int& month, int& day);
 	void extractTime(string timeStr, int& hour, int& min);
 
+	bool verifyDate(int year, int month, int day);
 	time_t createTime(int year, int month, int day, int hour, int min);
 
 	void splitString(string str, const string delimiter, vector<string>& strVector);
@@ -162,6 +168,7 @@ public:
 	int convertStringToInt(string);
 	RepeatType convertStringToRepeatType(string);
 	Priority convertStringToPriority(string);
+	long long convertDateToInt(string dateStr);
 	bool convertStringToTime(string timeStr, time_t returnTime);
 	time_t convertStringToTime(string dateStr, string timeStr);
 	TaskType convertStringToTime(string startDate, 
