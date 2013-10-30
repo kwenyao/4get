@@ -53,11 +53,13 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
 	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
 	const string MESSAGE_ERROR_COMMAND_QUERY = "System was unable to process your query.";
-	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
+	
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
 	const string MESSAGE_ERROR_NO_DESCRIPTION = "Error: No description indicated";
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
+	
+	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
 	const string MESSAGE_ERROR_WRONG_DATE_FORMAT ="Error: Wrong date format.";
@@ -68,10 +70,12 @@ namespace Message{
 	const string MESSAGE_ERROR_INVALID_YEAR = "Error: Year input is invalid.";
 	const string MESSAGE_ERROR_INVALID_MONTH = "Error: Month input is invalid.";
 	const string MESSAGE_ERROR_INVALID_DAY = "Error: Day input is invalid.";
+	const string MESSAGE_ERROR_MISSING_DAY = "Error: Missing day of the month";
+
 	const string MESSAGE_ERROR_START_AFTER_END = "Error: Start time is before end time.";
 	const string MESSAGE_ERROR_NO_END_TIME = "Error: Please enter end time for task.";
-	const string MESSAGE_SUCCESS_PARSED = "Input has been parsed.";
 
+	const string MESSAGE_SUCCESS_PARSED = "Input has been parsed.";
 };
 
 namespace Enum{

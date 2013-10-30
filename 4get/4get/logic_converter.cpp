@@ -178,19 +178,21 @@ bool Converter::isEqual(string string1, const string string2){
 
 long long Converter::convertDateToInt(string dateStr){
 	assert(!dateStr.empty());
-	int year = 0;
+	int year  = 0;
 	int month = 0;
-	int day = 0;
-	int hour = 0;
-	int min = 0;
+	int day   = 0;
 	long long timeInt;
 	time_t returnTime = 0;
-	extractDate(dateStr, year, month, day);
-	year = year * YEAR_INT_MULTIPLIER;
-	month = month * MONTH_INT_MULTIPLIER;
-	day = day * DAY_INT_MULTIPLIER;
-	timeInt = year + month + day;
-	return timeInt;
+	try{
+		extractDate(dateStr, year, month, day);
+		year = year * YEAR_INT_MULTIPLIER;
+		month = month * MONTH_INT_MULTIPLIER;
+		day = day * DAY_INT_MULTIPLIER;
+		timeInt = year + month + day;
+		return timeInt;
+	} catch(string errStr){
+		throw;
+	}
 }
 
 time_t Converter::convertStringToTime(string dateStr, string timeStr){
@@ -219,17 +221,17 @@ TaskType Converter::convertStringToTime(string startDate,
 										time_t& returnStart, 
 										time_t& returnEnd)
 {
-	int startYear=0,  endYear=0;
-	int startMonth=0, endMonth=0;
-	int startDay=0,   endDay=0;
-	int startHour=0,  endHour=0;
-	int startMin=0,   endMin=0;
+	int startYear  = 0, endYear  = 0;
+	int startMonth = 0, endMonth = 0;
+	int startDay   = 0, endDay   = 0;
+	int startHour  = 0, endHour  = 0;
+	int startMin   = 0, endMin   = 0;
 	bool isNoStartDate = startDate.empty();
 	bool isNoStartTime = startTime.empty();
 	bool isNoEndDate   = endDate.empty();
 	bool isNoEndTime   = endTime.empty();
 	returnStart = 0;
-	returnEnd = 0;
+	returnEnd   = 0;
 
 	if(isNoStartDate && isNoStartTime && isNoEndDate &&isNoEndTime)
 		return floating;
@@ -305,7 +307,7 @@ int Converter::getToday(DateType dateType){
 	case Converter::monthDayEnum:
 		return currentTime.tm_mday;
 	case Converter::monthEnum:
-		return currentTime.tm_mon;
+		return (currentTime.tm_mon + MONTH_CORRECTION);
 	case Converter::yearEnum:
 		return (currentTime.tm_year + YEAR_CORRECTION);
 	default:
@@ -361,16 +363,19 @@ bool Converter::verifyDate(int year, int month, int day){
 }
 
 void Converter::determineDate(int index, int dayDigit, int yearDigit, int& year, int& month, int& day){
-	if(index < INDEX_JAN_START)
-		dayCorrection(index, year, month, day);
-	else if(index > INDEX_SUNDAY_END && index < INDEX_DEC_END)
-		monthCorrection(index, dayDigit, yearDigit, year, month, day);
-	else
-		throw string(Message::MESSAGE_ERROR_WRONG_DATE);
+	try{
+		if(index < INDEX_JAN_START)
+			dayCorrection(index, year, month, day);
+		else if(index > INDEX_SUNDAY_END && index < INDEX_DEC_END)
+			monthCorrection(index, dayDigit, yearDigit, year, month, day);
+		else
+			throw string(Message::MESSAGE_ERROR_WRONG_DATE);
+	} catch(string errStr) {
+		throw;
+	}
 }
 
 void Converter::monthCorrection(int index, int dayDigit, int yearDigit, int& year, int& month, int& day){
-	int monthToday = getToday(monthEnum);
 	if(index >= INDEX_JAN_START && index <= INDEX_JAN_END){
 		month = MONTH_NUMBER_JAN;
 	}
@@ -407,8 +412,12 @@ void Converter::monthCorrection(int index, int dayDigit, int yearDigit, int& yea
 	else if(index >= INDEX_DEC_START && index <= INDEX_DEC_END){
 		month = MONTH_NUMBER_DEC;
 	}
-	day = dayDigit;
-	if(year != 0)
+	if(dayDigit < 1)
+		throw string(Message::MESSAGE_ERROR_MISSING_DAY);
+	else
+		day = dayDigit;
+
+	if(yearDigit != 0)
 		year = yearDigit;
 	else
 		year = getToday(yearEnum);
