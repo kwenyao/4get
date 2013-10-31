@@ -65,7 +65,7 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 	list<Task*>* listToDeleteFrom;
 	list<Task*>::iterator iterator;
 	try{
-		if(_currentDisplayed = listFiltered)
+		if(_currentDisplayed == listFiltered)
 			deleteFromFiltered(indexUI);
 		listToDeleteFrom = determineList(_currentDisplayed);
 		if (listToDeleteFrom->empty())
