@@ -47,6 +47,7 @@ long long TaskDeadline::getTimeLong(TimeType type){
 	default:
 		return 0;
 	}
+	return convertToLong(temp);
 }
 
 long long TaskDeadline::convertToLong(time_t rawTime){
@@ -58,10 +59,10 @@ long long TaskDeadline::convertToLong(time_t rawTime){
 	long long day = time->tm_mday;
 	long long month = time->tm_mon;
 	long long year = time->tm_year + YEAR_CORRECTION;
-	hour = hour*CONVERT_MULTIPLIER_HOUR;
+	//hour = hour*CONVERT_MULTIPLIER_HOUR;
 	day = day*CONVERT_MULTIPLIER_DAY;
 	month = month*CONVERT_MULTIPLIER_MONTH;
 	year = year*CONVERT_MULTIPLIER_YEAR;
-	yearMonthDayHourMin = (year + month + day + hour + min);
+	yearMonthDayHourMin = (year + month + day);
 	return yearMonthDayHourMin;
 }

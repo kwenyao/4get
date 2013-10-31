@@ -49,4 +49,5 @@ long long TaskTimed::getTimeLong(TimeType type){
 	default:
 		return 0;
 	}
+	return convertToLong(temp);
 }
