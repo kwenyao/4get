@@ -59,6 +59,7 @@ namespace Message{
 	const string MESSAGE_ERROR_NO_DESCRIPTION = "Error: No description indicated";
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
 	
+	const string MESSAGE_ERROR_EMPTY_INPUT = "Error: Input is empty";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";

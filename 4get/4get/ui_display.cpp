@@ -367,8 +367,8 @@ void ui_display::passUserInput(){
 			throw MESSAGE_ERROR_COMMAND_QUERY;
 		}
 	}
-	catch(string error){
-		this->printError(error);
+	catch(string& error){
+		throw error;
 	}
 }
 
@@ -391,7 +391,7 @@ void ui_display::printList(){
 			throw MESSAGE_ERROR_INVALID_LIST;
 		}
 	}
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 }
@@ -425,7 +425,7 @@ void ui_display::printToDoList(){
 		this->Cursor = Cursors::Default;
 		this->todoListView->EndUpdate();
 	}
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 	this->todoListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -462,7 +462,7 @@ void ui_display::printCompletedList(){
 		this->Cursor = Cursors::Default;
 		this->completedListView->EndUpdate();
 	}
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 	this->completedListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -500,7 +500,7 @@ void ui_display::printOverdueList(){
 		this->overdueListView->EndUpdate();
 	}
 
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 	this->overdueListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -588,7 +588,7 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 		*listOfTasks = execute->getUpdatedList(activeListType);
 		this->printList();
 	}
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 }
@@ -610,19 +610,25 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 			this->printList();
 		}
 		else if(e->KeyCode == Keys::Back){
-			if(this->textboxInput->Text==""){
+
+			if(this->textboxInput->Text->Length <= 1){
 				this->printHelpMessage();
 			}
-			commandKeyword->clear();
-			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
-			commandKeyword->pop_back();
-			this->checkInput();
+			else{
+				commandKeyword->clear();
+				converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
+				if(commandKeyword->empty()){
+					throw MESSAGE_ERROR_EMPTY_INPUT;
+				}
+				commandKeyword->pop_back();
+				this->checkInput();
+			}
 		}
 		else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
 			focusItem();
 		}
 	}
-	catch(string error){
+	catch(string& error){
 		this->printError(error);
 	}
 }
