@@ -80,7 +80,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="backgroundworker.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="logic_converter.cpp" />
     <ClCompile Include="logic_executor.cpp" />
@@ -96,7 +95,6 @@
     <ClCompile Include="ui_display.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="backgroundworker.h" />
     <ClInclude Include="common_message.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="logic_converter.h" />

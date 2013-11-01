@@ -54,9 +54,6 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
-	this->todayContainer = (gcnew System::Windows::Forms::GroupBox());
-	this->checkedTaskList = (gcnew System::Windows::Forms::CheckedListBox());
-	this->chooseDate = (gcnew System::Windows::Forms::DateTimePicker());
 	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
@@ -64,7 +61,6 @@ void ui_display::InitializeComponent(void){
 	this->tabOverdue->SuspendLayout();
 	this->inputContainer->SuspendLayout();
 	this->messageContainer->SuspendLayout();
-	this->todayContainer->SuspendLayout();
 	this->SuspendLayout();
 	// 
 	// tabContainer
@@ -283,7 +279,7 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
-	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);
+	/*this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);*/
 	// 
 	// messageContainer
 	// 
@@ -304,39 +300,8 @@ void ui_display::InitializeComponent(void){
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
 	// 
-	// todayContainer
-	// 
-	this->todayContainer->BackColor = System::Drawing::SystemColors::InactiveCaptionText;
-	this->todayContainer->Controls->Add(this->checkedTaskList);
-	this->todayContainer->Controls->Add(this->chooseDate);
-	this->todayContainer->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-	this->todayContainer->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-	this->todayContainer->Location = System::Drawing::Point(15, 261);
-	this->todayContainer->Name = L"todayContainer";
-	this->todayContainer->Size = System::Drawing::Size(349, 194);
-	this->todayContainer->TabIndex = 4;
-	this->todayContainer->TabStop = false;
-	this->todayContainer->Text = L"Tasks For";
-	// 
-	// checkedTaskList
-	// 
-	this->checkedTaskList->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->checkedTaskList->FormattingEnabled = true;
-	this->checkedTaskList->Location = System::Drawing::Point(6, 42);
-	this->checkedTaskList->Name = L"checkedTaskList";
-	this->checkedTaskList->Size = System::Drawing::Size(337, 135);
-	this->checkedTaskList->TabIndex = 1;
-	// 
-	// chooseDate
-	// 
-	this->chooseDate->Location = System::Drawing::Point(6, 16);
-	this->chooseDate->Name = L"chooseDate";
-	this->chooseDate->Size = System::Drawing::Size(337, 20);
-	this->chooseDate->TabIndex = 0;
-	// 
 	// notifyIcon1
 	// 
-	this->notifyIcon1->Icon = gcnew System::Drawing::Icon("favicon.ico");
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
 	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
@@ -347,7 +312,6 @@ void ui_display::InitializeComponent(void){
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackColor = System::Drawing::Color::Black;
 	this->ClientSize = System::Drawing::Size(1075, 543);
-	this->Controls->Add(this->todayContainer);
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
@@ -367,7 +331,6 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer->ResumeLayout(false);
 	this->inputContainer->PerformLayout();
 	this->messageContainer->ResumeLayout(false);
-	this->todayContainer->ResumeLayout(false);
 	this->ResumeLayout(false);
 
 }
@@ -397,12 +360,17 @@ void ui_display::printError(string error){
 }
 
 void ui_display::passUserInput(){
-	string stdCommand;
-	converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-	execute->stringCollector(stdCommand);	
+	try{
+		string stdCommand;
+		converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
+		if(execute->stringCollector(stdCommand)){
+			throw MESSAGE_ERROR_COMMAND_QUERY;
+		}
+	}
+	catch(string error){
+		this->printError(error);
+	}
 }
-
-
 
 void ui_display::printList(){
 	try{
@@ -543,7 +511,48 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
 		this->tabContainer->SelectedIndex = nextPage;
 	}
+	else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
+		this->focusItem();
+	}
 }
+
+void ui_display::focusItem(){
+	switch(activeListType){
+	case listCompleted:
+		focusCompletedItem();
+		break;
+	case listOverdue:
+		focusOverdueItem();
+		break;
+	case listToDo:
+		focusToDoItem();
+		break;
+	default:
+		throw MESSAGE_ERROR_INVALID_LIST;
+	}
+}
+void ui_display::focusCompletedItem(){
+	if(completedListView->Items->Count > 0){
+		if(SetFocus(completedListView)){
+			completedListView->Items[0]->Selected = true;
+		}
+	}
+}
+void ui_display::focusOverdueItem(){
+	if(overdueListView->Items->Count > 0){
+		if(SetFocus(overdueListView)){
+			overdueListView->Items[0]->Selected = true;
+		}
+	}
+}
+void ui_display::focusToDoItem(){
+	if(todoListView->Items->Count > 0){
+		if(SetFocus(todoListView)){
+			todoListView->Items[0]->Selected = true;
+		}
+	}
+}
+
 Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
@@ -585,29 +594,8 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 }
 Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(commandKeyword->size() < 3){
-		switch(e->KeyChar){
-		case 'a':
-			*commandKeyword += 'a';
-			break;
-		case 'd':
-			*commandKeyword += 'd';
-			break;
-		case 'e':
-			*commandKeyword += 'e';
-			break;
-		case 'l':
-			*commandKeyword += 'l';
-			break;
-		case 'm':
-			*commandKeyword += 'm';
-			break;
-		case 'o':
-			*commandKeyword += 'o';
-			break;
-		case 'r':
-			*commandKeyword += 'r';
-			break;
-		};
+		commandKeyword->clear();
+		converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
 	}
 	this->checkInput();
 }
@@ -618,19 +606,20 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 			commandKeyword->clear();
 			this->printHelpMessage();
 			this->passUserInput();
-
 			this->textboxInput->Clear();
 			this->printList();
 		}
 		else if(e->KeyCode == Keys::Back){
 			if(this->textboxInput->Text==""){
 				this->printHelpMessage();
-				return;
 			}
 			commandKeyword->clear();
 			converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
 			commandKeyword->pop_back();
 			this->checkInput();
+		}
+		else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
+			focusItem();
 		}
 	}
 	catch(string error){

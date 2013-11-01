@@ -47,44 +47,17 @@ namespace UIDisplay {
 
 
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	private: System::Windows::Forms::RichTextBox^  messageBox;
 
-
-
-	private: System::Windows::Forms::GroupBox^  todayContainer;
-	private: System::Windows::Forms::CheckedListBox^  checkedTaskList;
-	private: System::Windows::Forms::DateTimePicker^  chooseDate;
-
-
-
-
-
-
-
-
+	//to do list view
 	private: System::Windows::Forms::ListView^  todoListView;
 	private: System::Windows::Forms::ColumnHeader^  tIndex;
-
 	private: System::Windows::Forms::ColumnHeader^  tDescription;
 	private: System::Windows::Forms::ColumnHeader^  tVenue;
 	private: System::Windows::Forms::ColumnHeader^  tTime;
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
 	private: System::Windows::Forms::ColumnHeader^  tPriority;
+	//completed list view
 	private: System::Windows::Forms::ListView^  completedListView;
 	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
@@ -92,12 +65,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  cTime;
 	private: System::Windows::Forms::ColumnHeader^  cDueDate;
 	private: System::Windows::Forms::ColumnHeader^  cPriority;
-
-
-
-
-
-
+	//overdue list view
 	private: System::Windows::Forms::ListView^  overdueListView;
 	private: System::Windows::Forms::ColumnHeader^  oIndex;
 	private: System::Windows::Forms::ColumnHeader^  oDescription;
@@ -105,6 +73,7 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ColumnHeader^  oTime;
 	private: System::Windows::Forms::ColumnHeader^  oDueDate;
 	private: System::Windows::Forms::ColumnHeader^  oPriority;
+
 	private: System::Windows::Forms::NotifyIcon^  notifyIcon1;
 	private: System::ComponentModel::IContainer^  components;
 
@@ -212,7 +181,11 @@ namespace UIDisplay {
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-private: System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
-private: System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
+	private: void focusItem();
+	private: void focusToDoItem();
+	private: void focusCompletedItem();
+	private: void focusOverdueItem();
 };
 }
