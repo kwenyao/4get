@@ -54,24 +54,8 @@ const std::size_t Parser::MARKER_INCOMPLETE_LENGTH = 10;
 
 Parser::Parser()
 {
-	textInput = INITIALIZE_STRING_BLANK;
-	_textInput = INITIALIZE_STRING_BLANK;
-	textCommand = INITIALIZE_STRING_BLANK;
-	textDescription = INITIALIZE_STRING_BLANK;
-	textVenue = INITIALIZE_STRING_BLANK;
-	textStart = INITIALIZE_STRING_BLANK;
-	textStartDate = INITIALIZE_STRING_BLANK;
-	textStartTime = INITIALIZE_STRING_BLANK;
-	textEnd = INITIALIZE_STRING_BLANK;
-	textEndDate = INITIALIZE_STRING_BLANK;
-	textEndTime = INITIALIZE_STRING_BLANK;
-	textRepeat = INITIALIZE_STRING_BLANK;
-	textPriority = INITIALIZE_STRING_BLANK;
-	//textStatus = INITIALIZE_STRING_BLANK;
-	textRemind = INITIALIZE_STRING_BLANK;
-	textRemindDate = INITIALIZE_STRING_BLANK;
-	textRemindTime = INITIALIZE_STRING_BLANK;
-	textSlotNumber = INITIALIZE_STRING_BLANK;
+	parseReset();
+	loadDictionary();
 }
 void Parser::parseReset()
 {
@@ -1079,6 +1063,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				else													
 					strDate = _stringCheck;								// Date Format: DD
 				dateDayDetermine = true;
+				continue;
 			}
 			else if(stringLength >= 3 && stringLength < 6) {				// Date Format: 1/2 || 01/02 || 1/2/3 || MONTH_SHORT_WORD || YYYY
 				if(stringCheck.find(TIMER_SLASH)!=std::string::npos){	
@@ -1088,10 +1073,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1/2/3 => Unusual representation of date, but implies 1st Feb 2003. 
 							dateDetermined = true;
+							continue;
 						}
 						else{
 							strDate = _stringCheck;							// Date Format: 1/2 == 01/02 => year is implied to be current year and ommited. 
 							dateDetermined = true;
+							continue;
 						}
 					}
 				}
@@ -1102,14 +1089,16 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1-2-3 => Unusual representation of date, but implies 1st Feb 2003. 
 							dateDetermined = true;
+							continue;
 						}
 						else{
 							strDate = _stringCheck;							// Date Format: 1-2 == 01-02 => year is implied to be current year and ommited. 
 							dateDetermined = true;
+							continue;
 						}
 					}
 				}
-				else if (stringLength < 5 && isalpha(stringCheck.front())){								// Date Format: May or Sept  => Date month fragment, expect Date day fragment
+				else if (stringLength < 5 && scanMonthDictionary(stringCheck)){								// Date Format: May or Sept  => Date month fragment, expect Date day fragment
 					int i = 0;
 					while(i != stringLength){
 						isChar = isalpha(stringCheck[i]) != 0;
@@ -1125,6 +1114,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					else												
 						strDate = _stringCheck;							// Date Format: MONTH
 					dateMonthDetermined = true;
+					continue;
 				}
 				else if(stringLength == 4 && isdigit(stringCheck.front())){
 					int i = 0;
@@ -1142,10 +1132,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					else													
 						strDate = _stringCheck;								// Date Format: YYYY
 					dateYearDetermine = true;
+					continue;
 				}
-				else {
+				else if(scanDatesDictionary(stringCheck)){
 					strDate = _stringCheck;									//Date Format: Tml, today etc.
 					dateDetermined = true;
+					continue;
 				}
 			}
 			else if(stringLength >= 6 && stringLength < 11){				// Date Format: 1/2/13 == 01/02/2013 || MONTH_FULL_WORD
@@ -1156,6 +1148,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1/2/13 => Shorter representation of date with year
 							dateDetermined = true;
+							continue;
 						}
 						else{
 							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
@@ -1170,6 +1163,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1-2-13 => Shorter representation of date
 							dateDetermined = true;
+							continue;
 						}
 						else{
 							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
@@ -1177,7 +1171,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						}
 					}
 				}
-				else if (stringLength < 10){								// Date Format: January or September  => Date month fragment, expect Date day fragment
+				else if (stringLength < 10 && scanMonthDictionary(stringCheck)){								// Date Format: January or September  => Date month fragment, expect Date day fragment
 					int i = 0;
 					while(i != stringLength){
 						isChar = isalpha(stringCheck[i]) != 0;
@@ -1193,26 +1187,30 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					else												
 						strDate = _stringCheck;							// Date Format: MONTH
 					dateMonthDetermined = true;
+					continue;
 				}
-				else {
+				else if(scanDatesDictionary(stringCheck)){
 					strDate = _stringCheck;									//Date Format: Tomorrow, 
 					dateDetermined = true;
+					continue;
 				}
 			}
 			else{
 				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
 				throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 			}
+			
 		}
 
-		else if(!timeDetermined){
+		if(!timeDetermined){
 			if(stringCheck.find(TIMER_COLON)!=std::string::npos){
-				if(stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
+				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos){
 					foundLeft = stringCheck.find(TIMER_COLON);
 					foundRight = stringCheck.rfind(TIMER_COLON);
 					if(foundLeft==foundRight){
 						strTime = _stringCheck;								// Time Format: 09:00AM
 						timeDetermined = true;
+						continue;
 					}
 					else{
 						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
@@ -1225,12 +1223,13 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				}
 			}
 			else if(stringCheck.find(TIMER_DOT)!=std::string::npos){
-				if(stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
+				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos){
 					foundLeft = stringCheck.find(TIMER_DOT);
 					foundRight = stringCheck.rfind(TIMER_DOT);
 					if(foundLeft==foundRight){
 						strTime = _stringCheck;								// Time Format: 09.00AM
 						timeDetermined = true;
+						continue;
 					}
 					else{
 						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
@@ -1253,6 +1252,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				if(is24hr){
 					strTime = _stringCheck;									// Time Format: 0900hr
 					timeDetermined = true;
+					continue;
 				}
 				else{
 					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
@@ -1263,9 +1263,10 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 				throw MESSAGE_ERROR_WRONG_FORMAT;									// Time Format : Cannot be 10 PM => only 10PM works
 			}
-			else if((stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
+			else if((stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
 				strTime = _stringCheck;
 				timeDetermined = true;
+				continue;
 			}
 		}
 		else{
@@ -1315,4 +1316,204 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 	}
 
 	return true;
+}
+
+void Parser::loadDictionary()
+{
+	loadCommandDictionary();
+	loadDateDictionary();
+	loadTimeDictionary();
+	loadMonthDictionary();
+	loadMarkerDictionary();
+}
+void Parser::loadDateDictionary()
+{
+	dictionaryDates.push_back(TIMER_MON);
+	dictionaryDates.push_back(TIMER_MONDAY);
+	dictionaryDates.push_back(TIMER_TUE);
+	dictionaryDates.push_back(TIMER_TUES);
+	dictionaryDates.push_back(TIMER_TUESDAY);
+	dictionaryDates.push_back(TIMER_WED);
+	dictionaryDates.push_back(TIMER_WEDNESDAY);
+	dictionaryDates.push_back(TIMER_THU);
+	dictionaryDates.push_back(TIMER_THUR);
+	dictionaryDates.push_back(TIMER_THURS);
+	dictionaryDates.push_back(TIMER_THURSDAY);
+	dictionaryDates.push_back(TIMER_FRI);
+	dictionaryDates.push_back(TIMER_FRIDAY);
+	dictionaryDates.push_back(TIMER_SAT);
+	dictionaryDates.push_back(TIMER_SATURDAY);
+	dictionaryDates.push_back(TIMER_SUN);
+	dictionaryDates.push_back(TIMER_SUNDAY);
+	dictionaryDates.push_back(TIMER_TML);
+	dictionaryDates.push_back(TIMER_TMR);
+	dictionaryDates.push_back(TIMER_TMRW);
+	dictionaryDates.push_back(TIMER_TOMORROW);
+	dictionaryDates.push_back(TIMER_NEXT);
+	dictionaryDates.push_back(TIMER_LATER);
+	dictionaryDates.push_back(TIMER_TODAY);
+
+	
+}
+void Parser::loadMonthDictionary()
+{
+	dictionaryMonth.push_back(MONTH_JAN);
+	dictionaryMonth.push_back(MONTH_JANUARY);
+	dictionaryMonth.push_back(MONTH_FEB);
+	dictionaryMonth.push_back(MONTH_FEBRUARY);
+	dictionaryMonth.push_back(MONTH_MAR);
+	dictionaryMonth.push_back(MONTH_MARCH);
+	dictionaryMonth.push_back(MONTH_APR);
+	dictionaryMonth.push_back(MONTH_APRIL);
+	dictionaryMonth.push_back(MONTH_MAY);
+	dictionaryMonth.push_back(MONTH_JUN);
+	dictionaryMonth.push_back(MONTH_JUNE);
+	dictionaryMonth.push_back(MONTH_JUL);
+	dictionaryMonth.push_back(MONTH_JULY);
+	dictionaryMonth.push_back(MONTH_AUG);
+	dictionaryMonth.push_back(MONTH_AUGUST);
+	dictionaryMonth.push_back(MONTH_SEP);
+	dictionaryMonth.push_back(MONTH_SEPT);
+	dictionaryMonth.push_back(MONTH_SEPTEMBER);
+	dictionaryMonth.push_back(MONTH_OCT);
+	dictionaryMonth.push_back(MONTH_OCTOBER);
+	dictionaryMonth.push_back(MONTH_NOV);
+	dictionaryMonth.push_back(MONTH_NOVEMBER);
+	dictionaryMonth.push_back(MONTH_DEC);
+	dictionaryMonth.push_back(MONTH_DECEMBER);
+}
+
+void Parser::loadTimeDictionary()
+{
+
+}
+void Parser::loadCommandDictionary()
+{
+	dictionaryAddCommands.push_back(COMMAND_ADD);
+	dictionaryAddCommands.push_back(COMMAND_A);
+	dictionaryAddCommands.push_back(COMMAND_CREATE);
+
+	dictionaryDeleteCommands.push_back(COMMAND_DELETE);
+	dictionaryDeleteCommands.push_back(COMMAND_DEL);
+	dictionaryDeleteCommands.push_back(COMMAND_REMOVE);
+	dictionaryDeleteCommands.push_back(COMMAND_REM);
+	dictionaryDeleteCommands.push_back(COMMAND_ERASE);
+
+	dictionaryMarkCommands.push_back(COMMAND_MARK);
+	dictionaryMarkCommands.push_back(COMMAND_M);
+
+	dictionaryModifyCommands.push_back(COMMAND_MODIFY);
+	dictionaryModifyCommands.push_back(COMMAND_MOD);
+	dictionaryModifyCommands.push_back(COMMAND_UPDATE);
+
+	dictionaryUndoCommands.push_back(COMMAND_UNDO);
+
+	dictionaryRedoCommands.push_back(COMMAND_REDO);
+
+	dictionaryShowCommands.push_back(COMMAND_SHOW);
+	dictionaryShowCommands.push_back(COMMAND_DISPLAY);
+}
+
+void Parser::loadMarkerDictionary()
+{
+	dictionaryMarker.push_back(MARKER_AT);
+	dictionaryMarker.push_back(MARKER_NEAR);
+	dictionaryMarker.push_back(MARKER_BY);
+	dictionaryMarker.push_back(MARKER_FROM);
+	dictionaryMarker.push_back(MARKER_TO);
+	dictionaryMarker.push_back(MARKER_REMIND);
+	dictionaryMarker.push_back(MARKER_ON);
+	dictionaryMarker.push_back(MARKER_REPEAT);
+	dictionaryMarker.push_back(MARKER_PRIORITY);
+	dictionaryMarker.push_back(MARKER_PRIORITY_HIGH);
+	dictionaryMarker.push_back(MARKER_PRIORITY_NORMAL);
+	dictionaryMarker.push_back(MARKER_DONE);
+	dictionaryMarker.push_back(MARKER_UNDONE);
+	dictionaryMarker.push_back(MARKER_COMPLETED);
+	dictionaryMarker.push_back(MARKER_INCOMPLETE);
+}
+
+bool Parser::scanDictionary(string word)
+{
+	if(scanTimeDictionary(word))
+		return true;
+	if(scanDatesDictionary(word))
+		return true;
+	if(scanMonthDictionary(word))
+		return true;
+	return false;
+}
+bool Parser::scanTimeDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryTime.size(); i++){
+		if(dictionaryTime[i]==word)
+			return true;
+	}
+
+	return false;
+}
+bool Parser::scanDatesDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryDates.size(); i++){
+		if(dictionaryDates[i]==word)
+			return true;
+	}
+
+	return false;
+}
+bool Parser::scanMonthDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryMonth.size(); i++){
+		if(dictionaryMonth[i]==word)
+			return true;
+	}
+
+	return false;
+}
+string Parser::scanCommandDictonary(string word)
+{
+	for(size_t i=0; i<dictionaryAddCommands.size(); i++){
+		if(dictionaryAddCommands[i]==word)
+			return COMMAND_ADD;
+	}
+
+	for(size_t i=0; i<dictionaryDeleteCommands.size(); i++){
+		if(dictionaryDeleteCommands[i]==word)
+			return COMMAND_DELETE;
+	}
+
+	for(size_t i=0; i<dictionaryMarkCommands.size(); i++){
+		if(dictionaryMarkCommands[i]==word)
+			return COMMAND_MARK;
+	}
+
+	for(size_t i=0; i<dictionaryModifyCommands.size(); i++){
+		if(dictionaryModifyCommands[i]==word)
+			return COMMAND_MODIFY;
+	}
+
+	for(size_t i=0; i<dictionaryUndoCommands.size(); i++){
+		if(dictionaryUndoCommands[i]==word)
+			return COMMAND_UNDO;
+	}
+
+	for(size_t i=0; i<dictionaryRedoCommands.size(); i++){
+		if(dictionaryRedoCommands[i]==word)
+			return COMMAND_REDO;
+	}
+
+	for(size_t i=0; i<dictionaryShowCommands.size(); i++){
+		if(dictionaryShowCommands[i]==word)
+			return COMMAND_SHOW;
+	}
+
+	return COMMAND_NULL;
+}
+bool Parser::scanMarkerDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryMarker.size(); i++){
+		if(dictionaryMarker[i]==word)
+			return true;
+	}
+	return false;
 }

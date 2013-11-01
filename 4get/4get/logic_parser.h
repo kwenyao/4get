@@ -20,8 +20,22 @@ using namespace Message;
 using namespace Constants;
 class Parser
 {
+	vector<string> dictionaryAddCommands;
+	vector<string> dictionaryDeleteCommands;
+	vector<string> dictionaryModifyCommands;
+	vector<string> dictionaryMarkCommands;
+	vector<string> dictionaryUndoCommands;
+	vector<string> dictionaryRedoCommands;
+	vector<string> dictionaryShowCommands;
+	vector<string> dictionaryDates;
+	vector<string> dictionaryMonth;
+	vector<string> dictionaryTime;
+	vector<string> dictionaryMarker;
+
 private:
 
+	static const char MARKER;
+	static const std::size_t MARKER_LENGTH;
 	static const char MARKER_COMMA;
 	static const std::size_t MARKER_COMMA_LENGTH;
 	static const char MARKER_ENCLOSE;
@@ -82,7 +96,7 @@ public:
 	Parser();
 
 	// callable by executor
-	
+
 	void parseInput(string input, vector<string>& inputBits);
 	// function for testing validity of command
 	string getCommand();
@@ -125,6 +139,19 @@ private:
 	string getFirstWord(string input);
 	void removeFirstWord(string &input);
 	bool isParseInt(string input, int &value);
-	
+
+	//parser dictionary setup
+	void loadDictionary();
+	void loadDateDictionary();
+	void loadMonthDictionary();
+	void loadTimeDictionary();
+	void loadCommandDictionary();
+	void loadMarkerDictionary();
+	bool scanDictionary(string);
+	bool scanTimeDictionary(string);
+	bool scanDatesDictionary(string);
+	bool scanMonthDictionary(string);
+	string scanCommandDictonary(string);
+	bool scanMarkerDictionary(string);
 };
 #endif

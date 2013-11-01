@@ -18,46 +18,49 @@ const int Converter::SLOT_MONTH = 1;
 const int Converter::SLOT_YEAR = 2;
 const int Converter::SLOT_HOUR = 0;
 const int Converter::SLOT_MIN = 1;
+
 const int Converter::INDEX_TOMORROW_START = 0;
-const int Converter::INDEX_TOMORROW_END = 2;
-const int Converter::INDEX_MONDAY_START = 3;
-const int Converter::INDEX_MONDAY_END = 4;
-const int Converter::INDEX_TUESDAY_START = 5;
-const int Converter::INDEX_TUESDAY_END = 7;
-const int Converter::INDEX_WEDNESDAY_START = 8;
-const int Converter::INDEX_WEDNESDAY_END = 9;
-const int Converter::INDEX_THURSDAY_START = 10;
-const int Converter::INDEX_THURSDAY_END = 12;
-const int Converter::INDEX_FRIDAY_START = 13;
-const int Converter::INDEX_FRIDAY_END = 14;
-const int Converter::INDEX_SATURDAY_START = 15;
-const int Converter::INDEX_SATURDAY_END = 16;
-const int Converter::INDEX_SUNDAY_START = 17;
-const int Converter::INDEX_SUNDAY_END = 18;
-const int Converter::INDEX_JAN_START = 19;
-const int Converter::INDEX_JAN_END = 20;
-const int Converter::INDEX_FEB_START = 21;
-const int Converter::INDEX_FEB_END = 22;
-const int Converter::INDEX_MAR_START = 23;
-const int Converter::INDEX_MAR_END = 24;
-const int Converter::INDEX_APR_START = 25;
-const int Converter::INDEX_APR_END = 26;
-const int Converter::INDEX_MAY_START = 27;
-const int Converter::INDEX_MAY_END = 27;
-const int Converter::INDEX_JUN_START = 28;
-const int Converter::INDEX_JUN_END = 29;
-const int Converter::INDEX_JUL_START = 30;
-const int Converter::INDEX_JUL_END = 31;
-const int Converter::INDEX_AUG_START = 32;
-const int Converter::INDEX_AUG_END = 33;
-const int Converter::INDEX_SEP_START = 34;
-const int Converter::INDEX_SEP_END = 36;
-const int Converter::INDEX_OCT_START = 37;
-const int Converter::INDEX_OCT_END = 38;
-const int Converter::INDEX_NOV_START = 39;
-const int Converter::INDEX_NOV_END = 40;
-const int Converter::INDEX_DEC_START = 41; 
-const int Converter::INDEX_DEC_END = 42;
+const int Converter::INDEX_TOMORROW_END = 3;
+
+const int Converter::INDEX_MONDAY_START = 4;
+const int Converter::INDEX_MONDAY_END = 5;
+const int Converter::INDEX_TUESDAY_START = 6;
+const int Converter::INDEX_TUESDAY_END = 8;
+const int Converter::INDEX_WEDNESDAY_START = 9;
+const int Converter::INDEX_WEDNESDAY_END = 10;
+const int Converter::INDEX_THURSDAY_START = 11;
+const int Converter::INDEX_THURSDAY_END = 14;
+const int Converter::INDEX_FRIDAY_START = 15;
+const int Converter::INDEX_FRIDAY_END = 16;
+const int Converter::INDEX_SATURDAY_START = 17;
+const int Converter::INDEX_SATURDAY_END = 18;
+const int Converter::INDEX_SUNDAY_START = 19;
+const int Converter::INDEX_SUNDAY_END = 20;
+
+const int Converter::INDEX_JAN_START = 21;
+const int Converter::INDEX_JAN_END = 22;
+const int Converter::INDEX_FEB_START = 23;
+const int Converter::INDEX_FEB_END = 24;
+const int Converter::INDEX_MAR_START = 25;
+const int Converter::INDEX_MAR_END = 26;
+const int Converter::INDEX_APR_START = 27;
+const int Converter::INDEX_APR_END = 28;
+const int Converter::INDEX_MAY_START = 29;
+const int Converter::INDEX_MAY_END = 29;
+const int Converter::INDEX_JUN_START = 30;
+const int Converter::INDEX_JUN_END = 31;
+const int Converter::INDEX_JUL_START = 32;
+const int Converter::INDEX_JUL_END = 33;
+const int Converter::INDEX_AUG_START = 34;
+const int Converter::INDEX_AUG_END = 35;
+const int Converter::INDEX_SEP_START = 36;
+const int Converter::INDEX_SEP_END = 38;
+const int Converter::INDEX_OCT_START = 39;
+const int Converter::INDEX_OCT_END = 40;
+const int Converter::INDEX_NOV_START = 41;
+const int Converter::INDEX_NOV_END = 42;
+const int Converter::INDEX_DEC_START = 43; 
+const int Converter::INDEX_DEC_END = 44;
 
 const int Converter::DAY_SUNDAY = 0;
 const int Converter::DAY_MONDAY = 1;
@@ -93,20 +96,28 @@ Converter::Converter(){
 }
 
 void Converter::initialiseDateVector(){
-	_dateVector.push_back(TIMER_TOMORROW);
+	_dateVector.push_back(TIMER_TOMORROW); 
 	_dateVector.push_back(TIMER_TML);
 	_dateVector.push_back(TIMER_TMR);
-	_dateVector.push_back(TIMER_MONDAY);
-	_dateVector.push_back(TIMER_MON);
+	_dateVector.push_back(TIMER_TMRW);
+
+	_dateVector.push_back(TIMER_MONDAY); 
+	_dateVector.push_back(TIMER_MON); 
 	_dateVector.push_back(TIMER_TUESDAY);
 	_dateVector.push_back(TIMER_TUES);
+	_dateVector.push_back(TIMER_TUE);
+	_dateVector.push_back(TIMER_WED);
+	_dateVector.push_back(TIMER_WEDNESDAY);
 	_dateVector.push_back(TIMER_THURSDAY);
 	_dateVector.push_back(TIMER_THURS);
+	_dateVector.push_back(TIMER_THU);
+	_dateVector.push_back(TIMER_THUR);
 	_dateVector.push_back(TIMER_FRIDAY);
 	_dateVector.push_back(TIMER_FRI);
 	_dateVector.push_back(TIMER_SATURDAY);
 	_dateVector.push_back(TIMER_SAT);
 	_dateVector.push_back(TIMER_SUN);
+	_dateVector.push_back(TIMER_SUNDAY);
 
 	_dateVector.push_back(MONTH_JAN);
 	_dateVector.push_back(MONTH_JANUARY);
@@ -124,6 +135,7 @@ void Converter::initialiseDateVector(){
 	_dateVector.push_back(MONTH_AUG);
 	_dateVector.push_back(MONTH_AUGUST);
 	_dateVector.push_back(MONTH_SEPT);
+	_dateVector.push_back(MONTH_SEP);
 	_dateVector.push_back(MONTH_SEPTEMBER);
 	_dateVector.push_back(MONTH_OCT);
 	_dateVector.push_back(MONTH_OCTOBER);
@@ -131,8 +143,7 @@ void Converter::initialiseDateVector(){
 	_dateVector.push_back(MONTH_NOVEMBER);
 	_dateVector.push_back(MONTH_DEC);
 	_dateVector.push_back(MONTH_DECEMBER);
-	_dateVector.push_back(MONTH_JAN);
-	_dateVector.push_back(MONTH_JAN);
+	
 }
 
 void Converter::initialiseTimeVector(){

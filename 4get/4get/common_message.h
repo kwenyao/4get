@@ -40,6 +40,8 @@ namespace Commands{
 	//variants of query
 	const string COMMAND_WHAT = "what";
 	const string COMMAND_WHEN = "when";
+
+	const string COMMAND_NULL = "";
 }
 
 namespace Message{
@@ -197,6 +199,12 @@ namespace Constants{
 	const string TIMER_TOMORROW = "tommorrow";
 	const string TIMER_TML = "tml";
 	const string TIMER_TMR = "tmr";
+	const string TIMER_TMRW = "tmrw";
+	const string TIMER_TODAY = "today";
+	const string TIMER_NEXT = "next";
+	const string TIMER_LATER = "later";
+	const string TIMER_HR = "hr";
+
 	const string TIMER_MONDAY = "monday";
 	const string TIMER_MON = "mon";
 	const string TIMER_TUESDAY = "tuesday";
@@ -206,6 +214,7 @@ namespace Constants{
 	const string TIMER_WED = "wed";
 	const string TIMER_THURSDAY = "thursday";
 	const string TIMER_THU = "thu";
+	const string TIMER_THUR = "thur";
 	const string TIMER_THURS = "thurs";
 	const string TIMER_FRIDAY = "friday";
 	const string TIMER_FRI = "fri";
@@ -213,8 +222,7 @@ namespace Constants{
 	const string TIMER_SAT = "sat";
 	const string TIMER_SUNDAY = "sunday";
 	const string TIMER_SUN = "sun";
-	const string TIMER_NEXT = "next";
-	const string TIMER_HR = "hr";
+	
 
 	const string MONTH_JANUARY = "january";
 	const string MONTH_JAN = "jan";
