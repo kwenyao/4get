@@ -318,7 +318,7 @@ bool Executor::undoFunction(){
 		}
 
 		storeIntoRedoCommandStack(commandType);
-		if(!(commandType == commandModify)|| !(commandType == commandDelete)){
+		if((commandType != commandModify) && (commandType != commandDelete)){
 			storeIntoRedoTaskStack(taskTemp);
 		}
 		if(commandType == commandDelete && !undoDeleteNumberStack.empty()){
