@@ -67,6 +67,7 @@ list<Task*> Executor::getUpdatedList(ListType listType){
 	return taskList.obtainList(listType);
 }
 bool Executor::adderFunction(vector<string> vectorOfInputs){
+	taskList.turnOffFilter();
 	long long id;
 	string description, location;
 	time_t reminderTime, startTime, endTime;
