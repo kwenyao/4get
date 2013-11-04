@@ -55,6 +55,7 @@ void ui_display::InitializeComponent(void){
 	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
 	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
 	this->timerRefresh = (gcnew System::Windows::Forms::Timer(this->components));
+	this->itemDisplayLabel = (gcnew System::Windows::Forms::Label());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -105,6 +106,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
+	this->todoListView->SelectedIndexChanged += gcnew System::EventHandler(this, &ui_display::todoListView_SelectedIndexChanged);
 	// 
 	// tIndex
 	// 
@@ -311,12 +313,24 @@ void ui_display::InitializeComponent(void){
 	this->timerRefresh->Interval = 60000;
 	this->timerRefresh->Tick += gcnew System::EventHandler(this, &ui_display::timerRefresh_Tick);
 	// 
+	// itemDisplayLabel
+	// 
+	this->itemDisplayLabel->AutoSize = true;
+	this->itemDisplayLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->itemDisplayLabel->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->itemDisplayLabel->Location = System::Drawing::Point(27, 195);
+	this->itemDisplayLabel->Name = L"itemDisplayLabel";
+	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
+	this->itemDisplayLabel->TabIndex = 4;
+	// 
 	// ui_display
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackColor = System::Drawing::Color::Black;
 	this->ClientSize = System::Drawing::Size(1075, 543);
+	this->Controls->Add(this->itemDisplayLabel);
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
 	this->Controls->Add(this->tabContainer);
@@ -337,6 +351,7 @@ void ui_display::InitializeComponent(void){
 	this->inputContainer->PerformLayout();
 	this->messageContainer->ResumeLayout(false);
 	this->ResumeLayout(false);
+	this->PerformLayout();
 
 }
 
@@ -365,7 +380,7 @@ void ui_display::printError(string error){
 	array<String ^> ^  emptyLines ={};
 	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
-	this->printHelpMessage();
+	//this->printHelpMessage();
 }
 
 void ui_display::passUserInput(){
@@ -376,8 +391,8 @@ void ui_display::passUserInput(){
 			throw MESSAGE_ERROR_COMMAND_QUERY;
 		}
 	}
-	catch(string& error){
-		throw error;
+	catch(string error){
+		this->printError(error);
 	}
 }
 
@@ -400,7 +415,7 @@ void ui_display::printList(){
 			throw MESSAGE_ERROR_INVALID_LIST;
 		}
 	}
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 }
@@ -434,7 +449,7 @@ void ui_display::printToDoList(){
 		this->Cursor = Cursors::Default;
 		this->todoListView->EndUpdate();
 	}
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 	this->todoListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -471,7 +486,7 @@ void ui_display::printCompletedList(){
 		this->Cursor = Cursors::Default;
 		this->completedListView->EndUpdate();
 	}
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 	this->completedListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -509,7 +524,7 @@ void ui_display::printOverdueList(){
 		this->overdueListView->EndUpdate();
 	}
 
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 	this->overdueListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
@@ -523,17 +538,18 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 	else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
 		this->focusItem();
 	}
-	else if(e->Alt && e->KeyCode==Keys::D4){
+	/*else if(e->Alt && e->KeyCode==Keys::D4){
 		if(this->WindowState == FormWindowState::Normal){
 			this->WindowState = FormWindowState::Minimized;
 			this->Hide();
 			this->notifyIcon1->Visible = true;
 		}
 		else if (this->WindowState == FormWindowState::Minimized){
+			this->WindowState = FormWindowState::Normal;
 			this->Show();
 			this->notifyIcon1->Visible = false;
 		}
-	}
+	}*/
 }
 Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
@@ -607,7 +623,7 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 		*listOfTasks = execute->getUpdatedList(activeListType);
 		this->printList();
 	}
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 }
@@ -647,7 +663,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 			focusItem();
 		}
 	}
-	catch(string& error){
+	catch(string &error){
 		this->printError(error);
 	}
 }
@@ -656,7 +672,7 @@ Void ui_display::checkInput(){
 	if(commandKeyword->size()==3){
 		array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;
-		if(*commandKeyword == "add"){
+		if(*commandKeyword == "add" || *commandKeyword == "cre"){
 			this->printAddMessage();
 		}
 		else if(*commandKeyword == "del"){
@@ -721,4 +737,26 @@ Void ui_display::printHelpMessage(){
 		"type \"mark\" to change the status of a task"
 	};
 	this->messageBox->Lines = helpLines;
+}
+
+Void ui_display::todoListView_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e){
+	/*list<Task*> taskList;
+	taskList = execute->getUpdatedList(activeListType);
+	*listOfTasks = taskList;
+	int size = listOfTasks->size();
+	for(int i=0; i<size; i++){
+	if(todoListView->Items[i]->Selected != true){
+		listOfTasks->pop_front();
+	}
+	else{
+		Task* task = listOfTasks->front();
+	list<Task*> taskList;
+	taskList = execute->getUpdatedList(activeListType);
+	*listOfTasks = taskList;
+	int size = listOfTasks->size();
+	for(int i=0; i<size; i++){
+		Task* task = listOfTasks->front();
+
+	ListViewItem^ item = gcnew ListViewItem;
+	converter->printItem(item, listOfTasks, */
 }

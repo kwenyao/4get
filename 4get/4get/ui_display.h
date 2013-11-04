@@ -76,6 +76,7 @@ namespace UIDisplay {
 
 	private: System::Windows::Forms::NotifyIcon^  notifyIcon1;
 	private: System::Windows::Forms::Timer^  timerRefresh;
+	private: System::Windows::Forms::Label^  itemDisplayLabel;
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -189,5 +190,6 @@ namespace UIDisplay {
 	private: void focusCompletedItem();
 	private: void focusOverdueItem();
 	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void todoListView_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 };
 }
