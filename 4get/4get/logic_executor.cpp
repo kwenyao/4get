@@ -92,14 +92,14 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	if(taskTypeToCreate == floating){
 		try{
 			TaskFloating newTask(id,
-			description,
-			location,
-			reminderTime,
-			priority);
+				description,
+				location,
+				reminderTime,
+				priority);
 
-		taskGlobal = new TaskFloating;
-		*taskGlobal = newTask;
-		assert(taskGlobal != NULL);
+			taskGlobal = new TaskFloating;
+			*taskGlobal = newTask;
+			assert(taskGlobal != NULL);
 		}catch(string &error){
 			throw;
 		}
@@ -108,15 +108,15 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	else if(taskTypeToCreate == deadline){
 		try{
 			TaskDeadline newTask(id,
-			description, 
-			location, 
-			reminderTime, 
-			priority,  
-			repeat, 
-			endTime); 
-		taskGlobal = new TaskDeadline;
-		*taskGlobal = newTask;
-		assert(taskGlobal != NULL);
+				description, 
+				location, 
+				reminderTime, 
+				priority,  
+				repeat, 
+				endTime); 
+			taskGlobal = new TaskDeadline;
+			*taskGlobal = newTask;
+			assert(taskGlobal != NULL);
 		}catch(string &error){
 			throw;
 		}
@@ -124,18 +124,18 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 
 	else if(taskTypeToCreate == timed){
 		try{
-		TaskTimed newTask(id, 
-			description, 
-			location, 
-			reminderTime, 
-			priority,  
-			repeat, 
-			startTime, 
-			endTime);
+			TaskTimed newTask(id, 
+				description, 
+				location, 
+				reminderTime, 
+				priority,  
+				repeat, 
+				startTime, 
+				endTime);
 
-		taskGlobal = new TaskTimed;
-		*taskGlobal = newTask;
-		assert(taskGlobal != NULL);
+			taskGlobal = new TaskTimed;
+			*taskGlobal = newTask;
+			assert(taskGlobal != NULL);
 		}catch(string &error){
 			throw;
 		}
@@ -149,28 +149,29 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	return true;
 }
 bool Executor::deleteFunction(vector<string> vectorOfInputs){
-	int deleteNumber;
+	int deleteStartNumber,
+		deleteEndNumber,
+		deleteSize;
 	try{
-		deleteNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
+		deleteStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
+		deleteEndNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_END_NUMBER]);
 	}catch(string Error){
 		throw;
 	}
-	if(deleteNumber < 1){
-		throw string(MESSAGE_ERROR_COMMAND_DELETE);
-	}
-
-	try{
-		storeIntoUndoTaskStack(*taskList.obtainTask(deleteNumber));
-		taskList.deleteFromList(deleteNumber, true);
-	} catch (string errorStr){
-		throw;
+	deleteSize = deleteEndNumber - deleteStartNumber + 1;
+	undoDeleteNumberStack.push(deleteSize);
+	
+	for(unsigned int i = 0; i < deleteSize ; i++){
+		storeIntoUndoTaskStack(*taskList.obtainTask(deleteStartNumber));
+		taskList.deleteFromList(deleteStartNumber, true);
+		deleteStartNumber++;
 	}
 	return true;
 }
 bool Executor::markFunction(vector<string> vectorOfInputs){
 	int markNumber;
 	try{
-		markNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
+		markNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 	}catch(string Error){
 		throw;
 	}
@@ -200,7 +201,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	RepeatType repeat;
 	TaskType typeOfTask, typeOfOldTask;
 
-	modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_NUMBER]);
+	modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 	if(modifyNumber < 1){
 		throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 	}
@@ -324,7 +325,7 @@ bool Executor::undoFunction(){
 	taskPtrToAdd = createTaskPtr(taskTemp);
 
 	storeIntoRedoCommandStack(commandType);
-	if(!(commandType == commandModify)){
+	if(!(commandType == commandModify)/*|| !(commandType == commandDelete) */){
 		storeIntoRedoTaskStack(taskTemp);
 	}
 
@@ -435,10 +436,10 @@ bool Executor::redoFunction(){
 }
 bool Executor::searchFunction(vector<string> vectorOfInputs){
 	string searchDescription,
-		   searchLocation;
+		searchLocation;
 	time_t searchStartT,
-		   searchEndT;
-		  
+		searchEndT;
+
 
 	searchDescription =  vectorOfInputs[SLOT_DESCRIPTION];
 	searchLocation = vectorOfInputs[SLOT_LOCATION];
@@ -456,17 +457,17 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 	}
 	else if(vectorOfInputs[SLOT_START_TIME].empty() && !vectorOfInputs[SLOT_START_DATE].empty()){
 		taskList.searchStartDate(searchStartT);
-    }
+	}
 	else if(!vectorOfInputs[SLOT_START_TIME].empty() && vectorOfInputs[SLOT_START_DATE].empty()){
 		taskList.searchStartTime(searchStartT);
 	}
-	
+
 	if(!vectorOfInputs[SLOT_END_TIME].empty() && !vectorOfInputs[SLOT_END_DATE].empty()){
 		taskList.searchEnd(searchEndT);
 	}
 	else if(vectorOfInputs[SLOT_END_TIME].empty() && !vectorOfInputs[SLOT_END_DATE].empty()){
 		taskList.searchEndDate(searchEndT);
-    }
+	}
 	else if(!vectorOfInputs[SLOT_END_TIME].empty() && vectorOfInputs[SLOT_END_DATE].empty()){
 		taskList.searchEndTime(searchEndT);
 	}
