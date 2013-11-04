@@ -68,12 +68,16 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 	assert(indexUI > 0);
 	list<Task*>* listToDeleteFrom;
 	list<Task*>::iterator iterator;
+	int listSize;
 	try{
 		if(_currentDisplayed == listFiltered)
 			deleteFromFiltered(indexUI);
 		listToDeleteFrom = determineList(_currentDisplayed);
 		if (listToDeleteFrom->empty())
 			throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+		listSize = listToDeleteFrom->size();
+		if (listSize < indexUI)
+			throw string(Message::MESSAGE_ERROR_INVALID_INDEX);
 		iterator = iterateToTask(*listToDeleteFrom, indexUI);
 		if(isDelete)
 			delete *iterator;
