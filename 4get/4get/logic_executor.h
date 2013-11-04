@@ -66,6 +66,7 @@ public:
 	bool undoFunction();
 	bool redoFunction();
 	bool searchFunction(vector<string> vectorOfInputs);
+	bool showAllFunction();
 	
 	//helper functions
 	bool isEqual(string str1, const string str2);

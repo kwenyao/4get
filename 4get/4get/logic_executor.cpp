@@ -42,6 +42,8 @@ bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 		return redoFunction();
 	case commandShow:
 		return searchFunction(vectorOfInputs);
+	case commandShowAll:
+		return showAllFunction();
 	default: throw string(MESSAGE_ERROR_WRONG_KEYWORD);
 	}
 }
@@ -60,6 +62,8 @@ Enum::Command Executor::determineCommandType (string commandTypeString){
 		return Command::commandRedo;
 	else if(isEqual(commandTypeString, COMMAND_SHOW))
 		return Command::commandShow;
+	else if(isEqual(commandTypeString, COMMAND_SHOWALL))
+		return Command::commandShowAll;
 	else
 		throw string(MESSAGE_ERROR_WRONG_KEYWORD);
 }
@@ -67,7 +71,6 @@ list<Task*> Executor::getUpdatedList(ListType listType){
 	return taskList.obtainList(listType);
 }
 bool Executor::adderFunction(vector<string> vectorOfInputs){
-	taskList.turnOffFilter();
 	long long id;
 	string description, location;
 	time_t reminderTime, startTime, endTime;
@@ -433,14 +436,14 @@ bool Executor::redoFunction(){
 bool Executor::searchFunction(vector<string> vectorOfInputs){
 	string searchDescription,
 		   searchLocation;
-	time_t searchStart,
-		   searchEnd;
+	time_t searchStartT,
+		   searchEndT;
 		  
 
 	searchDescription =  vectorOfInputs[SLOT_DESCRIPTION];
 	searchLocation = vectorOfInputs[SLOT_LOCATION];
-	searchStart = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME]);
-	searchEnd = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME]);
+	searchStartT = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME]);
+	searchEndT = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME]);
 
 	if(!vectorOfInputs[SLOT_DESCRIPTION].empty()){
 		taskList.searchDescription(searchDescription);
@@ -449,25 +452,29 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		taskList.searchLocation(searchLocation);
 	}
 	if(!vectorOfInputs[SLOT_START_TIME].empty() && !vectorOfInputs[SLOT_START_DATE].empty()){
-		taskList.searchStart(searchStart);
+		taskList.searchStart(searchStartT);
 	}
 	else if(vectorOfInputs[SLOT_START_TIME].empty() && !vectorOfInputs[SLOT_START_DATE].empty()){
-		taskList.searchStartDate(searchStart);
+		taskList.searchStartDate(searchStartT);
     }
 	else if(!vectorOfInputs[SLOT_START_TIME].empty() && vectorOfInputs[SLOT_START_DATE].empty()){
-		taskList.searchStartTime(searchStart);
+		taskList.searchStartTime(searchStartT);
 	}
 	
 	if(!vectorOfInputs[SLOT_END_TIME].empty() && !vectorOfInputs[SLOT_END_DATE].empty()){
-		taskList.searchStart(searchEnd);
+		taskList.searchEnd(searchEndT);
 	}
 	else if(vectorOfInputs[SLOT_END_TIME].empty() && !vectorOfInputs[SLOT_END_DATE].empty()){
-		taskList.searchStartDate(searchEnd);
+		taskList.searchEndDate(searchEndT);
     }
 	else if(!vectorOfInputs[SLOT_END_TIME].empty() && vectorOfInputs[SLOT_END_DATE].empty()){
-		taskList.searchStartTime(searchEnd);
+		taskList.searchEndTime(searchEndT);
 	}
 
+	return true;
+}
+bool Executor::showAllFunction(){
+	taskList.turnOffFilter();
 	return true;
 }
 bool Executor::isEqual(string str1, const string str2){
