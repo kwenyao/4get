@@ -322,32 +322,36 @@ bool Parser::separateFunctionUndo(vector<string>& inputBits)
 }
 bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
+	bool hasResult = false;
+
 	if(determineDateAndTime()){											// if user specify time
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);					
-		return true;
+		hasResult = true;
 	}
-	if(!determineVenue()){
+	if(determineVenue()){
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-		return true;
+		hasResult = true;
 	}
 	if(determineReminder()){
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-		return true;
+		hasResult = true;
 	}
 	if(determinePriority()){
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-		return true;
+		hasResult = true;
 	}
 	if(determineRepeat()){
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-		return true;
+		hasResult = true;
 	}
 
-	if(!textInput.empty())
+	if(!textInput.empty()){
 		textDescription = _textInput;
+		hasResult = true;
+	}
 
 	logging(MESSAGE_ERROR_COMMAND_SHOW, Info, Pass);
-	return false;
+	return hasResult;
 }
 bool Parser::separateFunctionRedo(vector<string>& inputBits)
 {
