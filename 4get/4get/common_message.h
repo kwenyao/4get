@@ -213,7 +213,7 @@ namespace Constants{
 	const string TIMER_SQUARE_BRACKETS_CLOSE = "] ";
 	const string TIMER_AM = "am";
 	const string TIMER_PM = "pm";
-	const string TIMER_TOMORROW = "tommorrow";
+	const string TIMER_TOMORROW = "tomorrow";
 	const string TIMER_TML = "tml";
 	const string TIMER_TMR = "tmr";
 	const string TIMER_TMRW = "tmrw";

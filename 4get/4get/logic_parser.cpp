@@ -15,6 +15,9 @@ const std::size_t Parser::MARKER_NEAR_LENGTH = 3;
 const string Parser::MARKER_BY = ",by";
 const std::size_t Parser::MARKER_BY_LENGTH = 3;
 
+const string Parser::MARKER_DUE = ",due";
+const std::size_t Parser::MARKER_DUE_LENGTH = 4;
+
 const string Parser::MARKER_FROM = ",from";
 const std::size_t Parser::MARKER_FROM_LENGTH = 5;
 
@@ -474,60 +477,62 @@ bool Parser::determineVenue()
 	string marker = INITIALIZE_STRING_BLANK;
 
 	bool isVenueDetermined = !textVenue.empty();
-	if(isVenueDetermined)
+	if(!isVenueDetermined){
 
-	if(textInput.find(MARKER_AT)!=std::string::npos){
-		found = textInput.find(MARKER_AT);
-		if(textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH)!=std::string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_AT, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
-				textVenue = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
-				return true;
+		if(textInput.find(MARKER_AT)!=std::string::npos){
+			found = textInput.find(MARKER_AT);
+			if(textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH)!=std::string::npos){
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_AT, extractStartPos);
+				i = foundComma;
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textVenue = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}
 			}
 			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
-			}
-		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_AT, extractStartPos);
-			textVenue = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return true;
-		}
-	}
-	else if(textInput.find(MARKER_NEAR)!=std::string::npos){
-		found = textInput.find(MARKER_NEAR);
-		if(textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH)!=std::string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_NEAR, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
-				textVenue = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
+				extractLength = determindExtractLength(found, stringLength, MARKER_AT, extractStartPos);
+				textVenue = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
 				return true;
 			}
+		}
+		else if(textInput.find(MARKER_NEAR)!=std::string::npos){
+			found = textInput.find(MARKER_NEAR);
+			if(textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH)!=std::string::npos){
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_NEAR, extractStartPos);
+				i = foundComma;
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textVenue = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}
+			}
 			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
+				extractLength = determindExtractLength(found, stringLength, MARKER_NEAR, extractStartPos);
+				textVenue = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				return true;
 			}
 		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_NEAR, extractStartPos);
-			textVenue = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return true;
-		}
+		else
+			return false;																//No location keywords found
 	}
-	else
-		return false;																			//No location keywords found
+	return true;																		//venue was determined before
 }
 bool Parser::determineDateAndTime()
 {
@@ -540,47 +545,18 @@ bool Parser::determineDateAndTime()
 	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
-	//If found By
-	if(textInput.find(MARKER_BY)!=std::string::npos){
-		found = textInput.find(MARKER_BY);
-		if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
-			i = foundComma; 
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
-				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
-				textEnd = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
-				parseAllTimeAndDate();
-				return true;
-			}
-			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
-			}//wrong keyword definition
-		}
-		else{																					//by keyword is the last key input
-			extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
-			textEnd = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			parseAllTimeAndDate();
-			return true;
-		}
-	}
-	else if(textInput.find(MARKER_FROM)!=std::string::npos){									//try find from
-		found = textInput.find(MARKER_FROM);
-		if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=std::string::npos){				//try find to
-			foundTo = textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH);
-			extractLength = determindExtractLength(found, foundTo, MARKER_FROM, extractStartPos);
-			textStart = _textInput.substr(extractStartPos, extractLength);
-			if(textInput.find(MARKER_COMMA, foundTo)!=std::string::npos){						//try find comma
-				foundComma = textInput.find(MARKER_COMMA, foundTo);
-				extractLength = determindExtractLength(foundTo, foundComma, MARKER_TO, extractStartPos);
+	bool isDateAmdTimeDetermined = !textStart.empty() || !textEnd.empty();
+	if(!isDateAmdTimeDetermined){
+		//If found By
+		if(textInput.find(MARKER_BY)!=std::string::npos){
+			found = textInput.find(MARKER_BY);
+			if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
 				i = foundComma; 
-				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)							//try forming keyword
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
 					marker += textInput[i++];
-				if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
+				if(scanMarkerDictionary(marker)){
 					textEnd = _textInput.substr(extractStartPos, extractLength);
 					shortenInput(found, foundComma);
 					parseAllTimeAndDate();
@@ -589,23 +565,87 @@ bool Parser::determineDateAndTime()
 				else{
 					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 					throw MESSAGE_ERROR_WRONG_KEYWORD;
-				}
+				}//wrong keyword definition
 			}
-			else{																				//from and to combination keyword is the last keyword  
-				extractLength = determindExtractLength(foundTo, stringLength, MARKER_TO, extractStartPos);
+			else{																					//by keyword is the last key input
+				extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
 				textEnd = _textInput.substr(extractStartPos, ++extractLength);
 				shortenInput(found, stringLength);
 				parseAllTimeAndDate();
 				return true;
 			}
 		}
-		else{																					//wrong keyword definition
-			logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-			throw MESSAGE_ERROR_WRONG_KEYWORD;
+		else if(textInput.find(MARKER_DUE)!=std::string::npos){
+			found = textInput.find(MARKER_DUE);
+			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=std::string::npos ){			//try find comma
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_DUE, extractStartPos);
+				i = foundComma; 
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textEnd = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					parseAllTimeAndDate();
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}//wrong keyword definition
+			}
+			else{																					//by keyword is the last key input
+				extractLength = determindExtractLength(found, stringLength, MARKER_DUE, extractStartPos);
+				textEnd = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				parseAllTimeAndDate();
+				return true;
+			}
 		}
+		else if(textInput.find(MARKER_FROM)!=std::string::npos){									//try find from
+			found = textInput.find(MARKER_FROM);
+			if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=std::string::npos){				//try find to
+				foundTo = textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH);
+				extractLength = determindExtractLength(found, foundTo, MARKER_FROM, extractStartPos);
+				textStart = _textInput.substr(extractStartPos, extractLength);
+				if(textInput.find(MARKER_COMMA, foundTo)!=std::string::npos){						//try find comma
+					foundComma = textInput.find(MARKER_COMMA, foundTo);
+					extractLength = determindExtractLength(foundTo, foundComma, MARKER_TO, extractStartPos);
+					i = foundComma; 
+					while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)							//try forming keyword
+						marker += textInput[i++];
+					if(scanMarkerDictionary(marker)){
+						textEnd = _textInput.substr(extractStartPos, extractLength);
+						shortenInput(found, foundComma);
+						parseAllTimeAndDate();
+						return true;
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+						throw MESSAGE_ERROR_WRONG_KEYWORD;
+					}
+				}
+				else{																				//from and to combination keyword is the last keyword  
+					extractLength = determindExtractLength(foundTo, stringLength, MARKER_TO, extractStartPos);
+					textEnd = _textInput.substr(extractStartPos, ++extractLength);
+					shortenInput(found, stringLength);
+					parseAllTimeAndDate();
+					return true;
+				}
+			}
+			else if(textCommand==COMMAND_MODIFY && textInput.find(MARKER_COMMA+MARKER_TO)){
+				throw MESSAGE_ERROR_WRONG_KEYWORD; // testing
+			}
+			else{																					//wrong keyword definition
+				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+				throw MESSAGE_ERROR_WRONG_KEYWORD;
+			}
+		}
+		else																						//not specified date aka. Floating
+			return true; 
 	}
-	else																						//not specified date aka. Floating
-		return true; 
+	else 
+		return isDateAmdTimeDetermined;
 }
 bool Parser::determineRepeat()
 {
@@ -617,35 +657,38 @@ bool Parser::determineRepeat()
 	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
-
-	if(textInput.find(MARKER_REPEAT)!=std::string::npos){
-		found = textInput.find(MARKER_REPEAT);
-		if(textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH)!=std::string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_REPEAT, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL){
-				textRepeat = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
-				return true;
+	bool isRepeatDetermined = !textRepeat.empty();
+	if(!isRepeatDetermined){
+		if(textInput.find(MARKER_REPEAT)!=std::string::npos){
+			found = textInput.find(MARKER_REPEAT);
+			if(textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH)!=std::string::npos){
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_REPEAT, extractStartPos);
+				i = foundComma;
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textRepeat = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}
 			}
 			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
+				extractLength = determindExtractLength(found, stringLength, MARKER_REPEAT, extractStartPos);
+				textRepeat = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				return true;
 			}
 		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_REPEAT, extractStartPos);
-			textRepeat = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return true;
-		}
+		else
+			return false; 
 	}
-
 	else
-		return false; 
+		return isRepeatDetermined;
 }
 bool Parser::determinePriority()
 {
@@ -658,80 +701,83 @@ bool Parser::determinePriority()
 	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
-
-	if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
-		found = textInput.find(MARKER_PRIORITY);
-		if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=std::string::npos){
-			foundEnclose = textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH);
-			extractLength = determindExtractLength(found, foundEnclose, MARKER_PRIORITY, extractStartPos);
-			textPriority = _textInput.substr(extractStartPos, extractLength);
-			shortenInput(found, foundEnclose);
-			return true;
-		}
-
-		else{
-			extractStartPos = found;
-			textPriority = _textInput.substr(++extractStartPos);
-			shortenInput(found, MARKER_PRIORITY_LENGTH);
-			return true;
-		}
-	}
-
-	else if(textInput.find(MARKER_PRIORITY_HIGH)!=std::string::npos){
-		found = textInput.find(MARKER_PRIORITY_HIGH);
-		if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH)!=std::string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_HIGH, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR ||marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT){
+	bool isPriorityDetermined = !textPriority.empty();
+	if(!isPriorityDetermined){
+		if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
+			found = textInput.find(MARKER_PRIORITY);
+			if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=std::string::npos){
+				foundEnclose = textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH);
+				extractLength = determindExtractLength(found, foundEnclose, MARKER_PRIORITY, extractStartPos);
 				textPriority = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
+				shortenInput(found, foundEnclose);
 				return true;
 			}
-			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
-			}
-		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_HIGH, extractStartPos);
-			textPriority = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return true;
-		}
-	}
 
-	else if(textInput.find(MARKER_PRIORITY_NORMAL)!=std::string::npos){
-		found = textInput.find(MARKER_PRIORITY_NORMAL);
-		if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH)!=std::string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_NORMAL, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR ||marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_REMIND || marker==MARKER_REPEAT){
-				textPriority = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
+			else{
+				extractStartPos = found;
+				textPriority = _textInput.substr(++extractStartPos);
+				shortenInput(found, MARKER_PRIORITY_LENGTH);
 				return true;
 			}
+		}
+
+		else if(textInput.find(MARKER_PRIORITY_HIGH)!=std::string::npos){
+			found = textInput.find(MARKER_PRIORITY_HIGH);
+			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH)!=std::string::npos){
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_HIGH, extractStartPos);
+				i = foundComma;
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textPriority = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}
+			}
 			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
+				extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_HIGH, extractStartPos);
+				textPriority = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				return true;
 			}
 		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_NORMAL, extractStartPos);
-			textPriority = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return true;
+
+		else if(textInput.find(MARKER_PRIORITY_NORMAL)!=std::string::npos){
+			found = textInput.find(MARKER_PRIORITY_NORMAL);
+			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH)!=std::string::npos){
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_NORMAL, extractStartPos);
+				i = foundComma;
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textPriority = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}
+			}
+			else{
+				extractLength = determindExtractLength(found, stringLength, MARKER_PRIORITY_NORMAL, extractStartPos);
+				textPriority = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				return true;
+			}
 		}
+
+		else 
+			return false;
 	}
-
-	else 
-		return false;
-
+	else
+		return isPriorityDetermined;
 }
 //reminder is not neccessary. If user defines Reminder in input, then it will process.
 bool Parser::determineReminder()
@@ -753,7 +799,7 @@ bool Parser::determineReminder()
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REPEAT || marker==MARKER_BY || marker==MARKER_FROM || marker==MARKER_PRIORITY || marker==MARKER_PRIORITY_HIGH || marker==MARKER_PRIORITY_NORMAL && textInput.find(MARKER_ON, found)!=std::string::npos){
+			if(scanMarkerDictionary(marker) && textInput.find(MARKER_ON, found)!=std::string::npos){
 				textRemind = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
@@ -1310,9 +1356,17 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateYearDetermine = true;
 					continue;
 				}
-				else if(scanDatesDictionary(stringCheck)){
-					strDate = _stringCheck;									//Date Format: Tml, today etc.
-					dateDetermined = true;
+				else if(scanTimerDictionary(stringCheck)){
+					if(stringCheck==TIMER_NEXT)
+						strDate += _stringCheck;
+					else if(!strDate.empty() && scanDatesDictionary(stringCheck)){
+						strDate += TIMER_SPACE + _stringCheck;									//Date Format: Tml, today etc.
+						dateDetermined = true;
+					}
+					else{
+						strDate += _stringCheck;
+						dateDetermined = true;
+					}
 					continue;
 				}
 			}
@@ -1365,9 +1419,17 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateMonthDetermined = true;
 					continue;
 				}
-				else if(scanDatesDictionary(stringCheck)){
-					strDate = _stringCheck;									//Date Format: Tomorrow, 
-					dateDetermined = true;
+				else if(scanTimerDictionary(stringCheck)){
+					if(stringCheck==TIMER_NEXT)
+						strDate += _stringCheck;
+					else if(!strDate.empty() && scanDatesDictionary(stringCheck)){
+						strDate += TIMER_SPACE + _stringCheck;									//Date Format: Tomorrow
+						dateDetermined = true;
+					}
+					else{
+						strDate += _stringCheck;
+						dateDetermined = true;
+					}
 					continue;
 				}
 			}
@@ -1497,12 +1559,12 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 void Parser::loadDictionary()
 {
 	loadCommandDictionary();
-	loadDateDictionary();
+	loadDatesDictionary();
 	loadTimeDictionary();
 	loadMonthDictionary();
 	loadMarkerDictionary();
 }
-void Parser::loadDateDictionary()
+void Parser::loadDatesDictionary()
 {
 	dictionaryDates.push_back(TIMER_MON);
 	dictionaryDates.push_back(TIMER_MONDAY);
@@ -1521,13 +1583,7 @@ void Parser::loadDateDictionary()
 	dictionaryDates.push_back(TIMER_SATURDAY);
 	dictionaryDates.push_back(TIMER_SUN);
 	dictionaryDates.push_back(TIMER_SUNDAY);
-	dictionaryDates.push_back(TIMER_TML);
-	dictionaryDates.push_back(TIMER_TMR);
-	dictionaryDates.push_back(TIMER_TMRW);
-	dictionaryDates.push_back(TIMER_TOMORROW);
-	dictionaryDates.push_back(TIMER_NEXT);
-	dictionaryDates.push_back(TIMER_LATER);
-	dictionaryDates.push_back(TIMER_TODAY);
+
 }
 void Parser::loadMonthDictionary()
 {
@@ -1559,7 +1615,12 @@ void Parser::loadMonthDictionary()
 
 void Parser::loadTimeDictionary()
 {
-
+	dictionaryTime.push_back(TIMER_TML);
+	dictionaryTime.push_back(TIMER_TMR);
+	dictionaryTime.push_back(TIMER_TMRW);
+	dictionaryTime.push_back(TIMER_TOMORROW);
+	dictionaryTime.push_back(TIMER_NEXT);
+	dictionaryTime.push_back(TIMER_TODAY);
 }
 void Parser::loadCommandDictionary()
 {
@@ -1607,6 +1668,7 @@ void Parser::loadMarkerDictionary()
 	dictionaryMarker.push_back(MARKER_AT);
 	dictionaryMarker.push_back(MARKER_NEAR);
 	dictionaryMarker.push_back(MARKER_BY);
+	dictionaryMarker.push_back(MARKER_DUE);
 	dictionaryMarker.push_back(MARKER_FROM);
 	dictionaryMarker.push_back(MARKER_TO);
 	dictionaryMarker.push_back(MARKER_REMIND);
@@ -1621,14 +1683,18 @@ void Parser::loadMarkerDictionary()
 
 bool Parser::scanDictionary(string word)
 {
-	if(scanTimeDictionary(word))
+	if(scanTimerDictionary(word) || scanMonthDictionary(word))
 		return true;
-	if(scanDatesDictionary(word))
-		return true;
-	if(scanMonthDictionary(word))
-		return true;
-	return false;
+	else
+		return false;
 }
+bool Parser::scanTimerDictionary(string word){
+	if(scanTimeDictionary(word) || scanDatesDictionary(word))
+		return true;
+	else
+		return false;
+}
+
 bool Parser::scanTimeDictionary(string word)
 {
 	for(size_t i=0; i<dictionaryTime.size(); i++){
@@ -1647,6 +1713,7 @@ bool Parser::scanDatesDictionary(string word)
 
 	return false;
 }
+
 bool Parser::scanMonthDictionary(string word)
 {
 	for(size_t i=0; i<dictionaryMonth.size(); i++){
