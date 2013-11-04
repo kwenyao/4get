@@ -48,6 +48,8 @@ private:
 	static const std::size_t MARKER_NEAR_LENGTH;
 	static const string MARKER_BY;
 	static const std::size_t MARKER_BY_LENGTH;
+	static const string MARKER_DUE;
+	static const std::size_t MARKER_DUE_LENGTH;
 	static const string MARKER_FROM;
 	static const std::size_t MARKER_FROM_LENGTH;
 	static const string MARKER_TO;
@@ -155,12 +157,15 @@ private:
 
 	//parser dictionary setup
 	void loadDictionary();
-	void loadDateDictionary();
+	void loadDatesDictionary();
 	void loadMonthDictionary();
 	void loadTimeDictionary();
 	void loadCommandDictionary();
 	void loadMarkerDictionary();
+
+	//parser scan dictionaries
 	bool scanDictionary(string);
+	bool scanTimerDictionary(string);
 	bool scanTimeDictionary(string);
 	bool scanDatesDictionary(string);
 	bool scanMonthDictionary(string);
