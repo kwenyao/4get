@@ -56,6 +56,7 @@ public:
 
 	//UI call these functions
 	bool stringCollector(string task);
+	void refreshAll();
 	bool receive(string command, vector<string> vectorOfInputs);
 	Command determineCommandType (string commandTypeString); 
 	list<Task*> getUpdatedList(ListType listType);

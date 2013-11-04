@@ -323,21 +323,24 @@ bool Executor::undoFunction(){
 	Task taskTemp;
 	Command commandType;
 	Task* taskPtrToAdd;
+	int deleteSize;
 
 	if(undoCommandStack.empty()){
 		throw string(MESSAGE_ERROR_COMMAND_UNDO);
 	}
-
 	commandType = undoCommandStack.top();
-
-	taskTemp = undoTaskStack.top();
-	taskPtrToAdd = createTaskPtr(taskTemp);
-
-	storeIntoRedoCommandStack(commandType);
-	if(!(commandType == commandModify)/*|| !(commandType == commandDelete) */){
-		storeIntoRedoTaskStack(taskTemp);
+	if(!(commandType == commandDelete)){
+		taskTemp = undoTaskStack.top();
+		taskPtrToAdd = createTaskPtr(taskTemp);
 	}
 
+	storeIntoRedoCommandStack(commandType);
+	if(!(commandType == commandModify)|| !(commandType == commandDelete)){
+		storeIntoRedoTaskStack(taskTemp);
+	}
+	if(commandType == commandDelete){
+		deleteSize = undoDeleteNumberStack.top();
+	}
 	switch(commandType)
 	{
 	case commandAdd:
@@ -346,10 +349,29 @@ bool Executor::undoFunction(){
 		}catch(string Error){
 			throw;
 		}
+		undoTaskStack.pop();
 		break;
 	case commandDelete:
 		try{
-			taskList.addToList(taskPtrToAdd, listType);
+			if(deleteSize == 0){
+				taskTemp = undoTaskStack.top();
+				storeIntoRedoTaskStack(taskTemp);
+				taskPtrToAdd = createTaskPtr(taskTemp);
+				taskList.addToList(taskPtrToAdd, listType);
+				undoTaskStack.pop();
+			}
+			else if(deleteSize != 0){
+				redoDeleteNumberStack.push(deleteSize);
+				while(deleteSize != 0){
+					taskTemp = undoTaskStack.top();
+					storeIntoRedoTaskStack(taskTemp);
+					taskPtrToAdd = createTaskPtr(taskTemp);
+					taskList.addToList(taskPtrToAdd, listType);
+					undoTaskStack.pop();
+					deleteSize--;
+				}
+				undoDeleteNumberStack.pop();
+			}
 		}catch(string Error){
 			throw;
 		}
@@ -361,6 +383,7 @@ bool Executor::undoFunction(){
 		}catch(string Error){
 			throw;
 		}
+		undoTaskStack.pop();
 		break;
 	case commandModify:
 		storeIntoRedoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));  //get the task currently in the list
@@ -370,12 +393,12 @@ bool Executor::undoFunction(){
 		}catch(string Error){
 			throw;
 		}
+		undoTaskStack.pop();
 		break;
 	default:
 		throw string(MESSAGE_ERROR_COMMAND_UNDO);
 	}
 	undoCommandStack.pop();
-	undoTaskStack.pop();
 
 	return true;
 }
@@ -384,15 +407,22 @@ bool Executor::redoFunction(){
 	Task taskUndo;
 	Command commandType;
 	Task* taskPtrToAdd;
+	int deleteSize;
 
 	if(redoCommandStack.empty()){
 		throw string(MESSAGE_ERROR_COMMAND_REDO);
 	}
 	commandType = redoCommandStack.top();
-	taskTemp = redoTaskStack.top();
+	if(commandType == commandDelete){
+		deleteSize = redoDeleteNumberStack.top();
+		if(deleteSize != 0){
+			undoDeleteNumberStack.push(deleteSize);
+		}
+	}
 	switch(commandType)
 	{
 	case commandAdd:{
+		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		try{	
 			taskList.addToList(taskPtrToAdd, listType);
@@ -400,19 +430,33 @@ bool Executor::redoFunction(){
 			throw;
 		}
 		storeIntoUndoTaskStack(taskTemp);
+		redoTaskStack.pop();
 		break;
 					}
 	case commandDelete:{
-		taskPtrToAdd = createTaskPtr(taskTemp);
-		try{
+		if(deleteSize == 0){
+			taskTemp = redoTaskStack.top();
+			taskPtrToAdd = createTaskPtr(taskTemp);
 			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
-		}catch(string Error){
-			throw;
+			storeIntoUndoTaskStack(taskTemp);
+			redoTaskStack.pop();
 		}
-		storeIntoUndoTaskStack(taskTemp);
+		else if(deleteSize != 0){
+			while(deleteSize != 0)
+			{
+				taskTemp = redoTaskStack.top();
+				taskPtrToAdd = createTaskPtr(taskTemp);
+				taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);
+				storeIntoUndoTaskStack(taskTemp);
+				redoTaskStack.pop();
+				deleteSize--;
+			}
+			redoDeleteNumberStack.pop();
+		}
 		break;
 					   }
 	case commandMark:{
+		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		try{
 			taskList.addToList(taskPtrToAdd, listCompleted);
@@ -421,9 +465,11 @@ bool Executor::redoFunction(){
 			throw;
 		}
 		storeIntoUndoTaskStack(taskTemp);
+		redoTaskStack.pop();
 		break;
 					 }
 	case commandModify:{
+		taskTemp = redoTaskStack.top();
 		taskPtrToAdd = createTaskPtr(taskTemp);
 		storeIntoUndoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));
 		try{
@@ -432,6 +478,7 @@ bool Executor::redoFunction(){
 		}catch(string Error){
 			throw;
 		}
+		redoTaskStack.pop();
 		break;
 					   }
 	default:
@@ -439,7 +486,6 @@ bool Executor::redoFunction(){
 	}
 	storeIntoUndoCommandStack(commandType);
 	redoCommandStack.pop();
-	redoTaskStack.pop();
 
 	return true;
 }
@@ -682,4 +728,11 @@ bool Executor::helperDeleteFunction(int deleteStartNumber){
 	taskList.deleteFromList(deleteStartNumber, true);
 
 	return true;
+}
+void Executor::refreshAll(){
+	try{
+		taskList.refreshAll(convert.getNow());
+	}catch (string Error){
+		throw;
+	}
 }
