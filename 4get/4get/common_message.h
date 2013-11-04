@@ -116,6 +116,12 @@ namespace Enum{
 		taskInvalid
 	};
 
+	enum AttributeType{
+		descriptionAttr,
+		locationAttr,
+		startAttr,
+		endAttr,
+	};
 
 	enum Command{
 		commandAdd, 

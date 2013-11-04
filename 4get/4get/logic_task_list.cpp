@@ -4,6 +4,10 @@ const int TaskList::INDEX_CORRECTION = -1;
 const string TaskList::LOG_TASK_ADDED = "Task inserted into list";
 const string TaskList::LOG_TASK_DELETED = "Task deleted from list";
 const string TaskList::LOG_TASK_MARKED = "Task marked";
+const int TaskList::YYYYMMDD_YEAR_MULTIPLIER = 10000;
+const int TaskList::YYYYMMDD_MONTH_MULTIPLIER = 100;
+const int TaskList::HHMM_HOUR_MULTIPLIER = 100;
+
 
 TaskList::TaskList(){
 	loadFromFile();
@@ -130,13 +134,16 @@ bool TaskList::markDone(int indexUI){
 
 list<Task*> TaskList::obtainList(ListType listToReturn){
 	if(_isFiltered){
-		_isFiltered = false;
-		_currentDisplayed = listFiltered;
+		assert(_currentDisplayed == listFiltered);
 		return _filteredList;
 	}
 	_listToDisplay = *determineList(listToReturn);
 	_currentDisplayed = listToReturn;
 	return _listToDisplay;
+}
+
+void TaskList::turnOffFilter(){
+	_isFiltered = false;
 }
 
 Task* TaskList::obtainTask(int indexUI){
@@ -214,6 +221,7 @@ Task* TaskList::obtainTask(long long taskID, ListType listType){
 }
 
 void TaskList::searchList(string searchStr){
+	_isFiltered = true;
 	list<Task*> *listToFilter = determineList(_currentDisplayed);
 	_actualList = _currentDisplayed;
 	if(listToFilter->empty())
@@ -226,7 +234,6 @@ void TaskList::searchList(string searchStr){
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
-	_isFiltered = true;
 }
 
 //void TaskList::searchList(time_t searchTime){
@@ -248,6 +255,7 @@ void TaskList::searchList(string searchStr){
 //}
 
 void TaskList::searchList(long long searchDate){
+	_isFiltered = true;
 	list<Task*>* listToFilter = determineList(_currentDisplayed);
 	if(listToFilter->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
@@ -260,7 +268,6 @@ void TaskList::searchList(long long searchDate){
 			_filteredList.push_back(*iterator);
 		++iterator;
 	}
-	_isFiltered = true;
 }
 
 bool TaskList::isEqual(long long searchDate, list<Task*>::iterator iterator){
@@ -283,4 +290,178 @@ bool TaskList::isEqual(string searchStr, list<Task*>::iterator iterator){
 		return true;
 	else 
 		return false;
+}
+
+void TaskList::searchDescription(string searchStr){
+	try{
+		searchSetup();
+		populateFilteredList(descriptionAttr, searchStr);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchLocation(string searchStr){
+	try{
+		searchSetup();
+		populateFilteredList(locationAttr, searchStr);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStart(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchTime, specificSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEnd(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchTime, specificSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStartDate(time_t searchDate){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchDate, dateSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStartTime(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchTime, timeSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEndDate(time_t searchDate){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchDate, dateSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEndTime(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchTime, timeSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::populateFilteredList(AttributeType attrType, string searchStr){
+	int listSize;
+	listSize = _activeList->size();
+	assert(listSize != 0);
+	for(int i=0; i<listSize; i++){
+		if(isEqual(attrType, searchStr))
+			_filteredList.push_back(*searchIterator);
+		++searchIterator;
+	}
+	_isFiltered = true;
+}
+
+void TaskList::populateFilteredList(AttributeType attrType, time_t searchTime, SearchTimeType searchType){
+	int listSize;
+	listSize = _activeList->size();
+	assert(listSize != 0);
+	for(int i=0; i<listSize; i++){
+		if(isEqual(attrType, searchTime, searchType))
+			_filteredList.push_back(*searchIterator);
+		++searchIterator;
+	}
+	_isFiltered = true;
+}
+
+bool TaskList::isEqual(AttributeType attType, string searchStr){
+	string compareStr;
+	switch (attType){
+	case Enum::descriptionAttr:
+		compareStr = (*searchIterator)->getTaskDescription();
+		break;
+	case Enum::locationAttr:
+		compareStr = (*searchIterator)->getTaskLocation();
+		break;
+	default:
+		return false;
+	}
+	return (compareStr == searchStr);
+}
+
+bool TaskList::isEqual(AttributeType attType, time_t searchTime, SearchTimeType searchType){
+	time_t compareTime;
+	switch (attType){
+	case Enum::startAttr:
+		compareTime = (*searchIterator)->getTaskStart();
+		break;
+	case Enum::endAttr:
+		compareTime = (*searchIterator)->getTaskEnd();
+		break;
+	default:
+		return false;
+	}
+	switch (searchType){
+	case dateSearch:
+		compareTime = getDate(compareTime);
+		searchTime = getDate(searchTime);
+		break;
+	case timeSearch:
+		compareTime = getTime(compareTime);
+		searchTime = getTime(searchTime);
+		break;
+	default:
+		break;
+	}
+	return (compareTime == searchTime);
+}
+
+void TaskList::searchSetup(){
+	_activeList = determineList(_currentDisplayed);
+	if(!_isFiltered){
+		_actualList = _currentDisplayed;
+		_filteredList.clear();
+	}
+	_currentDisplayed = listFiltered;
+	if(_activeList->empty())
+		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	searchIterator = _activeList->begin();
+}
+
+int TaskList::getDate(time_t dateAndTime){
+	int year;
+	int month;
+	int day;
+	struct tm newtime;
+	localtime_s(&newtime, &dateAndTime);
+	year = newtime.tm_year + YEAR_CORRECTION;
+	month = newtime.tm_mon + MONTH_CORRECTION;
+	day = newtime.tm_mday;
+	year = year * YYYYMMDD_YEAR_MULTIPLIER;
+	month = month * YYYYMMDD_MONTH_MULTIPLIER;
+	return (year + month + day);
+}
+
+int TaskList::getTime(time_t dateAndTime){
+	int hour;
+	int min;
+	struct tm newtime;
+	localtime_s(&newtime, &dateAndTime);
+	hour = newtime.tm_hour * HHMM_HOUR_MULTIPLIER;
+	min = newtime.tm_min;
+	return (hour + min);
 }
