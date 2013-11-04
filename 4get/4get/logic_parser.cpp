@@ -24,6 +24,9 @@ const std::size_t Parser::MARKER_FROM_LENGTH = 5;
 const string Parser::MARKER_TO = "to";
 const std::size_t Parser::MARKER_TO_LENGTH = 2;
 
+const string Parser::MARKER_COMMA_TO = ",to";
+const std::size_t Parser::MARKER_COMMA_TO_LENGTH = 3;
+
 const string Parser::MARKER_REMIND = ",remind";
 const std::size_t Parser::MARKER_REMIND_LENGTH = 7;
 
@@ -575,6 +578,33 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
+		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos){
+			found = textInput.find(MARKER_COMMA_TO);
+			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=std::string::npos ){			//try find comma
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_COMMA_TO, extractStartPos);
+				i = foundComma; 
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textEnd = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					parseAllTimeAndDate();
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}//wrong keyword definition
+			}
+			else{																					//by keyword is the last key input
+				extractLength = determindExtractLength(found, stringLength, MARKER_COMMA_TO, extractStartPos);
+				textEnd = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				parseAllTimeAndDate();
+				return true;
+			}
+		}
 		else if(textInput.find(MARKER_DUE)!=std::string::npos){
 			found = textInput.find(MARKER_DUE);
 			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=std::string::npos ){			//try find comma
@@ -632,9 +662,6 @@ bool Parser::determineDateAndTime()
 					parseAllTimeAndDate();
 					return true;
 				}
-			}
-			else if(textCommand==COMMAND_MODIFY && textInput.find(MARKER_COMMA+MARKER_TO)){
-				throw MESSAGE_ERROR_WRONG_KEYWORD; // testing
 			}
 			else{																					//wrong keyword definition
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
@@ -827,11 +854,14 @@ bool Parser::determineSlot()
 	std::size_t found = INITIALIZE_SIZE_T;
 	bool hasRange = false;
 	bool startSlotFilled = false;
+	bool endSlotFilled = false;
 	int slotNumber = INITIALIZE_INT;
 	int count = INITIALIZE_INT;
 	istringstream buffer(textInput);
 	string temp;
 	while(!buffer.eof()){
+		if(startSlotFilled && endSlotFilled)
+			break;
 		buffer >> temp;
 		count++;
 		if(isParseInt(temp, slotNumber) && !startSlotFilled){
@@ -839,23 +869,35 @@ bool Parser::determineSlot()
 			startSlotFilled = true;
 			continue;
 		}
-		if(scanMarkerDictionary(temp) && temp!=MARKER_TO)
+		if(scanMarkerDictionary(temp) && temp!=MARKER_TO) // this statement handles if the word is keyword
 			break;
 		else{
-			if (temp==MARKER_TO)
+			if (temp==MARKER_TO && count == 2)
 				hasRange = true;
 			else if(hasRange && startSlotFilled && isParseInt(temp, slotNumber)){
 				textSlotEndNumber = std::to_string(slotNumber);
+				endSlotFilled = true;
+				continue;
 			}
 			else
-				throw MESSAGE_ERROR_WRONG_FORMAT;
+				break;
 		}
 	}
-	if((count == 1 || count == 3) && startSlotFilled){
-		found = textInput.find(temp);
-		extractEndPos = found + temp.size();
-		shortenInput(extractStartPos, extractEndPos);
-		return true;
+	if(startSlotFilled){
+		if(endSlotFilled){
+			found = textInput.find(temp);
+			extractEndPos = found + temp.size();
+			shortenInput(extractStartPos, extractEndPos);
+			return true;
+		}
+		else if(count == 2){
+			found = textInput.find(temp);
+			extractEndPos = --found;
+			shortenInput(extractStartPos, extractEndPos);
+			return true;
+		}
+		else
+			throw MESSAGE_ERROR_WRONG_FORMAT;
 	}
 	else
 		throw MESSAGE_ERROR_WRONG_FORMAT;
@@ -1671,6 +1713,7 @@ void Parser::loadMarkerDictionary()
 	dictionaryMarker.push_back(MARKER_DUE);
 	dictionaryMarker.push_back(MARKER_FROM);
 	dictionaryMarker.push_back(MARKER_TO);
+	dictionaryMarker.push_back(MARKER_COMMA_TO);
 	dictionaryMarker.push_back(MARKER_REMIND);
 	dictionaryMarker.push_back(MARKER_ON);
 	dictionaryMarker.push_back(MARKER_REPEAT);

@@ -54,6 +54,8 @@ private:
 	static const std::size_t MARKER_FROM_LENGTH;
 	static const string MARKER_TO;
 	static const std::size_t MARKER_TO_LENGTH;
+	static const string MARKER_COMMA_TO;
+	static const std::size_t MARKER_COMMA_TO_LENGTH;
 	static const string MARKER_REMIND;
 	static const std::size_t MARKER_REMIND_LENGTH;
 	static const string MARKER_ON;
