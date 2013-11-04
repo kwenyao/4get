@@ -486,7 +486,7 @@ void TaskList::refreshAll(time_t timeNow){
 
 bool TaskList::isExpiredTask(Task* testTask, time_t timeNow){
 	time_t taskTime = testTask->getTaskEnd();
-	if(taskTime < timeNow)
+	if(taskTime > 0 && taskTime < timeNow)
 		return true;
 	else
 		return false;
