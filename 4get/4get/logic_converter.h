@@ -169,5 +169,6 @@ public:
 							     string endTime, 
 							     time_t& returnStart, 
 							     time_t& returnEnd);
+	time_t getNow();
 };
 #endif

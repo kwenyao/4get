@@ -347,6 +347,12 @@ int Converter::getToday(DateType dateType){
 	}
 }
 
+time_t Converter::getNow(){
+	time_t returnTime;
+	time(&returnTime);
+	return returnTime;
+}
+
 void Converter::getDefaultEndTime(int& hour, int& min){
 	hour = DEFAULT_END_HOUR;
 	min = DEFAULT_END_MIN;
