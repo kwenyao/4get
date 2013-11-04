@@ -53,13 +53,14 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_UNDO = "System was unable to undo to your previous task.";
 	const string MESSAGE_ERROR_COMMAND_REDO = "System was unable to redo your previous task.";
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
-	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
+	const string MESSAGE_ERROR_COMMAND_ERROR = "You have entered a wrong command, pls try again.";
 	const string MESSAGE_ERROR_COMMAND_QUERY = "System was unable to process your query.";
 	
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
 	const string MESSAGE_ERROR_NO_DESCRIPTION = "Error: No description indicated";
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
+	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
 	
 	const string MESSAGE_ERROR_EMPTY_INPUT = "Error: Input is empty";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";

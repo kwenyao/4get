@@ -322,11 +322,29 @@ bool Parser::separateFunctionUndo(vector<string>& inputBits)
 }
 bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
-	if(!determineDateAndTime())												//if user specified with formats, startTime or endTime will have the time 
-		textStartTime = _textInput;										//else whatever the user input after show will be assumed to be strings indicating time.
+	if(determineDateAndTime()){											// if user specify time
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);					
+		return true;
+	}
+	if(!determineVenue()){
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+		return true;
+	}
+	if(determineReminder()){
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+		return true;
+	}
+	if(determinePriority()){
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+		return true;
+	}
+	if(determineRepeat()){
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+		return true;
+	}
 
-	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-	return true;
+	logging(MESSAGE_ERROR_COMMAND_SHOW, Info, Pass);
+	return false;
 }
 bool Parser::separateFunctionRedo(vector<string>& inputBits)
 {
@@ -1199,7 +1217,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
 				throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 			}
-			
+
 		}
 
 		if(!timeDetermined){
@@ -1353,7 +1371,7 @@ void Parser::loadDateDictionary()
 	dictionaryDates.push_back(TIMER_LATER);
 	dictionaryDates.push_back(TIMER_TODAY);
 
-	
+
 }
 void Parser::loadMonthDictionary()
 {

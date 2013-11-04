@@ -363,7 +363,7 @@ void ui_display::passUserInput(){
 	try{
 		string stdCommand;
 		converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-		if(execute->stringCollector(stdCommand)){
+		if(!execute->stringCollector(stdCommand)){
 			throw MESSAGE_ERROR_COMMAND_QUERY;
 		}
 	}
