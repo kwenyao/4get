@@ -73,6 +73,7 @@ public:
 	//helper functions
 	bool isEqual(string str1, const string str2);
 	long long retrieveTaskID();
+	bool helperDeleteFunction(int deleteStartNumber);
 	bool storeIntoUndoTaskStack(Task taskTemp);
 	bool storeIntoUndoCommandStack(Command command);
 	bool storeIntoRedoTaskStack(Task taskTemp);

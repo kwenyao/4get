@@ -10,6 +10,7 @@ bool Executor::stringCollector(string task){
 	try{
 		vector<string> vectorOfInputs(SLOT_SIZE);
 		parser.parseInput(task, (vectorOfInputs));
+		cout << vectorOfInputs[SLOT_COMMAND] << endl;
 		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs)){
 			logging("Number of times UI call stringCollector", Info, Pass);
 			return true;
@@ -154,18 +155,26 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 		deleteSize;
 	try{
 		deleteStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
-		deleteEndNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_END_NUMBER]);
+		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+			deleteEndNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_END_NUMBER]);
+		}
 	}catch(string Error){
 		throw;
 	}
-	deleteSize = deleteEndNumber - deleteStartNumber + 1;
-	undoDeleteNumberStack.push(deleteSize);
-	
-	for(unsigned int i = 0; i < deleteSize ; i++){
-		storeIntoUndoTaskStack(*taskList.obtainTask(deleteStartNumber));
-		taskList.deleteFromList(deleteStartNumber, true);
-		deleteStartNumber++;
+	if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+		deleteSize = deleteEndNumber - deleteStartNumber + 1;
+		undoDeleteNumberStack.push(deleteSize);
 	}
+
+	if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+		for(unsigned int i = 0; i < deleteSize ; i++){
+			helperDeleteFunction(deleteStartNumber);
+		}
+	}
+	else{
+		helperDeleteFunction(deleteStartNumber);
+	}
+
 	return true;
 }
 bool Executor::markFunction(vector<string> vectorOfInputs){
@@ -665,4 +674,12 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 	else{
 		throw string(MESSAGE_ERROR_INVALID_TASKTYPE);
 	}
+}
+bool Executor::helperDeleteFunction(int deleteStartNumber){
+	Task taskTemp;
+	taskTemp = *taskList.obtainTask(deleteStartNumber);
+	storeIntoUndoTaskStack(taskTemp);
+	taskList.deleteFromList(deleteStartNumber, true);
+
+	return true;
 }
