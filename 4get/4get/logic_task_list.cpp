@@ -133,12 +133,13 @@ bool TaskList::markDone(int indexUI){
 }
 
 list<Task*> TaskList::obtainList(ListType listToReturn){
-	if(_isFiltered){
+	if(_isFiltered && listToReturn == _actualList){
 		assert(_currentDisplayed == listFiltered);
 		return _filteredList;
 	}
 	_listToDisplay = *determineList(listToReturn);
 	_currentDisplayed = listToReturn;
+	_isFiltered = false;
 	return _listToDisplay;
 }
 
@@ -149,9 +150,18 @@ void TaskList::turnOffFilter(){
 Task* TaskList::obtainTask(int indexUI){
 	Task* taskToReturn;
 	list<Task*>::iterator iterator;
-	iterator = iterateToTask(_listToDisplay, indexUI);
+	list<Task*>* listToFind = determineList(_currentDisplayed); 
+	iterator = iterateToTask((*listToFind), indexUI);
 	taskToReturn = (*iterator);
 	return taskToReturn;
+}
+
+Task* TaskList::obtainTask(long long taskID, ListType listType){
+	list<Task*>* listToFind;
+	list<Task*>::iterator iterator;
+	listToFind = determineList(listType);
+	findID(listToFind, taskID, iterator);
+	return (*iterator);
 }
 
 list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* taskToAdd){
@@ -212,13 +222,7 @@ void TaskList::setCurrentDisplayed(ListType listType){
 	_currentDisplayed = listType;
 }
 
-Task* TaskList::obtainTask(long long taskID, ListType listType){
-	list<Task*>* listToFind;
-	list<Task*>::iterator iterator;
-	listToFind = determineList(listType);
-	findID(listToFind, taskID, iterator);
-	return (*iterator);
-}
+
 
 void TaskList::searchList(string searchStr){
 	_isFiltered = true;
@@ -373,6 +377,8 @@ void TaskList::populateFilteredList(AttributeType attrType, string searchStr){
 			_filteredList.push_back(*searchIterator);
 		++searchIterator;
 	}
+	if(_filteredList.empty())
+		throw string(Message::MESSAGE_NO_SEARCH_RESULT);
 	_isFiltered = true;
 }
 
@@ -464,4 +470,30 @@ int TaskList::getTime(time_t dateAndTime){
 	hour = newtime.tm_hour * HHMM_HOUR_MULTIPLIER;
 	min = newtime.tm_min;
 	return (hour + min);
+}
+
+void TaskList::refreshAll(time_t timeNow){
+	int listSize = _toDoList.size();
+	list<Task*>::iterator iterator = _toDoList.begin();
+	for(int i=0; i<listSize; i++){
+		if(isExpiredTask((*iterator),timeNow))
+			moveTask(iterator, _toDoList, _overdueList);
+		else
+			++iterator;
+	}
+	saveAll();
+}
+
+bool TaskList::isExpiredTask(Task* testTask, time_t timeNow){
+	time_t taskTime = testTask->getTaskEnd();
+	if(taskTime < timeNow)
+		return true;
+	else
+		return false;
+}
+
+void TaskList::moveTask(list<Task*>::iterator fromIterator, list<Task*>& fromList, list<Task*>& toList){
+	Task* taskPtr = (*fromIterator);
+	fromList.erase(fromIterator);
+	toList.push_front(taskPtr);
 }

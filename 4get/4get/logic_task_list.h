@@ -25,8 +25,6 @@ private:
 	ListType _actualList;
 	bool _isFiltered;
 
-	void clearList(ListType listType);
-
 	enum SearchTimeType{
 		dateSearch,
 		timeSearch,
@@ -60,6 +58,12 @@ private:
 
 	int getDate(time_t dateAndTime);
 	int getTime(time_t dateAndTime);
+
+	void clearList(ListType listType);
+
+	void moveTask(list<Task*>::iterator fromIterator, list<Task*>& fromList, list<Task*>& toList);
+	bool isExpiredTask(Task* testTask, time_t timeNow);
+
 
 public:
 	TaskList();
@@ -95,6 +99,9 @@ public:
 	void searchEndTime(time_t searchTime);
 	void searchEndDate(time_t searchTime);
 	void turnOffFilter();
+
+	//Refresh
+	void refreshAll(time_t timeNow);
 
 	//Functions used in testing only
 	void setCurrentDisplayed(ListType listType);
