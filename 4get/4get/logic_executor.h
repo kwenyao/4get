@@ -39,6 +39,8 @@ private:
 	stack<Command> undoCommandStack;
 	stack<Task> redoTaskStack;
 	stack<Command> redoCommandStack;
+	stack<int> undoDeleteNumberStack;
+	stack<int> redoDeleteNumberStack;
 	ListType listType;
 
 	Task* createTaskPtr(Task taskToCreate);
