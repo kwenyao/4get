@@ -138,7 +138,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw;
 			}
 		}
-		else if(commandString.compare(COMMAND_SHOW)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAY)==COMPARE_SUCCESS){
+		else if(commandString.compare(COMMAND_SHOW)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAY)==COMPARE_SUCCESS || commandString.compare(COMMAND_SEARCH)==COMPARE_SUCCESS){
 			inputBits[SLOT_COMMAND] = COMMAND_SHOW;
 			try{
 				if(!separateInput(commandShow, inputBits)){
@@ -149,6 +149,18 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw;
 			}
 		}
+		else if(commandString.compare(COMMAND_SHOWALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAYALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_SEARCHALL)==COMPARE_SUCCESS){
+			inputBits[SLOT_COMMAND] = COMMAND_SHOWALL;
+			try{
+				if(!separateInput(commandShow, inputBits)){
+					throw MESSAGE_ERROR_COMMAND_SHOW;
+				}
+			}
+			catch(string error){
+				throw;
+			}
+		}
+
 		/*else if(commandString.compare(COMMAND_WHAT)==COMPARE_SUCCESS){
 		inputBits[SLOT_COMMAND] = COMMAND_WHAT;
 		if(!separateInput(commandQuery, inputBits)){
@@ -209,6 +221,8 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 		return separateFunctionShow(inputBits);
 	case commandRedo:
 		return separateFunctionRedo(inputBits);
+	case commandShowAll:
+		return separateFunctionShowAll(inputBits);
 	default:
 		return false;
 	}
@@ -357,6 +371,12 @@ bool Parser::separateFunctionRedo(vector<string>& inputBits)
 {
 	return true;
 }
+
+bool Parser::separateFunctionShowAll(vector<string>& inputBits)
+{
+	return true;
+}
+
 bool Parser::determineVenue()
 {
 	std::size_t found = INITIALIZE_SIZE_T;

@@ -36,6 +36,12 @@ namespace Commands{
 	//variants of show
 	const string COMMAND_SHOW = "show";
 	const string COMMAND_DISPLAY = "display";
+	const string COMMAND_SEARCH = "search";
+
+	//variants of show all
+	const string COMMAND_SHOWALL = "showall";
+	const string COMMAND_DISPLAYALL = "displayall";
+	const string COMMAND_SEARCHALL = "searchall";
 
 	//variants of query
 	const string COMMAND_WHAT = "what";
@@ -132,7 +138,8 @@ namespace Enum{
 		commandUndo, 
 		commandRedo,
 		commandShow,
-		commandInvalid
+		commandInvalid,
+		commandShowAll
 	};
 
 	enum LogType {
