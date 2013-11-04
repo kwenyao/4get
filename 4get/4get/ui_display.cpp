@@ -24,7 +24,6 @@ ui_display::~ui_display(){
 
 void ui_display::InitializeComponent(void){
 	this->components = (gcnew System::ComponentModel::Container());
-	System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(ui_display::typeid));
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
@@ -55,6 +54,7 @@ void ui_display::InitializeComponent(void){
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
 	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
+	this->timerRefresh = (gcnew System::Windows::Forms::Timer(this->components));
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -279,7 +279,6 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Text = L"Enter Command Here";
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
-	/*this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);*/
 	// 
 	// messageContainer
 	// 
@@ -305,6 +304,12 @@ void ui_display::InitializeComponent(void){
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
 	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
+	// 
+	// timerRefresh
+	// 
+	this->timerRefresh->Enabled = true;
+	this->timerRefresh->Interval = 60000;
+	this->timerRefresh->Tick += gcnew System::EventHandler(this, &ui_display::timerRefresh_Tick);
 	// 
 	// ui_display
 	// 
@@ -333,6 +338,10 @@ void ui_display::InitializeComponent(void){
 	this->messageContainer->ResumeLayout(false);
 	this->ResumeLayout(false);
 
+}
+
+Void ui_display::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e){
+	//call executor which call task list to check if any task is overdue
 }
 
 Void ui_display::notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e){
@@ -514,6 +523,24 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 	else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
 		this->focusItem();
 	}
+	else if(e->Alt && e->KeyCode==Keys::D4){
+		if(this->WindowState == FormWindowState::Normal){
+			this->WindowState = FormWindowState::Minimized;
+			this->Hide();
+			this->notifyIcon1->Visible = true;
+		}
+		else if (this->WindowState == FormWindowState::Minimized){
+			this->Show();
+			this->notifyIcon1->Visible = false;
+		}
+	}
+}
+Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+	if(SetFocus(textboxInput)){
+		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
+		this->textboxInput->SelectionStart = 1;
+		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
+	}
 }
 
 void ui_display::focusItem(){
@@ -550,14 +577,6 @@ void ui_display::focusToDoItem(){
 		if(SetFocus(todoListView)){
 			todoListView->Items[0]->Selected = true;
 		}
-	}
-}
-
-Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
-	if(SetFocus(textboxInput)){
-		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
-		this->textboxInput->SelectionStart = 1;
-		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
 	}
 }
 
