@@ -41,14 +41,11 @@ private:
 	stack<Command> redoCommandStack;
 	stack<int> undoDeleteNumberStack;
 	stack<int> redoDeleteNumberStack;
+	stack<ListType> undoListTypeStack;
+	stack<ListType> redoListTypeStack;
 	ListType listType;
 
 	Task* createTaskPtr(Task taskToCreate);
-
-	static const int CONSTANT_MULTIPLIER_YEAR;
-	static const int CONSTANT_MULTIPLIER_MONTH;
-	static const int CONSTANT_MULTIPLIER_DAY;
-	static const int CONSTANT_MONTH_ONE;
 
 public:
 	//constructor
@@ -89,8 +86,6 @@ public:
 						time_t &reminderTime, 
 						TaskType &typeOfTask,
 						vector<string> &vectorOfInputs);
-	Task tempTaskCreator(Task* task);
-
 	//assertions
 	void assertNotEmptyTask();
 };
