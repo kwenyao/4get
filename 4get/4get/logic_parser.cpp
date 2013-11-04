@@ -405,37 +405,15 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 		throw MESSAGE_ERROR_LIMIT_ONE_SLOT;
 
 	determineVenue();
-	//cout << "no venue" << endl;
-
 	determineDateAndTime();
-	//cout << "no date and time" << endl;
-
 	determineRepeat();
-	//cout << "no repeat" << endl;
-
 	determinePriority();
-	//cout << "no priority" << endl;
-
 	determineReminder();
-	//cout << "no reminder" << endl;
-
 	parseAllTimeAndDate();
 
 	textDescription = _textInput;
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-	/*
-	cout << "command: <" << textCommand << ">" << endl;
-	cout << "description: <" << textDescription << ">" << endl;
-	cout << "venue: <" << textVenue << ">" << endl;
-	cout << "start date: <" << textStartDate << ">" << endl;
-	cout << "start time: <" << textStartTime << ">" << endl;
-	cout << "end date: <" << textEndDate << ">" << endl;
-	cout << "end time: <" << textEndTime << ">" << endl;
-	cout << "repeat: <" << textRepeat << ">" << endl;
-	cout << "priority: <" << textPriority << ">" << endl;
-	cout << "reminder date: <" << textRemindDate << ">" << endl;
-	cout << "reminder time: <" << textRemindTime << ">" << endl;
-	*/
+
 	return true;
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
@@ -446,7 +424,7 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
 	bool hasResult = false;
 
-	if(determineDateAndTime()){											// if user specify time
+	if(determineDateAndTime()){											
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);					
 		hasResult = true;
 	}
@@ -494,6 +472,9 @@ bool Parser::determineVenue()
 	std::size_t stringLength = textInput.size();
 	std::size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
+
+	bool isVenueDetermined = !textVenue.empty();
+	if(isVenueDetermined)
 
 	if(textInput.find(MARKER_AT)!=std::string::npos){
 		found = textInput.find(MARKER_AT);
@@ -1702,7 +1683,7 @@ string Parser::scanCommandDictionary(string word)
 	case DICTIONARY_UNDO:
 		return COMMAND_UNDO;
 	case DICTIONARY_REDO:
-		return COMMAND_UNDO;
+		return COMMAND_REDO;
 	case DICTIONARY_SHOW:
 		return COMMAND_SHOW;
 	case DICTIONARY_SHOWALL:
