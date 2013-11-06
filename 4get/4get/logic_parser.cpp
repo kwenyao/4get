@@ -97,18 +97,17 @@ void Parser::parseReset()
 }
 void Parser::processCommand(string commandString, vector<string>& inputBits)
 {
-	string command;
 	try {
 		try{
-			command = scanCommandDictionary(commandString);
-			if(command == COMMAND_NULL)
+			textCommand = scanCommandDictionary(commandString);
+			if(textCommand == COMMAND_NULL)
 				throw MESSAGE_ERROR_COMMAND_ERROR;
 		}
 		catch(string error){
 			throw;
 		}
-		inputBits[SLOT_COMMAND] = command;
-		if(command == COMMAND_ADD){
+		inputBits[SLOT_COMMAND] = textCommand;
+		if(textCommand == COMMAND_ADD){
 			try{
 				if(!separateFunctionAdd(inputBits))
 					throw MESSAGE_ERROR_COMMAND_ADD;
@@ -118,7 +117,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_DELETE){
+		else if(textCommand == COMMAND_DELETE){
 			try{
 				if(!separateFunctionDelete(inputBits))
 					throw MESSAGE_ERROR_COMMAND_DELETE;
@@ -128,7 +127,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_MARK){
+		else if(textCommand == COMMAND_MARK){
 			try{
 				if(!separateFunctionMark(inputBits))
 					throw MESSAGE_ERROR_COMMAND_MARK;
@@ -138,7 +137,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_MODIFY){
+		else if(textCommand == COMMAND_MODIFY){
 			try{
 				if(!separateFunctionModify(inputBits))
 					throw MESSAGE_ERROR_COMMAND_MODIFY;
@@ -148,7 +147,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_UNDO){
+		else if(textCommand == COMMAND_UNDO){
 			try{
 				if(!separateFunctionUndo(inputBits))
 					throw MESSAGE_ERROR_COMMAND_UNDO;
@@ -158,7 +157,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_REDO){
+		else if(textCommand == COMMAND_REDO){
 			try{
 				if(!separateFunctionRedo(inputBits))
 					throw MESSAGE_ERROR_COMMAND_REDO;
@@ -168,7 +167,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_SHOW){
+		else if(textCommand == COMMAND_SHOW){
 			try{
 				if(!separateFunctionShow(inputBits))
 					throw MESSAGE_ERROR_COMMAND_SHOW;
@@ -178,7 +177,7 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 				throw error;
 			}
 		}
-		else if(command == COMMAND_SHOWALL){
+		else if(textCommand == COMMAND_SHOWALL){
 			try{
 				if(!separateFunctionShowAll(inputBits))
 					throw MESSAGE_ERROR_COMMAND_SHOW;
@@ -415,7 +414,6 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	determineRepeat();
 	determinePriority();
 	determineReminder();
-	parseAllTimeAndDate();
 
 	textDescription = _textInput;
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
@@ -553,6 +551,7 @@ bool Parser::determineDateAndTime()
 		//If found By
 		if(textInput.find(MARKER_BY)!=std::string::npos){
 			found = textInput.find(MARKER_BY);
+
 			if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
@@ -578,7 +577,7 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos){
+		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos && textCommand==COMMAND_MODIFY){
 			found = textInput.find(MARKER_COMMA_TO);
 			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=std::string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
@@ -857,7 +856,8 @@ bool Parser::determineSlot()
 	bool endSlotFilled = false;
 	int slotNumber = INITIALIZE_INT;
 	int count = INITIALIZE_INT;
-	istringstream buffer(textInput);
+	string tempInput = textInput;
+	istringstream buffer(tempInput);
 	string temp;
 	while(!buffer.eof()){
 		if(startSlotFilled && endSlotFilled)
@@ -1042,11 +1042,12 @@ void Parser::removeBorderSpaces(string& str)
 	if(str.empty())
 		return;
 
-	while(str.front()==MARKER_ENCLOSE){
+	while(!str.empty() && str.front()==MARKER_ENCLOSE){
+		
 		str.erase(INITIALIZE_SIZE_T, MARKER_ENCLOSE_LENGTH);
 	}
 
-	while(str.back()==MARKER_ENCLOSE){
+	while(!str.empty() && str.back()==MARKER_ENCLOSE){
 		str.pop_back();
 	}
 }
@@ -1406,7 +1407,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						dateDetermined = true;
 					}
 					else{
-						strDate += _stringCheck;
+						strDate = _stringCheck;
 						dateDetermined = true;
 					}
 					continue;
@@ -1469,7 +1470,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						dateDetermined = true;
 					}
 					else{
-						strDate += _stringCheck;
+						strDate = _stringCheck;
 						dateDetermined = true;
 					}
 					continue;
