@@ -29,6 +29,38 @@ void TaskTimed::setupTask(long long id, TaskType type, string description, strin
 
 
 void TaskTimed::setTaskStart(time_t startTime) { taskStart = startTime; }
+
+void TaskTimed::setNextOccurance(){
+	struct tm endTM = convertToTm(taskEnd);
+	struct tm startTM = convertToTm(taskStart);
+	switch (taskRepeat){
+	case Enum::daily:
+		endTM.tm_mday = endTM.tm_mday + 1;
+		startTM.tm_mday = startTM.tm_mday + 1;
+		break;
+	case Enum::weekly:
+		endTM.tm_mday = endTM.tm_mday + 7;
+		startTM.tm_mday = startTM.tm_mday + 7;
+		break;
+	case Enum::fortnightly:
+		endTM.tm_mday = endTM.tm_mday + 14;
+		startTM.tm_mday = startTM.tm_mday + 14;
+		break;
+	case Enum::monthly:
+		endTM.tm_mon = endTM.tm_mon + 1;
+		startTM.tm_mon = startTM.tm_mon + 1;
+		break;
+	case Enum::annually:
+		endTM.tm_year = endTM.tm_year + 1;
+		startTM.tm_year = startTM.tm_year + 1;
+		break;
+	default:
+		return;
+	}
+	taskEnd = mktime(&endTM);
+	taskStart = mktime(&startTM);
+}
+
 time_t TaskTimed::getTaskStart() { return taskStart; }
 
 long long TaskTimed::getTimeLong(TimeType type){

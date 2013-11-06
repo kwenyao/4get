@@ -30,6 +30,30 @@ void TaskDeadline::setupTask(long long id, TaskType type, string description, st
 }
 void TaskDeadline::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
 
+void TaskDeadline::setNextOccurance(){
+	struct tm timeTM = convertToTm(taskEnd);
+	switch (taskRepeat){
+	case Enum::daily:
+		timeTM.tm_mday = timeTM.tm_mday + 1;
+		break;
+	case Enum::weekly:
+		timeTM.tm_mday = timeTM.tm_mday + 7;
+		break;
+	case Enum::fortnightly:
+		timeTM.tm_mday = timeTM.tm_mday + 14;
+		break;
+	case Enum::monthly:
+		timeTM.tm_mon = timeTM.tm_mon + 1;
+		break;
+	case Enum::annually:
+		timeTM.tm_year = timeTM.tm_year + 1;
+		break;
+	default:
+		return;
+	}
+	taskEnd = mktime(&timeTM);
+}
+
 time_t TaskDeadline::getTaskEnd() {	return taskEnd; }
 
 long long TaskDeadline::getTimeLong(TimeType type){
@@ -65,4 +89,10 @@ long long TaskDeadline::convertToLong(time_t rawTime){
 	year = year*CONVERT_MULTIPLIER_YEAR;
 	yearMonthDayHourMin = (year + month + day);
 	return yearMonthDayHourMin;
+}
+
+tm TaskDeadline::convertToTm(time_t rawTime){
+	struct tm returnTime;
+	localtime_s(&returnTime,&rawTime);
+	return returnTime;
 }
