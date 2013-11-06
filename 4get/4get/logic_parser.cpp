@@ -893,13 +893,13 @@ bool Parser::determineSlot()
 			shortenInput(extractStartPos, extractEndPos);
 			return true;
 		}
-		/*else if(count == 2){
+		else if(count == 2){
 		found = textInput.find(temp);
 		extractEndPos = --found;
 		shortenInput(extractStartPos, extractEndPos);
 		return true;
 
-		}*/
+		}
 		else if(count == 1){
 			found = textInput.find(temp);
 			extractEndPos = found+1;
