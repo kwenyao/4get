@@ -665,6 +665,32 @@ bool Parser::determineDateAndTime()
 					return true;
 				}
 			}
+			else if(textCommand==COMMAND_MODIFY){
+				if(textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH)!=std::string::npos ){			//try find comma
+					foundComma = textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH);
+					extractLength = determindExtractLength(found, foundComma, MARKER_FROM, extractStartPos);
+					i = foundComma; 
+					while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+						marker += textInput[i++];
+					if(scanMarkerDictionary(marker)){
+						textStart = _textInput.substr(extractStartPos, extractLength);
+						shortenInput(found, foundComma);
+						parseAllTimeAndDate();
+						return true;
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+						throw MESSAGE_ERROR_WRONG_KEYWORD;
+					}//wrong keyword definition
+				}
+				else{																					//by keyword is the last key input
+					extractLength = determindExtractLength(found, stringLength, MARKER_FROM, extractStartPos);
+					textStart = _textInput.substr(extractStartPos, ++extractLength);
+					shortenInput(found, stringLength);
+					parseAllTimeAndDate();
+					return true;
+				}
+			}
 			else{																					//wrong keyword definition
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				throw MESSAGE_ERROR_WRONG_KEYWORD;
