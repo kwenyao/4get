@@ -162,7 +162,7 @@ public:
 	Priority convertStringToPriority(string);
 	long long convertDateToInt(string dateStr);
 	bool convertStringToTime(string timeStr, time_t returnTime);
-	time_t convertStringToTime(string dateStr, string timeStr);
+	time_t convertStringToTime(string dateStr, string timeStr, bool isStart);
 	TaskType convertStringToTime(string startDate, 
 			  				     string startTime, 
 							     string endDate, 
