@@ -394,8 +394,6 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 		throw MESSAGE_ERROR_NO_SLOT_NUM;
 	}
 
-	//cout << "slot number: <" << textSlotNumber << ">" << endl;
-	//cout << "TaskStatus: <" << textStatus <<  ">" << endl;
 	logging(MESSAGE_SUCCESS_PARSED,Info,None);
 	return true;
 }
@@ -890,9 +888,16 @@ bool Parser::determineSlot()
 			shortenInput(extractStartPos, extractEndPos);
 			return true;
 		}
-		else if(count == 2){
+		/*else if(count == 2){
 			found = textInput.find(temp);
 			extractEndPos = --found;
+			shortenInput(extractStartPos, extractEndPos);
+			return true;
+			
+		}*/
+		else if(count == 1){
+			found = textInput.find(temp);
+			extractEndPos = found+1;
 			shortenInput(extractStartPos, extractEndPos);
 			return true;
 		}
