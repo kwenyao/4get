@@ -288,6 +288,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
 			taskTemp->setTaskStart(startTime);
 		}
+		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
+			taskTemp->setTaskEnd(endTime);
+		}
 		if(!vectorOfInputs[SLOT_PRIORITY].empty())
 		{
 			taskTemp->setTaskPriority(priority);
