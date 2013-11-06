@@ -42,6 +42,8 @@ private:
 	static const std::size_t MARKER_COMMA_LENGTH;
 	static const char MARKER_ENCLOSE;
 	static const std::size_t MARKER_ENCLOSE_LENGTH;
+	static const string MARKER_SPACE;
+	static const std::size_t MARKER_SPACE_LENGTH;
 	static const string MARKER_AT;
 	static const std::size_t MARKER_AT_LENGTH;
 	static const string MARKER_NEAR;

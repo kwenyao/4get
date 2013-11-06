@@ -6,6 +6,9 @@ const std::size_t Parser::MARKER_COMMA_LENGTH = 1;
 const char Parser::MARKER_ENCLOSE = ' ';
 const std::size_t Parser::MARKER_ENCLOSE_LENGTH = 1;
 
+const string Parser::MARKER_SPACE = " ";
+const std::size_t Parser::MARKER_SPACE_LENGTH = 1;
+
 const string Parser::MARKER_AT = ",at";
 const std::size_t Parser::MARKER_AT_LENGTH = 3;
 
@@ -412,11 +415,13 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	determineRepeat();
 	determinePriority();
 	determineReminder();
+	if(!textInput.empty() && textInput != MARKER_SPACE){
+		textDescription = _textInput;
+		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
+		return true;
+	}
 
-	textDescription = _textInput;
-	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-
-	return true;
+	throw MESSAGE_ERROR_NO_DESCRIPTION;
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
 {
@@ -889,11 +894,11 @@ bool Parser::determineSlot()
 			return true;
 		}
 		/*else if(count == 2){
-			found = textInput.find(temp);
-			extractEndPos = --found;
-			shortenInput(extractStartPos, extractEndPos);
-			return true;
-			
+		found = textInput.find(temp);
+		extractEndPos = --found;
+		shortenInput(extractStartPos, extractEndPos);
+		return true;
+
 		}*/
 		else if(count == 1){
 			found = textInput.find(temp);
@@ -1048,7 +1053,7 @@ void Parser::removeBorderSpaces(string& str)
 		return;
 
 	while(!str.empty() && str.front()==MARKER_ENCLOSE){
-		
+
 		str.erase(INITIALIZE_SIZE_T, MARKER_ENCLOSE_LENGTH);
 	}
 
