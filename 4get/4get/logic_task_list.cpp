@@ -52,6 +52,10 @@ void TaskList::saveAll(){
 	}
 }
 
+void TaskList::saveToDoList(){
+	_storage.save(_toDoList, listToDo);
+}
+
 bool TaskList::addToList(Task* task, ListType listType){
 	assert(task != NULL);
 	list<Task*>* listToAdd;
