@@ -73,8 +73,11 @@ list<Task*> Executor::getUpdatedList(ListType listType){
 bool Executor::adderFunction(vector<string> vectorOfInputs){
 	try{
 		long long id;
-		string description, location;
-		time_t reminderTime, startTime, endTime;
+		string description; 
+		string location;
+		time_t reminderTime;
+		time_t startTime;
+		time_t endTime;
 		RepeatType repeat;
 		Priority priority;
 		TaskType taskTypeToCreate;
@@ -181,9 +184,10 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 }
 bool Executor::markFunction(vector<string> vectorOfInputs){
 	try{
-		int markStartNumber,
-			markEndNumber,
-			markSize;
+		int markStartNumber;
+		int	markEndNumber;
+		int	markSize;
+
 		markStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if(markStartNumber < 1){
 			throw string(MESSAGE_ERROR_COMMAND_MARK);
@@ -233,16 +237,34 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			endTime;
 		Priority priority;
 		RepeatType repeat;
-		TaskType typeOfTask, typeOfOldTask;
+		TaskType /*typeOfTask,*/ typeOfOldTask;
+		bool flag = false;
 
 		modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if(modifyNumber < 1){
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
+		for(int i = 2; i < SLOT_SIZE; i++){
+			if(!vectorOfInputs[i].empty()){
+				flag = true;
+				break;
+			}
+		}
+		if(flag == false){
+			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+		}
 		taskTemp = taskList.obtainTask(modifyNumber);
 		typeOfOldTask = taskTemp->getTaskType();
 		storeIntoUndoTaskStack(*taskTemp);
-		setParameters(description,
+		description = vectorOfInputs[SLOT_DESCRIPTION];
+		location = vectorOfInputs[SLOT_LOCATION];
+		reminderTime = convert.convertStringToTime(vectorOfInputs[SLOT_REMIND_DATE], vectorOfInputs[SLOT_REMIND_TIME]);
+		startTime = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME]);
+		endTime = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME]);
+		priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
+		repeat = convert.convertStringToRepeatType(vectorOfInputs[SLOT_REPEAT]);
+
+		/*setParameters(description,
 			location,
 			priority,
 			repeat,
@@ -250,7 +272,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			endTime,
 			reminderTime,
 			typeOfTask,
-			vectorOfInputs);
+			vectorOfInputs);*/
 		bool isNoEndTime = (endTime == 0);
 		bool isNoStartTime = (startTime == 0);
 		if(!description.empty()){
@@ -514,12 +536,6 @@ bool Executor::redoFunction(){
 				}
 				redoMarkNumberStack.pop();
 			}
-			/*taskTemp = redoTaskStack.top();
-			taskPtrToAdd = createTaskPtr(taskTemp);
-			taskList.addToList(taskPtrToAdd, listCompleted);
-			taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
-			storeIntoUndoTaskStack(taskTemp);
-			redoTaskStack.pop();*/
 			break;
 		case commandModify:
 			taskTemp = redoTaskStack.top();
@@ -547,7 +563,6 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 			searchLocation;
 		time_t searchStartT,
 			searchEndT;
-
 
 		searchDescription =  vectorOfInputs[SLOT_DESCRIPTION];
 		searchLocation = vectorOfInputs[SLOT_LOCATION];
@@ -579,7 +594,6 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		else if(!vectorOfInputs[SLOT_END_TIME].empty() && vectorOfInputs[SLOT_END_DATE].empty()){
 			taskList.searchEndTime(searchEndT);
 		}
-
 		return true;
 	}catch(string error){
 		throw;
