@@ -275,6 +275,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			vectorOfInputs);*/
 		bool isNoEndTime = (endTime == 0);
 		bool isNoStartTime = (startTime == 0);
+		if(typeOfOldTask == floating && isNoEndTime && !isNoStartTime){
+			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+		}
 		if(!description.empty()){
 			taskTemp->setTaskDescription(description);
 		}
