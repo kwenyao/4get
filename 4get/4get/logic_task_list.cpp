@@ -83,7 +83,10 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 			delete *iterator;
 		listToDeleteFrom->erase(iterator);
 		logging(LOG_TASK_DELETED, Info, Pass);
-		_storage.save(*listToDeleteFrom, _currentDisplayed);
+		if(_currentDisplayed == listFiltered)
+			_storage.save(*listToDeleteFrom, _actualList);
+		else
+			_storage.save(*listToDeleteFrom, _currentDisplayed);
 	} catch(string e){
 		throw;
 	}
