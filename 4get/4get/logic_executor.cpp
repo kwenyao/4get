@@ -73,8 +73,11 @@ list<Task*> Executor::getUpdatedList(ListType listType){
 bool Executor::adderFunction(vector<string> vectorOfInputs){
 	try{
 		long long id;
-		string description, location;
-		time_t reminderTime, startTime, endTime;
+		string description; 
+		string location;
+		time_t reminderTime;
+		time_t startTime;
+		time_t endTime;
 		RepeatType repeat;
 		Priority priority;
 		TaskType taskTypeToCreate;
@@ -145,17 +148,30 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 			deleteEndNumber,
 			deleteSize;
 		deleteStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
+		if (deleteStartNumber < 1){
+			throw string(MESSAGE_ERROR_COMMAND_DELETE);
+		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
 			deleteEndNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_END_NUMBER]);
 		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
-			deleteSize = deleteEndNumber - deleteStartNumber + 1;
-			undoDeleteNumberStack.push(deleteSize);
+			if(deleteEndNumber > deleteStartNumber){
+				deleteSize = getSizeFunction(deleteStartNumber, deleteEndNumber);
+				undoDeleteNumberStack.push(deleteSize);
+			}
+			else if(deleteEndNumber < deleteStartNumber){
+				deleteSize = swapValueAndGetSizeFunction(deleteStartNumber, deleteEndNumber);
+				undoDeleteNumberStack.push(deleteSize);
+			}
 		}
-
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
 			for(int i = 0; i < deleteSize ; i++){
-				helperDeleteFunction(deleteStartNumber);
+				if(deleteStartNumber < deleteEndNumber){
+					helperDeleteFunction(deleteStartNumber);
+				}
+				else if(deleteEndNumber < deleteStartNumber){
+					helperDeleteFunction(deleteEndNumber);
+				}
 			}
 		}
 		else{
@@ -168,13 +184,40 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 }
 bool Executor::markFunction(vector<string> vectorOfInputs){
 	try{
-		int markNumber;
-		markNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
-		if(markNumber < 1){
+		int markStartNumber;
+		int	markEndNumber;
+		int	markSize;
+
+		markStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
+		if(markStartNumber < 1){
 			throw string(MESSAGE_ERROR_COMMAND_MARK);
 		}
-		storeIntoUndoTaskStack(*taskList.obtainTask(markNumber));
-		taskList.markDone(markNumber);
+		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+			markEndNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_END_NUMBER]);
+		}
+		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+			if(markEndNumber > markStartNumber){
+				markSize = getSizeFunction(markStartNumber, markEndNumber);
+				undoMarkNumberStack.push(markSize);
+			}
+			else if(markEndNumber < markStartNumber){
+				markSize = swapValueAndGetSizeFunction(markStartNumber, markEndNumber);
+				undoMarkNumberStack.push(markSize);
+			}
+		}
+		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
+			for(int i = 0; i < markSize ; i++){
+				if(markStartNumber < markEndNumber){
+					helperMarkFunction(markStartNumber);
+				}
+				else if(markEndNumber < markStartNumber){
+					helperMarkFunction(markEndNumber);
+				}
+			}
+		}
+		else{
+			helperMarkFunction(markStartNumber);
+		}
 		return true;
 	}catch (string errorStr){
 		throw;
@@ -194,16 +237,34 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			endTime;
 		Priority priority;
 		RepeatType repeat;
-		TaskType typeOfTask, typeOfOldTask;
+		TaskType /*typeOfTask,*/ typeOfOldTask;
+		bool flag = false;
 
 		modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if(modifyNumber < 1){
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
+		for(int i = 2; i < SLOT_SIZE; i++){
+			if(!vectorOfInputs[i].empty()){
+				flag = true;
+				break;
+			}
+		}
+		if(flag == false){
+			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+		}
 		taskTemp = taskList.obtainTask(modifyNumber);
 		typeOfOldTask = taskTemp->getTaskType();
 		storeIntoUndoTaskStack(*taskTemp);
-		setParameters(description,
+		description = vectorOfInputs[SLOT_DESCRIPTION];
+		location = vectorOfInputs[SLOT_LOCATION];
+		reminderTime = convert.convertStringToTime(vectorOfInputs[SLOT_REMIND_DATE], vectorOfInputs[SLOT_REMIND_TIME], false);
+		startTime = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME], true);
+		endTime = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME], false);
+		priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
+		repeat = convert.convertStringToRepeatType(vectorOfInputs[SLOT_REPEAT]);
+
+		/*setParameters(description,
 			location,
 			priority,
 			repeat,
@@ -211,25 +272,37 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			endTime,
 			reminderTime,
 			typeOfTask,
-			vectorOfInputs);
+			vectorOfInputs);*/
 		bool isNoEndTime = (endTime == 0);
 		bool isNoStartTime = (startTime == 0);
+		if(typeOfOldTask == floating && isNoEndTime && !isNoStartTime){
+			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+		}
 		if(!description.empty()){
 			taskTemp->setTaskDescription(description);
+			taskList.saveToDoList();
 		}
 		if(!location.empty()){
 			taskTemp->setTaskLocation(location);
+			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
 		{
 			taskTemp->setTaskReminder(reminderTime);
+			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
 			taskTemp->setTaskStart(startTime);
+			taskList.saveToDoList();
+		}
+		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
+			taskTemp->setTaskEnd(endTime);
+			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_PRIORITY].empty())
 		{
 			taskTemp->setTaskPriority(priority);
+			taskList.saveToDoList();
 		}
 		//change floating to deadline task
 		if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
@@ -303,6 +376,7 @@ bool Executor::undoFunction(){
 		Task* taskPtrToAdd;
 		ListType undoListType;
 		int deleteSize = 0;
+		int markSize = 0;
 
 		if(undoCommandStack.empty()){
 			throw string(MESSAGE_ERROR_COMMAND_UNDO);
@@ -312,17 +386,20 @@ bool Executor::undoFunction(){
 			throw string(MESSAGE_ERROR_COMMAND_UNDO);
 		}
 		undoListType = undoListTypeStack.top();
-		if(!(commandType == commandDelete)){
+		if((commandType != commandDelete) && (commandType != commandMark)){
 			taskTemp = undoTaskStack.top();
 			taskPtrToAdd = createTaskPtr(taskTemp);
 		}
 
 		storeIntoRedoCommandStack(commandType);
-		if((commandType != commandModify) && (commandType != commandDelete)){
+		if((commandType != commandModify) && (commandType != commandDelete) && (commandType != commandMark)){
 			storeIntoRedoTaskStack(taskTemp);
 		}
 		if(commandType == commandDelete && !undoDeleteNumberStack.empty()){
 			deleteSize = undoDeleteNumberStack.top();
+		}
+		if(commandType == commandMark && !undoMarkNumberStack.empty()){
+			markSize = undoMarkNumberStack.top();
 		}
 		switch(commandType)
 		{
@@ -334,7 +411,6 @@ bool Executor::undoFunction(){
 			if(deleteSize == 0){
 				taskTemp = undoTaskStack.top();
 				storeIntoRedoTaskStack(taskTemp);
-				cout << taskTemp.getTaskId() << endl;
 				taskPtrToAdd = createTaskPtr(taskTemp);
 				taskList.addToList(taskPtrToAdd, undoListType);
 				undoTaskStack.pop();
@@ -353,9 +429,27 @@ bool Executor::undoFunction(){
 			}
 			break;
 		case commandMark:
-			taskList.deleteIDFromList(taskTemp.getTaskId(), listCompleted, true);
-			taskList.addToList(taskPtrToAdd, undoListType);
-			undoTaskStack.pop();
+			if(markSize == 0){
+				taskTemp = undoTaskStack.top();
+				storeIntoRedoTaskStack(taskTemp);
+				taskPtrToAdd = createTaskPtr(taskTemp);
+				taskList.deleteIDFromList(taskTemp.getTaskId(), listCompleted, true);
+				taskList.addToList(taskPtrToAdd, undoListType);
+				undoTaskStack.pop();
+			}
+			else if(markSize != 0){
+				redoMarkNumberStack.push(markSize);
+				while(markSize != 0){
+					taskTemp = undoTaskStack.top();
+					storeIntoRedoTaskStack(taskTemp);
+					taskPtrToAdd = createTaskPtr(taskTemp);
+					taskList.deleteIDFromList(taskTemp.getTaskId(), listCompleted, true);
+					taskList.addToList(taskPtrToAdd, undoListType);
+					undoTaskStack.pop();
+					markSize--;
+				}
+				undoMarkNumberStack.pop();
+			}
 			break;
 		case commandModify:
 			storeIntoRedoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));  //get the task currently in the list
@@ -381,6 +475,7 @@ bool Executor::redoFunction(){
 		Command commandType;
 		Task* taskPtrToAdd;
 		int deleteSize = 0;
+		int markSize = 0;
 		ListType redoListType;
 
 		if(redoCommandStack.empty()){
@@ -397,6 +492,12 @@ bool Executor::redoFunction(){
 				undoDeleteNumberStack.push(deleteSize);
 			}
 		}
+		if(commandType == commandMark && !redoMarkNumberStack.empty()){
+			markSize = redoMarkNumberStack.top();
+			if(markSize != 0){
+				undoMarkNumberStack.push(markSize);
+			}
+		}
 		switch(commandType)
 		{
 		case commandAdd:
@@ -409,8 +510,6 @@ bool Executor::redoFunction(){
 		case commandDelete:
 			if(deleteSize == 0){
 				taskTemp = redoTaskStack.top();
-			//	taskPtrToAdd = createTaskPtr(taskTemp);
-				cout << taskTemp.getTaskId() << endl;
 				taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
 				storeIntoUndoTaskStack(taskTemp);
 				redoTaskStack.pop();
@@ -419,7 +518,6 @@ bool Executor::redoFunction(){
 				while(deleteSize != 0)
 				{
 					taskTemp = redoTaskStack.top();
-			//		taskPtrToAdd = createTaskPtr(taskTemp);
 					taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
 					storeIntoUndoTaskStack(taskTemp);
 					redoTaskStack.pop();
@@ -429,12 +527,27 @@ bool Executor::redoFunction(){
 			}
 			break;
 		case commandMark:
-			taskTemp = redoTaskStack.top();
-			taskPtrToAdd = createTaskPtr(taskTemp);
-			taskList.addToList(taskPtrToAdd, listCompleted);
-			taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
-			storeIntoUndoTaskStack(taskTemp);
-			redoTaskStack.pop();
+			if(markSize == 0){
+				taskTemp = redoTaskStack.top();
+				taskPtrToAdd = createTaskPtr(taskTemp);
+				taskList.addToList(taskPtrToAdd, listCompleted);
+				taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
+				storeIntoUndoTaskStack(taskTemp);
+				redoTaskStack.pop();
+			}
+			else if(markSize != 0){
+				while(markSize != 0)
+				{
+					taskTemp = redoTaskStack.top();
+					taskPtrToAdd = createTaskPtr(taskTemp);
+					taskList.addToList(taskPtrToAdd, listCompleted);
+					taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
+					storeIntoUndoTaskStack(taskTemp);
+					redoTaskStack.pop();
+					markSize--;
+				}
+				redoMarkNumberStack.pop();
+			}
 			break;
 		case commandModify:
 			taskTemp = redoTaskStack.top();
@@ -463,11 +576,10 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		time_t searchStartT,
 			searchEndT;
 
-
 		searchDescription =  vectorOfInputs[SLOT_DESCRIPTION];
 		searchLocation = vectorOfInputs[SLOT_LOCATION];
-		searchStartT = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME]);
-		searchEndT = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME]);
+		searchStartT = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME], true);
+		searchEndT = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME], false);
 
 		if(!vectorOfInputs[SLOT_DESCRIPTION].empty()){
 			taskList.searchDescription(searchDescription);
@@ -494,7 +606,6 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		else if(!vectorOfInputs[SLOT_END_TIME].empty() && vectorOfInputs[SLOT_END_DATE].empty()){
 			taskList.searchEndTime(searchEndT);
 		}
-
 		return true;
 	}catch(string error){
 		throw;
@@ -582,7 +693,7 @@ bool Executor::setParameters(string &description,
 
 									 priority = convert.convertStringToPriority(prioritySlot);
 									 repeat = convert.convertStringToRepeatType(repeatSlot);
-									 reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot);
+									 reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot, false);
 									 typeOfTask = convert.convertStringToTime(startDateSlot, 
 										 startTimeSlot, 
 										 endDateSlot, 
@@ -662,10 +773,33 @@ bool Executor::helperDeleteFunction(int deleteStartNumber){
 		throw;
 	}
 }
+void Executor::helperMarkFunction(int markStartNumber){
+	try{
+		Task taskTemp;
+		taskTemp = *taskList.obtainTask(markStartNumber);
+		storeIntoUndoTaskStack(taskTemp);
+		taskList.markDone(markStartNumber);
+	}catch(string error){
+		throw;
+	}
+}
 void Executor::refreshAll(){
 	try{
 		taskList.refreshAll(convert.getNow());
 	}catch (string Error){
 		throw;
 	}
+}
+int Executor::swapValueAndGetSizeFunction(int start, int end){
+	int temp,
+		size;
+
+	temp = end;
+	end = start;
+	start = temp;
+	return size = end - start + 1;
+}
+int Executor::getSizeFunction(int start, int end){
+	int size;
+	return size = end - start + 1;
 }

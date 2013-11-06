@@ -72,6 +72,7 @@ public:
 	//storage functions
 	void loadFromFile();
 	void saveAll();
+	void saveToDoList();
 
 	//Public list manipulation functions
 	bool addToList(Task* task, ListType listToAdd);

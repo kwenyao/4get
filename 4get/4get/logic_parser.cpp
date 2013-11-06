@@ -6,6 +6,9 @@ const std::size_t Parser::MARKER_COMMA_LENGTH = 1;
 const char Parser::MARKER_ENCLOSE = ' ';
 const std::size_t Parser::MARKER_ENCLOSE_LENGTH = 1;
 
+const string Parser::MARKER_SPACE = " ";
+const std::size_t Parser::MARKER_SPACE_LENGTH = 1;
+
 const string Parser::MARKER_AT = ",at";
 const std::size_t Parser::MARKER_AT_LENGTH = 3;
 
@@ -88,7 +91,6 @@ void Parser::parseReset()
 	textEndTime = INITIALIZE_STRING_BLANK;
 	textRepeat = INITIALIZE_STRING_BLANK;
 	textPriority = INITIALIZE_STRING_BLANK;
-	//textStatus = INITIALIZE_STRING_BLANK;
 	textRemind = INITIALIZE_STRING_BLANK;
 	textRemindDate = INITIALIZE_STRING_BLANK;
 	textRemindTime = INITIALIZE_STRING_BLANK;
@@ -97,88 +99,80 @@ void Parser::parseReset()
 }
 void Parser::processCommand(string commandString, vector<string>& inputBits)
 {
-	string command;
 	try {
 		try{
-			command = scanCommandDictionary(commandString);
-			if(command == COMMAND_NULL)
+			textCommand = scanCommandDictionary(commandString);
+			if(textCommand == COMMAND_NULL)
 				throw MESSAGE_ERROR_COMMAND_ERROR;
 		}
 		catch(string error){
 			throw;
 		}
-		inputBits[SLOT_COMMAND] = command;
-		if(command == COMMAND_ADD){
+		inputBits[SLOT_COMMAND] = textCommand;
+		if(textCommand == COMMAND_ADD){
 			try{
 				if(!separateFunctionAdd(inputBits))
 					throw MESSAGE_ERROR_COMMAND_ADD;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_DELETE){
+		else if(textCommand == COMMAND_DELETE){
 			try{
 				if(!separateFunctionDelete(inputBits))
 					throw MESSAGE_ERROR_COMMAND_DELETE;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_MARK){
+		else if(textCommand == COMMAND_MARK){
 			try{
 				if(!separateFunctionMark(inputBits))
 					throw MESSAGE_ERROR_COMMAND_MARK;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_MODIFY){
+		else if(textCommand == COMMAND_MODIFY){
 			try{
 				if(!separateFunctionModify(inputBits))
 					throw MESSAGE_ERROR_COMMAND_MODIFY;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_UNDO){
+		else if(textCommand == COMMAND_UNDO){
 			try{
 				if(!separateFunctionUndo(inputBits))
 					throw MESSAGE_ERROR_COMMAND_UNDO;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_REDO){
+		else if(textCommand == COMMAND_REDO){
 			try{
 				if(!separateFunctionRedo(inputBits))
 					throw MESSAGE_ERROR_COMMAND_REDO;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_SHOW){
+		else if(textCommand == COMMAND_SHOW){
 			try{
 				if(!separateFunctionShow(inputBits))
 					throw MESSAGE_ERROR_COMMAND_SHOW;
 			}
-
 			catch(string error){
 				throw error;
 			}
 		}
-		else if(command == COMMAND_SHOWALL){
+		else if(textCommand == COMMAND_SHOWALL){
 			try{
 				if(!separateFunctionShowAll(inputBits))
 					throw MESSAGE_ERROR_COMMAND_SHOW;
@@ -191,117 +185,6 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 	catch(string error){
 		throw error;
 	}
-	/*
-	try{
-	if(commandString.compare(COMMAND_A)==COMPARE_SUCCESS || commandString.compare(COMMAND_ADD)==COMPARE_SUCCESS || commandString.compare(COMMAND_CREATE)==COMPARE_SUCCESS){
-	inputBits[SLOT_COMMAND] = COMMAND_ADD;
-	try{
-	if(!separateInput(commandAdd, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_ADD;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-
-	}
-
-	else if(commandString.compare(COMMAND_DEL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DELETE)==COMPARE_SUCCESS || commandString.compare(COMMAND_ERASE)==COMPARE_SUCCESS ||commandString.compare(COMMAND_REM)==COMPARE_SUCCESS || commandString.compare(COMMAND_REMOVE)==COMPARE_SUCCESS) {
-	inputBits[SLOT_COMMAND] = COMMAND_DELETE;
-	try{
-	if(!separateInput(commandDelete, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_DELETE;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	else if(commandString.compare(COMMAND_M)==COMPARE_SUCCESS || commandString.compare(COMMAND_MARK)==COMPARE_SUCCESS || commandString.compare(COMMAND_DONE)==COMPARE_SUCCESS) {
-	inputBits[SLOT_COMMAND] = COMMAND_MARK;
-	try{
-	if(!separateInput(commandMark, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_MARK;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	else if(commandString.compare(COMMAND_MOD)==COMPARE_SUCCESS || commandString.compare(COMMAND_MODIFY)==COMPARE_SUCCESS || commandString.compare(COMMAND_UPDATE)==COMPARE_SUCCESS) {
-	inputBits[SLOT_COMMAND] = COMMAND_MODIFY;
-	try{
-	if(!separateInput(commandModify, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_MODIFY;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	else if(commandString.compare(COMMAND_UNDO)==COMPARE_SUCCESS) {
-	inputBits[SLOT_COMMAND] = COMMAND_UNDO;
-	try{
-	if(!separateInput(commandUndo, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_UNDO;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	else if(commandString.compare(COMMAND_SHOW)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAY)==COMPARE_SUCCESS || commandString.compare(COMMAND_SEARCH)==COMPARE_SUCCESS){
-	inputBits[SLOT_COMMAND] = COMMAND_SHOW;
-	try{
-	if(!separateInput(commandShow, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_SHOW;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	else if(commandString.compare(COMMAND_SHOWALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_DISPLAYALL)==COMPARE_SUCCESS || commandString.compare(COMMAND_SEARCHALL)==COMPARE_SUCCESS){
-	inputBits[SLOT_COMMAND] = COMMAND_SHOWALL;
-	try{
-	if(!separateInput(commandShow, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_SHOW;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-
-	/*else if(commandString.compare(COMMAND_WHAT)==COMPARE_SUCCESS){
-	inputBits[SLOT_COMMAND] = COMMAND_WHAT;
-	if(!separateInput(commandQuery, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_QUERY;
-	}
-	}
-	else if(commandString.compare(COMMAND_WHEN)==COMPARE_SUCCESS){
-	inputBits[SLOT_COMMAND] = COMMAND_WHEN;
-	if(!separateInput(commandQuery, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_QUERY;
-	}
-	}
-	else if(commandString.compare(COMMAND_REDO)==COMPARE_SUCCESS) {
-	inputBits[SLOT_COMMAND] = COMMAND_REDO;
-	try{
-	if(!separateInput(commandRedo, inputBits)){
-	throw MESSAGE_ERROR_COMMAND_REDO;
-	}
-	}
-	catch(string error){
-	throw;
-	}
-	}
-	}
-	catch(string error)
-	{
-	throw error;
-	}
-	*/
 }
 void Parser::parseInput(string input, vector<string>& inputBits)
 {
@@ -317,7 +200,6 @@ void Parser::parseInput(string input, vector<string>& inputBits)
 }
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 {
-
 	switch (userCommand){
 	case commandAdd: 
 		return separateFunctionAdd(inputBits);
@@ -338,39 +220,18 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 	default:
 		return false;
 	}
-
-
-
 }
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 	determineVenue();
-	//cout << "no venue" << endl;
 	determineDateAndTime();
-	//cout << "no date and time" << endl;
 	determineRepeat();
-	//cout << "no repeat" << endl;
 	determinePriority();
-	//cout << "no priority" << endl;
 	determineReminder();
-	//cout << "no reminder" << endl;
 	textDescription = _textInput;
 	if(textDescription.empty())
 		throw MESSAGE_ERROR_NO_DESCRIPTION;
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-	/*
-	cout << "command: <" << textCommand << ">" << endl;
-	cout << "description: <" << textDescription << ">" << endl;
-	cout << "venue: <" << textVenue << ">" << endl;
-	cout << "start date: <" << textStartDate << ">" << endl;
-	cout << "start time: <" << textStartTime << ">" << endl;
-	cout << "end date: <" << textEndDate << ">" << endl;
-	cout << "end time: <" << textEndTime << ">" << endl;
-	cout << "repeat: <" << textRepeat << ">" << endl;
-	cout << "priority: <" << textPriority << ">" << endl;
-	cout << "reminder date: <" << textRemindDate << ">" << endl;
-	cout << "reminder time: <" << textRemindTime << ">" << endl;
-	*/
 
 	return true;
 }
@@ -387,16 +248,12 @@ bool Parser::separateFunctionDelete(vector<string>& inputBits)
 }
 bool Parser::separateFunctionMark(vector<string>& inputBits)
 {
-	//if(!determineStatus())
-	//	cout << "no status" << endl;
 	if(!determineSlot()){
 		cout << "no slot" << endl;
 		logging(MESSAGE_ERROR_NO_SLOT_NUM,Error,None);
 		throw MESSAGE_ERROR_NO_SLOT_NUM;
 	}
 
-	//cout << "slot number: <" << textSlotNumber << ">" << endl;
-	//cout << "TaskStatus: <" << textStatus <<  ">" << endl;
 	logging(MESSAGE_SUCCESS_PARSED,Info,None);
 	return true;
 }
@@ -415,11 +272,8 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	determineRepeat();
 	determinePriority();
 	determineReminder();
-	parseAllTimeAndDate();
-
 	textDescription = _textInput;
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-
 	return true;
 }
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
@@ -553,6 +407,7 @@ bool Parser::determineDateAndTime()
 		//If found By
 		if(textInput.find(MARKER_BY)!=std::string::npos){
 			found = textInput.find(MARKER_BY);
+
 			if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
@@ -578,7 +433,7 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos){
+		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos && textCommand==COMMAND_MODIFY){
 			found = textInput.find(MARKER_COMMA_TO);
 			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=std::string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
@@ -663,6 +518,32 @@ bool Parser::determineDateAndTime()
 					return true;
 				}
 			}
+			else if(textCommand==COMMAND_MODIFY){
+				if(textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH)!=std::string::npos ){			//try find comma
+					foundComma = textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH);
+					extractLength = determindExtractLength(found, foundComma, MARKER_FROM, extractStartPos);
+					i = foundComma; 
+					while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+						marker += textInput[i++];
+					if(scanMarkerDictionary(marker)){
+						textStart = _textInput.substr(extractStartPos, extractLength);
+						shortenInput(found, foundComma);
+						parseAllTimeAndDate();
+						return true;
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+						throw MESSAGE_ERROR_WRONG_KEYWORD;
+					}//wrong keyword definition
+				}
+				else{																					//by keyword is the last key input
+					extractLength = determindExtractLength(found, stringLength, MARKER_FROM, extractStartPos);
+					textStart = _textInput.substr(extractStartPos, ++extractLength);
+					shortenInput(found, stringLength);
+					parseAllTimeAndDate();
+					return true;
+				}
+			}
 			else{																					//wrong keyword definition
 				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
 				throw MESSAGE_ERROR_WRONG_KEYWORD;
@@ -731,7 +612,7 @@ bool Parser::determinePriority()
 	bool isPriorityDetermined = !textPriority.empty();
 	if(!isPriorityDetermined){
 		if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
-			found = textInput.find(MARKER_PRIORITY);
+			found = textInput.rfind(MARKER_PRIORITY);
 			if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=std::string::npos){
 				foundEnclose = textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH);
 				extractLength = determindExtractLength(found, foundEnclose, MARKER_PRIORITY, extractStartPos);
@@ -743,7 +624,7 @@ bool Parser::determinePriority()
 			else{
 				extractStartPos = found;
 				textPriority = _textInput.substr(++extractStartPos);
-				shortenInput(found, MARKER_PRIORITY_LENGTH);
+				shortenInput(found, stringLength);
 				return true;
 			}
 		}
@@ -857,7 +738,8 @@ bool Parser::determineSlot()
 	bool endSlotFilled = false;
 	int slotNumber = INITIALIZE_INT;
 	int count = INITIALIZE_INT;
-	istringstream buffer(textInput);
+	string tempInput = textInput;
+	istringstream buffer(tempInput);
 	string temp;
 	while(!buffer.eof()){
 		if(startSlotFilled && endSlotFilled)
@@ -895,6 +777,13 @@ bool Parser::determineSlot()
 			extractEndPos = --found;
 			shortenInput(extractStartPos, extractEndPos);
 			return true;
+
+		}
+		else if(count == 1){
+			found = textInput.find(temp);
+			extractEndPos = found+1;
+			shortenInput(extractStartPos, extractEndPos);
+			return true;
 		}
 		else
 			throw MESSAGE_ERROR_WRONG_FORMAT;
@@ -902,90 +791,7 @@ bool Parser::determineSlot()
 	else
 		throw MESSAGE_ERROR_WRONG_FORMAT;
 }
-/*
-bool Parser::determineTaskList()
-{
-std::size_t found = INITIALIZE_SIZE_T;
-std::size_t stringLength = textInput.size();
 
-if(textInput.rfind(LIST_COMPLETED)!=std::string::npos){
-found = textInput.rfind(LIST_COMPLETED);
-textTaskList = _textInput.substr(found, LIST_COMPLETED_LENGTH);
-shortenInput(found, stringLength);
-return true;
-}
-else if(textInput.rfind(LIST_TO_DO)!=std::string::npos){
-found = textInput.rfind(LIST_TO_DO);
-textTaskList = _textInput.substr(found, LIST_TO_DO_LENGTH);
-shortenInput(found, stringLength);
-return true;
-}
-else if(textInput.rfind(LIST_OVERDUED)!=std::string::npos){
-found = textInput.rfind(LIST_OVERDUED);
-textTaskList = _textInput.substr(found, LIST_OVERDUED_LENGTH);
-shortenInput(found, stringLength);
-return true;
-}
-
-else
-return false;
-}
-*/
-/*
-bool Parser::determineStatus()
-{
-std::size_t found = INITIALIZE_SIZE_T;
-std::size_t extractEndPos = INITIALIZE_SIZE_T;
-
-
-if(textInput.find(MARKER_UNDONE)!=std::string::npos){
-found = textInput.find(MARKER_UNDONE);
-if(textInput.find(MARKER_ENCLOSE,found)!=std::string::npos)
-extractEndPos = textInput.find(MARKER_ENCLOSE,found);
-else
-extractEndPos = textInput.size();
-textStatus = _textInput.substr(found, MARKER_UNDONE_LENGTH);
-shortenInput(found, --extractEndPos);
-return true;
-}
-
-else if(textInput.find(MARKER_INCOMPLETE)!=std::string::npos){
-found = textInput.find(MARKER_INCOMPLETE);
-if(textInput.find(MARKER_ENCLOSE,found)!=std::string::npos)
-extractEndPos = textInput.find(MARKER_ENCLOSE,found);
-else
-extractEndPos = textInput.size();
-textStatus = _textInput.substr(found, MARKER_INCOMPLETE_LENGTH);
-shortenInput(found, --extractEndPos);
-return true;
-}
-
-else if(textInput.find(MARKER_DONE)!=std::string::npos){
-found = textInput.find(MARKER_DONE);
-if(textInput.find(MARKER_ENCLOSE,found)!=std::string::npos)
-extractEndPos = textInput.find(MARKER_ENCLOSE,found);
-else
-extractEndPos = textInput.size();
-textStatus = _textInput.substr(found, MARKER_DONE_LENGTH);
-shortenInput(found, --extractEndPos);
-return true;
-}
-
-else if(textInput.find(MARKER_COMPLETED)!=std::string::npos){
-found = textInput.find(MARKER_COMPLETED);
-if(textInput.find(MARKER_ENCLOSE,found)!=std::string::npos)
-extractEndPos = textInput.find(MARKER_COMPLETED,found);
-else
-extractEndPos = textInput.size();
-textStatus = _textInput.substr(found, MARKER_COMPLETED_LENGTH);
-shortenInput(found, --extractEndPos);
-return true;
-}
-
-else
-return false;
-}
-*/
 std::size_t Parser::determindExtractLength(std::size_t partitionStart, std::size_t partitionEnd, string markConstant, std::size_t& extractStartPos)
 {
 	extractStartPos = INITIALIZE_SIZE_T;
@@ -1042,11 +848,12 @@ void Parser::removeBorderSpaces(string& str)
 	if(str.empty())
 		return;
 
-	while(str.front()==MARKER_ENCLOSE){
+	while(!str.empty() && str.front()==MARKER_ENCLOSE){
+
 		str.erase(INITIALIZE_SIZE_T, MARKER_ENCLOSE_LENGTH);
 	}
 
-	while(str.back()==MARKER_ENCLOSE){
+	while(!str.empty() && str.back()==MARKER_ENCLOSE){
 		str.pop_back();
 	}
 }
@@ -1055,113 +862,7 @@ void Parser::parseAllTimeAndDate()
 	parseTimeAndDate(textStart, textStartDate, textStartTime);
 	parseTimeAndDate(textEnd, textEndDate, textEndTime);
 }
-/*
-bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
-{
-stringstream buffer(str);
-string stringcheck;
-string _stringcheck;
-std::size_t foundLeft;
-std::size_t foundRight;
 
-if(str.empty())
-return true;
-while(!buffer.eof()){
-buffer >> _stringcheck;
-stringcheck = _stringcheck;
-toLowerCase(stringcheck);
-if(stringcheck.find(TIMER_SLASH)!=std::string::npos || stringcheck.find(TIMER_DASH)!=std::string::npos){
-if(stringcheck.find(TIMER_SLASH)!=std::string::npos){
-foundLeft = stringcheck.find(TIMER_SLASH);
-if(stringcheck.rfind(TIMER_SLASH)!=std::string::npos){
-foundRight = stringcheck.rfind(TIMER_SLASH);
-if(foundRight!=foundLeft)
-strDate = _stringcheck;
-else{
-logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-throw MESSAGE_ERROR_WRONG_FORMAT;
-}
-}
-else{
-logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-throw MESSAGE_ERROR_WRONG_FORMAT;
-}
-}
-else{
-foundLeft = stringcheck.find(TIMER_DASH);
-if(stringcheck.rfind(TIMER_DASH)!=std::string::npos){
-foundRight = stringcheck.rfind(TIMER_DASH);
-if(foundRight!=foundLeft)
-strDate = _stringcheck;
-else{
-logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-throw MESSAGE_ERROR_WRONG_FORMAT;
-}
-}
-else{
-logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-throw MESSAGE_ERROR_WRONG_FORMAT;
-}
-}
-}
-else if(stringcheck.size()>TIMER_TIME_LOWER_LENGTH && stringcheck.size()<TIMER_TIME_UPPER_LENGTH && stringcheck.size()!=TIMER_TIME_EXCLUDED_LENGTH){
-if(stringcheck.size()==TIMER_24HR_LENGTH) {
-int i = 0;
-bool is24hr = true;
-while(i<TIMER_24HR_LENGTH){
-if(!isdigit(stringcheck[i]))
-is24hr = false;
-i++;
-}
-if(is24hr)
-strTime = _stringcheck;
-else{
-logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-throw MESSAGE_ERROR_WRONG_FORMAT;
-}
-}
-else if(stringcheck.find(TIMER_COLON)!=std::string::npos || stringcheck.find(TIMER_DOT)!=std::string::npos || 
-stringcheck.find(TIMER_AM)!=std::string::npos || stringcheck.find(TIMER_PM)!=std::string::npos){
-strTime = _stringcheck;
-}
-}
-else
-strDate = _stringcheck;
-}
-return true;
-}*/
-/*
-int Parser::separateInput(int state)
-{
-string temp;
-iss >> temp;
-
-if(temp == ",at"){
-temp.clear();
-iss >> temp;
-textVenue+= temp + " ";
-return 1;
-}
-else if(temp ==",by"){
-temp.clear();
-iss >> temp;
-textDateAndTime+= temp + " ";
-return 2;
-}
-else if(state == 1){
-textVenue+= temp + " ";
-return 1;
-}
-else if (state == 2){
-textDateAndTime+= temp + " ";
-return 2;
-}
-else
-{
-textDescription += temp + " ";
-}
-}
-*/
 void Parser::populateContainer(vector<string>& inputBits)
 {
 	inputBits[SLOT_DESCRIPTION] = textDescription;
@@ -1176,7 +877,6 @@ void Parser::populateContainer(vector<string>& inputBits)
 	inputBits[SLOT_END_TIME] = textEndTime;
 	inputBits[SLOT_SLOT_START_NUMBER] = textSlotStartNumber;
 	inputBits[SLOT_SLOT_END_NUMBER] = textSlotEndNumber;
-	//inputBits[SLOT_STATUS] = textStatus;
 }
 void Parser::toLowerCase(string &str)
 {
@@ -1234,44 +934,6 @@ string Parser::getCommand()
 {
 	return textCommand;
 }
-/*
-bool Parser::determineDateAndTime()
-{
-std::size_t found = INITIALIZE_SIZE_T;
-std::size_t foundComma = INITIALIZE_SIZE_T;
-std::size_t foundTo = INITIALIZE_SIZE_T;
-
-if(textInput.find(MARKER_BY)!=std::string::npos){
-found = textInput.find(MARKER_BY);
-
-if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
-foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
-extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
-i = foundComma; 
-while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
-marker += textInput[i++];
-if(marker==MARKER_AT || marker==MARKER_NEAR || marker==MARKER_REMIND || marker==MARKER_REPEAT || marker==MARKER_PRIORITY){
-textEnd = _textInput.substr(extractStartPos, extractLength);
-shortenInput(found, foundComma);
-parseAllTimeAndDate();
-return true;
-}
-else{
-logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-throw MESSAGE_ERROR_WRONG_KEYWORD;
-}//wrong keyword definition
-}
-else{																					//by keyword is the last key input
-extractLength = determindExtractLength(found, stringLength, MARKER_BY, extractStartPos);
-textEnd = _textInput.substr(extractStartPos, ++extractLength);
-shortenInput(found, stringLength);
-parseAllTimeAndDate();
-return true;
-}
-}
-
-}*/
-
 
 bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 {
@@ -1380,7 +1042,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateMonthDetermined = true;
 					continue;
 				}
-				else if(stringLength == 4 && isdigit(stringCheck.front())){
+				else if(stringLength == 4 && isdigit(stringCheck.front()) && !(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos)){
 					int i = 0;
 					while(i != stringLength){
 						isDigit = isdigit(stringCheck[i]) != 0;
@@ -1406,7 +1068,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						dateDetermined = true;
 					}
 					else{
-						strDate += _stringCheck;
+						strDate = _stringCheck;
 						dateDetermined = true;
 					}
 					continue;
@@ -1469,7 +1131,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						dateDetermined = true;
 					}
 					else{
-						strDate += _stringCheck;
+						strDate = _stringCheck;
 						dateDetermined = true;
 					}
 					continue;
@@ -1548,36 +1210,15 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				timeDetermined = true;
 				continue;
 			}
+			else{
+				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
+				throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+			}
 		}
 		else{
 			logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
 			throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 		}
-		/*
-		else if(stringLength>TIMER_TIME_LOWER_LENGTH && stringLength<TIMER_TIME_UPPER_LENGTH && stringLength!=TIMER_TIME_EXCLUDED_LENGTH){
-		if(stringLength==TIMER_24HR_LENGTH) {
-		int i = 0;
-		bool is24hr = true;
-		while(i<TIMER_24HR_LENGTH){
-		if(!isdigit(stringCheck[i]))
-		is24hr = false;
-		i++;
-		}
-		if(is24hr)
-		strTime = _stringCheck;
-		else{
-		logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-		throw MESSAGE_ERROR_WRONG_FORMAT;
-		}
-		}
-		else if(stringCheck.find(TIMER_COLON)!=std::string::npos || stringCheck.find(TIMER_DOT)!=std::string::npos || 
-		stringCheck.find(TIMER_AM)!=std::string::npos || stringCheck.find(TIMER_PM)!=std::string::npos){
-		strTime = _stringCheck;
-		}
-		}
-		else
-		strDate = _stringCheck;
-		*/
 	}
 
 	if(dateYearDetermine && !dateMonthDetermined && !dateDayDetermine){

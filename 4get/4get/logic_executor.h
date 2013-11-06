@@ -41,6 +41,8 @@ private:
 	stack<Command> redoCommandStack;
 	stack<int> undoDeleteNumberStack;
 	stack<int> redoDeleteNumberStack;
+	stack<int> undoMarkNumberStack;
+	stack<int> redoMarkNumberStack;
 	stack<ListType> undoListTypeStack;
 	stack<ListType> redoListTypeStack;
 	ListType listType;
@@ -72,6 +74,7 @@ public:
 	bool isEqual(string str1, const string str2);
 	long long retrieveTaskID();
 	bool helperDeleteFunction(int deleteStartNumber);
+	void helperMarkFunction(int markStartNumber);
 	bool storeIntoUndoTaskStack(Task taskTemp);
 	bool storeIntoUndoCommandStack(Command command);
 	bool storeIntoRedoTaskStack(Task taskTemp);
@@ -86,6 +89,8 @@ public:
 						time_t &reminderTime, 
 						TaskType &typeOfTask,
 						vector<string> &vectorOfInputs);
+	int swapValueAndGetSizeFunction(int start, int end);
+	int getSizeFunction(int start, int end);
 	//assertions
 	void assertNotEmptyTask();
 };

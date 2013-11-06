@@ -8,14 +8,17 @@ class TaskDeadline : public Task
 {
 protected:
 	long long convertToLong(time_t rawTime);
+	tm convertToTm(time_t rawTime);
+
 public:
 	TaskDeadline();
 	TaskDeadline(long long id);
 	TaskDeadline(long long id, string description, string location, time_t reminder, Priority priority, RepeatType repeat, time_t endTime);
 	virtual void setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority, RepeatType repeat, time_t endTime);
 	void setTaskEnd(time_t endTask);
+	virtual void setNextOccurance();
 	time_t getTaskEnd();
-	long long getTimeLong(TimeType type);
+	virtual long long getTimeLong(TimeType type);
 };
 
 #endif

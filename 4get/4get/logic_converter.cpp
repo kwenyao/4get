@@ -206,7 +206,7 @@ long long Converter::convertDateToInt(string dateStr){
 	}
 }
 
-time_t Converter::convertStringToTime(string dateStr, string timeStr){
+time_t Converter::convertStringToTime(string dateStr, string timeStr, bool isStart){
 	int year  = 0;
 	int month = 0;
 	int day   = 0;
@@ -220,8 +220,15 @@ time_t Converter::convertStringToTime(string dateStr, string timeStr){
 	try{
 		if(!isNoDate)
 			extractDate(dateStr, year, month, day);
+		else
+			getTodayDate(year, month, day);
 		if(!isNoTime)
 			extractTime(timeStr, hour, min);
+		else
+			if(isStart)
+				getDefaultStartTime(hour, min);
+			else
+				getDefaultEndTime(hour, min);
 		returnTime = createTime(year, month, day, hour, min);
 		return returnTime;
 	} catch (string errString) {
@@ -515,7 +522,7 @@ void Converter::extractTime(string timeStr, int& hour, int& min){
 	isAM = (timeAMPM == TIME_ANTE_MERIDIAN);
 	isPM = (timeAMPM == TIME_POST_MERIDIAN);
 	is24HR = (!isAM && !isPM);
-	if(is24HR){
+	if(is24HR){ //e.g. 1420HR
 		hour = convertStringToInt(timeStr.substr(0,2));
 		min = convertStringToInt(timeStr.substr(2,2));
 	}
