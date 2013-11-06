@@ -106,7 +106,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
-	this->todoListView->SelectedIndexChanged += gcnew System::EventHandler(this, &ui_display::todoListView_SelectedIndexChanged);
+	this->todoListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::todoListView_ItemActivate);
 	// 
 	// tIndex
 	// 
@@ -321,9 +321,9 @@ void ui_display::InitializeComponent(void){
 	this->itemDisplayLabel->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->itemDisplayLabel->Location = System::Drawing::Point(27, 195);
 	this->itemDisplayLabel->Name = L"itemDisplayLabel";
-	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
+	this->itemDisplayLabel->Size = System::Drawing::Size(112, 24);
 	this->itemDisplayLabel->TabIndex = 4;
-	this->itemDisplayLabel->Text = "label is here";
+	this->itemDisplayLabel->Text = L"label is here";
 	// 
 	// ui_display
 	// 
@@ -357,8 +357,11 @@ void ui_display::InitializeComponent(void){
 }
 
 Void ui_display::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e){
- 	try{
-		execute->refreshAll();
+	try{
+		if(todoListView->Items->Count!=0){
+			execute->refreshAll();
+			this->printList();
+		}
 	}
 	catch(string &error){
 		this->printError(error);
@@ -541,8 +544,13 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
 		this->tabContainer->SelectedIndex = nextPage;
 	}
-	else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
+	else if(e->KeyCode == Keys::Down){
 		this->focusItem();
+		selectedItem++;
+	}
+	else if(e->KeyCode == Keys::Up){
+		this->focusItem();
+		selectedItem--;
 	}
 	/*else if(e->Alt && e->KeyCode==Keys::D4){
 	if(this->WindowState == FormWindowState::Normal){
@@ -558,7 +566,8 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 	}*/
 }
 Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
-	if(SetFocus(textboxInput)){
+	if(!textboxInput->Focused){
+		SetFocus(textboxInput);
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
 		this->textboxInput->SelectionStart = 1;
 		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
@@ -582,32 +591,69 @@ void ui_display::focusItem(){
 }
 void ui_display::focusCompletedItem(){
 	if(completedListView->Items->Count > 0){
-		if(SetFocus(completedListView)){
-			completedListView->Items[0]->Selected = true;
-		}
+		SetFocus(completedListView);
+		completedListView->Items[0]->Selected = true;
 	}
 }
 void ui_display::focusOverdueItem(){
 	if(overdueListView->Items->Count > 0){
-		if(SetFocus(overdueListView)){
-			overdueListView->Items[0]->Selected = true;
-		}
+		SetFocus(overdueListView);
+		overdueListView->Items[0]->Selected = true;
 	}
 }
 void ui_display::focusToDoItem(){
-	/*if(todoListView->Items->Count > 0){
-		if(todoListView->Focused){
+	System::Object^ sender;
+	System::EventArgs^ e;
+	if(todoListView->Items->Count > 0){
 		SetFocus(todoListView);
-	}*/
+		if(selectedItem >= todoListView->Items->Count){
+			selectedItem--;
+		}
+		else if(selectedItem < 0){
+			selectedItem++;
+		}
+		this->todoListView->Items[selectedItem]->Selected=true;
+		this->todoListView_ItemActivate(sender, e);
+	}
 }
 
-bool ui_display::SetFocus(Control ^ control){
+void ui_display::printLabel(){
+	ListView::SelectedListViewItemCollection^ pdt = this->todoListView->SelectedItems;
+	ListViewItem^ item = pdt[0];
+	string newline= "\n";
+	//display selected item in product details
+	this->itemDisplayLabel->Text =item->SubItems[0]->Text->ToString();
+	//if(item->SubItems[1]->Text==""){
+		this->itemDisplayLabel->Text +=gcnew System::String(newline.c_str());
+		this->itemDisplayLabel->Text +=item->SubItems[1]->Text->ToString();
+	//}
+	//if(item->SubItems[2]->Text==""){
+		this->itemDisplayLabel->Text +=gcnew System::String(newline.c_str());
+		this->itemDisplayLabel->Text +=item->SubItems[2]->Text->ToString();
+	//}
+	//if(item->SubItems[3]->Text==""){
+		this->itemDisplayLabel->Text +=gcnew System::String(newline.c_str());
+		this->itemDisplayLabel->Text +=item->SubItems[3]->Text->ToString();
+	//}
+	//if(item->SubItems[4]->Text==""){
+		this->itemDisplayLabel->Text +=gcnew System::String(newline.c_str());
+		this->itemDisplayLabel->Text +=item->SubItems[4]->Text->ToString();
+	//}
+	//if(item->SubItems[5]->Text==""){
+		this->itemDisplayLabel->Text +=gcnew System::String(newline.c_str());
+		this->itemDisplayLabel->Text +=item->SubItems[5]->Text->ToString();
+	//}
+}
+
+Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
+	this->printLabel();
+}
+
+void ui_display::SetFocus(Control ^ control){
 	if(!(control->Focused)){
 		control->Focus();
-		return true;
+		selectedItem=0;
 	}
-	else
-		return false;
 }
 
 Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
@@ -742,24 +788,4 @@ Void ui_display::printHelpMessage(){
 		"type \"mark\" to change the status of a task"
 	};
 	this->messageBox->Lines = helpLines;
-}
-
-Void ui_display::todoListView_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e){
-	list<Task*> taskList;
-	taskList = execute->getUpdatedList(listToDo);
-	*listOfTasks = taskList;
-	ListViewItem^ item = gcnew ListViewItem;
-	int size = listOfTasks->size();
-	for(int i=0; i<size; i++){
-		if(todoListView->Items[i]->Selected != true){
-			listOfTasks->pop_front();
-		}
-		else{
-			converter->printItem(item, &taskList, i+1);
-		}
-	} 
-	if(this->itemDisplayLabel->Text == "label is here")
-		this->itemDisplayLabel->Text = "hi";
-	else
-		this->itemDisplayLabel->Text = "label is here";
 }
