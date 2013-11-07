@@ -67,8 +67,8 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	item->BeginEdit();
 	item->SubItems[0]->Text = sys_index;
 	item->SubItems->Add(sys_desc); //add description
+	item->SubItems->Add(sys_due); //add due
 	item->SubItems->Add(sys_venue); //add venue	 
 	item->SubItems->Add(sys_time); //add time
-	item->SubItems->Add(sys_due); //add due
 	item->SubItems->Add(sys_priority); //add priority
 }

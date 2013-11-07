@@ -28,31 +28,23 @@ ui_display::~ui_display(){
 
 void ui_display::InitializeComponent(void){
 	this->components = (gcnew System::ComponentModel::Container());
+	System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(ui_display::typeid));
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
 	this->tIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->tVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->tTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->tPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
 	this->completedListView = (gcnew System::Windows::Forms::ListView());
 	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->cDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->cPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
 	this->overdueListView = (gcnew System::Windows::Forms::ListView());
 	this->oIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->oDescription = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oVenue = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->oDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->oPriority = (gcnew System::Windows::Forms::ColumnHeader());
 	this->inputContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
 	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
@@ -97,8 +89,8 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->AutoArrange = false;
 	this->todoListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->todoListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->tIndex, this->tDescription, 
-		this->tVenue, this->tTime, this->tDueDate, this->tPriority});
+	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->tIndex, this->tDescription, 
+		this->tDueDate});
 	this->todoListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
 	this->todoListView->FullRowSelect = true;
@@ -110,7 +102,6 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
-	
 	// 
 	// tIndex
 	// 
@@ -122,25 +113,10 @@ void ui_display::InitializeComponent(void){
 	this->tDescription->Text = L"Description";
 	this->tDescription->Width = 25;
 	// 
-	// tVenue
-	// 
-	this->tVenue->Text = L"Venue";
-	this->tVenue->Width = 25;
-	// 
-	// tTime
-	// 
-	this->tTime->Text = L"Time";
-	this->tTime->Width = 25;
-	// 
 	// tDueDate
 	// 
 	this->tDueDate->Text = L"Due Date";
 	this->tDueDate->Width = 25;
-	// 
-	// tPriority
-	// 
-	this->tPriority->Text = L"Priority";
-	this->tPriority->Width = 552;
 	// 
 	// tabCompleted
 	// 
@@ -159,8 +135,8 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->AutoArrange = false;
 	this->completedListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->cIndex, this->cDescription, 
-		this->cVenue, this->cTime, this->cDueDate, this->cPriority});
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->cIndex, this->cDescription, 
+		this->cDueDate});
 	this->completedListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->completedListView->FullRowSelect = true;
@@ -172,7 +148,6 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
-	
 	// 
 	// cIndex
 	// 
@@ -184,25 +159,10 @@ void ui_display::InitializeComponent(void){
 	this->cDescription->Text = L"Description";
 	this->cDescription->Width = 160;
 	// 
-	// cVenue
-	// 
-	this->cVenue->Text = L"Venue";
-	this->cVenue->Width = 79;
-	// 
-	// cTime
-	// 
-	this->cTime->Text = L"Time";
-	this->cTime->Width = 172;
-	// 
 	// cDueDate
 	// 
 	this->cDueDate->Text = L"Due Date";
 	this->cDueDate->Width = 171;
-	// 
-	// cPriority
-	// 
-	this->cPriority->Text = L"Priority";
-	this->cPriority->Width = 81;
 	// 
 	// tabOverdue
 	// 
@@ -220,8 +180,8 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->AutoArrange = false;
 	this->overdueListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->overdueListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(6) {this->oIndex, this->oDescription, 
-		this->oVenue, this->oTime, this->oDueDate, this->oPriority});
+	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->oIndex, this->oDescription, 
+		this->oDueDate});
 	this->overdueListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->overdueListView->FullRowSelect = true;
@@ -233,7 +193,6 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
-	
 	// 
 	// oIndex
 	// 
@@ -245,24 +204,10 @@ void ui_display::InitializeComponent(void){
 	this->oDescription->Text = L"Description";
 	this->oDescription->Width = 160;
 	// 
-	// oVenue
-	// 
-	this->oVenue->Text = L"Venue";
-	this->oVenue->Width = 79;
-	// 
-	// oTime
-	// 
-	this->oTime->Text = L"Time";
-	this->oTime->Width = 172;
-	// 
 	// oDueDate
 	// 
 	this->oDueDate->Text = L"Due Date";
 	this->oDueDate->Width = 171;
-	// 
-	// oPriority
-	// 
-	this->oPriority->Text = L"Priority";
 	// 
 	// inputContainer
 	// 
@@ -310,10 +255,10 @@ void ui_display::InitializeComponent(void){
 	// 
 	// notifyIcon1
 	// 
+	/*this->notifyIcon1->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"notifyIcon1.Icon")));*/
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
 	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
-	this->notifyIcon1->Icon = gcnew System::Drawing::Icon("favicon.ico");
 	// 
 	// timerRefresh
 	// 
@@ -678,13 +623,13 @@ void ui_display::printLabel(ListViewItem^ item){
 	this->itemDisplayLabel->Text +=item->SubItems[1]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_LOCATION;
-	this->itemDisplayLabel->Text +=item->SubItems[2]->Text->ToString();
-	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_START_TIME;
 	this->itemDisplayLabel->Text +=item->SubItems[3]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_END_TIME;
+	this->itemDisplayLabel->Text += TAG_START_TIME;
 	this->itemDisplayLabel->Text +=item->SubItems[4]->Text->ToString();
+	this->itemDisplayLabel->Text += NEWLINE;
+	this->itemDisplayLabel->Text += TAG_END_TIME;
+	this->itemDisplayLabel->Text +=item->SubItems[2]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_PRIORITY;
 	this->itemDisplayLabel->Text +=item->SubItems[5]->Text->ToString();

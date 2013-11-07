@@ -89,26 +89,26 @@ namespace UIDisplay {
 	private: System::Windows::Forms::ListView^  todoListView;
 	private: System::Windows::Forms::ColumnHeader^  tIndex;
 	private: System::Windows::Forms::ColumnHeader^  tDescription;
-	private: System::Windows::Forms::ColumnHeader^  tVenue;
-	private: System::Windows::Forms::ColumnHeader^  tTime;
+
+
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
-	private: System::Windows::Forms::ColumnHeader^  tPriority;
+
 			 //completed list view
 	private: System::Windows::Forms::ListView^  completedListView;
 	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
-	private: System::Windows::Forms::ColumnHeader^  cVenue;
-	private: System::Windows::Forms::ColumnHeader^  cTime;
+
+
 	private: System::Windows::Forms::ColumnHeader^  cDueDate;
-	private: System::Windows::Forms::ColumnHeader^  cPriority;
+
 			 //overdue list view
 	private: System::Windows::Forms::ListView^  overdueListView;
 	private: System::Windows::Forms::ColumnHeader^  oIndex;
 	private: System::Windows::Forms::ColumnHeader^  oDescription;
-	private: System::Windows::Forms::ColumnHeader^  oVenue;
-	private: System::Windows::Forms::ColumnHeader^  oTime;
+
+
 	private: System::Windows::Forms::ColumnHeader^  oDueDate;
-	private: System::Windows::Forms::ColumnHeader^  oPriority;
+
 
 	private: System::Windows::Forms::NotifyIcon^  notifyIcon1;
 	private: System::Windows::Forms::Timer^  timerRefresh;
