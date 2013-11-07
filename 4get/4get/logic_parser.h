@@ -21,14 +21,7 @@ using namespace Constants;
 class Parser
 {
 	vector< vector<string> > dictionaryCommands;
-	vector<string> dictionaryAddCommands;
-	vector<string> dictionaryDeleteCommands;
-	vector<string> dictionaryModifyCommands;
-	vector<string> dictionaryMarkCommands;
-	vector<string> dictionaryUndoCommands;
-	vector<string> dictionaryRedoCommands;
-	vector<string> dictionaryShowCommands;
-	vector<string> dictionaryShowAllCommands;
+	vector< vector<string> > dictionaryRepeatCommands;
 	vector<string> dictionaryDates;
 	vector<string> dictionaryMonth;
 	vector<string> dictionaryTime;
@@ -37,56 +30,75 @@ class Parser
 private:
 
 	static const char MARKER;
-	static const std::size_t MARKER_LENGTH;
+	static const size_t MARKER_LENGTH;
 	static const char MARKER_COMMA;
-	static const std::size_t MARKER_COMMA_LENGTH;
+	static const size_t MARKER_COMMA_LENGTH;
 	static const char MARKER_ENCLOSE;
-	static const std::size_t MARKER_ENCLOSE_LENGTH;
+	static const size_t MARKER_ENCLOSE_LENGTH;
 	static const string MARKER_SPACE;
-	static const std::size_t MARKER_SPACE_LENGTH;
+	static const size_t MARKER_SPACE_LENGTH;
 	static const string MARKER_AT;
-	static const std::size_t MARKER_AT_LENGTH;
+	static const size_t MARKER_AT_LENGTH;
 	static const string MARKER_NEAR;
-	static const std::size_t MARKER_NEAR_LENGTH;
+	static const size_t MARKER_NEAR_LENGTH;
 	static const string MARKER_BY;
-	static const std::size_t MARKER_BY_LENGTH;
+	static const size_t MARKER_BY_LENGTH;
 	static const string MARKER_DUE;
-	static const std::size_t MARKER_DUE_LENGTH;
+	static const size_t MARKER_DUE_LENGTH;
 	static const string MARKER_FROM;
-	static const std::size_t MARKER_FROM_LENGTH;
+	static const size_t MARKER_FROM_LENGTH;
 	static const string MARKER_TO;
-	static const std::size_t MARKER_TO_LENGTH;
+	static const size_t MARKER_TO_LENGTH;
 	static const string MARKER_COMMA_TO;
-	static const std::size_t MARKER_COMMA_TO_LENGTH;
+	static const size_t MARKER_COMMA_TO_LENGTH;
 	static const string MARKER_REMIND;
-	static const std::size_t MARKER_REMIND_LENGTH;
+	static const size_t MARKER_REMIND_LENGTH;
 	static const string MARKER_ON;
-	static const std::size_t MARKER_ON_LENGTH;
+	static const size_t MARKER_ON_LENGTH;
 	static const string MARKER_REPEAT;
-	static const std::size_t MARKER_REPEAT_LENGTH;
+	static const size_t MARKER_REPEAT_LENGTH;
 	static const string MARKER_PRIORITY;
-	static const std::size_t MARKER_PRIORITY_LENGTH;
+	static const size_t MARKER_PRIORITY_LENGTH;
 	static const string MARKER_PRIORITY_HIGH;
-	static const std::size_t MARKER_PRIORITY_HIGH_LENGTH;
+	static const size_t MARKER_PRIORITY_HIGH_LENGTH;
 	static const string MARKER_PRIORITY_NORMAL;
-	static const std::size_t MARKER_PRIORITY_NORMAL_LENGTH;
+	static const size_t MARKER_PRIORITY_NORMAL_LENGTH;
 	static const string MARKER_DONE;
-	static const std::size_t MARKER_DONE_LENGTH;
+	static const size_t MARKER_DONE_LENGTH;
 	static const string MARKER_COMPLETED;
-	static const std::size_t MARKER_COMPLETED_LENGTH;
+	static const size_t MARKER_COMPLETED_LENGTH;
 	static const string MARKER_UNDONE;
-	static const std::size_t MARKER_UNDONE_LENGTH;
+	static const size_t MARKER_UNDONE_LENGTH;
 	static const string MARKER_INCOMPLETE;
-	static const std::size_t MARKER_INCOMPLETE_LENGTH;
+	static const size_t MARKER_INCOMPLETE_LENGTH;
 
-	static const int DICTIONARY_ADD;
-	static const int DICTIONARY_DELETE;
-	static const int DICTIONARY_MODIFY;
-	static const int DICTIONARY_MARK;
-	static const int DICTIONARY_UNDO;
-	static const int DICTIONARY_REDO;
-	static const int DICTIONARY_SHOW;
-	static const int DICTIONARY_SHOWALL;
+	static const int DICTIONARY_COMMAND_SIZE;
+	static const int DICTIONARY_ADD_INDEX;
+	static const int DICTIONARY_DELETE_INDEX;
+	static const int DICTIONARY_MODIFY_INDEX;
+	static const int DICTIONARY_MARK_INDEX;
+	static const int DICTIONARY_UNDO_INDEX;
+	static const int DICTIONARY_REDO_INDEX;
+	static const int DICTIONARY_SHOW_INDEX;
+	static const int DICTIONARY_SHOWALL_INDEX;
+	static const int REPEAT_COMMAND_SIZE;
+	static const int REPEAT_DAILY_INDEX;
+	static const int REPEAT_WEEKLY_INDEX;
+	static const int REPEAT_FORTNIGHTLY_INDEX;
+	static const int REPEAT_MONTHLY_INDEX;
+	static const int REPEAT_ANNUALLY_INDEX;
+	static const string REPEAT_DAILY;
+	static const string REPEAT_EVERY_DAY;
+	static const string REPEAT_WEEKLY;
+	static const string REPEAT_EVERY_WEEK;
+	static const string REPEAT_FORTNIGHTLY;
+	static const string REPEAT_EVERY_FORTNIGHT;
+	static const string REPEAT_MONTHLY;
+	static const string REPEAT_EVERY_MONTH;
+	static const string REPEAT_ANNUALLY;
+	static const string REPEAT_EVERY_YEAR;
+	static const string REPEAT_EVERY;
+	static const string REPEAT_NULL;
 
 	//istringstream iss;
 	string _textInput; // Main input
@@ -145,9 +157,9 @@ private:
 	bool determineSlot();
 	//bool determineTaskList();
 	bool determineStatus();
-	std::size_t determindExtractLength(std::size_t found, std::size_t foundComma, string markerConstant, std::size_t& extractStart);
+	size_t determindExtractLength(size_t found, size_t foundComma, string markerConstant, size_t& extractStart);
 
-	void shortenInput(std::size_t partitionStart, std::size_t partitionEnd);
+	void shortenInput(size_t partitionStart, size_t partitionEnd);
 	void removeAllBorderSpace();
 	void removeBorderSpaces(string& str);
 	void parseAllTimeAndDate();
@@ -165,6 +177,7 @@ private:
 	void loadMonthDictionary();
 	void loadTimeDictionary();
 	void loadCommandDictionary();
+	void loadRepeatDictionary();
 	void loadMarkerDictionary();
 
 	//parser scan dictionaries
@@ -174,6 +187,7 @@ private:
 	bool scanDatesDictionary(string);
 	bool scanMonthDictionary(string);
 	string scanCommandDictionary(string);
+	string scanRepeatDictionary(string);
 	bool scanMarkerDictionary(string);
 };
 #endif

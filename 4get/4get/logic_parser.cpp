@@ -1,78 +1,80 @@
 #include "logic_parser.h"
 
 const char Parser::MARKER_COMMA = ',';
-const std::size_t Parser::MARKER_COMMA_LENGTH = 1;
-
+const size_t Parser::MARKER_COMMA_LENGTH = 1;
 const char Parser::MARKER_ENCLOSE = ' ';
-const std::size_t Parser::MARKER_ENCLOSE_LENGTH = 1;
-
+const size_t Parser::MARKER_ENCLOSE_LENGTH = 1;
 const string Parser::MARKER_SPACE = " ";
-const std::size_t Parser::MARKER_SPACE_LENGTH = 1;
-
+const size_t Parser::MARKER_SPACE_LENGTH = 1;
 const string Parser::MARKER_AT = ",at";
-const std::size_t Parser::MARKER_AT_LENGTH = 3;
-
+const size_t Parser::MARKER_AT_LENGTH = 3;
 const string Parser::MARKER_NEAR = ",near";
-const std::size_t Parser::MARKER_NEAR_LENGTH = 3;
-
+const size_t Parser::MARKER_NEAR_LENGTH = 3;
 const string Parser::MARKER_BY = ",by";
-const std::size_t Parser::MARKER_BY_LENGTH = 3;
-
+const size_t Parser::MARKER_BY_LENGTH = 3;
 const string Parser::MARKER_DUE = ",due";
-const std::size_t Parser::MARKER_DUE_LENGTH = 4;
-
+const size_t Parser::MARKER_DUE_LENGTH = 4;
 const string Parser::MARKER_FROM = ",from";
-const std::size_t Parser::MARKER_FROM_LENGTH = 5;
-
+const size_t Parser::MARKER_FROM_LENGTH = 5;
 const string Parser::MARKER_TO = "to";
-const std::size_t Parser::MARKER_TO_LENGTH = 2;
-
+const size_t Parser::MARKER_TO_LENGTH = 2;
 const string Parser::MARKER_COMMA_TO = ",to";
-const std::size_t Parser::MARKER_COMMA_TO_LENGTH = 3;
-
+const size_t Parser::MARKER_COMMA_TO_LENGTH = 3;
 const string Parser::MARKER_REMIND = ",remind";
-const std::size_t Parser::MARKER_REMIND_LENGTH = 7;
-
+const size_t Parser::MARKER_REMIND_LENGTH = 7;
 const string Parser::MARKER_ON = "on";
-const std::size_t Parser::MARKER_ON_LENGTH = 2;
-
+const size_t Parser::MARKER_ON_LENGTH = 2;
 const string Parser::MARKER_REPEAT = ",repeat";
-const std::size_t Parser::MARKER_REPEAT_LENGTH = 7;
-
+const size_t Parser::MARKER_REPEAT_LENGTH = 7;
 const string Parser::MARKER_PRIORITY = ",!";
-const std::size_t Parser::MARKER_PRIORITY_LENGTH = 2;
-
+const size_t Parser::MARKER_PRIORITY_LENGTH = 2;
 const string Parser::MARKER_PRIORITY_HIGH = ",high";
-const std::size_t Parser::MARKER_PRIORITY_HIGH_LENGTH = 5;
-
+const size_t Parser::MARKER_PRIORITY_HIGH_LENGTH = 5;
 const string Parser::MARKER_PRIORITY_NORMAL = ",normal";
-const std::size_t Parser::MARKER_PRIORITY_NORMAL_LENGTH = 7;
-
+const size_t Parser::MARKER_PRIORITY_NORMAL_LENGTH = 7;
 const string Parser::MARKER_DONE = "done";
-const std::size_t Parser::MARKER_DONE_LENGTH = 4;
-
+const size_t Parser::MARKER_DONE_LENGTH = 4;
 const string Parser::MARKER_COMPLETED = "completed";
-const std::size_t Parser::MARKER_COMPLETED_LENGTH = 9;
-
+const size_t Parser::MARKER_COMPLETED_LENGTH = 9;
 const string Parser::MARKER_UNDONE = "undone";
-const std::size_t Parser::MARKER_UNDONE_LENGTH = 6;
-
+const size_t Parser::MARKER_UNDONE_LENGTH = 6;
 const string Parser::MARKER_INCOMPLETE = "incomplete";
-const std::size_t Parser::MARKER_INCOMPLETE_LENGTH = 10;
+const size_t Parser::MARKER_INCOMPLETE_LENGTH = 10;
 
-const int Parser::DICTIONARY_ADD = 0;
-const int Parser::DICTIONARY_DELETE = 1;
-const int Parser::DICTIONARY_MARK = 2;
-const int Parser::DICTIONARY_MODIFY = 3;
-const int Parser::DICTIONARY_UNDO = 4;
-const int Parser::DICTIONARY_REDO = 5;
-const int Parser::DICTIONARY_SHOW = 6;
-const int Parser::DICTIONARY_SHOWALL = 7;
+const int Parser::DICTIONARY_COMMAND_SIZE = 8;
+const int Parser::DICTIONARY_ADD_INDEX = 0;
+const int Parser::DICTIONARY_DELETE_INDEX = 1;
+const int Parser::DICTIONARY_MARK_INDEX = 2;
+const int Parser::DICTIONARY_MODIFY_INDEX = 3;
+const int Parser::DICTIONARY_UNDO_INDEX = 4;
+const int Parser::DICTIONARY_REDO_INDEX = 5;
+const int Parser::DICTIONARY_SHOW_INDEX = 6;
+const int Parser::DICTIONARY_SHOWALL_INDEX = 7;
 
+const int Parser::REPEAT_COMMAND_SIZE = 5;
+const int Parser::REPEAT_DAILY_INDEX = 0;
+const int Parser::REPEAT_WEEKLY_INDEX = 1;
+const int Parser::REPEAT_FORTNIGHTLY_INDEX = 2;
+const int Parser::REPEAT_MONTHLY_INDEX = 3;
+const int Parser::REPEAT_ANNUALLY_INDEX = 4;
 
+const string Parser::REPEAT_DAILY = "daily";
+const string Parser::REPEAT_EVERY_DAY = "every day";
+const string Parser::REPEAT_WEEKLY = "weekly";
+const string Parser::REPEAT_EVERY_WEEK = "every week";
+const string Parser::REPEAT_FORTNIGHTLY = "fortnightly";
+const string Parser::REPEAT_EVERY_FORTNIGHT = "every fortnight";
+const string Parser::REPEAT_MONTHLY = "monthly";
+const string Parser::REPEAT_EVERY_MONTH = "every month";
+const string Parser::REPEAT_ANNUALLY = "annually";
+const string Parser::REPEAT_EVERY_YEAR = "every year";
+const string Parser::REPEAT_EVERY = "every";
+const string Parser::REPEAT_NULL = "";
 
 Parser::Parser()
 {
+	dictionaryCommands.resize(DICTIONARY_COMMAND_SIZE);
+	dictionaryRepeatCommands.resize(REPEAT_COMMAND_SIZE);
 	parseReset();
 	loadDictionary();
 }
@@ -325,20 +327,20 @@ bool Parser::separateFunctionShowAll(vector<string>& inputBits)
 
 bool Parser::determineVenue()
 {
-	std::size_t found = INITIALIZE_SIZE_T;
-	std::size_t foundComma = INITIALIZE_SIZE_T;
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractLength = INITIALIZE_SIZE_T;
-	std::size_t stringLength = textInput.size();
-	std::size_t i = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
+	size_t foundComma = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractLength = INITIALIZE_SIZE_T;
+	size_t stringLength = textInput.size();
+	size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	bool isVenueDetermined = !textVenue.empty();
 	if(!isVenueDetermined){
 
-		if(textInput.find(MARKER_AT)!=std::string::npos){
+		if(textInput.find(MARKER_AT)!=string::npos){
 			found = textInput.find(MARKER_AT);
-			if(textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH)!=string::npos){
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_AT_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_AT, extractStartPos);
 				i = foundComma;
@@ -361,9 +363,9 @@ bool Parser::determineVenue()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_NEAR)!=std::string::npos){
+		else if(textInput.find(MARKER_NEAR)!=string::npos){
 			found = textInput.find(MARKER_NEAR);
-			if(textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH)!=string::npos){
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_NEAR_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_NEAR, extractStartPos);
 				i = foundComma;
@@ -393,22 +395,22 @@ bool Parser::determineVenue()
 }
 bool Parser::determineDateAndTime()
 {
-	std::size_t found = INITIALIZE_SIZE_T;
-	std::size_t foundComma = INITIALIZE_SIZE_T;
-	std::size_t foundTo = INITIALIZE_SIZE_T;
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractLength = INITIALIZE_SIZE_T;
-	std::size_t stringLength = textInput.size();
-	std::size_t i = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
+	size_t foundComma = INITIALIZE_SIZE_T;
+	size_t foundTo = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractLength = INITIALIZE_SIZE_T;
+	size_t stringLength = textInput.size();
+	size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	bool isDateAmdTimeDetermined = !textStart.empty() || !textEnd.empty();
 	if(!isDateAmdTimeDetermined){
 		//If found By
-		if(textInput.find(MARKER_BY)!=std::string::npos){
+		if(textInput.find(MARKER_BY)!=string::npos){
 			found = textInput.find(MARKER_BY);
 
-			if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=std::string::npos ){			//try find comma
+			if(textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH)!=string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_BY_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_BY, extractStartPos);
 				i = foundComma; 
@@ -433,9 +435,9 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_COMMA_TO)!=std::string::npos && textCommand==COMMAND_MODIFY){
+		else if(textInput.find(MARKER_COMMA_TO)!=string::npos && textCommand==COMMAND_MODIFY){
 			found = textInput.find(MARKER_COMMA_TO);
-			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=std::string::npos ){			//try find comma
+			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_COMMA_TO, extractStartPos);
 				i = foundComma; 
@@ -460,9 +462,9 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_DUE)!=std::string::npos){
+		else if(textInput.find(MARKER_DUE)!=string::npos){
 			found = textInput.find(MARKER_DUE);
-			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=std::string::npos ){			//try find comma
+			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=string::npos ){			//try find comma
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_DUE, extractStartPos);
 				i = foundComma; 
@@ -487,13 +489,13 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_FROM)!=std::string::npos){									//try find from
+		else if(textInput.find(MARKER_FROM)!=string::npos){									//try find from
 			found = textInput.find(MARKER_FROM);
-			if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=std::string::npos){				//try find to
+			if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=string::npos){				//try find to
 				foundTo = textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH);
 				extractLength = determindExtractLength(found, foundTo, MARKER_FROM, extractStartPos);
 				textStart = _textInput.substr(extractStartPos, extractLength);
-				if(textInput.find(MARKER_COMMA, foundTo)!=std::string::npos){						//try find comma
+				if(textInput.find(MARKER_COMMA, foundTo)!=string::npos){						//try find comma
 					foundComma = textInput.find(MARKER_COMMA, foundTo);
 					extractLength = determindExtractLength(foundTo, foundComma, MARKER_TO, extractStartPos);
 					i = foundComma; 
@@ -519,7 +521,7 @@ bool Parser::determineDateAndTime()
 				}
 			}
 			else if(textCommand==COMMAND_MODIFY){
-				if(textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH)!=std::string::npos ){			//try find comma
+				if(textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH)!=string::npos ){			//try find comma
 					foundComma = textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH);
 					extractLength = determindExtractLength(found, foundComma, MARKER_FROM, extractStartPos);
 					i = foundComma; 
@@ -557,19 +559,19 @@ bool Parser::determineDateAndTime()
 }
 bool Parser::determineRepeat()
 {
-	std::size_t found = INITIALIZE_SIZE_T;
-	std::size_t foundComma = INITIALIZE_SIZE_T;
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractLength = INITIALIZE_SIZE_T;
-	std::size_t stringLength = textInput.size();
-	std::size_t i = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
+	size_t foundComma = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractLength = INITIALIZE_SIZE_T;
+	size_t stringLength = textInput.size();
+	size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	bool isRepeatDetermined = !textRepeat.empty();
 	if(!isRepeatDetermined){
-		if(textInput.find(MARKER_REPEAT)!=std::string::npos){
+		if(textInput.find(MARKER_REPEAT)!=string::npos){
 			found = textInput.find(MARKER_REPEAT);
-			if(textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH)!=string::npos){
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_REPEAT_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_REPEAT, extractStartPos);
 				i = foundComma;
@@ -600,20 +602,20 @@ bool Parser::determineRepeat()
 }
 bool Parser::determinePriority()
 {
-	std::size_t found = INITIALIZE_SIZE_T;
-	std::size_t foundComma = INITIALIZE_SIZE_T;
-	std::size_t foundEnclose = INITIALIZE_SIZE_T;
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractLength = INITIALIZE_SIZE_T;
-	std::size_t stringLength = textInput.size();
-	std::size_t i = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
+	size_t foundComma = INITIALIZE_SIZE_T;
+	size_t foundEnclose = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractLength = INITIALIZE_SIZE_T;
+	size_t stringLength = textInput.size();
+	size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 	bool isPriorityDetermined = !textPriority.empty();
 	if(!isPriorityDetermined){
-		if(textInput.rfind(MARKER_PRIORITY)!=std::string::npos){
+		if(textInput.rfind(MARKER_PRIORITY)!=string::npos){
 			found = textInput.rfind(MARKER_PRIORITY);
-			if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH)!=string::npos){
 				foundEnclose = textInput.find(MARKER_ENCLOSE, found+MARKER_PRIORITY_LENGTH);
 				extractLength = determindExtractLength(found, foundEnclose, MARKER_PRIORITY, extractStartPos);
 				textPriority = _textInput.substr(extractStartPos, extractLength);
@@ -629,9 +631,9 @@ bool Parser::determinePriority()
 			}
 		}
 
-		else if(textInput.find(MARKER_PRIORITY_HIGH)!=std::string::npos){
+		else if(textInput.find(MARKER_PRIORITY_HIGH)!=string::npos){
 			found = textInput.find(MARKER_PRIORITY_HIGH);
-			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH)!=string::npos){
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_HIGH_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_HIGH, extractStartPos);
 				i = foundComma;
@@ -655,9 +657,9 @@ bool Parser::determinePriority()
 			}
 		}
 
-		else if(textInput.find(MARKER_PRIORITY_NORMAL)!=std::string::npos){
+		else if(textInput.find(MARKER_PRIORITY_NORMAL)!=string::npos){
 			found = textInput.find(MARKER_PRIORITY_NORMAL);
-			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH)!=std::string::npos){
+			if(textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH)!=string::npos){
 				foundComma = textInput.find(MARKER_COMMA, found+MARKER_PRIORITY_NORMAL_LENGTH);
 				extractLength = determindExtractLength(found, foundComma, MARKER_PRIORITY_NORMAL, extractStartPos);
 				i = foundComma;
@@ -690,24 +692,24 @@ bool Parser::determinePriority()
 //reminder is not neccessary. If user defines Reminder in input, then it will process.
 bool Parser::determineReminder()
 {
-	std::size_t found = INITIALIZE_SIZE_T;
-	std::size_t foundComma = INITIALIZE_SIZE_T;
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractLength = INITIALIZE_SIZE_T;
-	std::size_t stringLength = textInput.size();
-	std::size_t i = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
+	size_t foundComma = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractLength = INITIALIZE_SIZE_T;
+	size_t stringLength = textInput.size();
+	size_t i = INITIALIZE_SIZE_T;
 	string marker = INITIALIZE_STRING_BLANK;
 
 
-	if(textInput.find(MARKER_REMIND)!=std::string::npos){
+	if(textInput.find(MARKER_REMIND)!=string::npos){
 		found = textInput.find(MARKER_REMIND);
-		if(textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH)!=std::string::npos){
+		if(textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH)!=string::npos){
 			foundComma = textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH);
 			extractLength = determindExtractLength(found, foundComma, MARKER_REMIND, extractStartPos);
 			i = foundComma;
 			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
 				marker += textInput[i++];
-			if(scanMarkerDictionary(marker) && textInput.find(MARKER_ON, found)!=std::string::npos){
+			if(scanMarkerDictionary(marker) && textInput.find(MARKER_ON, found)!=string::npos){
 				textRemind = _textInput.substr(extractStartPos, extractLength);
 				shortenInput(found, foundComma);
 				return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
@@ -730,9 +732,9 @@ bool Parser::determineReminder()
 }
 bool Parser::determineSlot()
 {
-	std::size_t extractStartPos = INITIALIZE_SIZE_T;
+	size_t extractStartPos = INITIALIZE_SIZE_T;
 	size_t extractEndPos = INITIALIZE_SIZE_T;
-	std::size_t found = INITIALIZE_SIZE_T;
+	size_t found = INITIALIZE_SIZE_T;
 	bool hasRange = false;
 	bool startSlotFilled = false;
 	bool endSlotFilled = false;
@@ -747,7 +749,7 @@ bool Parser::determineSlot()
 		buffer >> temp;
 		count++;
 		if(isParseInt(temp, slotNumber) && !startSlotFilled){
-			textSlotStartNumber = std::to_string(slotNumber);
+			textSlotStartNumber = to_string(slotNumber);
 			startSlotFilled = true;
 			continue;
 		}
@@ -757,7 +759,7 @@ bool Parser::determineSlot()
 			if (temp==MARKER_TO && count == 2)
 				hasRange = true;
 			else if(hasRange && startSlotFilled && isParseInt(temp, slotNumber)){
-				textSlotEndNumber = std::to_string(slotNumber);
+				textSlotEndNumber = to_string(slotNumber);
 				endSlotFilled = true;
 				continue;
 			}
@@ -792,17 +794,17 @@ bool Parser::determineSlot()
 		throw MESSAGE_ERROR_WRONG_FORMAT;
 }
 
-std::size_t Parser::determindExtractLength(std::size_t partitionStart, std::size_t partitionEnd, string markConstant, std::size_t& extractStartPos)
+size_t Parser::determindExtractLength(size_t partitionStart, size_t partitionEnd, string markConstant, size_t& extractStartPos)
 {
 	extractStartPos = INITIALIZE_SIZE_T;
-	std::size_t extractEndPos;
-	std::size_t shiftPos = INITIALIZE_SIZE_T;
+	size_t extractEndPos;
+	size_t shiftPos = INITIALIZE_SIZE_T;
 
 	if(markConstant == MARKER_PRIORITY || markConstant == MARKER_PRIORITY_HIGH || markConstant == MARKER_PRIORITY_NORMAL){
 		shiftPos = shiftPos;
 	}
 	else if(markConstant == MARKER_REMIND){
-		if(textInput.find(MARKER_ON,partitionStart)!=std::string::npos){
+		if(textInput.find(MARKER_ON,partitionStart)!=string::npos){
 			partitionStart = textInput.find(MARKER_ON,partitionStart);
 			shiftPos = MARKER_ON_LENGTH;
 		}
@@ -819,9 +821,9 @@ std::size_t Parser::determindExtractLength(std::size_t partitionStart, std::size
 
 	return extractEndPos - extractStartPos;
 }
-void Parser::shortenInput(std::size_t partitionStart, std::size_t partitionEnd)
+void Parser::shortenInput(size_t partitionStart, size_t partitionEnd)
 {
-	std::size_t partitionLength = partitionEnd-partitionStart;
+	size_t partitionLength = partitionEnd-partitionStart;
 
 	textInput.erase(partitionStart, partitionLength);
 	_textInput.erase(partitionStart, partitionLength);
@@ -898,7 +900,7 @@ string Parser::getFirstWord(string input)
 void Parser::removeFirstWord(string &input)
 {
 	textCommand = getFirstWord(input);
-	std::size_t found = input.find(textCommand);
+	size_t found = input.find(textCommand);
 	toLowerCase(textCommand);
 	input.replace(0, found+textCommand.length()+1, "");
 }
@@ -940,8 +942,11 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 	stringstream buffer(str);
 	string stringCheck;
 	string _stringCheck;
-	std::size_t foundLeft;
-	std::size_t foundRight;
+	string repeatCheck = INITIALIZE_STRING_BLANK;
+	//string scanResult;
+	size_t foundLeft;
+	size_t foundRight;
+	bool foundRepeat = false;
 	bool dateDetermined = false;
 	bool dateDayDetermine = false;
 	bool dateMonthDetermined = false;
@@ -966,7 +971,29 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		}
 		if(dateDayDetermine && dateMonthDetermined && dateYearDetermine)
 			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine; // if components of date are determined, turn dateDetermined as true
-
+		
+		/*scanResult = scanRepeatDictionary(stringCheck);
+		if(scanResult!=REPEAT_NULL && !foundRepeat){
+			repeatCheck = scanResult;
+			foundRepeat = true;
+			continue;
+		}*/
+		
+		if(stringCheck == REPEAT_EVERY || (!repeatCheck.empty() && !foundRepeat)){
+			if(repeatCheck.empty()){
+				repeatCheck = stringCheck;
+				continue;
+			}
+			else if(scanDatesDictionary(stringCheck)){
+				repeatCheck = REPEAT_EVERY_WEEK;
+				foundRepeat = true;
+			}
+			else{
+				repeatCheck += TIMER_SPACE + stringCheck;
+				foundRepeat = true;
+				continue;
+			}
+		}
 
 		if(!dateDetermined){
 			if(stringLength > 0 && stringLength < 3 && !dateDayDetermine){					// Date Format: 7 or 07  => Date day fragment, expect Date month fragment 
@@ -992,9 +1019,9 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				continue;
 			}
 			else if(stringLength >= 3 && stringLength < 6) {				// Date Format: 1/2 || 01/02 || 1/2/3 || MONTH_SHORT_WORD || YYYY
-				if(stringCheck.find(TIMER_SLASH)!=std::string::npos){	
+				if(stringCheck.find(TIMER_SLASH)!=string::npos){	
 					foundLeft = stringCheck.find(TIMER_SLASH);
-					if(stringCheck.rfind(TIMER_SLASH)!=std::string::npos){	
+					if(stringCheck.rfind(TIMER_SLASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_SLASH);
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1/2/3 => Unusual representation of date, but implies 1st Feb 2003. 
@@ -1008,9 +1035,9 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						}
 					}
 				}
-				else if(stringCheck.find(TIMER_DASH)!=std::string::npos){
+				else if(stringCheck.find(TIMER_DASH)!=string::npos){
 					foundLeft = stringCheck.find(TIMER_DASH);
-					if(stringCheck.rfind(TIMER_DASH)!=std::string::npos){	
+					if(stringCheck.rfind(TIMER_DASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_DASH);
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1-2-3 => Unusual representation of date, but implies 1st Feb 2003. 
@@ -1042,7 +1069,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					dateMonthDetermined = true;
 					continue;
 				}
-				else if(stringLength == 4 && isdigit(stringCheck.front()) && !(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos)){
+				else if(stringLength == 4 && isdigit(stringCheck.front()) && !(stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos)){
 					int i = 0;
 					while(i != stringLength){
 						isDigit = isdigit(stringCheck[i]) != 0;
@@ -1075,9 +1102,9 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				}
 			}
 			else if(stringLength >= 6 && stringLength < 11){				// Date Format: 1/2/13 == 01/02/2013 || MONTH_FULL_WORD
-				if(stringCheck.find(TIMER_SLASH)!=std::string::npos){	
+				if(stringCheck.find(TIMER_SLASH)!=string::npos){	
 					foundLeft = stringCheck.find(TIMER_SLASH);
-					if(stringCheck.rfind(TIMER_SLASH)!=std::string::npos){	
+					if(stringCheck.rfind(TIMER_SLASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_SLASH);
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1/2/13 => Shorter representation of date with year
@@ -1090,9 +1117,9 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						}
 					}
 				}
-				else if(stringCheck.find(TIMER_DASH)!=std::string::npos){
+				else if(stringCheck.find(TIMER_DASH)!=string::npos){
 					foundLeft = stringCheck.find(TIMER_DASH);
-					if(stringCheck.rfind(TIMER_DASH)!=std::string::npos){	
+					if(stringCheck.rfind(TIMER_DASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_DASH);
 						if(foundRight!=foundLeft){
 							strDate = _stringCheck;							// Date Format: 1-2-13 => Shorter representation of date
@@ -1145,8 +1172,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		}
 
 		if(!timeDetermined){
-			if(stringCheck.find(TIMER_COLON)!=std::string::npos){
-				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos){
+			if(stringCheck.find(TIMER_COLON)!=string::npos){
+				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos){
 					foundLeft = stringCheck.find(TIMER_COLON);
 					foundRight = stringCheck.rfind(TIMER_COLON);
 					if(foundLeft==foundRight){
@@ -1164,8 +1191,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;					// Time Format: error, 09:00, use 24hr format instead or put AM/PM
 				}
 			}
-			else if(stringCheck.find(TIMER_DOT)!=std::string::npos){
-				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos){
+			else if(stringCheck.find(TIMER_DOT)!=string::npos){
+				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos){
 					foundLeft = stringCheck.find(TIMER_DOT);
 					foundRight = stringCheck.rfind(TIMER_DOT);
 					if(foundLeft==foundRight){
@@ -1185,7 +1212,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 			}
 			else if(stringLength==TIMER_24HR_LENGTH) {
 				int i = 0;
-				bool is24hr = stringCheck.find(TIMER_HR)!=std::string::npos;
+				bool is24hr = stringCheck.find(TIMER_HR)!=string::npos;
 				while(i<TIMER_24_LENGTH && is24hr){
 					if(!isdigit(stringCheck[i]))
 						is24hr = false;
@@ -1205,7 +1232,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 				throw MESSAGE_ERROR_WRONG_FORMAT;									// Time Format : Cannot be 10 PM => only 10PM works
 			}
-			else if((stringCheck.find(TIME_ANTE_MERIDIAN)!=std::string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=std::string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
+			else if((stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
 				strTime = _stringCheck;
 				timeDetermined = true;
 				continue;
@@ -1235,6 +1262,18 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
 		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 	}
+	if(foundRepeat){
+		if(!textRepeat.empty())
+			throw MESSAGE_ERROR_NO_DOUBLE_REPEATS;
+		try{
+			textRepeat = scanRepeatDictionary(repeatCheck);
+			if(textRepeat == COMMAND_NULL)
+				throw MESSAGE_ERROR_WRONG_FORMAT;
+		}
+		catch(string error){
+			throw;
+		}
+	}
 
 	return true;
 }
@@ -1246,6 +1285,7 @@ void Parser::loadDictionary()
 	loadTimeDictionary();
 	loadMonthDictionary();
 	loadMarkerDictionary();
+	loadRepeatDictionary();
 }
 void Parser::loadDatesDictionary()
 {
@@ -1295,7 +1335,6 @@ void Parser::loadMonthDictionary()
 	dictionaryMonth.push_back(MONTH_DEC);
 	dictionaryMonth.push_back(MONTH_DECEMBER);
 }
-
 void Parser::loadTimeDictionary()
 {
 	dictionaryTime.push_back(TIMER_TML);
@@ -1307,45 +1346,49 @@ void Parser::loadTimeDictionary()
 }
 void Parser::loadCommandDictionary()
 {
-	dictionaryAddCommands.push_back(COMMAND_ADD);
-	dictionaryAddCommands.push_back(COMMAND_A);
-	dictionaryAddCommands.push_back(COMMAND_CREATE);
-
-	dictionaryDeleteCommands.push_back(COMMAND_DELETE);
-	dictionaryDeleteCommands.push_back(COMMAND_DEL);
-	dictionaryDeleteCommands.push_back(COMMAND_REMOVE);
-	dictionaryDeleteCommands.push_back(COMMAND_REM);
-	dictionaryDeleteCommands.push_back(COMMAND_ERASE);
-
-	dictionaryMarkCommands.push_back(COMMAND_MARK);
-	dictionaryMarkCommands.push_back(COMMAND_M);
-
-	dictionaryModifyCommands.push_back(COMMAND_MODIFY);
-	dictionaryModifyCommands.push_back(COMMAND_MOD);
-	dictionaryModifyCommands.push_back(COMMAND_UPDATE);
-
-	dictionaryUndoCommands.push_back(COMMAND_UNDO);
-
-	dictionaryRedoCommands.push_back(COMMAND_REDO);
-
-	dictionaryShowCommands.push_back(COMMAND_SHOW);
-	dictionaryShowCommands.push_back(COMMAND_DISPLAY);
-	dictionaryShowCommands.push_back(COMMAND_SEARCH);
-
-	dictionaryShowAllCommands.push_back(COMMAND_SHOWALL);
-	dictionaryShowAllCommands.push_back(COMMAND_DISPLAYALL);
-	dictionaryShowAllCommands.push_back(COMMAND_SEARCHALL);
-
-	dictionaryCommands.push_back(dictionaryAddCommands);
-	dictionaryCommands.push_back(dictionaryDeleteCommands);
-	dictionaryCommands.push_back(dictionaryMarkCommands);
-	dictionaryCommands.push_back(dictionaryModifyCommands);
-	dictionaryCommands.push_back(dictionaryUndoCommands);
-	dictionaryCommands.push_back(dictionaryRedoCommands);
-	dictionaryCommands.push_back(dictionaryShowCommands);
-	dictionaryCommands.push_back(dictionaryShowAllCommands);
+	//ADD COMMANDS
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_ADD);
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_A);
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_CREATE);
+	//DELETE COMMANDS
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DELETE);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DEL);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REMOVE);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REM);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_ERASE);
+	//MARK COMMANDS
+	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_MARK);
+	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_M);
+	//MODIFY COMMANDS
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MODIFY);
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MOD);
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_UPDATE);
+	//UNDO COMMANDS
+	dictionaryCommands[DICTIONARY_UNDO_INDEX].push_back(COMMAND_UNDO);
+	//REDO COMMANDS
+	dictionaryCommands[DICTIONARY_REDO_INDEX].push_back(COMMAND_REDO);
+	//SHOW COMMANDS
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SHOW);
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_DISPLAY);
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SEARCH);
+	//SHOWALL COMMANDS
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SHOWALL);
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_DISPLAYALL);
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SEARCHALL);
 }
-
+void Parser::loadRepeatDictionary()
+{
+	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_DAILY);
+	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_EVERY_DAY);
+	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_WEEKLY);
+	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_EVERY_WEEK);
+	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_FORTNIGHTLY);
+	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_EVERY_FORTNIGHT);
+	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_MONTHLY);
+	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_EVERY_MONTH);
+	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_ANNUALLY);
+	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_EVERY_YEAR);
+}
 void Parser::loadMarkerDictionary()
 {
 	dictionaryMarker.push_back(MARKER_AT);
@@ -1364,7 +1407,6 @@ void Parser::loadMarkerDictionary()
 	dictionaryMarker.push_back(MARKER_DONE);
 	dictionaryMarker.push_back(MARKER_UNDONE);
 }
-
 bool Parser::scanDictionary(string word)
 {
 	if(scanTimerDictionary(word) || scanMonthDictionary(word))
@@ -1378,7 +1420,6 @@ bool Parser::scanTimerDictionary(string word){
 	else
 		return false;
 }
-
 bool Parser::scanTimeDictionary(string word)
 {
 	for(size_t i=0; i<dictionaryTime.size(); i++){
@@ -1397,7 +1438,6 @@ bool Parser::scanDatesDictionary(string word)
 
 	return false;
 }
-
 bool Parser::scanMonthDictionary(string word)
 {
 	for(size_t i=0; i<dictionaryMonth.size(); i++){
@@ -1423,24 +1463,55 @@ string Parser::scanCommandDictionary(string word)
 	}
 
 	switch(foundCommand){
-	case DICTIONARY_ADD:
+	case DICTIONARY_ADD_INDEX:
 		return COMMAND_ADD;
-	case DICTIONARY_DELETE:
+	case DICTIONARY_DELETE_INDEX:
 		return COMMAND_DELETE;
-	case DICTIONARY_MARK:
+	case DICTIONARY_MARK_INDEX:
 		return COMMAND_MARK;
-	case DICTIONARY_MODIFY:
+	case DICTIONARY_MODIFY_INDEX:
 		return COMMAND_MODIFY;
-	case DICTIONARY_UNDO:
+	case DICTIONARY_UNDO_INDEX:
 		return COMMAND_UNDO;
-	case DICTIONARY_REDO:
+	case DICTIONARY_REDO_INDEX:
 		return COMMAND_REDO;
-	case DICTIONARY_SHOW:
+	case DICTIONARY_SHOW_INDEX:
 		return COMMAND_SHOW;
-	case DICTIONARY_SHOWALL:
+	case DICTIONARY_SHOWALL_INDEX:
 		return COMMAND_SHOWALL;
 	default:
 		return COMMAND_NULL;
+	}
+}
+string Parser::scanRepeatDictionary(string word)
+{
+	size_t foundRepeat;
+	size_t currentDictionarySize;
+	bool found = false;;
+	for(size_t i=0; i<dictionaryRepeatCommands.size() && !found; i++){
+		currentDictionarySize = (dictionaryRepeatCommands.at(i)).size();
+		for(size_t k=0; k<currentDictionarySize; k++){
+			if(dictionaryRepeatCommands[i][k]==word){
+				foundRepeat = i;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	switch(foundRepeat){
+	case REPEAT_DAILY_INDEX:
+		return REPEAT_DAILY;
+	case REPEAT_WEEKLY_INDEX:
+		return REPEAT_WEEKLY;
+	case REPEAT_FORTNIGHTLY_INDEX:
+		return REPEAT_FORTNIGHTLY;
+	case REPEAT_MONTHLY_INDEX:
+		return REPEAT_MONTHLY;
+	case REPEAT_ANNUALLY_INDEX:
+		return REPEAT_ANNUALLY;
+	default:
+		return REPEAT_NULL;
 	}
 }
 bool Parser::scanMarkerDictionary(string word)
