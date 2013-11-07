@@ -504,7 +504,15 @@ void TaskList::refreshAll(time_t timeNow){
 
 bool TaskList::isExpiredTask(Task* testTask, time_t timeNow){
 	time_t taskTime = testTask->getTaskEnd();
-	if(taskTime > 0 && taskTime < timeNow)
+	RepeatType taskRepeat = testTask->getTaskRepeat();
+	bool isRepeat = (taskRepeat != repeatNone);
+	bool isOver = (taskTime < timeNow);
+	bool isNotFloating = (taskTime > 0);
+	if(isNotFloating && isOver && isRepeat){
+		testTask->setNextOccurance();
+		return false;
+	}
+	else if(isNotFloating && isOver)
 		return true;
 	else
 		return false;

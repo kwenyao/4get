@@ -413,7 +413,7 @@ void Converter::determineDate(int& year, int& month, int& day){
 	try{
 		if(_matchedIndex < INDEX_JAN)
 			dayCorrection(year, month, day);
-		else if(_matchedIndex > INDEX_SUN && _matchedIndex < INDEX_DEC)
+		else if(_matchedIndex > INDEX_SUN && _matchedIndex < INDEX_NXT)
 			monthCorrection(year, month, day);
 		else
 			throw string(Message::MESSAGE_ERROR_WRONG_DATE);

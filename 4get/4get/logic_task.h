@@ -66,6 +66,7 @@ public:
 	virtual void setTaskStart(time_t startTask);
 	virtual void setTaskEnd(time_t endTask);
 	virtual void setTaskRepeat(RepeatType repeat); 
+	virtual void setNextOccurance();
 
 	//update function
 	void updateAllAttr();

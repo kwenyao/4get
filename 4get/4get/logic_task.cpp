@@ -50,6 +50,7 @@ void Task::setTaskNextOccurance(time_t next) { taskNextOccurance = next; }
 void Task::setTaskStart(time_t startTime) {	taskStart = startTime; }
 void Task::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
 void Task::setTaskRepeat(RepeatType repeat) { taskRepeat = repeat; }
+void Task::setNextOccurance(){ return ; }
 
 void Task::updateAllAttr()
 {
