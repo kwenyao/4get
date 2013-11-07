@@ -8,6 +8,7 @@
 #include <list>
 #include <time.h>
 #include <Windows.h>
+#include <ctype.h>
 
 namespace UIDisplay {
 
@@ -36,6 +37,41 @@ namespace UIDisplay {
 	private: int selectedItem;
 	private: bool loaded;
 	private: string *commandKeyword;
+
+	private: static String^ TAG_NAME = "Name: ";
+			 static String^ TAG_LOCATION = "Location: ";
+			 static String^ TAG_START_TIME = "Start Time: ";
+			 static String^ TAG_END_TIME = "End Time: ";
+			 static String^ TAG_PRIORITY = "Priority: ";
+			 static String^ NEWLINE = "\n";
+
+			 static String^ COMMAND_ADD_HELP = "add <task description>";
+			 static String^ COMMAND_ADD_HELP_LOCATION = ",at <venue>";
+			 static String^ COMMAND_ADD_HELP_START = ",from <start time of timed task>";
+			 static String^ COMMAND_ADD_HELP_END = ",to <end time of timed task>";
+			 static String^ COMMAND_ADD_HELP_DUE = ",by <due time>";
+			 static String^ COMMAND_ADD_HELP_REMIND = ",remind on <reminder time>";
+			 static String^ COMMAND_ADD_HELP_PRIORITY = ",!";
+
+			 static String^ COMMAND_DEL_HELP = "del <task index>";
+			 static String^ COMMAND_DEL_HELP_MULTIPLE = "del <start task index> to <end task index>";
+
+			 static String^ COMMAND_MOD_HELP = "mod <taskindex> <task description>";
+			 static String^ COMMAND_MOD_HELP_LOCATION = ",at <venue>";
+			 static String^ COMMAND_MOD_HELP_START = ",from <start time of timed task>";
+			 static String^ COMMAND_MOD_HELP_END = ",to <end time of timed task>";
+			 static String^ COMMAND_MOD_HELP_DUE = ",by <due time>";
+			 static String^ COMMAND_MOD_HELP_REMIND = ",remind on <reminder time>";
+			 static String^ COMMAND_MOD_HELP_PRIORITY = ",!";
+
+			 static String^ COMMAND_MARK_HELP = "mark <taskindex>";
+			 static String^ COMMAND_MARK_HELP_MULTIPLE = "mark <start task index> to <end task index>";
+
+			 static String^ MESSAGE_HELP_ADD = "type \"add\" to add a task";
+			 static String^ MESSAGE_HELP_DEL = "type \"del\" to delete a task";
+			 static String^ MESSAGE_HELP_MOD = "type \"mod\" to modify a task";
+			 static String^ MESSAGE_HELP_MARK = "type \"mark\" to change the status of a task";
+			 static String^ MESSAGE_HELP_SEARCH = "type \"search\" to search list";
 
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
@@ -109,7 +145,7 @@ namespace UIDisplay {
 	private: System::Void printModMessage();
 	private: System::Void printMarMessage();
 	private: System::Void printHelpMessage();
-	private: void SetFocus(Control ^ control);
+	private: bool SetFocus(Control ^ control);
 	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
 	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	private: System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
@@ -121,6 +157,8 @@ namespace UIDisplay {
 	private: void focusOverdueItem();
 	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-	private: void printLabel();
+	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);	
+	private: void printLabel(ListViewItem^ item);
 	};
 }
