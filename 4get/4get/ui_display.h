@@ -157,8 +157,8 @@ namespace UIDisplay {
 	private: void focusOverdueItem();
 	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-	private: void printLabel();
-	/*private: System::Void textboxInput_KeyPress_1(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-			 }*/
-};
+	private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);	
+	private: void printLabel(ListViewItem^ item);
+	};
 }

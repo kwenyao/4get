@@ -1,4 +1,5 @@
 #include "ui_display.h"
+#include <sstream>
 using namespace UIDisplay;
 
 //constructor
@@ -8,6 +9,7 @@ ui_display::ui_display(){
 	listOfTasks = new std::list<Task*>;
 	commandKeyword = new string;
 	commandKeyword->clear();
+	selectedItem = 0;
 	loaded = false;
 	activeListType = listToDo;
 	execute->setListType(activeListType);
@@ -169,6 +171,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
+	this->completedListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::completedListView_ItemActivate);
 	// 
 	// cIndex
 	// 
@@ -229,6 +232,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
+	this->overdueListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::overdueListView_ItemActivate);
 	// 
 	// oIndex
 	// 
@@ -323,9 +327,9 @@ void ui_display::InitializeComponent(void){
 	this->itemDisplayLabel->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->itemDisplayLabel->Location = System::Drawing::Point(27, 195);
 	this->itemDisplayLabel->Name = L"itemDisplayLabel";
-	this->itemDisplayLabel->Size = System::Drawing::Size(112, 24);
+	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
 	this->itemDisplayLabel->TabIndex = 4;
-	this->itemDisplayLabel->Text = L"label is here";
+	this->itemDisplayLabel->Text = L"here";
 	// 
 	// ui_display
 	// 
@@ -391,7 +395,6 @@ void ui_display::printError(string error){
 	array<String ^> ^  emptyLines ={};
 	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
-	//this->printHelpMessage();
 }
 
 void ui_display::passUserInput(){
@@ -545,8 +548,9 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 	if(e->Control && e->KeyCode==Keys::Tab){
 		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
 		this->tabContainer->SelectedIndex = nextPage;
+
 	}
-	else if(e->KeyCode == Keys::Down){
+	else if(e->KeyCode == Keys::Down){	
 		this->focusItem();
 		selectedItem++;
 	}
@@ -591,18 +595,56 @@ void ui_display::focusItem(){
 	}
 }
 void ui_display::focusCompletedItem(){
+	/*if(completedListView->Items->Count > 0){
+	SetFocus(completedListView);
+	completedListView->Items[0]->Selected = true;
+	}*/
+
+	System::Object^ sender;
+	System::EventArgs^ e;
 	if(completedListView->Items->Count > 0){
 		SetFocus(completedListView);
-		completedListView->Items[0]->Selected = true;
+		if(selectedItem >= completedListView->Items->Count){
+			selectedItem--;
+		}
+		else if(selectedItem < 0){
+			selectedItem++;
+		}
+		stringstream ss;
+		ss << selectedItem;
+		string selectedItemstring = ss.str();
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		this->completedListView->Items[selectedItem]->Selected = true;
+		this->completedListView_ItemActivate(sender, e);
 	}
 }
 void ui_display::focusOverdueItem(){
+	/*if(overdueListView->Items->Count > 0){
+	SetFocus(overdueListView);
+	overdueListView->Items[0]->Selected = true;
+	}*/
+
+	System::Object^ sender;
+	System::EventArgs^ e;
 	if(overdueListView->Items->Count > 0){
 		SetFocus(overdueListView);
-		overdueListView->Items[0]->Selected = true;
+		if(selectedItem >= overdueListView->Items->Count){
+			selectedItem--;
+		}
+		else if(selectedItem < 0){
+			selectedItem++;
+		}
+		stringstream ss;
+		ss << selectedItem;
+		string selectedItemstring = ss.str();
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		this->overdueListView->Items[selectedItem]->Selected = true;
+		this->overdueListView_ItemActivate(sender, e);
 	}
 }
 void ui_display::focusToDoItem(){
+
+	
 	System::Object^ sender;
 	System::EventArgs^ e;
 	if(todoListView->Items->Count > 0){
@@ -613,14 +655,38 @@ void ui_display::focusToDoItem(){
 		else if(selectedItem < 0){
 			selectedItem++;
 		}
-		this->todoListView->Items[selectedItem]->Selected=true;
+		stringstream ss;
+		ss << selectedItem;
+		string selectedItemstring = ss.str();
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		this->todoListView->Items[selectedItem]->Selected = true;
 		this->todoListView_ItemActivate(sender, e);
+
 	}
 }
 
-void ui_display::printLabel(){
-	ListView::SelectedListViewItemCollection^ pdt = this->todoListView->SelectedItems;
-	ListViewItem^ item = pdt[0];
+void ui_display::printLabel(ListViewItem^ item){
+	/*ListView::SelectedListViewItemCollection^ pdt;
+	switch(activeListType){
+	case listToDo:
+	pdt = this->todoListView->SelectedItems;
+	break;
+	case listCompleted:
+	pdt = this->completedListView->SelectedItems;
+	break;
+	case listOverdue:
+	pdt = this->overdueListView->SelectedItems;
+	break;
+	default:
+	throw MESSAGE_ERROR_INVALID_LIST;
+	}
+	ListViewItem^ item = pdt[0];*/
+	if(item->SubItems[5]->Text == "high"){
+		this->itemDisplayLabel->ForeColor = Color::OrangeRed;
+	}
+	else{
+		this->itemDisplayLabel->ForeColor = Color::White;
+	}
 	//display selected item in product details
 	this->itemDisplayLabel->Text = TAG_NAME;
 	this->itemDisplayLabel->Text +=item->SubItems[1]->Text->ToString();
@@ -640,13 +706,18 @@ void ui_display::printLabel(){
 }
 
 Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
-	this->printLabel();
+	this->printLabel(this->todoListView->Items[selectedItem]);
+}
+Void ui_display::completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
+	this->printLabel(this->completedListView->Items[selectedItem]);
+}
+Void ui_display::overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
+	this->printLabel(this->overdueListView->Items[selectedItem]);
 }
 
 bool ui_display::SetFocus(Control ^ control){
 	if(!(control->Focused)){
 		control->Focus();
-		selectedItem=0;
 		return true;
 	}
 	return false;
@@ -658,6 +729,7 @@ Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Window
 }
 Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
 	try{
+		selectedItem=0;
 		if(this->tabContainer->SelectedIndex==1)
 			activeListType=listCompleted;
 		else if(this->tabContainer->SelectedIndex==2)
