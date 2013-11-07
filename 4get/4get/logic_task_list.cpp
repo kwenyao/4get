@@ -8,6 +8,9 @@ const int TaskList::YYYYMMDD_YEAR_MULTIPLIER = 10000;
 const int TaskList::YYYYMMDD_MONTH_MULTIPLIER = 100;
 const int TaskList::HHMM_HOUR_MULTIPLIER = 100;
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
 
 TaskList::TaskList(){
 	loadFromFile();
@@ -18,18 +21,6 @@ TaskList::~TaskList(){
 	clearList(listToDo);
 	clearList(listCompleted);
 	clearList(listOverdue);
-}
-
-void TaskList::clearList(ListType listType){
-	list<Task*>* listToClear;
-	list<Task*>::iterator iterator;
-	listToClear = determineList(listType);
-	for (iterator = listToClear->begin();
-		iterator != listToClear->end();
-		iterator++){
-			delete *iterator;
-	}
-	listToClear->clear();
 }
 
 void TaskList::loadFromFile(){
@@ -61,14 +52,17 @@ bool TaskList::addToList(Task* task, ListType listType){
 	list<Task*>* listToAdd;
 	list<Task*>::iterator iterator;
 	listToAdd = determineList(listType);
-	iterator = getIterator(*listToAdd, task);
-	listToAdd->insert(iterator,task);
+	listToAdd->push_back(task);
+	listToAdd->sort(&TaskList::compareEndThenPriority);
+
+	/*iterator = getIterator(*listToAdd, task);
+	listToAdd->insert(iterator,task);*/
 	logging(LOG_TASK_ADDED, Info, Pass);
 	_storage.save(*listToAdd, listType);
 	return true;
 }
 
-void TaskList::deleteFromList(int indexUI, bool isDelete){
+void TaskList::deleteIndexFromList(int indexUI, bool isDelete){
 	assert(indexUI > 0);
 	list<Task*>* listToDeleteFrom;
 	list<Task*>::iterator iterator;
@@ -96,23 +90,6 @@ void TaskList::deleteFromList(int indexUI, bool isDelete){
 	}
 }
 
-void TaskList::deleteFromFiltered(int indexUI){
-	long long taskID;
-	list<Task*>::iterator iterator;
-	list<Task*>* listToDeleteFrom = determineList(_actualList);
-	try{
-		taskID = obtainTaskID(indexUI, _filteredList);
-		deleteIDFromList(taskID, _actualList, false);
-	} catch(string e){
-		throw;
-	}
-}
-
-long long TaskList::obtainTaskID(int indexUI, list<Task*> taskList){
-	list<Task*>::iterator iterator = iterateToTask(taskList, indexUI);
-	return (*iterator)->getTaskId();
-}
-
 void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete){
 	list<Task*>::iterator iterator;
 	list<Task*>* listPtr = determineList(listToDelete);
@@ -137,7 +114,7 @@ bool TaskList::markDone(int indexUI){
 	listToMark = determineList(_currentDisplayed);
 	iterator = iterateToTask(*listToMark, indexUI);
 	taskPtr = (*iterator);
-	deleteFromList(indexUI, false);
+	deleteIndexFromList(indexUI, false);
 	addToList(taskPtr, listCompleted);
 	logging(LOG_TASK_MARKED, Info, Pass);
 	return true;
@@ -152,10 +129,6 @@ list<Task*> TaskList::obtainList(ListType listToReturn){
 	_currentDisplayed = listToReturn;
 	_isFiltered = false;
 	return _listToDisplay;
-}
-
-void TaskList::turnOffFilter(){
-	_isFiltered = false;
 }
 
 Task* TaskList::obtainTask(int indexUI){
@@ -175,23 +148,141 @@ Task* TaskList::obtainTask(long long taskID, ListType listType){
 	return (*iterator);
 }
 
-list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* taskToAdd){
-	time_t tempTime;
-	bool isEmpty = insertionList.empty();
-	time_t taskEndTime = taskToAdd->getTaskEnd();
-	list<Task*>::iterator iterator = insertionList.begin();
-	if(isEmpty){
-		return iterator;
-	}
-	int listSize = insertionList.size();
+void TaskList::searchList(string searchStr){
+	_isFiltered = true;
+	list<Task*> *listToFilter = determineList(_currentDisplayed);
+	_actualList = _currentDisplayed;
+	if(listToFilter->empty())
+		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	int listSize = listToFilter->size();
+	_filteredList.clear();
+	list<Task*>::iterator iterator = listToFilter->begin();
 	for(int i=0; i<listSize; i++){
-		tempTime = (*iterator)->getTaskEnd();
-		if(tempTime > taskEndTime)
-			return iterator;
+		if(isEqual(searchStr, iterator))
+			_filteredList.push_back(*iterator);
 		++iterator;
 	}
-	return iterator;
 }
+
+void TaskList::searchList(long long searchDate){
+	_isFiltered = true;
+	list<Task*>* listToFilter = determineList(_currentDisplayed);
+	if(listToFilter->empty())
+		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
+	_actualList = _currentDisplayed;
+	int listSize = listToFilter->size();
+	_filteredList.clear();
+	list<Task*>::iterator iterator = listToFilter->begin();
+	for(int i=0; i<listSize; i++){
+		if(isEqual(searchDate,iterator))
+			_filteredList.push_back(*iterator);
+		++iterator;
+	}
+}
+
+void TaskList::searchDescription(string searchStr){
+	try{
+		searchSetup();
+		populateFilteredList(descriptionAttr, searchStr);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchLocation(string searchStr){
+	try{
+		searchSetup();
+		populateFilteredList(locationAttr, searchStr);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStart(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchTime, specificSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStartTime(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchTime, timeSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchStartDate(time_t searchDate){
+	try{
+		searchSetup();
+		populateFilteredList(startAttr, searchDate, dateSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEnd(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchTime, specificSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEndTime(time_t searchTime){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchTime, timeSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::searchEndDate(time_t searchDate){
+	try{
+		searchSetup();
+		populateFilteredList(endAttr, searchDate, dateSearch);
+	} catch (string errString) {
+		throw;
+	}
+}
+
+void TaskList::turnOffFilter(){
+	_isFiltered = false;
+}
+
+void TaskList::refreshAll(time_t timeNow){
+	assert(!_toDoList.empty());
+	int listSize = _toDoList.size();
+	int marker = 0;
+	list<Task*>::iterator iterator = _toDoList.begin();
+	for(int i=0; i<listSize; i++){
+		if(isExpiredTask((*iterator),timeNow)){
+			moveTask(iterator, _toDoList, _overdueList);
+			iterator = _toDoList.begin();
+			advance(iterator,marker);
+		}
+		else{
+			marker++;
+			++iterator;
+		}
+	}
+	_toDoList.sort(&compareEndThenPriority);
+	saveAll();
+}
+
+void TaskList::setCurrentDisplayed(ListType listType){
+	_currentDisplayed = listType;
+}
+
+/*************************************
+           PRIVATE FUNCTIONS            
+*************************************/
 
 list<Task*>::iterator TaskList::iterateToTask(list<Task*>& listToEdit, int indexUI){
 	assert(!listToEdit.empty());
@@ -229,154 +320,33 @@ list<Task*>* TaskList::determineList(ListType listType){
 	}
 }
 
-void TaskList::setCurrentDisplayed(ListType listType){
-	_currentDisplayed = listType;
+void TaskList::deleteFromFiltered(int indexUI){
+	long long taskID;
+	list<Task*>::iterator iterator;
+	list<Task*>* listToDeleteFrom = determineList(_actualList);
+	try{
+		taskID = obtainTaskID(indexUI, _filteredList);
+		deleteIDFromList(taskID, _actualList, false);
+	} catch(string e){
+		throw;
+	}
 }
 
+long long TaskList::obtainTaskID(int indexUI, list<Task*> taskList){
+	list<Task*>::iterator iterator = iterateToTask(taskList, indexUI);
+	return (*iterator)->getTaskId();
+}
 
-
-void TaskList::searchList(string searchStr){
-	_isFiltered = true;
-	list<Task*> *listToFilter = determineList(_currentDisplayed);
-	_actualList = _currentDisplayed;
-	if(listToFilter->empty())
+void TaskList::searchSetup(){
+	_activeList = determineList(_currentDisplayed);
+	if(!_isFiltered){
+		_actualList = _currentDisplayed;
+		_filteredList.clear();
+	}
+	_currentDisplayed = listFiltered;
+	if(_activeList->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
-	int listSize = listToFilter->size();
-	_filteredList.clear();
-	list<Task*>::iterator iterator = listToFilter->begin();
-	for(int i=0; i<listSize; i++){
-		if(isEqual(searchStr, iterator))
-			_filteredList.push_back(*iterator);
-		++iterator;
-	}
-}
-
-//void TaskList::searchList(time_t searchTime){
-//	list<Task*> *listToFilter = determineList(_currentDisplayed);
-//	_actualList = _currentDisplayed;
-//	if(listToFilter->empty())
-//		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
-//	int listSize = listToFilter->size();
-//	_filteredList.clear();
-//	list<Task*>::iterator iterator = listToFilter->begin();
-//	for(int i=0; i<listSize; i++){
-//		if( (*iterator)->getTaskEnd() == searchTime)
-//			_filteredList.push_back(*iterator);
-//		else if( (*iterator)->getTaskStart() == searchTime)
-//			_filteredList.push_back(*iterator);
-//		++iterator;
-//	}
-//	_isFiltered = true;
-//}
-
-void TaskList::searchList(long long searchDate){
-	_isFiltered = true;
-	list<Task*>* listToFilter = determineList(_currentDisplayed);
-	if(listToFilter->empty())
-		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
-	_actualList = _currentDisplayed;
-	int listSize = listToFilter->size();
-	_filteredList.clear();
-	list<Task*>::iterator iterator = listToFilter->begin();
-	for(int i=0; i<listSize; i++){
-		if(isEqual(searchDate,iterator))
-			_filteredList.push_back(*iterator);
-		++iterator;
-	}
-}
-
-bool TaskList::isEqual(long long searchDate, list<Task*>::iterator iterator){
-	long long tempStart;
-	long long tempEnd;
-	tempStart = (*iterator)->getTimeLong(timeStart);
-	tempEnd = (*iterator)->getTimeLong(timeEnd);
-	if(tempEnd == searchDate)
-		return true;
-	else if(tempStart == searchDate)
-		return true;
-	else
-		return false;
-}
-
-bool TaskList::isEqual(string searchStr, list<Task*>::iterator iterator){
-	if( (*iterator)->getTaskDescription() == searchStr)
-		return true;
-	else if( (*iterator)->getTaskLocation() == searchStr)
-		return true;
-	else 
-		return false;
-}
-
-void TaskList::searchDescription(string searchStr){
-	try{
-		searchSetup();
-		populateFilteredList(descriptionAttr, searchStr);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchLocation(string searchStr){
-	try{
-		searchSetup();
-		populateFilteredList(locationAttr, searchStr);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchStart(time_t searchTime){
-	try{
-		searchSetup();
-		populateFilteredList(startAttr, searchTime, specificSearch);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchEnd(time_t searchTime){
-	try{
-		searchSetup();
-		populateFilteredList(endAttr, searchTime, specificSearch);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchStartDate(time_t searchDate){
-	try{
-		searchSetup();
-		populateFilteredList(startAttr, searchDate, dateSearch);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchStartTime(time_t searchTime){
-	try{
-		searchSetup();
-		populateFilteredList(startAttr, searchTime, timeSearch);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchEndDate(time_t searchDate){
-	try{
-		searchSetup();
-		populateFilteredList(endAttr, searchDate, dateSearch);
-	} catch (string errString) {
-		throw;
-	}
-}
-
-void TaskList::searchEndTime(time_t searchTime){
-	try{
-		searchSetup();
-		populateFilteredList(endAttr, searchTime, timeSearch);
-	} catch (string errString) {
-		throw;
-	}
+	searchIterator = _activeList->begin();
 }
 
 void TaskList::populateFilteredList(AttributeType attrType, string searchStr){
@@ -403,6 +373,28 @@ void TaskList::populateFilteredList(AttributeType attrType, time_t searchTime, S
 		++searchIterator;
 	}
 	_isFiltered = true;
+}
+
+bool TaskList::isEqual(long long searchDate, list<Task*>::iterator iterator){
+	long long tempStart;
+	long long tempEnd;
+	tempStart = (*iterator)->getTimeLong(timeStart);
+	tempEnd = (*iterator)->getTimeLong(timeEnd);
+	if(tempEnd == searchDate)
+		return true;
+	else if(tempStart == searchDate)
+		return true;
+	else
+		return false;
+}
+
+bool TaskList::isEqual(string searchStr, list<Task*>::iterator iterator){
+	if( (*iterator)->getTaskDescription() == searchStr)
+		return true;
+	else if( (*iterator)->getTaskLocation() == searchStr)
+		return true;
+	else 
+		return false;
 }
 
 bool TaskList::isEqual(AttributeType attType, string searchStr){
@@ -447,16 +439,23 @@ bool TaskList::isEqual(AttributeType attType, time_t searchTime, SearchTimeType 
 	return (compareTime == searchTime);
 }
 
-void TaskList::searchSetup(){
-	_activeList = determineList(_currentDisplayed);
-	if(!_isFiltered){
-		_actualList = _currentDisplayed;
-		_filteredList.clear();
+bool TaskList::compareEndThenPriority(Task* firstTask, Task* secondTask){
+	time_t firstEnd = firstTask->getTaskEnd();
+	time_t secondEnd = secondTask->getTaskEnd();
+	Priority firstPriority = firstTask->getTaskPriority();
+	Priority secondPriority = secondTask->getTaskPriority();
+	bool isFirstHigh = (firstPriority == high);
+	bool isSecondHigh = (secondPriority == high);
+	if(firstEnd < secondEnd)
+		return true;
+	else if(firstEnd > secondEnd)
+		return false;
+	else{ //if end time same
+		if(isFirstHigh && !isSecondHigh)
+			return true;
+		else 
+			return false;
 	}
-	_currentDisplayed = listFiltered;
-	if(_activeList->empty())
-		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
-	searchIterator = _activeList->begin();
 }
 
 int TaskList::getDate(time_t dateAndTime){
@@ -483,23 +482,10 @@ int TaskList::getTime(time_t dateAndTime){
 	return (hour + min);
 }
 
-void TaskList::refreshAll(time_t timeNow){
-	assert(!_toDoList.empty());
-	int listSize = _toDoList.size();
-	int marker = 0;
-	list<Task*>::iterator iterator = _toDoList.begin();
-	for(int i=0; i<listSize; i++){
-		if(isExpiredTask((*iterator),timeNow)){
-			moveTask(iterator, _toDoList, _overdueList);
-			iterator = _toDoList.begin();
-			advance(iterator,marker);
-		}
-		else{
-			marker++;
-			++iterator;
-		}
-	}
-	saveAll();
+void TaskList::moveTask(list<Task*>::iterator fromIterator, list<Task*>& fromList, list<Task*>& toList){
+	Task* taskPtr = (*fromIterator);
+	fromList.erase(fromIterator);
+	toList.push_front(taskPtr);
 }
 
 bool TaskList::isExpiredTask(Task* testTask, time_t timeNow){
@@ -518,8 +504,32 @@ bool TaskList::isExpiredTask(Task* testTask, time_t timeNow){
 		return false;
 }
 
-void TaskList::moveTask(list<Task*>::iterator fromIterator, list<Task*>& fromList, list<Task*>& toList){
-	Task* taskPtr = (*fromIterator);
-	fromList.erase(fromIterator);
-	toList.push_front(taskPtr);
+void TaskList::clearList(ListType listType){
+	list<Task*>* listToClear;
+	list<Task*>::iterator iterator;
+	listToClear = determineList(listType);
+	for (iterator = listToClear->begin();
+		iterator != listToClear->end();
+		iterator++){
+			delete *iterator;
+	}
+	listToClear->clear();
 }
+
+//list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* taskToAdd){
+//	time_t tempTime;
+//	bool isEmpty = insertionList.empty();
+//	time_t taskEndTime = taskToAdd->getTaskEnd();
+//	list<Task*>::iterator iterator = insertionList.begin();
+//	if(isEmpty){
+//		return iterator;
+//	}
+//	int listSize = insertionList.size();
+//	for(int i=0; i<listSize; i++){
+//		tempTime = (*iterator)->getTaskEnd();
+//		if(tempTime > taskEndTime)
+//			return iterator;
+//		++iterator;
+//	}
+//	return iterator;
+//}

@@ -80,15 +80,15 @@ TEST_F(TaskListTest, TestListDelete){
 	tempList = TaskListTester.obtainList(listToDo);
 	listSize = tempList.size();
 	EXPECT_EQ(listSize, 3);
-	TaskListTester.deleteFromList(1, true);
+	TaskListTester.deleteIndexFromList(1, true);
 	tempList = TaskListTester.obtainList(listToDo);
 	listSize = tempList.size();
 	EXPECT_EQ(listSize, 2);
-	TaskListTester.deleteFromList(1, true);
+	TaskListTester.deleteIndexFromList(1, true);
 	tempList = TaskListTester.obtainList(listToDo);
 	listSize = tempList.size();
 	EXPECT_EQ(listSize, 1);
-	TaskListTester.deleteFromList(1, true);
+	TaskListTester.deleteIndexFromList(1, true);
 	tempList = TaskListTester.obtainList(listToDo);
 	listSize = tempList.size();
 	EXPECT_EQ(listSize, 0);

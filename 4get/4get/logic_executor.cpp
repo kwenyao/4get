@@ -768,7 +768,7 @@ bool Executor::helperDeleteFunction(int deleteStartNumber){
 		Task taskTemp;
 		taskTemp = *taskList.obtainTask(deleteStartNumber);
 		storeIntoUndoTaskStack(taskTemp);
-		taskList.deleteFromList(deleteStartNumber, true);
+		taskList.deleteIndexFromList(deleteStartNumber, true);
 		return true;
 	}catch(string error){
 		throw;

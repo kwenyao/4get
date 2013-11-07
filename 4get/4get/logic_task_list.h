@@ -6,6 +6,7 @@
 #include "logic_task.h"
 #include "storage.h"
 #include "log.h"
+#include <functional>
 
 using namespace std;
 using namespace Enum;
@@ -35,39 +36,48 @@ private:
 	static const int YYYYMMDD_MONTH_MULTIPLIER;
 	static const int HHMM_HOUR_MULTIPLIER;
 	static const int INDEX_CORRECTION;
+
 	static const string LOG_TASK_ADDED;
 	static const string LOG_TASK_DELETED;
 	static const string LOG_TASK_MARKED;
 
-	list<Task*>::iterator getIterator(list<Task*>& insertionList, Task* task);
+	//list<Task*>::iterator getIterator(list<Task*>& insertionList, Task* task);
 	list<Task*>::iterator iterateToTask(list<Task*>& listToEdit, int task);
 	void findID(list<Task*>* listToEdit, long long IDNumber, list<Task*>::iterator& iterator);
+
 	list<Task*>* determineList(ListType listType);
+
 	void deleteFromFiltered(int indexUI);
 	long long obtainTaskID(int indexUI, list<Task*> taskList);
 
 	//Search helper functions
-	void populateFilteredList(AttributeType, string searchStr);
 	void searchSetup();
+	void populateFilteredList(AttributeType, string searchStr);
 	void populateFilteredList(AttributeType attrType, time_t searchTime, SearchTimeType searchType);
+	
 	//compare functions for search
 	bool isEqual(long long searchDate, list<Task*>::iterator iterator);
 	bool isEqual(string searchStr, list<Task*>::iterator iterator);
 	bool isEqual(AttributeType attType, string searchStr);
 	bool isEqual(AttributeType attType, time_t searchTime, SearchTimeType searchType);
 
+	//compare function for sort
+	static bool compareEndThenPriority(Task* firstTask, Task* secondTask);
+
+	//functions to extract date/time from date time to use for non-specific datetime search
 	int getDate(time_t dateAndTime);
 	int getTime(time_t dateAndTime);
 
+	//function to delete all pointers in list (used in destructor)
 	void clearList(ListType listType);
 
+	// refresh helper functions
 	void moveTask(list<Task*>::iterator fromIterator, list<Task*>& fromList, list<Task*>& toList);
 	bool isExpiredTask(Task* testTask, time_t timeNow);
 
-
 public:
-	TaskList();
-	~TaskList();
+	TaskList(); //constructor
+	~TaskList(); //destructor
 
 	//storage functions
 	void loadFromFile();
@@ -76,29 +86,29 @@ public:
 
 	//Public list manipulation functions
 	bool addToList(Task* task, ListType listToAdd);
-	void deleteFromList(int indexUI, bool isDelete);
+	void deleteIndexFromList(int indexUI, bool isDelete);
 	void deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete);
 	bool markDone(int taskToMark);
 
 	//Getter functions
 	list<Task*> obtainList(ListType listToReturn);
-	Task* obtainTask(int indexUI);
-	Task* obtainTask(long long taskID, ListType listType);
+	Task*       obtainTask(int indexUI);
+	Task*       obtainTask(long long taskID, ListType listType);
 
 	//Search functions (overload)
 	void searchList(string searchStr);
-	//void searchList(time_t searchTime);
 	void searchList(long long searchDate);
 
 	//Search functions (single)
 	void searchDescription(string searchStr);
-	void searchLocation(string searchStr);
-	void searchStart(time_t searchTime);
-	void searchStartTime(time_t searchTime);
-	void searchStartDate(time_t searchTime);
-	void searchEnd(time_t searchTime);
-	void searchEndTime(time_t searchTime);
-	void searchEndDate(time_t searchTime);
+	void searchLocation   (string searchStr);
+	void searchStart      (time_t searchTime);
+	void searchStartTime  (time_t searchTime);
+	void searchStartDate  (time_t searchTime);
+	void searchEnd        (time_t searchTime);
+	void searchEndTime    (time_t searchTime);
+	void searchEndDate    (time_t searchTime);
+
 	void turnOffFilter();
 
 	//Refresh
