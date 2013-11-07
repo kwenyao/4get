@@ -110,8 +110,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
-	/*this->todoListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::todoListView_ItemActivate);*/
-	/*this->todoListView->ItemSelectionChanged += gcnew System::Windows::Forms::ListViewItemSelectionChangedEventHandler(this, &ui_display::todoListView_ItemSelectionChanged);*/
+	
 	// 
 	// tIndex
 	// 
@@ -173,7 +172,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
-	/*this->completedListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::completedListView_ItemActivate);*/
+	
 	// 
 	// cIndex
 	// 
@@ -234,7 +233,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
-	/*this->overdueListView->ItemActivate += gcnew System::EventHandler(this, &ui_display::overdueListView_ItemActivate);*/
+	
 	// 
 	// oIndex
 	// 
@@ -314,6 +313,7 @@ void ui_display::InitializeComponent(void){
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
 	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
+	this->notifyIcon1->Icon = gcnew System::Drawing::Icon("favicon.ico");
 	// 
 	// timerRefresh
 	// 
@@ -725,7 +725,9 @@ void ui_display::focusList(ListType activeListType){
 		list = overdueListView;
 		break;
 	}
-	if(!(list->Focused))
+	if(list->Items->Count == 0)
+		return;
+	else if(!(list->Focused))
 		this->SetFocus(list);
 	else if (selectedItem == 0 && up || selectedItem == list->Items->Count - 1 && !up)
 		return;
