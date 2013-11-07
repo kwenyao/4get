@@ -652,6 +652,7 @@ void ui_display::printLabel(ListViewItem^ item){
 
 bool ui_display::SetFocus(Control ^ control){
 	if(!(control->Focused)){
+		selectedItem = 0;
 		control->Focus();
 		return true;
 	}
