@@ -329,7 +329,6 @@ void ui_display::InitializeComponent(void){
 	this->itemDisplayLabel->Name = L"itemDisplayLabel";
 	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
 	this->itemDisplayLabel->TabIndex = 4;
-	this->itemDisplayLabel->Text = L"here";
 	// 
 	// ui_display
 	// 
@@ -610,10 +609,10 @@ void ui_display::focusCompletedItem(){
 		else if(selectedItem < 0){
 			selectedItem++;
 		}
-		stringstream ss;
+		/*stringstream ss;
 		ss << selectedItem;
 		string selectedItemstring = ss.str();
-		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));*/
 		this->completedListView->Items[selectedItem]->Selected = true;
 		this->completedListView_ItemActivate(sender, e);
 	}
@@ -634,10 +633,10 @@ void ui_display::focusOverdueItem(){
 		else if(selectedItem < 0){
 			selectedItem++;
 		}
-		stringstream ss;
+		/*stringstream ss;
 		ss << selectedItem;
 		string selectedItemstring = ss.str();
-		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));*/
 		this->overdueListView->Items[selectedItem]->Selected = true;
 		this->overdueListView_ItemActivate(sender, e);
 	}
@@ -655,10 +654,10 @@ void ui_display::focusToDoItem(){
 		else if(selectedItem < 0){
 			selectedItem++;
 		}
-		stringstream ss;
+		/*stringstream ss;
 		ss << selectedItem;
 		string selectedItemstring = ss.str();
-		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));
+		MessageBox::Show( gcnew System::String(selectedItemstring.c_str()));*/
 		this->todoListView->Items[selectedItem]->Selected = true;
 		this->todoListView_ItemActivate(sender, e);
 
@@ -764,7 +763,7 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 		if(e->KeyCode == Keys::Enter){
 			commandKeyword->clear();
 			this->printHelpMessage();
-			if(!this->textboxInput->Text->Empty)
+			//if(!this->textboxInput->Text->Empty)
 				this->passUserInput();
 			this->textboxInput->Clear();
 			this->printList();
