@@ -9,43 +9,35 @@ namespace Commands{
 	const string COMMAND_ADD = "add";
 	const string COMMAND_A = "a";
 	const string COMMAND_CREATE= "create";
-
 	//variants of delete
 	const string COMMAND_DELETE = "delete";
 	const string COMMAND_REMOVE = "remove";
 	const string COMMAND_ERASE = "erase";
 	const string COMMAND_DEL = "del";
 	const string COMMAND_REM = "rem";
-
 	//variants of mark
 	const string COMMAND_MARK = "mark";
 	const string COMMAND_M = "m";
-
 	//variants of modify
 	const string COMMAND_MODIFY = "modify";
 	const string COMMAND_MOD = "mod";
 	const string COMMAND_UPDATE = "update";
 	const string COMMAND_DONE = "done";
-
 	//variants of undo
 	const string COMMAND_UNDO = "undo";
-
 	//variants of redo
 	const string COMMAND_REDO = "redo";
-
 	//variants of show
 	const string COMMAND_SHOW = "show";
 	const string COMMAND_DISPLAY = "display";
 	const string COMMAND_SEARCH = "search";
-
 	//variants of show all
 	const string COMMAND_SHOWALL = "showall";
 	const string COMMAND_DISPLAYALL = "displayall";
 	const string COMMAND_SEARCHALL = "searchall";
-
 	//variants of query
-	const string COMMAND_WHAT = "what";
-	const string COMMAND_WHEN = "when";
+	//const string COMMAND_WHAT = "what";
+	//const string COMMAND_WHEN = "when";
 
 	const string COMMAND_NULL = "";
 }
@@ -85,6 +77,7 @@ namespace Message{
 	const string MESSAGE_ERROR_START_AFTER_END = "Error: Start time is before end time.";
 	const string MESSAGE_ERROR_NO_END_TIME = "Error: Please enter end time for task.";
 	const string MESSAGE_ERROR_INVALID_INDEX = "Error: Please enter a valid task index.";
+	const string MESSAGE_ERROR_NO_DOUBLE_REPEATS = "Error: Unable to set 2 repeats in one input.";
 
 	const string MESSAGE_NO_SEARCH_RESULT = "Search yielded no results. Please try other keywords.";
 
@@ -266,8 +259,6 @@ namespace Constants{
 	const string MONTH_NOV = "nov";
 	const string MONTH_DECEMBER = "december";
 	const string MONTH_DEC = "dec";
-
-
 
 	const std::size_t TIMER_24HR_LENGTH = 6;
 	const std::size_t TIMER_24_LENGTH = 4;
