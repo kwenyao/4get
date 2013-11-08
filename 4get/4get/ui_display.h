@@ -50,23 +50,47 @@ namespace UIDisplay {
 			 static String^ COMMAND_ADD_HELP_START = ",from <start time of timed task>";
 			 static String^ COMMAND_ADD_HELP_END = ",to <end time of timed task>";
 			 static String^ COMMAND_ADD_HELP_DUE = ",by <due time>";
-			 static String^ COMMAND_ADD_HELP_REMIND = ",remind on <reminder time>";
+			 static String^ COMMAND_ADD_HELP_REPEAT = ",repeat <frequency>";
 			 static String^ COMMAND_ADD_HELP_PRIORITY = ",!";
+			 static String^ COMMAND_ADD_HELP_TIME_DATE = "date: jan, january, feb, feburary, mar, ...";
+			 static String^ COMMAND_ADD_HELP_TIME_DAY = "day: today, tomorrow, monday, tuesday, wednesday, ...";
+			 static String^ COMMAND_ADD_HELP_TIME_TIME = "time: 1800hr, 6pm, 0900hr, 9am, ...";
+			 static String^ COMMAND_ADD_HELP_REMIND_FREQUENCY = "remind frequency: daily, weekly, monthy, yearly";
+			 static String^ COMMAND_ADD_FLOATING_EXAMPLE = "E.g. add get newspaper ,at newstand";
+			 static String^ COMMAND_ADD_DEADLINE_EXAMPLE = "E.g. add do homework ,by 8 nov 9pm";
+			 static String^ COMMAND_ADD_TIMED_EXAMPLE = "E.g. add tuition ,at crown centre ,from saturday 2pm to 4pm ,repeat weekly ,!";
 
 			 static String^ COMMAND_DEL_HELP = "del <task index>";
 			 static String^ COMMAND_DEL_HELP_MULTIPLE = "del <start task index> to <end task index>";
+			 static String^ COMMAND_DEL_HELP_EXAMPLE = "E.g. del 1";
+			 static String^ COMMAND_DEL_HELP_MULTIPLE_EXAMPLE = "E.g. del 1 to 3";
 
 			 static String^ COMMAND_MOD_HELP = "mod <taskindex> <task description>";
 			 static String^ COMMAND_MOD_HELP_LOCATION = ",at <venue>";
-			 static String^ COMMAND_MOD_HELP_START = ",from <start time of timed task>";
-			 static String^ COMMAND_MOD_HELP_END = ",to <end time of timed task>";
+			 static String^ COMMAND_MOD_HELP_START = ",from <start time of task>";
+			 static String^ COMMAND_MOD_HELP_END = ",to <end time of task>";
 			 static String^ COMMAND_MOD_HELP_DUE = ",by <due time>";
-			 static String^ COMMAND_MOD_HELP_REMIND = ",remind on <reminder time>";
-			 static String^ COMMAND_MOD_HELP_PRIORITY = ",!";
+			 static String^ COMMAND_MOD_HELP_PRIORITY = ",<priority state>";
+			 static String^ COMMAND_MOD_HELP_PRIORITY_STATES = "priority states: normal, high";
+			 static String^ COMMAND_MOD_HELP_EXAMPLE1 = "changing to a timed task: \n mod 3 ,at grand pacific hotel ,from 9pm to 11pm";
+			 static String^ COMMAND_MOD_HELP_EXAMPLE2 = "changing to a deadline task: \n mod 5 project ,by 20 dec ,normal";
+			 static String^ COMMAND_MOD_HELP_EXAMPLE3 = "changing to a floating task: \n mod 1 dinner ,by 0 ,at charles' house";
 
 			 static String^ COMMAND_MARK_HELP = "mark <taskindex>";
 			 static String^ COMMAND_MARK_HELP_MULTIPLE = "mark <start task index> to <end task index>";
+			 static String^ COMMAND_MARK_HELP_EXAMPLE = "E.g. mark 1";
+			 static String^ COMMAND_MARK_HELP_MULTIPLE_EXAMPLE = "E.g. mark 1 to 3";
 
+			 static String^ COMMAND_SEARCH_HELP = "search ";
+			 static String^ COMMAND_SEARCH_HELP_LOCATION = ",at <venue>";
+			 static String^ COMMAND_SEARCH_HELP_START = ",from <start time of task>";
+			 static String^ COMMAND_SEARCH_HELP_END = ",to <end time of task>";
+			 static String^ COMMAND_SEARCH_HELP_DUE = ",by <due time>";
+			 static String^ COMMAND_SEARCH_HELP_PRIORITY = ",<priority state>";
+			 static String^ COMMAND_SEARCH_HELP_PRIORITY_STATES = "priority states: normal, high";
+			 static String^ COMMAND_SEARCH_HELP_INSTRUCTIONS = "Choose the keywords according to the category you wish to search under.";
+
+			 static String^ MESSAGE_HELP_INSTRUCTIONS = "type in any of the keywords below to get started";
 			 static String^ MESSAGE_HELP_ADD = "type \"add\" to add a task";
 			 static String^ MESSAGE_HELP_DEL = "type \"del\" to delete a task";
 			 static String^ MESSAGE_HELP_MOD = "type \"mod\" to modify a task";
@@ -131,35 +155,39 @@ namespace UIDisplay {
 #pragma endregion
 
 	private: void printList();
-	private: void printToDoList();
-	private: void printCompletedList();
-	private: void printOverdueList();
-	private: void passUserInput();
-	private: void printError(string error);
+			 void printToDoList();
+			 void printCompletedList();
+			 void printOverdueList();
+			 void passUserInput();
+			 void printError(string error);
+
+			 System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			 System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			 System::Void checkInput();
+			 System::Void printAddMessage();
+			 System::Void printDelMessage();
+			 System::Void printModMessage();
+			 System::Void printMarMessage();
+			 System::Void printSearchMessage();
+			 System::Void printHelpMessage();
+			 bool SetFocus(Control ^ control);
+			 System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
+			 System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+			 System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			 System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
+			 System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
+			 void printLabel(ListViewItem^ item);
+			 void focusList(ListType activeListType);
+
 	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-	private: System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-	private: System::Void checkInput();
-	private: System::Void printAddMessage();
-	private: System::Void printDelMessage();
-	private: System::Void printModMessage();
-	private: System::Void printMarMessage();
-	private: System::Void printHelpMessage();
-	private: bool SetFocus(Control ^ control);
-	private: System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
-	private: System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-	private: System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-	private: System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
-			 /*private: void focusItem();
-			 private: void focusToDoItem();
-			 private: void focusCompletedItem();
-			 private: void focusOverdueItem();*/
+			/*private: void focusItem();
+			private: void focusToDoItem();
+			private: void focusCompletedItem();
+			private: void focusOverdueItem();*/
 	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
 			 /*private: System::Void todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 			 private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 			 private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);	*/
-	private: void printLabel(ListViewItem^ item);
-	private: void focusList(ListType activeListType);
+
 	};
 }

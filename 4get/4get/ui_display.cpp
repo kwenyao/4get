@@ -28,7 +28,6 @@ ui_display::~ui_display(){
 
 void ui_display::InitializeComponent(void){
 	this->components = (gcnew System::ComponentModel::Container());
-	System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(ui_display::typeid));
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
@@ -65,10 +64,10 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->Controls->Add(this->tabTodo);
 	this->tabContainer->Controls->Add(this->tabCompleted);
 	this->tabContainer->Controls->Add(this->tabOverdue);
-	this->tabContainer->Location = System::Drawing::Point(382, 173);
+	this->tabContainer->Location = System::Drawing::Point(386, 42);
 	this->tabContainer->Name = L"tabContainer";
 	this->tabContainer->SelectedIndex = 0;
-	this->tabContainer->Size = System::Drawing::Size(677, 358);
+	this->tabContainer->Size = System::Drawing::Size(677, 330);
 	this->tabContainer->TabIndex = 0;
 	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
 	// 
@@ -78,7 +77,7 @@ void ui_display::InitializeComponent(void){
 	this->tabTodo->Location = System::Drawing::Point(4, 22);
 	this->tabTodo->Name = L"tabTodo";
 	this->tabTodo->Padding = System::Windows::Forms::Padding(3);
-	this->tabTodo->Size = System::Drawing::Size(669, 332);
+	this->tabTodo->Size = System::Drawing::Size(669, 304);
 	this->tabTodo->TabIndex = 0;
 	this->tabTodo->Text = L"To Do";
 	this->tabTodo->UseVisualStyleBackColor = true;
@@ -98,7 +97,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->LabelEdit = true;
 	this->todoListView->Location = System::Drawing::Point(-4, 0);
 	this->todoListView->Name = L"todoListView";
-	this->todoListView->Size = System::Drawing::Size(677, 336);
+	this->todoListView->Size = System::Drawing::Size(677, 303);
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
@@ -124,7 +123,7 @@ void ui_display::InitializeComponent(void){
 	this->tabCompleted->Location = System::Drawing::Point(4, 22);
 	this->tabCompleted->Name = L"tabCompleted";
 	this->tabCompleted->Padding = System::Windows::Forms::Padding(3);
-	this->tabCompleted->Size = System::Drawing::Size(669, 332);
+	this->tabCompleted->Size = System::Drawing::Size(669, 304);
 	this->tabCompleted->TabIndex = 1;
 	this->tabCompleted->Text = L"Completed";
 	this->tabCompleted->UseVisualStyleBackColor = true;
@@ -144,7 +143,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->LabelEdit = true;
 	this->completedListView->Location = System::Drawing::Point(-4, 0);
 	this->completedListView->Name = L"completedListView";
-	this->completedListView->Size = System::Drawing::Size(677, 336);
+	this->completedListView->Size = System::Drawing::Size(677, 303);
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
@@ -169,7 +168,7 @@ void ui_display::InitializeComponent(void){
 	this->tabOverdue->Controls->Add(this->overdueListView);
 	this->tabOverdue->Location = System::Drawing::Point(4, 22);
 	this->tabOverdue->Name = L"tabOverdue";
-	this->tabOverdue->Size = System::Drawing::Size(669, 332);
+	this->tabOverdue->Size = System::Drawing::Size(669, 304);
 	this->tabOverdue->TabIndex = 2;
 	this->tabOverdue->Text = L"Overdue";
 	this->tabOverdue->UseVisualStyleBackColor = true;
@@ -189,7 +188,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->LabelEdit = true;
 	this->overdueListView->Location = System::Drawing::Point(-4, 0);
 	this->overdueListView->Name = L"overdueListView";
-	this->overdueListView->Size = System::Drawing::Size(677, 336);
+	this->overdueListView->Size = System::Drawing::Size(677, 303);
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
@@ -213,7 +212,7 @@ void ui_display::InitializeComponent(void){
 	// 
 	this->inputContainer->Anchor = System::Windows::Forms::AnchorStyles::Left;
 	this->inputContainer->Controls->Add(this->textboxInput);
-	this->inputContainer->Location = System::Drawing::Point(12, 12);
+	this->inputContainer->Location = System::Drawing::Point(12, 16);
 	this->inputContainer->Name = L"inputContainer";
 	this->inputContainer->Size = System::Drawing::Size(1047, 24);
 	this->inputContainer->TabIndex = 2;
@@ -239,23 +238,24 @@ void ui_display::InitializeComponent(void){
 	this->messageContainer->Controls->Add(this->messageBox);
 	this->messageContainer->Location = System::Drawing::Point(12, 42);
 	this->messageContainer->Name = L"messageContainer";
-	this->messageContainer->Size = System::Drawing::Size(1047, 125);
+	this->messageContainer->Size = System::Drawing::Size(361, 496);
 	this->messageContainer->TabIndex = 3;
 	// 
 	// messageBox
 	// 
 	this->messageBox->BackColor = System::Drawing::Color::IndianRed;
 	this->messageBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+	this->messageBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
 	this->messageBox->Location = System::Drawing::Point(3, 3);
 	this->messageBox->Name = L"messageBox";
 	this->messageBox->ReadOnly = true;
-	this->messageBox->Size = System::Drawing::Size(1044, 122);
+	this->messageBox->Size = System::Drawing::Size(358, 493);
 	this->messageBox->TabIndex = 0;
 	this->messageBox->Text = L"";
 	// 
 	// notifyIcon1
 	// 
-	/*this->notifyIcon1->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"notifyIcon1.Icon")));*/
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
 	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
@@ -272,7 +272,7 @@ void ui_display::InitializeComponent(void){
 	this->itemDisplayLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->itemDisplayLabel->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-	this->itemDisplayLabel->Location = System::Drawing::Point(27, 195);
+	this->itemDisplayLabel->Location = System::Drawing::Point(386, 375);
 	this->itemDisplayLabel->Name = L"itemDisplayLabel";
 	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
 	this->itemDisplayLabel->TabIndex = 4;
@@ -282,7 +282,7 @@ void ui_display::InitializeComponent(void){
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackColor = System::Drawing::Color::Black;
-	this->ClientSize = System::Drawing::Size(1075, 543);
+	this->ClientSize = System::Drawing::Size(1075, 550);
 	this->Controls->Add(this->itemDisplayLabel);
 	this->Controls->Add(this->messageContainer);
 	this->Controls->Add(this->inputContainer);
@@ -652,6 +652,7 @@ void ui_display::printLabel(ListViewItem^ item){
 
 bool ui_display::SetFocus(Control ^ control){
 	if(!(control->Focused)){
+		selectedItem = 0;
 		control->Focus();
 		return true;
 	}
@@ -778,6 +779,9 @@ Void ui_display::checkInput(){
 		else if(*commandKeyword == "mar"){
 			this->printMarMessage();
 		}
+		else if(*commandKeyword == "sea"){
+			this->printSearchMessage();
+		}
 	}
 	else return;
 }
@@ -788,15 +792,26 @@ Void ui_display::printAddMessage(){
 		COMMAND_ADD_HELP_START,
 		COMMAND_ADD_HELP_END,
 		COMMAND_ADD_HELP_DUE,
-		COMMAND_ADD_HELP_REMIND,
-		COMMAND_ADD_HELP_PRIORITY
+		COMMAND_ADD_HELP_REPEAT,
+		COMMAND_ADD_HELP_PRIORITY,
+		NEWLINE,
+		COMMAND_ADD_HELP_TIME_DATE,
+		COMMAND_ADD_HELP_TIME_DAY,
+		COMMAND_ADD_HELP_TIME_TIME,
+		NEWLINE,
+		COMMAND_ADD_FLOATING_EXAMPLE,
+		COMMAND_ADD_DEADLINE_EXAMPLE,
+		COMMAND_ADD_TIMED_EXAMPLE
 	};
 	this->messageBox->Lines= addLines;
 }
 Void ui_display::printDelMessage(){
 	array<String ^> ^  delLines ={
 		COMMAND_DEL_HELP,
-		COMMAND_DEL_HELP_MULTIPLE
+		COMMAND_DEL_HELP_MULTIPLE,
+		NEWLINE,
+		COMMAND_DEL_HELP_EXAMPLE,
+		COMMAND_DEL_HELP_MULTIPLE_EXAMPLE
 	};
 	this->messageBox->Lines= delLines;
 }
@@ -807,20 +822,45 @@ Void ui_display::printModMessage(){
 		COMMAND_MOD_HELP_START,
 		COMMAND_MOD_HELP_END,
 		COMMAND_MOD_HELP_DUE,
-		COMMAND_MOD_HELP_REMIND,
-		COMMAND_MOD_HELP_PRIORITY
+		COMMAND_MOD_HELP_PRIORITY,
+		COMMAND_MOD_HELP_PRIORITY_STATES,
+		NEWLINE,
+		COMMAND_MOD_HELP_EXAMPLE1,
+		NEWLINE,
+		COMMAND_MOD_HELP_EXAMPLE2,
+		NEWLINE,
+		COMMAND_MOD_HELP_EXAMPLE3
 	};
 	this->messageBox->Lines= modLines;
 }
 Void ui_display::printMarMessage(){
 	array<String ^> ^  markLines ={
 		COMMAND_MARK_HELP,
-		COMMAND_MARK_HELP_MULTIPLE
+		COMMAND_MARK_HELP_MULTIPLE,
+		NEWLINE,
+		COMMAND_MARK_HELP_EXAMPLE,
+		COMMAND_MARK_HELP_MULTIPLE_EXAMPLE
 	};
 	this->messageBox->Lines = markLines;
 }
+Void ui_display::printSearchMessage(){
+	array<String ^> ^  searchLines ={
+		COMMAND_SEARCH_HELP_INSTRUCTIONS,
+		NEWLINE,
+		COMMAND_SEARCH_HELP,
+		COMMAND_SEARCH_HELP_LOCATION,
+		COMMAND_SEARCH_HELP_START,
+		COMMAND_SEARCH_HELP_END,
+		COMMAND_SEARCH_HELP_DUE,
+		COMMAND_SEARCH_HELP_PRIORITY,
+		COMMAND_SEARCH_HELP_PRIORITY_STATES
+	};
+	this->messageBox->Lines = searchLines;
+}
 Void ui_display::printHelpMessage(){
 	array<String ^> ^  helpLines = {
+		MESSAGE_HELP_INSTRUCTIONS,
+		NEWLINE,
 		MESSAGE_HELP_ADD,
 		MESSAGE_HELP_DEL,
 		MESSAGE_HELP_MOD,
