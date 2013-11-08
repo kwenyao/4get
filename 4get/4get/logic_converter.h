@@ -86,6 +86,7 @@ private:
 	static const int INDEX_NOV;
 	static const int INDEX_DEC;
 	static const int INDEX_NXT;
+	static const int INDEX_TDY;
 
 	static const int DAY_SUNDAY;
 	static const int DAY_MONDAY;

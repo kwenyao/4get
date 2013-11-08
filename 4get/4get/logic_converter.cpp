@@ -19,7 +19,7 @@ const int Converter::SLOT_YEAR = 2;
 const int Converter::SLOT_HOUR = 0;
 const int Converter::SLOT_MIN = 1;
 
-const int Converter::DATE_DICTIONARY_SIZE = 21;
+const int Converter::DATE_DICTIONARY_SIZE = 22;
 const int Converter::INDEX_TMR = 0;
 const int Converter::INDEX_MON = 1;
 const int Converter::INDEX_TUE = 2;
@@ -28,19 +28,21 @@ const int Converter::INDEX_THU = 4;
 const int Converter::INDEX_FRI = 5;
 const int Converter::INDEX_SAT = 6;
 const int Converter::INDEX_SUN = 7;
-const int Converter::INDEX_JAN = 8;
-const int Converter::INDEX_FEB = 9;
-const int Converter::INDEX_MAR = 10;
-const int Converter::INDEX_APR = 11;
-const int Converter::INDEX_MAY = 12;
-const int Converter::INDEX_JUN = 13;
-const int Converter::INDEX_JUL = 14;
-const int Converter::INDEX_AUG = 15;
-const int Converter::INDEX_SEP = 16;
-const int Converter::INDEX_OCT = 17;
-const int Converter::INDEX_NOV = 18;
-const int Converter::INDEX_DEC = 19;
-const int Converter::INDEX_NXT = 20;
+const int Converter::INDEX_TDY = 8;
+
+const int Converter::INDEX_JAN = 9;
+const int Converter::INDEX_FEB = 10;
+const int Converter::INDEX_MAR = 11;
+const int Converter::INDEX_APR = 12;
+const int Converter::INDEX_MAY = 13;
+const int Converter::INDEX_JUN = 14;
+const int Converter::INDEX_JUL = 15;
+const int Converter::INDEX_AUG = 16;
+const int Converter::INDEX_SEP = 17;
+const int Converter::INDEX_OCT = 18;
+const int Converter::INDEX_NOV = 19;
+const int Converter::INDEX_DEC = 20;
+const int Converter::INDEX_NXT = 21;
 
 const int Converter::DAY_SUNDAY = 0;
 const int Converter::DAY_MONDAY = 1;
@@ -143,6 +145,7 @@ void Converter::initialiseDateDictionary(){
 	_dateDictionary[INDEX_DEC].push_back(MONTH_DECEMBER);
 	_dateDictionary[INDEX_DEC].push_back(MONTH_DEC);
 
+	_dateDictionary[INDEX_TDY].push_back(TIMER_TODAY);
 	_dateDictionary[INDEX_NXT].push_back(TIMER_NEXT);
 }
 
@@ -502,6 +505,8 @@ void Converter::dayCorrection(int& year, int& month, int& day){
 	}
 	else if(_matchedIndex == INDEX_SUN)
 		correction = 7 - dayToday;
+	else if(_matchedIndex == INDEX_TDY)
+		correction = 0;
 	getWordDate(correction, year, month, day);
 }
 
