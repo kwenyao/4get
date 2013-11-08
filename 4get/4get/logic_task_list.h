@@ -19,6 +19,7 @@ private:
 	list<Task*> _overdueList;
 	list<Task*> _listToDisplay;
 	list<Task*> _filteredList;
+	list<Task*> _tempList;
 	list<Task*>* _activeList;
 	list<Task*>::iterator searchIterator;
 	Storage _storage;

@@ -338,11 +338,15 @@ long long TaskList::obtainTaskID(int indexUI, list<Task*> taskList){
 }
 
 void TaskList::searchSetup(){
-	_activeList = determineList(_currentDisplayed);
 	if(!_isFiltered){
+		_activeList = determineList(_currentDisplayed);
 		_actualList = _currentDisplayed;
-		_filteredList.clear();
 	}
+	else{
+		_tempList = _filteredList;
+		_activeList = &_tempList;
+	}
+	_filteredList.clear();
 	_currentDisplayed = listFiltered;
 	if(_activeList->empty())
 		throw string(Message::MESSAGE_ERROR_LIST_EMPTY);
