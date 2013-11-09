@@ -127,6 +127,8 @@ public:
 	//Refresh
 	void refreshAll(time_t timeNow);
 
+	int getCurrentListSize();
+
 	//Functions used in testing only
 	void setCurrentDisplayed(ListType listType);
 };
