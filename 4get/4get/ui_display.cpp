@@ -1,7 +1,6 @@
 #include "ui_display.h"
 #include <sstream>
 using namespace UIDisplay;
-
 //constructor
 UiDisplay::UiDisplay(){
 	execute = new Executor;
@@ -342,8 +341,6 @@ void UiDisplay::printError(string error){
 	String ^ error_sys_string;
 	converter->stringStdToSysConversion(error_sys_string, error);
 	array<String ^> ^ errorLines = {error_sys_string};
-	array<String ^> ^  emptyLines ={};
-	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
 }
 
@@ -362,9 +359,7 @@ void UiDisplay::passUserInput(){
 
 void UiDisplay::printList(){
 	try{
-		list<Task*> taskList;
-		taskList = execute->getUpdatedList(activeListType);
-		*listOfTasks = taskList;
+		*listOfTasks = execute->getUpdatedList(activeListType);
 		switch(activeListType){
 		case listCompleted:
 			printCompletedList();
@@ -384,15 +379,14 @@ void UiDisplay::printList(){
 void UiDisplay::printToDoList(){
 	try{
 		int size = listOfTasks->size();
-
-		int j=0;
+		int j = INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 		if(loaded)
 		{
 			this->todoListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -420,7 +414,7 @@ void UiDisplay::printCompletedList(){
 	try{
 		int size = listOfTasks->size();
 
-		int j=0;
+		int j=INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 
@@ -428,7 +422,7 @@ void UiDisplay::printCompletedList(){
 		{
 			this->completedListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -457,7 +451,7 @@ void UiDisplay::printOverdueList(){
 	try{
 		int size = listOfTasks->size();
 
-		int j=0;
+		int j=INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 
@@ -465,7 +459,7 @@ void UiDisplay::printOverdueList(){
 		{
 			this->overdueListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -522,8 +516,8 @@ Void UiDisplay::UiDisplay_KeyDown(System::Object^  sender, System::Windows::Form
 Void UiDisplay::UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
-		this->textboxInput->SelectionStart = 1;
-		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
+		this->textboxInput->SelectionStart = POSITION_AFTER_FIRST_CHAR;
+		converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword); 
 	}
 }
 
@@ -614,7 +608,7 @@ Void UiDisplay::UiDisplay_KeyPress(System::Object^  sender, System::Windows::For
 //}
 
 void UiDisplay::printLabel(ListViewItem^ item){
-	if(item->SubItems[ITEM_PRIORITY_SLOT]->Text == "high"){
+	if(item->SubItems[ITEM_PRIORITY_SLOT]->Text == HIGH_PRIORITY_NAME){
 		this->itemDisplayLabel->ForeColor = Color::OrangeRed;
 	}
 	else{
@@ -622,19 +616,19 @@ void UiDisplay::printLabel(ListViewItem^ item){
 	}
 	//display selected item in product details
 	this->itemDisplayLabel->Text = TAG_NAME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_DESCRIPTION_SLOT]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_DESCRIPTION_SLOT]->Text;
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_LOCATION;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_LOCATION_SLOT]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_LOCATION_SLOT]->Text;
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_START_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_STARTTIME_SLOT]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_STARTTIME_SLOT]->Text;
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_END_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_ENDTIME_SLOT]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_ENDTIME_SLOT]->Text;
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_PRIORITY;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_PRIORITY_SLOT]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_PRIORITY_SLOT]->Text;
 }
 
 //Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
@@ -772,13 +766,13 @@ Void UiDisplay::completedListView_MouseClick(System::Object^  sender, System::Wi
 }
 Void UiDisplay::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
-	ListViewItem^ item = tasks[0];
+	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
 	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
 
 Void UiDisplay::checkInput(){
-	if(commandKeyword->size()==3){
+	if(commandKeyword->size()==INPUT_LENGTH_SHOW_HELP_INFO){
 		/*array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;*/
 		//MessageBox::Show("check input");

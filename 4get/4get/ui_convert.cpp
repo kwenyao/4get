@@ -1,9 +1,6 @@
 #include "ui_convert.h"
-#include "logic_task.h"
-#include "msclr\marshal_cppstd.h"
 
-using namespace System;
-using namespace msclr::interop;
+using namespace UIConvert;
 
 const int UiConvert::ITEM_INDEX_SLOT = 0;
 const time_t UiConvert::EMPTY_TIME = 0;

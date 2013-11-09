@@ -18,6 +18,7 @@ namespace UIDisplay {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace UIConvert;
 
 	/// <summary>
 	/// Summary for UiDisplay
@@ -45,9 +46,13 @@ namespace UIDisplay {
 			 static const int TAB_INDEX_OVERDUE = 2;
 			 static const int INPUT_LENGTH_SHOW_HELP_INFO = 3;
 			 static const int MAX_EMPTY_TEXTBOX_LENGTH = 1;
-			 
+			 static const int INITIALISE_INT_ZERO = 0;
+			 static const int POSITION_AFTER_FIRST_CHAR = 1;
+
 			 static const bool INITIALISE_BOOLEAN = false;
 			 static const ListType INITIALISE_LIST_TYPE = listToDo;
+
+			 static String^ HIGH_PRIORITY_NAME = "high";
 
 			 static String^ TAG_NAME = "Name: ";
 			 static String^ TAG_LOCATION = "Location: ";
