@@ -117,7 +117,7 @@ private:
 	static const int MONTH_NUMBER_AUG;
 	static const int MONTH_NUMBER_SEP;
 	static const int MONTH_NUMBER_OCT;
-	static const int MONTH_NUMBER_NOV;
+	static const int MONTH_NUMBER_NOV; 
 	static const int MONTH_NUMBER_DEC;
 	static const int TIME_SPECIFIER_LENGTH;
 	static const int TIME_PM_CORRECTION;

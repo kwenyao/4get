@@ -1,8 +1,13 @@
-/////////////////////////////////////
-// this function receives an array //
-//   with parameters form input    //
-//  and calls the approriate list  //
-/////////////////////////////////////
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_executor.h
+ *
+ *         Author:  POH HUAN YU (A0101831X), a0101831@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
 #ifndef _LOGIC_EXECUTOR_H_
 #define _LOGIC_EXECUTOR_H_
 

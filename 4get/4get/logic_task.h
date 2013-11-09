@@ -56,9 +56,6 @@ public:
 	virtual void setTaskRepeat(RepeatType repeat); 
 	virtual void setNextOccurance();
 
-	//update function
-	void updateAllAttr();
-
 	void clearTimeAttr();
 	void clearAllAttr();
 

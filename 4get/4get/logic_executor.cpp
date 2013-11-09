@@ -1,11 +1,18 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_executor.cpp
+ *
+ *         Author:  POH HUAN YU (A0101831X), a0101831@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
 #include "logic_executor.h"
 
 const int Executor::ONE = 1;
 const int Executor::ID_MULTIPLIER = 1000;
 
-/*************************************
-           PUBLIC FUNCTIONS            
-*************************************/
 Executor::Executor(){
 	refreshAll();
 }
@@ -317,7 +324,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 				priority,
 				repeat, 
 				endTime);
-			taskList.deleteIDFromList(id, listType,true);
+			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
 		//change floating to timed task
@@ -336,7 +343,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 				repeat, 
 				startTime, 
 				endTime);
-			taskList.deleteIDFromList(id, listType, true);
+			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
 		//change deadline task to timed
@@ -348,6 +355,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			Priority priority = taskTemp->getTaskPriority();
 			RepeatType repeat = taskTemp->getTaskRepeat();
 			time_t endTime = taskTemp->getTaskEnd();
+			if(startTime > endTime){
+				throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+			}
 			taskNew = new TaskTimed(id, 
 				description, 
 				location, 
@@ -355,7 +365,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 				repeat, 
 				startTime, 
 				endTime);
-			taskList.deleteIDFromList(id, listType, true);
+			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
 		//change deadline task to floating

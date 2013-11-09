@@ -1,5 +1,9 @@
 #include "logic_task_floating.h"
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 TaskFloating::TaskFloating(): Task(){
 	taskType = floating;
 }
