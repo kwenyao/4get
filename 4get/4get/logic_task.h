@@ -28,8 +28,6 @@ protected:
 	string taskDescription;
 	Priority taskPriority;
 	string taskLocation;
-	time_t taskReminder;
-	//Status taskStatus;
 	RepeatType taskRepeat;
 	time_t taskNextOccurance;
 	time_t taskStart;
@@ -37,8 +35,7 @@ protected:
 
 public:
 	Task();
-	virtual void setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority);
-	//Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminder);
+	virtual void setupTask(long long id, TaskType type, string description, string location, Priority priority);
 
 	//getter functions
 	long long getTaskId() const;
@@ -46,8 +43,6 @@ public:
 	string getTaskDescription() const;
 	Priority getTaskPriority() const;
 	string getTaskLocation() const;
-	//Status getTaskStatus() const;
-	time_t getTaskReminder() const;
 	time_t getTaskNextOccurance() const;
 	virtual time_t getTaskStart() const;
 	virtual time_t getTaskEnd() const;
@@ -61,7 +56,6 @@ public:
 	void setTaskPriority(Priority priority);
 	void setTaskLocation(string location);
 	//void setTaskStatus(Status status);
-	void setTaskReminder(time_t reminder);
 	void setTaskNextOccurance(time_t next);
 	virtual void setTaskStart(time_t startTask);
 	virtual void setTaskEnd(time_t endTask);

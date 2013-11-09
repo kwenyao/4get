@@ -20,8 +20,6 @@ const string Parser::MARKER_TO = "to";
 const size_t Parser::MARKER_TO_LENGTH = 2;
 const string Parser::MARKER_COMMA_TO = ",to";
 const size_t Parser::MARKER_COMMA_TO_LENGTH = 3;
-const string Parser::MARKER_REMIND = ",remind";
-const size_t Parser::MARKER_REMIND_LENGTH = 7;
 const string Parser::MARKER_ON = "on";
 const size_t Parser::MARKER_ON_LENGTH = 2;
 const string Parser::MARKER_REPEAT = ",repeat";
@@ -78,6 +76,25 @@ Parser::Parser()
 	parseReset();
 	loadDictionary();
 }
+
+void Parser::parseInput(string input, vector<string>& inputBits)
+{
+	parseReset();
+	removeFirstWord(input);
+	_textInput = textInput = input;
+	toLowerCase(textInput);
+
+	processCommand(textCommand, inputBits);
+	removeAllBorderSpace();
+	populateContainer(inputBits);
+
+}
+
+string Parser::getCommand()
+{
+	return textCommand;
+}
+
 void Parser::parseReset()
 {
 	textInput = INITIALIZE_STRING_BLANK;
@@ -93,12 +110,10 @@ void Parser::parseReset()
 	textEndTime = INITIALIZE_STRING_BLANK;
 	textRepeat = INITIALIZE_STRING_BLANK;
 	textPriority = INITIALIZE_STRING_BLANK;
-	textRemind = INITIALIZE_STRING_BLANK;
-	textRemindDate = INITIALIZE_STRING_BLANK;
-	textRemindTime = INITIALIZE_STRING_BLANK;
 	textSlotStartNumber = INITIALIZE_STRING_BLANK;
 	textSlotEndNumber = INITIALIZE_STRING_BLANK;
 }
+
 void Parser::processCommand(string commandString, vector<string>& inputBits)
 {
 	try {
@@ -188,18 +203,21 @@ void Parser::processCommand(string commandString, vector<string>& inputBits)
 		throw error;
 	}
 }
-void Parser::parseInput(string input, vector<string>& inputBits)
+
+void Parser::populateContainer(vector<string>& inputBits)
 {
-	parseReset();
-	removeFirstWord(input);
-	_textInput = textInput = input;
-	toLowerCase(textInput);
-
-	processCommand(textCommand, inputBits);
-	removeAllBorderSpace();
-	populateContainer(inputBits);
-
+	inputBits[SLOT_DESCRIPTION] = textDescription;
+	inputBits[SLOT_LOCATION] = textVenue;
+	inputBits[SLOT_PRIORITY] = textPriority;
+	inputBits[SLOT_REPEAT] = textRepeat;
+	inputBits[SLOT_START_DATE] = textStartDate;
+	inputBits[SLOT_START_TIME] = textStartTime;
+	inputBits[SLOT_END_DATE] = textEndDate;
+	inputBits[SLOT_END_TIME] = textEndTime;
+	inputBits[SLOT_SLOT_START_NUMBER] = textSlotStartNumber;
+	inputBits[SLOT_SLOT_END_NUMBER] = textSlotEndNumber;
 }
+
 bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 {
 	switch (userCommand){
@@ -223,13 +241,13 @@ bool Parser::separateInput(Command userCommand, vector<string>& inputBits)
 		return false;
 	}
 }
+
 bool Parser::separateFunctionAdd(vector<string>& inputBits)
 {
 	determineVenue();
 	determineDateAndTime();
 	determineRepeat();
 	determinePriority();
-	determineReminder();
 	textDescription = _textInput;
 	if(textDescription.empty())
 		throw MESSAGE_ERROR_NO_DESCRIPTION;
@@ -237,6 +255,7 @@ bool Parser::separateFunctionAdd(vector<string>& inputBits)
 
 	return true;
 }
+
 bool Parser::separateFunctionDelete(vector<string>& inputBits)
 {
 	if(!determineSlot()){
@@ -248,6 +267,7 @@ bool Parser::separateFunctionDelete(vector<string>& inputBits)
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 	return true;
 }
+
 bool Parser::separateFunctionMark(vector<string>& inputBits)
 {
 	if(!determineSlot()){
@@ -259,6 +279,7 @@ bool Parser::separateFunctionMark(vector<string>& inputBits)
 	logging(MESSAGE_SUCCESS_PARSED,Info,None);
 	return true;
 }
+
 bool Parser::separateFunctionModify(vector<string>& inputBits)
 {
 	if(!determineSlot()) {
@@ -273,15 +294,16 @@ bool Parser::separateFunctionModify(vector<string>& inputBits)
 	determineDateAndTime();
 	determineRepeat();
 	determinePriority();
-	determineReminder();
 	textDescription = _textInput;
 	logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 	return true;
 }
+
 bool Parser::separateFunctionUndo(vector<string>& inputBits)
 {
 	return true;
 }
+
 bool Parser::separateFunctionShow(vector<string>& inputBits)
 {
 	bool hasResult = false;
@@ -291,10 +313,6 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 		hasResult = true;
 	}
 	if(determineVenue()){
-		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
-		hasResult = true;
-	}
-	if(determineReminder()){
 		logging(MESSAGE_SUCCESS_PARSED, Info, Pass);
 		hasResult = true;
 	}
@@ -315,6 +333,7 @@ bool Parser::separateFunctionShow(vector<string>& inputBits)
 	logging(MESSAGE_ERROR_COMMAND_SHOW, Info, Pass);
 	return hasResult;
 }
+
 bool Parser::separateFunctionRedo(vector<string>& inputBits)
 {
 	return true;
@@ -393,6 +412,7 @@ bool Parser::determineVenue()
 	}
 	return true;																		//venue was determined before
 }
+
 bool Parser::determineDateAndTime()
 {
 	size_t found = INITIALIZE_SIZE_T;
@@ -557,6 +577,7 @@ bool Parser::determineDateAndTime()
 	else 
 		return isDateAmdTimeDetermined;
 }
+
 bool Parser::determineRepeat()
 {
 	size_t found = INITIALIZE_SIZE_T;
@@ -600,6 +621,7 @@ bool Parser::determineRepeat()
 	else
 		return isRepeatDetermined;
 }
+
 bool Parser::determinePriority()
 {
 	size_t found = INITIALIZE_SIZE_T;
@@ -689,47 +711,7 @@ bool Parser::determinePriority()
 	else
 		return isPriorityDetermined;
 }
-//reminder is not neccessary. If user defines Reminder in input, then it will process.
-bool Parser::determineReminder()
-{
-	size_t found = INITIALIZE_SIZE_T;
-	size_t foundComma = INITIALIZE_SIZE_T;
-	size_t extractStartPos = INITIALIZE_SIZE_T;
-	size_t extractLength = INITIALIZE_SIZE_T;
-	size_t stringLength = textInput.size();
-	size_t i = INITIALIZE_SIZE_T;
-	string marker = INITIALIZE_STRING_BLANK;
 
-
-	if(textInput.find(MARKER_REMIND)!=string::npos){
-		found = textInput.find(MARKER_REMIND);
-		if(textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH)!=string::npos){
-			foundComma = textInput.find(MARKER_COMMA, found+MARKER_REMIND_LENGTH);
-			extractLength = determindExtractLength(found, foundComma, MARKER_REMIND, extractStartPos);
-			i = foundComma;
-			while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)
-				marker += textInput[i++];
-			if(scanMarkerDictionary(marker) && textInput.find(MARKER_ON, found)!=string::npos){
-				textRemind = _textInput.substr(extractStartPos, extractLength);
-				shortenInput(found, foundComma);
-				return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
-			}
-			else{
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				return false;
-			}
-		}
-		else{
-			extractLength = determindExtractLength(found, stringLength, MARKER_REMIND, extractStartPos);
-			textRemind = _textInput.substr(extractStartPos, ++extractLength);
-			shortenInput(found, stringLength);
-			return parseTimeAndDate(textRemind, textRemindDate, textRemindTime);
-		}
-	}
-
-	else
-		return true; 
-}
 bool Parser::determineSlot()
 {
 	size_t extractStartPos = INITIALIZE_SIZE_T;
@@ -794,7 +776,10 @@ bool Parser::determineSlot()
 		throw MESSAGE_ERROR_WRONG_FORMAT;
 }
 
-size_t Parser::determindExtractLength(size_t partitionStart, size_t partitionEnd, string markConstant, size_t& extractStartPos)
+size_t Parser::determindExtractLength(size_t partitionStart, 
+									  size_t partitionEnd, 
+									  string markConstant, 
+									  size_t& extractStartPos)
 {
 	extractStartPos = INITIALIZE_SIZE_T;
 	size_t extractEndPos;
@@ -802,15 +787,6 @@ size_t Parser::determindExtractLength(size_t partitionStart, size_t partitionEnd
 
 	if(markConstant == MARKER_PRIORITY || markConstant == MARKER_PRIORITY_HIGH || markConstant == MARKER_PRIORITY_NORMAL){
 		shiftPos = shiftPos;
-	}
-	else if(markConstant == MARKER_REMIND){
-		if(textInput.find(MARKER_ON,partitionStart)!=string::npos){
-			partitionStart = textInput.find(MARKER_ON,partitionStart);
-			shiftPos = MARKER_ON_LENGTH;
-		}
-		else{
-			shiftPos = MARKER_REMIND_LENGTH;
-		}
 	}
 
 	else
@@ -821,6 +797,265 @@ size_t Parser::determindExtractLength(size_t partitionStart, size_t partitionEnd
 
 	return extractEndPos - extractStartPos;
 }
+
+void Parser::loadDictionary()
+{
+	loadCommandDictionary();
+	loadDatesDictionary();
+	loadTimeDictionary();
+	loadMonthDictionary();
+	loadMarkerDictionary();
+	loadRepeatDictionary();
+}
+
+void Parser::loadDatesDictionary()
+{
+	dictionaryDates.push_back(TIMER_MON);
+	dictionaryDates.push_back(TIMER_MONDAY);
+	dictionaryDates.push_back(TIMER_TUE);
+	dictionaryDates.push_back(TIMER_TUES);
+	dictionaryDates.push_back(TIMER_TUESDAY);
+	dictionaryDates.push_back(TIMER_WED);
+	dictionaryDates.push_back(TIMER_WEDNESDAY);
+	dictionaryDates.push_back(TIMER_THU);
+	dictionaryDates.push_back(TIMER_THUR);
+	dictionaryDates.push_back(TIMER_THURS);
+	dictionaryDates.push_back(TIMER_THURSDAY);
+	dictionaryDates.push_back(TIMER_FRI);
+	dictionaryDates.push_back(TIMER_FRIDAY);
+	dictionaryDates.push_back(TIMER_SAT);
+	dictionaryDates.push_back(TIMER_SATURDAY);
+	dictionaryDates.push_back(TIMER_SUN);
+	dictionaryDates.push_back(TIMER_SUNDAY);
+
+}
+
+void Parser::loadMonthDictionary()
+{
+	dictionaryMonth.push_back(MONTH_JAN);
+	dictionaryMonth.push_back(MONTH_JANUARY);
+	dictionaryMonth.push_back(MONTH_FEB);
+	dictionaryMonth.push_back(MONTH_FEBRUARY);
+	dictionaryMonth.push_back(MONTH_MAR);
+	dictionaryMonth.push_back(MONTH_MARCH);
+	dictionaryMonth.push_back(MONTH_APR);
+	dictionaryMonth.push_back(MONTH_APRIL);
+	dictionaryMonth.push_back(MONTH_MAY);
+	dictionaryMonth.push_back(MONTH_JUN);
+	dictionaryMonth.push_back(MONTH_JUNE);
+	dictionaryMonth.push_back(MONTH_JUL);
+	dictionaryMonth.push_back(MONTH_JULY);
+	dictionaryMonth.push_back(MONTH_AUG);
+	dictionaryMonth.push_back(MONTH_AUGUST);
+	dictionaryMonth.push_back(MONTH_SEP);
+	dictionaryMonth.push_back(MONTH_SEPT);
+	dictionaryMonth.push_back(MONTH_SEPTEMBER);
+	dictionaryMonth.push_back(MONTH_OCT);
+	dictionaryMonth.push_back(MONTH_OCTOBER);
+	dictionaryMonth.push_back(MONTH_NOV);
+	dictionaryMonth.push_back(MONTH_NOVEMBER);
+	dictionaryMonth.push_back(MONTH_DEC);
+	dictionaryMonth.push_back(MONTH_DECEMBER);
+}
+
+void Parser::loadTimeDictionary()
+{
+	dictionaryTime.push_back(TIMER_TML);
+	dictionaryTime.push_back(TIMER_TMR);
+	dictionaryTime.push_back(TIMER_TMRW);
+	dictionaryTime.push_back(TIMER_TOMORROW);
+	dictionaryTime.push_back(TIMER_NEXT);
+	dictionaryTime.push_back(TIMER_TODAY);
+}
+
+void Parser::loadCommandDictionary()
+{
+	//ADD COMMANDS
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_ADD);
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_A);
+	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_CREATE);
+	//DELETE COMMANDS
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DELETE);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DEL);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REMOVE);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REM);
+	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_ERASE);
+	//MARK COMMANDS
+	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_MARK);
+	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_M);
+	//MODIFY COMMANDS
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MODIFY);
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MOD);
+	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_UPDATE);
+	//UNDO COMMANDS
+	dictionaryCommands[DICTIONARY_UNDO_INDEX].push_back(COMMAND_UNDO);
+	//REDO COMMANDS
+	dictionaryCommands[DICTIONARY_REDO_INDEX].push_back(COMMAND_REDO);
+	//SHOW COMMANDS
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SHOW);
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_DISPLAY);
+	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SEARCH);
+	//SHOWALL COMMANDS
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SHOWALL);
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_DISPLAYALL);
+	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SEARCHALL);
+}
+
+void Parser::loadRepeatDictionary()
+{
+	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_DAILY);
+	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_EVERY_DAY);
+	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_WEEKLY);
+	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_EVERY_WEEK);
+	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_FORTNIGHTLY);
+	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_EVERY_FORTNIGHT);
+	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_MONTHLY);
+	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_EVERY_MONTH);
+	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_ANNUALLY);
+	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_EVERY_YEAR);
+}
+
+void Parser::loadMarkerDictionary()
+{
+	dictionaryMarker.push_back(MARKER_AT);
+	dictionaryMarker.push_back(MARKER_NEAR);
+	dictionaryMarker.push_back(MARKER_BY);
+	dictionaryMarker.push_back(MARKER_DUE);
+	dictionaryMarker.push_back(MARKER_FROM);
+	dictionaryMarker.push_back(MARKER_TO);
+	dictionaryMarker.push_back(MARKER_COMMA_TO);
+	dictionaryMarker.push_back(MARKER_ON);
+	dictionaryMarker.push_back(MARKER_REPEAT);
+	dictionaryMarker.push_back(MARKER_PRIORITY);
+	dictionaryMarker.push_back(MARKER_PRIORITY_HIGH);
+	dictionaryMarker.push_back(MARKER_PRIORITY_NORMAL);
+	dictionaryMarker.push_back(MARKER_DONE);
+	dictionaryMarker.push_back(MARKER_UNDONE);
+}
+
+bool Parser::scanDictionary(string word)
+{
+	if(scanTimerDictionary(word) || scanMonthDictionary(word))
+		return true;
+	else
+		return false;
+}
+
+bool Parser::scanTimerDictionary(string word){
+	if(scanTimeDictionary(word) || scanDatesDictionary(word))
+		return true;
+	else
+		return false;
+}
+
+bool Parser::scanTimeDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryTime.size(); i++){
+		if(dictionaryTime[i]==word)
+			return true;
+	}
+
+	return false;
+}
+
+bool Parser::scanDatesDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryDates.size(); i++){
+		if(dictionaryDates[i]==word)
+			return true;
+	}
+
+	return false;
+}
+
+bool Parser::scanMonthDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryMonth.size(); i++){
+		if(dictionaryMonth[i]==word)
+			return true;
+	}
+
+	return false;
+}
+
+string Parser::scanCommandDictionary(string word)
+{
+	int foundCommand;
+	bool found = false;;
+	for(size_t i=0; i<dictionaryCommands.size() && !found; i++){
+		size_t currentDictionarySize = dictionaryCommands[i].size();
+		for(size_t k=0; k<currentDictionarySize; k++){
+			if(dictionaryCommands[i][k]==word){
+				foundCommand = i;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	switch(foundCommand){
+	case DICTIONARY_ADD_INDEX:
+		return COMMAND_ADD;
+	case DICTIONARY_DELETE_INDEX:
+		return COMMAND_DELETE;
+	case DICTIONARY_MARK_INDEX:
+		return COMMAND_MARK;
+	case DICTIONARY_MODIFY_INDEX:
+		return COMMAND_MODIFY;
+	case DICTIONARY_UNDO_INDEX:
+		return COMMAND_UNDO;
+	case DICTIONARY_REDO_INDEX:
+		return COMMAND_REDO;
+	case DICTIONARY_SHOW_INDEX:
+		return COMMAND_SHOW;
+	case DICTIONARY_SHOWALL_INDEX:
+		return COMMAND_SHOWALL;
+	default:
+		return COMMAND_NULL;
+	}
+}
+
+string Parser::scanRepeatDictionary(string word)
+{
+	size_t foundRepeat;
+	size_t currentDictionarySize;
+	bool found = false;;
+	for(size_t i=0; i<dictionaryRepeatCommands.size() && !found; i++){
+		currentDictionarySize = (dictionaryRepeatCommands.at(i)).size();
+		for(size_t k=0; k<currentDictionarySize; k++){
+			if(dictionaryRepeatCommands[i][k]==word){
+				foundRepeat = i;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	switch(foundRepeat){
+	case REPEAT_DAILY_INDEX:
+		return REPEAT_DAILY;
+	case REPEAT_WEEKLY_INDEX:
+		return REPEAT_WEEKLY;
+	case REPEAT_FORTNIGHTLY_INDEX:
+		return REPEAT_FORTNIGHTLY;
+	case REPEAT_MONTHLY_INDEX:
+		return REPEAT_MONTHLY;
+	case REPEAT_ANNUALLY_INDEX:
+		return REPEAT_ANNUALLY;
+	default:
+		return REPEAT_NULL;
+	}
+}
+
+bool Parser::scanMarkerDictionary(string word)
+{
+	for(size_t i=0; i<dictionaryMarker.size(); i++){
+		if(dictionaryMarker[i]==word)
+			return true;
+	}
+	return false;
+}
+
 void Parser::shortenInput(size_t partitionStart, size_t partitionEnd)
 {
 	size_t partitionLength = partitionEnd-partitionStart;
@@ -828,6 +1063,7 @@ void Parser::shortenInput(size_t partitionStart, size_t partitionEnd)
 	textInput.erase(partitionStart, partitionLength);
 	_textInput.erase(partitionStart, partitionLength);
 }
+
 void Parser::removeAllBorderSpace()
 {
 	removeBorderSpaces(_textInput);
@@ -840,11 +1076,10 @@ void Parser::removeAllBorderSpace()
 	removeBorderSpaces(textEndTime);
 	removeBorderSpaces(textRepeat);
 	removeBorderSpaces(textPriority);
-	removeBorderSpaces(textRemindDate);
-	removeBorderSpaces(textRemindTime);
 	removeBorderSpaces(textSlotStartNumber);
 	removeBorderSpaces(textSlotEndNumber);
 }
+
 void Parser::removeBorderSpaces(string& str)
 {
 	if(str.empty())
@@ -859,82 +1094,11 @@ void Parser::removeBorderSpaces(string& str)
 		str.pop_back();
 	}
 }
+
 void Parser::parseAllTimeAndDate()
 {
 	parseTimeAndDate(textStart, textStartDate, textStartTime);
 	parseTimeAndDate(textEnd, textEndDate, textEndTime);
-}
-
-void Parser::populateContainer(vector<string>& inputBits)
-{
-	inputBits[SLOT_DESCRIPTION] = textDescription;
-	inputBits[SLOT_LOCATION] = textVenue;
-	inputBits[SLOT_REMIND_DATE] = textRemindDate;
-	inputBits[SLOT_REMIND_TIME] = textRemindTime;
-	inputBits[SLOT_PRIORITY] = textPriority;
-	inputBits[SLOT_REPEAT] = textRepeat;
-	inputBits[SLOT_START_DATE] = textStartDate;
-	inputBits[SLOT_START_TIME] = textStartTime;
-	inputBits[SLOT_END_DATE] = textEndDate;
-	inputBits[SLOT_END_TIME] = textEndTime;
-	inputBits[SLOT_SLOT_START_NUMBER] = textSlotStartNumber;
-	inputBits[SLOT_SLOT_END_NUMBER] = textSlotEndNumber;
-}
-void Parser::toLowerCase(string &str)
-{
-	const int length = str.length();
-	for(int i=0; i < length; ++i)
-	{
-		str[i] = tolower(str[i]);
-	}
-}
-//To retrieve the first word which is the command.
-string Parser::getFirstWord(string input)
-{
-	string firstword;
-	istringstream streamInput (input);
-	streamInput >> firstword;
-	return firstword;
-}
-//Remove the command from _input after retrieving it, change command to lower case
-void Parser::removeFirstWord(string &input)
-{
-	textCommand = getFirstWord(input);
-	size_t found = input.find(textCommand);
-	toLowerCase(textCommand);
-	input.replace(0, found+textCommand.length()+1, "");
-}
-//Check if the first character is a valid digit
-bool Parser::isParseInt(string input, int &value)
-{	
-	int stringLength = input.size();
-	int i = 0;
-	bool isDigit = isInt(input);
-	if(isDigit){
-		value = atoi(input.c_str());
-		return isDigit;
-	}
-	else
-		return isDigit;
-}
-bool Parser::isInt(string input)
-{
-	int stringLength = input.size();
-	int i = 0;
-	bool isDigit = true;
-	while(i != stringLength){
-		isDigit = isdigit(input[i]) != 0;
-		if(!isDigit){
-			return isDigit;
-		}
-		i++;
-	}
-	return isDigit;
-}
-
-string Parser::getCommand()
-{
-	return textCommand;
 }
 
 bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
@@ -971,14 +1135,14 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		}
 		if(dateDayDetermine && dateMonthDetermined && dateYearDetermine)
 			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine; // if components of date are determined, turn dateDetermined as true
-		
+
 		/*scanResult = scanRepeatDictionary(stringCheck);
 		if(scanResult!=REPEAT_NULL && !foundRepeat){
-			repeatCheck = scanResult;
-			foundRepeat = true;
-			continue;
+		repeatCheck = scanResult;
+		foundRepeat = true;
+		continue;
 		}*/
-		
+
 		if(stringCheck == REPEAT_EVERY || (!repeatCheck.empty() && !foundRepeat)){
 			if(repeatCheck.empty()){
 				repeatCheck = stringCheck;
@@ -1278,247 +1442,58 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 	return true;
 }
 
-void Parser::loadDictionary()
+void Parser::toLowerCase(string &str)
 {
-	loadCommandDictionary();
-	loadDatesDictionary();
-	loadTimeDictionary();
-	loadMonthDictionary();
-	loadMarkerDictionary();
-	loadRepeatDictionary();
+	const int length = str.length();
+	for(int i=0; i < length; ++i)
+	{
+		str[i] = tolower(str[i]);
+	}
 }
-void Parser::loadDatesDictionary()
-{
-	dictionaryDates.push_back(TIMER_MON);
-	dictionaryDates.push_back(TIMER_MONDAY);
-	dictionaryDates.push_back(TIMER_TUE);
-	dictionaryDates.push_back(TIMER_TUES);
-	dictionaryDates.push_back(TIMER_TUESDAY);
-	dictionaryDates.push_back(TIMER_WED);
-	dictionaryDates.push_back(TIMER_WEDNESDAY);
-	dictionaryDates.push_back(TIMER_THU);
-	dictionaryDates.push_back(TIMER_THUR);
-	dictionaryDates.push_back(TIMER_THURS);
-	dictionaryDates.push_back(TIMER_THURSDAY);
-	dictionaryDates.push_back(TIMER_FRI);
-	dictionaryDates.push_back(TIMER_FRIDAY);
-	dictionaryDates.push_back(TIMER_SAT);
-	dictionaryDates.push_back(TIMER_SATURDAY);
-	dictionaryDates.push_back(TIMER_SUN);
-	dictionaryDates.push_back(TIMER_SUNDAY);
 
-}
-void Parser::loadMonthDictionary()
+//To retrieve the first word which is the command.
+string Parser::getFirstWord(string input)
 {
-	dictionaryMonth.push_back(MONTH_JAN);
-	dictionaryMonth.push_back(MONTH_JANUARY);
-	dictionaryMonth.push_back(MONTH_FEB);
-	dictionaryMonth.push_back(MONTH_FEBRUARY);
-	dictionaryMonth.push_back(MONTH_MAR);
-	dictionaryMonth.push_back(MONTH_MARCH);
-	dictionaryMonth.push_back(MONTH_APR);
-	dictionaryMonth.push_back(MONTH_APRIL);
-	dictionaryMonth.push_back(MONTH_MAY);
-	dictionaryMonth.push_back(MONTH_JUN);
-	dictionaryMonth.push_back(MONTH_JUNE);
-	dictionaryMonth.push_back(MONTH_JUL);
-	dictionaryMonth.push_back(MONTH_JULY);
-	dictionaryMonth.push_back(MONTH_AUG);
-	dictionaryMonth.push_back(MONTH_AUGUST);
-	dictionaryMonth.push_back(MONTH_SEP);
-	dictionaryMonth.push_back(MONTH_SEPT);
-	dictionaryMonth.push_back(MONTH_SEPTEMBER);
-	dictionaryMonth.push_back(MONTH_OCT);
-	dictionaryMonth.push_back(MONTH_OCTOBER);
-	dictionaryMonth.push_back(MONTH_NOV);
-	dictionaryMonth.push_back(MONTH_NOVEMBER);
-	dictionaryMonth.push_back(MONTH_DEC);
-	dictionaryMonth.push_back(MONTH_DECEMBER);
+	string firstword;
+	istringstream streamInput (input);
+	streamInput >> firstword;
+	return firstword;
 }
-void Parser::loadTimeDictionary()
+
+//Remove the command from _input after retrieving it, change command to lower case
+void Parser::removeFirstWord(string &input)
 {
-	dictionaryTime.push_back(TIMER_TML);
-	dictionaryTime.push_back(TIMER_TMR);
-	dictionaryTime.push_back(TIMER_TMRW);
-	dictionaryTime.push_back(TIMER_TOMORROW);
-	dictionaryTime.push_back(TIMER_NEXT);
-	dictionaryTime.push_back(TIMER_TODAY);
+	textCommand = getFirstWord(input);
+	size_t found = input.find(textCommand);
+	toLowerCase(textCommand);
+	input.replace(0, found+textCommand.length()+1, "");
 }
-void Parser::loadCommandDictionary()
-{
-	//ADD COMMANDS
-	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_ADD);
-	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_A);
-	dictionaryCommands[DICTIONARY_ADD_INDEX].push_back(COMMAND_CREATE);
-	//DELETE COMMANDS
-	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DELETE);
-	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_DEL);
-	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REMOVE);
-	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_REM);
-	dictionaryCommands[DICTIONARY_DELETE_INDEX].push_back(COMMAND_ERASE);
-	//MARK COMMANDS
-	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_MARK);
-	dictionaryCommands[DICTIONARY_MARK_INDEX].push_back(COMMAND_M);
-	//MODIFY COMMANDS
-	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MODIFY);
-	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_MOD);
-	dictionaryCommands[DICTIONARY_MODIFY_INDEX].push_back(COMMAND_UPDATE);
-	//UNDO COMMANDS
-	dictionaryCommands[DICTIONARY_UNDO_INDEX].push_back(COMMAND_UNDO);
-	//REDO COMMANDS
-	dictionaryCommands[DICTIONARY_REDO_INDEX].push_back(COMMAND_REDO);
-	//SHOW COMMANDS
-	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SHOW);
-	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_DISPLAY);
-	dictionaryCommands[DICTIONARY_SHOW_INDEX].push_back(COMMAND_SEARCH);
-	//SHOWALL COMMANDS
-	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SHOWALL);
-	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_DISPLAYALL);
-	dictionaryCommands[DICTIONARY_SHOWALL_INDEX].push_back(COMMAND_SEARCHALL);
-}
-void Parser::loadRepeatDictionary()
-{
-	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_DAILY);
-	dictionaryRepeatCommands[REPEAT_DAILY_INDEX].push_back(REPEAT_EVERY_DAY);
-	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_WEEKLY);
-	dictionaryRepeatCommands[REPEAT_WEEKLY_INDEX].push_back(REPEAT_EVERY_WEEK);
-	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_FORTNIGHTLY);
-	dictionaryRepeatCommands[REPEAT_FORTNIGHTLY_INDEX].push_back(REPEAT_EVERY_FORTNIGHT);
-	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_MONTHLY);
-	dictionaryRepeatCommands[REPEAT_MONTHLY_INDEX].push_back(REPEAT_EVERY_MONTH);
-	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_ANNUALLY);
-	dictionaryRepeatCommands[REPEAT_ANNUALLY_INDEX].push_back(REPEAT_EVERY_YEAR);
-}
-void Parser::loadMarkerDictionary()
-{
-	dictionaryMarker.push_back(MARKER_AT);
-	dictionaryMarker.push_back(MARKER_NEAR);
-	dictionaryMarker.push_back(MARKER_BY);
-	dictionaryMarker.push_back(MARKER_DUE);
-	dictionaryMarker.push_back(MARKER_FROM);
-	dictionaryMarker.push_back(MARKER_TO);
-	dictionaryMarker.push_back(MARKER_COMMA_TO);
-	dictionaryMarker.push_back(MARKER_REMIND);
-	dictionaryMarker.push_back(MARKER_ON);
-	dictionaryMarker.push_back(MARKER_REPEAT);
-	dictionaryMarker.push_back(MARKER_PRIORITY);
-	dictionaryMarker.push_back(MARKER_PRIORITY_HIGH);
-	dictionaryMarker.push_back(MARKER_PRIORITY_NORMAL);
-	dictionaryMarker.push_back(MARKER_DONE);
-	dictionaryMarker.push_back(MARKER_UNDONE);
-}
-bool Parser::scanDictionary(string word)
-{
-	if(scanTimerDictionary(word) || scanMonthDictionary(word))
-		return true;
+
+//Check if the first character is a valid digit
+bool Parser::isParseInt(string input, int &value)
+{	
+	int stringLength = input.size();
+	int i = 0;
+	bool isDigit = isInt(input);
+	if(isDigit){
+		value = atoi(input.c_str());
+		return isDigit;
+	}
 	else
-		return false;
+		return isDigit;
 }
-bool Parser::scanTimerDictionary(string word){
-	if(scanTimeDictionary(word) || scanDatesDictionary(word))
-		return true;
-	else
-		return false;
-}
-bool Parser::scanTimeDictionary(string word)
-{
-	for(size_t i=0; i<dictionaryTime.size(); i++){
-		if(dictionaryTime[i]==word)
-			return true;
-	}
 
-	return false;
-}
-bool Parser::scanDatesDictionary(string word)
+bool Parser::isInt(string input)
 {
-	for(size_t i=0; i<dictionaryDates.size(); i++){
-		if(dictionaryDates[i]==word)
-			return true;
-	}
-
-	return false;
-}
-bool Parser::scanMonthDictionary(string word)
-{
-	for(size_t i=0; i<dictionaryMonth.size(); i++){
-		if(dictionaryMonth[i]==word)
-			return true;
-	}
-
-	return false;
-}
-string Parser::scanCommandDictionary(string word)
-{
-	int foundCommand;
-	bool found = false;;
-	for(size_t i=0; i<dictionaryCommands.size() && !found; i++){
-		size_t currentDictionarySize = dictionaryCommands[i].size();
-		for(size_t k=0; k<currentDictionarySize; k++){
-			if(dictionaryCommands[i][k]==word){
-				foundCommand = i;
-				found = true;
-				break;
-			}
+	int stringLength = input.size();
+	int i = 0;
+	bool isDigit = true;
+	while(i != stringLength){
+		isDigit = isdigit(input[i]) != 0;
+		if(!isDigit){
+			return isDigit;
 		}
+		i++;
 	}
-
-	switch(foundCommand){
-	case DICTIONARY_ADD_INDEX:
-		return COMMAND_ADD;
-	case DICTIONARY_DELETE_INDEX:
-		return COMMAND_DELETE;
-	case DICTIONARY_MARK_INDEX:
-		return COMMAND_MARK;
-	case DICTIONARY_MODIFY_INDEX:
-		return COMMAND_MODIFY;
-	case DICTIONARY_UNDO_INDEX:
-		return COMMAND_UNDO;
-	case DICTIONARY_REDO_INDEX:
-		return COMMAND_REDO;
-	case DICTIONARY_SHOW_INDEX:
-		return COMMAND_SHOW;
-	case DICTIONARY_SHOWALL_INDEX:
-		return COMMAND_SHOWALL;
-	default:
-		return COMMAND_NULL;
-	}
-}
-string Parser::scanRepeatDictionary(string word)
-{
-	size_t foundRepeat;
-	size_t currentDictionarySize;
-	bool found = false;;
-	for(size_t i=0; i<dictionaryRepeatCommands.size() && !found; i++){
-		currentDictionarySize = (dictionaryRepeatCommands.at(i)).size();
-		for(size_t k=0; k<currentDictionarySize; k++){
-			if(dictionaryRepeatCommands[i][k]==word){
-				foundRepeat = i;
-				found = true;
-				break;
-			}
-		}
-	}
-
-	switch(foundRepeat){
-	case REPEAT_DAILY_INDEX:
-		return REPEAT_DAILY;
-	case REPEAT_WEEKLY_INDEX:
-		return REPEAT_WEEKLY;
-	case REPEAT_FORTNIGHTLY_INDEX:
-		return REPEAT_FORTNIGHTLY;
-	case REPEAT_MONTHLY_INDEX:
-		return REPEAT_MONTHLY;
-	case REPEAT_ANNUALLY_INDEX:
-		return REPEAT_ANNUALLY;
-	default:
-		return REPEAT_NULL;
-	}
-}
-bool Parser::scanMarkerDictionary(string word)
-{
-	for(size_t i=0; i<dictionaryMarker.size(); i++){
-		if(dictionaryMarker[i]==word)
-			return true;
-	}
-	return false;
+	return isDigit;
 }

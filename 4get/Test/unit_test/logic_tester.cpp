@@ -30,12 +30,6 @@ TEST_F(ParserTest, TestModify)
 	EXPECT_EQ("modify",parser.getCommand());
 }
 
-TEST_F(ParserTest, TestParseDateandTime)
-{
-	string date = "";
-	string time = "";
-	parser.parseTimeAndDate(input5, date, time);
-}
 
 TEST_F(LogTest, TestLog)
 {

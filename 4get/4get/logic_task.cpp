@@ -8,33 +8,20 @@ const long long Task::CONVERT_MULTIPLIER_HOUR = 100;
 Task::Task(){
 	clearAllAttr();
 }
-void Task::setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority)
+void Task::setupTask(long long id, TaskType type, string description, string location, Priority priority)
 {
 	taskId = id;
 	taskType = type;
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
-	taskReminder = reminder;
 }
-/*
-Task::Task(string description, Priority priority, string location, Status status, Repeat_Type repeat, tm *reminderTime)
-{
-taskDescription = description;
-taskPriority = priority;
-taskLocation = location;
-taskReminderTime = reminderTime;
-taskStatus = status;
-taskRepeat = repeat;
-}
-*/
 
 long long Task::getTaskId() const {	return taskId;}
 TaskType Task::getTaskType() const { return taskType; }
 string Task::getTaskDescription() const { return taskDescription; }
 Priority Task::getTaskPriority() const { return taskPriority; }
 string Task::getTaskLocation() const { return taskLocation; }
-time_t Task::getTaskReminder() const { return taskReminder; }
 time_t Task::getTaskNextOccurance() const {	return taskNextOccurance; }
 time_t Task::getTaskStart() const {	return taskStart; }
 time_t Task::getTaskEnd() const { return taskEnd; }
@@ -45,7 +32,6 @@ void Task::setTaskType(TaskType type) {	taskType = type; }
 void Task::setTaskDescription(string description) {	taskDescription = description; }
 void Task::setTaskPriority(Priority priority) { taskPriority = priority; }
 void Task::setTaskLocation(string location) { taskLocation = location; }
-void Task::setTaskReminder(time_t reminder) { taskReminder = reminder; }
 void Task::setTaskNextOccurance(time_t next) { taskNextOccurance = next; }
 void Task::setTaskStart(time_t startTime) {	taskStart = startTime; }
 void Task::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
@@ -63,7 +49,6 @@ void Task::clearTimeAttr()
 	taskStart = initializeTime;
 	taskEnd = initializeTime;
 	taskNextOccurance = initializeTime;
-	taskReminder = initializeTime;
 }
 
 void Task::clearAllAttr()

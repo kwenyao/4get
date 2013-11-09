@@ -28,7 +28,6 @@ class Parser
 	vector<string> dictionaryMarker;
 
 private:
-
 	static const char MARKER;
 	static const size_t MARKER_LENGTH;
 	static const char MARKER_COMMA;
@@ -51,8 +50,6 @@ private:
 	static const size_t MARKER_TO_LENGTH;
 	static const string MARKER_COMMA_TO;
 	static const size_t MARKER_COMMA_TO_LENGTH;
-	static const string MARKER_REMIND;
-	static const size_t MARKER_REMIND_LENGTH;
 	static const string MARKER_ON;
 	static const size_t MARKER_ON_LENGTH;
 	static const string MARKER_REPEAT;
@@ -114,62 +111,43 @@ private:
 	string textEndTime;
 	string textRepeat;
 	string textPriority;
-	//string textStatus;
-	string textRemind;
-	string textRemindDate;
-	string textRemindTime;
 	string textSlotStartNumber;
 	string textSlotEndNumber;
 
 public:
-	Parser();
-
 	// callable by executor
-
-	void parseInput(string input, vector<string>& inputBits);
-	// function for testing validity of command
-	string getCommand();
-	bool parseTimeAndDate(string& str, string& strDate, string& strTime);
+	Parser();
+	void parseInput(string, vector<string>&);
+	string getCommand(); // function for testing validity of command
+	
 
 private:	
 	void parseReset();
-	void processCommand(string commandString, vector<string>& inputBits);
-	void populateContainer(vector<string>& inputBits);
+	void processCommand(string, vector<string>&);
+	void populateContainer(vector<string>& );
 
 	//separate functions
-	bool separateInput(Command userCommand, vector<string>& inputBits);
-	bool separateFunctionAdd(vector<string>& inputBits);
-	bool separateFunctionDelete(vector<string>& inputBits);
-	//bool separateFunctionDeleteAll(vector<string>& inputBits);
-	bool separateFunctionMark(vector<string>& inputBits);
-	//bool separateFunctionMarkDone(vector<string>& inputBits);
-	bool separateFunctionModify(vector<string>& inputBits);
-	bool separateFunctionUndo(vector<string>& inputBits);
-	bool separateFunctionShow(vector<string>& inputBits); // Show, Display, GoTo. This show user task in a timespan.
-	bool separateFunctionRedo(vector<string>& inputBits);
-	bool separateFunctionShowAll(vector<string>& inputBits);
+	bool separateInput(Command, vector<string>&);
+	bool separateFunctionAdd(vector<string>&);
+	bool separateFunctionDelete(vector<string>&);
+	bool separateFunctionMark(vector<string>& );
+	bool separateFunctionModify(vector<string>&);
+	bool separateFunctionUndo(vector<string>&);
+	bool separateFunctionShow(vector<string>&);
+	bool separateFunctionRedo(vector<string>&);
+	bool separateFunctionShowAll(vector<string>&);
 
+	//determine functions
 	bool determineVenue();
 	bool determineDateAndTime();
-	bool determineReminder();
 	bool determinePriority();
 	bool determineRepeat();
 	bool determineSlot();
-	//bool determineTaskList();
 	bool determineStatus();
-	size_t determindExtractLength(size_t found, size_t foundComma, string markerConstant, size_t& extractStart);
-
-	void shortenInput(size_t partitionStart, size_t partitionEnd);
-	void removeAllBorderSpace();
-	void removeBorderSpaces(string& str);
-	void parseAllTimeAndDate();
-
-	//int separateInput(int state);
-	void toLowerCase(string &string);
-	string getFirstWord(string input);
-	void removeFirstWord(string &input);
-	bool isParseInt(string input, int &value);
-	bool isInt(string input);
+	size_t determindExtractLength(size_t, 
+								  size_t, 
+								  string, 
+								  size_t&);
 
 	//parser dictionary setup
 	void loadDictionary();
@@ -189,5 +167,17 @@ private:
 	string scanCommandDictionary(string);
 	string scanRepeatDictionary(string);
 	bool scanMarkerDictionary(string);
+
+	void shortenInput(size_t, size_t);
+	void removeAllBorderSpace();
+	void removeBorderSpaces(string& );
+	void parseAllTimeAndDate();
+	bool parseTimeAndDate(string&, string&, string&);
+
+	void toLowerCase(string&);
+	string getFirstWord(string);
+	void removeFirstWord(string&);
+	bool isParseInt(string, int&);
+	bool isInt(string);
 };
 #endif

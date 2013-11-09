@@ -10,21 +10,20 @@ TaskDeadline::TaskDeadline(long long id)
 	taskId = id;
 }
 
-TaskDeadline::TaskDeadline(long long id, string description, string location, time_t reminder, Priority priority, RepeatType repeat, time_t endTime) : Task()
+TaskDeadline::TaskDeadline(long long id, string description, string location, Priority priority, RepeatType repeat, time_t endTime) : Task()
 {
 	TaskType type = deadline;
-	setupTask(id, type, description, location, reminder, priority, repeat, endTime);
+	setupTask(id, type, description, location, priority, repeat, endTime);
 }
 
 
-void TaskDeadline::setupTask(long long id, TaskType type, string description, string location, time_t reminder, Priority priority, RepeatType repeat, time_t endTime)
+void TaskDeadline::setupTask(long long id, TaskType type, string description, string location, Priority priority, RepeatType repeat, time_t endTime)
 {
 	taskId = id;
 	taskType = type;
 	taskDescription = description;
 	taskPriority = priority;
 	taskLocation = location;
-	taskReminder = reminder;
 	taskRepeat = repeat;
 	taskEnd = endTime;
 }
@@ -64,9 +63,6 @@ long long TaskDeadline::getTimeLong(TimeType type){
 		break;
 	case Enum::timeNext:
 		temp = taskNextOccurance;
-		break;
-	case Enum::timeReminder:
-		temp = taskReminder;
 		break;
 	default:
 		return 0;

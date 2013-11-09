@@ -89,7 +89,7 @@ namespace Enum{
 		timeStart,
 		timeEnd,
 		timeNext,
-		timeReminder
+
 	};
 	enum ListType{
 		listToDo,
@@ -174,18 +174,16 @@ namespace Constants{
 	const int SLOT_COMMAND = 0;
 	const int SLOT_DESCRIPTION = 1;
 	const int SLOT_LOCATION = 2;
-	const int SLOT_REMIND_DATE = 3;
-	const int SLOT_REMIND_TIME = 4;
-	const int SLOT_PRIORITY = 5;
-	const int SLOT_REPEAT = 6;
-	const int SLOT_START_DATE = 7;
-	const int SLOT_START_TIME = 8;
-	const int SLOT_END_DATE = 9;
-	const int SLOT_END_TIME = 10;
-	const int SLOT_SLOT_START_NUMBER = 11;
-	const int SLOT_SLOT_END_NUMBER = 12;
-	const int SLOT_STATUS = 13;
-	const int SLOT_USER_RESPONSE = 14;
+	const int SLOT_PRIORITY = 3;
+	const int SLOT_REPEAT = 4;
+	const int SLOT_START_DATE = 5;
+	const int SLOT_START_TIME = 6;
+	const int SLOT_END_DATE = 7;
+	const int SLOT_END_TIME = 8;
+	const int SLOT_SLOT_START_NUMBER = 9;
+	const int SLOT_SLOT_END_NUMBER = 10;
+	const int SLOT_STATUS = 11;
+	const int SLOT_USER_RESPONSE = 12;
 
 	//Time Container slots;
 	const int TIME_SLOT_SIZE = 10;
@@ -233,7 +231,6 @@ namespace Constants{
 	const string TIMER_SAT = "sat";
 	const string TIMER_SUNDAY = "sunday";
 	const string TIMER_SUN = "sun";
-	
 
 	const string MONTH_JANUARY = "january";
 	const string MONTH_JAN = "jan";

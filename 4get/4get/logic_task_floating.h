@@ -9,6 +9,6 @@ class TaskFloating : public Task
 public:
 	TaskFloating();
 	TaskFloating(long long id);
-	TaskFloating(long long id, string description, string location, time_t reminderTime, Priority priority);
+	TaskFloating(long long id, string description, string location, Priority priority);
 };
 #endif
