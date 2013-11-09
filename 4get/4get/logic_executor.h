@@ -46,8 +46,9 @@ private:
 	stack<ListType> undoListTypeStack;
 	stack<ListType> redoListTypeStack;
 	ListType listType;
-
 	Task* createTaskPtr(Task taskToCreate);
+	static const int ONE;
+	static const int ID_MULTIPLIER;
 
 public:
 	//constructor
@@ -86,7 +87,6 @@ public:
 						RepeatType &repeat,
 						time_t &startTime, 
 						time_t &endTime, 
-						time_t &erTime, 
 						TaskType &typeOfTask,
 						vector<string> &vectorOfInputs);
 	int swapValueAndGetSizeFunction(int start, int end);
