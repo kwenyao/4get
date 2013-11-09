@@ -1,13 +1,13 @@
 /*
- * =====================================================================================
- *
- *       Filename:  logic_task_list.cpp
- *
- *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
- *   Organization:  NUS, School of Computing
- *
- * =====================================================================================
- */
+* =====================================================================================
+*
+*       Filename:  logic_task_list.cpp
+*
+*         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 #include "logic_task_list.h"
 
@@ -20,7 +20,7 @@ const int TaskList::YYYYMMDD_MONTH_MULTIPLIER = 100;
 const int TaskList::HHMM_HOUR_MULTIPLIER = 100;
 
 /*************************************
-           PUBLIC FUNCTIONS            
+           PUBLIC FUNCTIONS                      
 *************************************/
 
 TaskList::TaskList(){
@@ -99,7 +99,7 @@ void TaskList::deleteIndexFromList(int indexUI, bool isDelete){
 			_storage.save(*listToDeleteFrom, _actualList);
 		else
 			_storage.save(*listToDeleteFrom, _currentDisplayed);
-	} catch(string e){
+	} catch(string errString){
 		throw;
 	}
 }
@@ -114,8 +114,7 @@ void TaskList::deleteIDFromList(long long IDNumber, ListType listToDelete, bool 
 		listPtr->erase(iterator);
 		logging(LOG_TASK_DELETED, Info, Pass);
 		_storage.save(*listPtr, listToDelete);
-	} catch(string e){
-		cout << e << endl;
+	} catch(string errString){
 		throw;
 	}
 }
@@ -125,7 +124,11 @@ bool TaskList::markDone(int indexUI){
 	Task* taskPtr;
 	list<Task*>* listToMark;
 	list<Task*>::iterator iterator;
+	int listSize;
 	listToMark = determineList(_currentDisplayed);
+	listSize = listToMark->size();
+	if (listSize < indexUI)
+		throw string(Message::MESSAGE_ERROR_INVALID_INDEX);
 	iterator = iterateToTask(*listToMark, indexUI);
 	taskPtr = (*iterator);
 	deleteIndexFromList(indexUI, false);
@@ -147,8 +150,12 @@ list<Task*> TaskList::obtainList(ListType listToReturn){
 
 Task* TaskList::obtainTask(int indexUI){
 	Task* taskToReturn;
+	int listSize;
 	list<Task*>::iterator iterator;
 	list<Task*>* listToFind = determineList(_currentDisplayed); 
+	listSize = listToFind->size();
+	if (listSize < indexUI)
+		throw string(Message::MESSAGE_ERROR_INVALID_INDEX);
 	iterator = iterateToTask((*listToFind), indexUI);
 	taskToReturn = (*iterator);
 	return taskToReturn;
@@ -157,8 +164,12 @@ Task* TaskList::obtainTask(int indexUI){
 Task* TaskList::obtainTask(long long taskID, ListType listType){
 	list<Task*>* listToFind;
 	list<Task*>::iterator iterator;
+	try{
 	listToFind = determineList(listType);
 	findID(listToFind, taskID, iterator);
+	} catch(string errString) {
+		throw;
+	}
 	return (*iterator);
 }
 
@@ -296,7 +307,7 @@ void TaskList::setCurrentDisplayed(ListType listType){
 }
 
 /*************************************
-           PRIVATE FUNCTIONS            
+          PRIVATE FUNCTIONS            
 *************************************/
 
 list<Task*>::iterator TaskList::iterateToTask(list<Task*>& listToEdit, int indexUI){
@@ -534,21 +545,3 @@ void TaskList::clearList(ListType listType){
 	}
 	listToClear->clear();
 }
-
-//list<Task*>::iterator TaskList::getIterator(list<Task*>& insertionList, Task* taskToAdd){
-//	time_t tempTime;
-//	bool isEmpty = insertionList.empty();
-//	time_t taskEndTime = taskToAdd->getTaskEnd();
-//	list<Task*>::iterator iterator = insertionList.begin();
-//	if(isEmpty){
-//		return iterator;
-//	}
-//	int listSize = insertionList.size();
-//	for(int i=0; i<listSize; i++){
-//		tempTime = (*iterator)->getTaskEnd();
-//		if(tempTime > taskEndTime)
-//			return iterator;
-//		++iterator;
-//	}
-//	return iterator;
-//}
