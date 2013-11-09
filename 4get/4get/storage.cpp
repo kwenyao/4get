@@ -11,9 +11,9 @@
 
 #include "storage.h"
 
-const string Storage::FILENAME_TODO      = "todo.txt";
-const string Storage::FILENAME_COMPLETED = "completed.txt";
-const string Storage::FILENAME_OVERDUE   = "overdue.txt";
+const string Storage::FILENAME_TODO      = "todo.4get";
+const string Storage::FILENAME_COMPLETED = "completed.4get";
+const string Storage::FILENAME_OVERDUE   = "overdue.4get";
 
 const string Storage::MARKER_TASK_BEGIN  = "---------Task Begin---------";
 const string Storage::MARKER_TASK_TYPE   = "Task Type:";
