@@ -392,7 +392,7 @@ void ui_display::printToDoList(){
 			this->todoListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
@@ -428,7 +428,7 @@ void ui_display::printCompletedList(){
 			this->completedListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
@@ -465,7 +465,7 @@ void ui_display::printOverdueList(){
 			this->overdueListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
@@ -765,16 +765,19 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 Void ui_display::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
 	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
 Void ui_display::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
 	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
 Void ui_display::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
 	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
 

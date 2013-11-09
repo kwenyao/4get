@@ -31,6 +31,11 @@ string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	return result;
 }
 
+int stringSysToIntConversion(System::String^ source){
+	int result = 0;
+	result = int::Parse(source);
+	return result;
+}
 
 void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*> *list, int taskIndex)
 {
