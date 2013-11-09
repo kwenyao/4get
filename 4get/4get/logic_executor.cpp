@@ -6,7 +6,9 @@ const int Executor::ID_MULTIPLIER = 1000;
 /*************************************
            PUBLIC FUNCTIONS            
 *************************************/
-Executor::Executor(){}
+Executor::Executor(){
+	refreshAll();
+}
 bool Executor::stringCollector(string task){
 	try{
 		vector<string> vectorOfInputs(SLOT_SIZE);
@@ -28,6 +30,18 @@ bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 		if(!(commandType == commandRedo || commandType == commandUndo || commandType == commandShow || commandType == commandShowAll)){
 			storeIntoUndoCommandStack(commandType); 
 			undoListTypeStack.push(listType);
+		}
+		if(commandType != commandRedo && commandType != commandUndo){
+			if(!redoCommandStack.empty()){
+				redoCommandStack.pop();
+				redoTaskStack.pop();
+			}
+			if(!redoDeleteNumberStack.empty()){
+				redoDeleteNumberStack.pop();
+			}
+			if(!redoMarkNumberStack.empty()){
+				redoMarkNumberStack.pop();
+			}
 		}
 		switch(commandType)
 		{

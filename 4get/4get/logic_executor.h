@@ -31,8 +31,8 @@ class Executor
 {
 private:
 	string task;
-	Task *taskGlobal;
 	TaskList taskList;
+	Task *taskGlobal;
 	Parser parser;
 	Converter convert;
 	stack<Task> undoTaskStack;
