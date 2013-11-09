@@ -1105,6 +1105,8 @@ void Parser::removeBorderSpaces(string& str)
 
 void Parser::parseAllTimeAndDate()
 {
+	removeBorderSpaces(textStart);
+	removeBorderSpaces(textEnd);
 	parseTimeAndDate(textStart, textStartDate, textStartTime);
 	parseTimeAndDate(textEnd, textEndDate, textEndTime);
 }
