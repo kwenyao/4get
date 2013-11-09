@@ -183,6 +183,7 @@ namespace Constants{
 	//system constants
 	const int COMPARE_SUCCESS = 0;
 	const int FOUND_SUCCESS = 0;
+	const int FOUND_FAILED = -1;
 
 	//Initializer
 	const string INITIALIZE_STRING_BLANK = "";

@@ -988,7 +988,7 @@ bool Parser::scanMonthDictionary(string word)
 
 string Parser::scanCommandDictionary(string word)
 {
-	int foundCommand;
+	int foundCommand = FOUND_FAILED;
 	bool found = false;;
 	for(size_t i=0; i<dictionaryCommands.size() && !found; i++){
 		size_t currentDictionarySize = dictionaryCommands[i].size();

@@ -61,7 +61,7 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	System::String^ sys_end_time;
 	System::String^ sys_priority;
 	time_t timeAsTimeT;
-	tm*  timeAsTm=NULL;
+	struct tm timeTm;
 	char timeBuffer[TIME_BUFFER_SIZE] = {0};
 	string timeString = INITIALISE_EMPTY_STD_STRING;
 
@@ -71,17 +71,16 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 
 	timeAsTimeT = t1->getTaskStart();
 	if(timeAsTimeT != EMPTY_TIME){
-		timeAsTm = localtime(&timeAsTimeT);
-		asctime_s(timeBuffer, TIME_BUFFER_SIZE, timeAsTm);
+		localtime_s(&timeTm,&timeAsTimeT);
+		asctime_s(timeBuffer, TIME_BUFFER_SIZE, &timeTm);
 		timeString = timeBuffer;
 		this->stringStdToSysConversion(sys_start_time, timeString); //start time
 	}
 
-	timeAsTm = NULL;
 	timeAsTimeT = t1->getTaskEnd();
 	if(timeAsTimeT != EMPTY_TIME){
-		timeAsTm = localtime(&timeAsTimeT);
-		asctime_s(timeBuffer, TIME_BUFFER_SIZE, timeAsTm);
+		localtime_s(&timeTm,&timeAsTimeT);
+		asctime_s(timeBuffer, TIME_BUFFER_SIZE, &timeTm);
 		timeString = timeBuffer;
 		this->stringStdToSysConversion(sys_end_time, timeString); //end time
 	}
