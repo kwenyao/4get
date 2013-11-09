@@ -18,6 +18,7 @@ namespace UIDisplay {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace UIConvert;
 
 	/// <summary>
 	/// Summary for UiDisplay
@@ -45,15 +46,19 @@ namespace UIDisplay {
 			 static const int TAB_INDEX_OVERDUE = 2;
 			 static const int INPUT_LENGTH_SHOW_HELP_INFO = 3;
 			 static const int MAX_EMPTY_TEXTBOX_LENGTH = 1;
-			 
+			 static const int INITIALISE_INT_ZERO = 0;
+			 static const int POSITION_AFTER_FIRST_CHAR = 1;
+
 			 static const bool INITIALISE_BOOLEAN = false;
 			 static const ListType INITIALISE_LIST_TYPE = listToDo;
 
-			 static String^ TAG_NAME = "Name: ";
+			 static String^ HIGH_PRIORITY_NAME = "high";
+
+			/* static String^ TAG_NAME = "Name: ";
 			 static String^ TAG_LOCATION = "Location: ";
 			 static String^ TAG_START_TIME = "Start Time: ";
 			 static String^ TAG_END_TIME = "End Time: ";
-			 static String^ TAG_PRIORITY = "Priority: ";
+			 static String^ TAG_PRIORITY = "Priority: ";*/
 			 static String^ NEWLINE = "\n";
 
 			 static String^ COMMAND_ADD_HELP = "add <task description>";
@@ -121,14 +126,14 @@ namespace UIDisplay {
 	private: System::Windows::Forms::TabPage^  tabCompleted;
 	private: System::Windows::Forms::TabPage^  tabOverdue;
 	private: System::Windows::Forms::TextBox^  textboxInput;
-	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
+
 
 			 //feedback message box
-	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
-	private: System::Windows::Forms::RichTextBox^  messageBox;
+
+
 
 			 //label that display task details
-	private: System::Windows::Forms::Label^  itemDisplayLabel;
+
 
 			 //to do list view
 	private: System::Windows::Forms::ListView^  todoListView;
@@ -153,6 +158,26 @@ namespace UIDisplay {
 
 			 //timer to refresh every minute
 	private: System::Windows::Forms::Timer^  timerRefresh;
+private: System::Windows::Forms::ColumnHeader^  tStartTime;
+private: System::Windows::Forms::ColumnHeader^  cStartTime;
+private: System::Windows::Forms::ColumnHeader^  oStartTime;
+private: System::Windows::Forms::RichTextBox^  messageBox;
+private: System::Windows::Forms::GroupBox^  labelContainer;
+private: System::Windows::Forms::Label^  labelTagPriority;
+private: System::Windows::Forms::Label^  labelTagEndTime;
+private: System::Windows::Forms::Label^  labelTagStartTime;
+private: System::Windows::Forms::Label^  labelTagVenue;
+private: System::Windows::Forms::Label^  labelTagDesc;
+private: System::Windows::Forms::Label^  labelTaskPriority;
+
+private: System::Windows::Forms::Label^  labelTaskEndTime;
+
+private: System::Windows::Forms::Label^  labelTaskStartTime;
+
+private: System::Windows::Forms::Label^  labelTaskVenue;
+
+private: System::Windows::Forms::Label^  labelTaskDesc;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -177,6 +202,7 @@ namespace UIDisplay {
 			 void printCompletedList();
 			 void printOverdueList();
 			 void passUserInput();
+			 void changeLabelColour(String^ priority);
 			 void printLabel(ListViewItem^ item);
 			 void printError(string error);
 			 System::Void printAddMessage();

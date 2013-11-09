@@ -1,7 +1,6 @@
 #include "ui_display.h"
 #include <sstream>
 using namespace UIDisplay;
-
 //constructor
 UiDisplay::UiDisplay(){
 	execute = new Executor;
@@ -33,30 +32,40 @@ void UiDisplay::InitializeComponent(void){
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
 	this->tIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->tStartTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabCompleted = (gcnew System::Windows::Forms::TabPage());
 	this->completedListView = (gcnew System::Windows::Forms::ListView());
 	this->cIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->cDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cStartTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->cDueDate = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabOverdue = (gcnew System::Windows::Forms::TabPage());
 	this->overdueListView = (gcnew System::Windows::Forms::ListView());
 	this->oIndex = (gcnew System::Windows::Forms::ColumnHeader());
 	this->oDescription = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oStartTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->oDueDate = (gcnew System::Windows::Forms::ColumnHeader());
-	this->inputContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
 	this->textboxInput = (gcnew System::Windows::Forms::TextBox());
-	this->messageContainer = (gcnew System::Windows::Forms::FlowLayoutPanel());
-	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
 	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
 	this->timerRefresh = (gcnew System::Windows::Forms::Timer(this->components));
-	this->itemDisplayLabel = (gcnew System::Windows::Forms::Label());
+	this->messageBox = (gcnew System::Windows::Forms::RichTextBox());
+	this->labelContainer = (gcnew System::Windows::Forms::GroupBox());
+	this->labelTaskPriority = (gcnew System::Windows::Forms::Label());
+	this->labelTaskEndTime = (gcnew System::Windows::Forms::Label());
+	this->labelTaskStartTime = (gcnew System::Windows::Forms::Label());
+	this->labelTaskVenue = (gcnew System::Windows::Forms::Label());
+	this->labelTaskDesc = (gcnew System::Windows::Forms::Label());
+	this->labelTagPriority = (gcnew System::Windows::Forms::Label());
+	this->labelTagEndTime = (gcnew System::Windows::Forms::Label());
+	this->labelTagStartTime = (gcnew System::Windows::Forms::Label());
+	this->labelTagVenue = (gcnew System::Windows::Forms::Label());
+	this->labelTagDesc = (gcnew System::Windows::Forms::Label());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
 	this->tabOverdue->SuspendLayout();
-	this->inputContainer->SuspendLayout();
-	this->messageContainer->SuspendLayout();
+	this->labelContainer->SuspendLayout();
 	this->SuspendLayout();
 	// 
 	// tabContainer
@@ -64,7 +73,7 @@ void UiDisplay::InitializeComponent(void){
 	this->tabContainer->Controls->Add(this->tabTodo);
 	this->tabContainer->Controls->Add(this->tabCompleted);
 	this->tabContainer->Controls->Add(this->tabOverdue);
-	this->tabContainer->Location = System::Drawing::Point(382, 45);
+	this->tabContainer->Location = System::Drawing::Point(385, 34);
 	this->tabContainer->Name = L"tabContainer";
 	this->tabContainer->SelectedIndex = 0;
 	this->tabContainer->Size = System::Drawing::Size(677, 330);
@@ -88,8 +97,8 @@ void UiDisplay::InitializeComponent(void){
 	this->todoListView->AutoArrange = false;
 	this->todoListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->todoListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->tIndex, this->tDescription, 
-		this->tDueDate});
+	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->tIndex, this->tDescription, 
+		this->tStartTime, this->tDueDate});
 	this->todoListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
 	this->todoListView->FullRowSelect = true;
@@ -113,6 +122,11 @@ void UiDisplay::InitializeComponent(void){
 	this->tDescription->Text = L"Description";
 	this->tDescription->Width = 25;
 	// 
+	// tStartTime
+	// 
+	this->tStartTime->Text = L"Start Time";
+	this->tStartTime->Width = 25;
+	// 
 	// tDueDate
 	// 
 	this->tDueDate->Text = L"Due Date";
@@ -135,8 +149,8 @@ void UiDisplay::InitializeComponent(void){
 	this->completedListView->AutoArrange = false;
 	this->completedListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->cIndex, this->cDescription, 
-		this->cDueDate});
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->cIndex, this->cDescription, 
+		this->cStartTime, this->cDueDate});
 	this->completedListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->completedListView->FullRowSelect = true;
@@ -158,12 +172,17 @@ void UiDisplay::InitializeComponent(void){
 	// cDescription
 	// 
 	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 160;
+	this->cDescription->Width = 25;
+	// 
+	// cStartTime
+	// 
+	this->cStartTime->Text = L"Start Time";
+	this->cStartTime->Width = 25;
 	// 
 	// cDueDate
 	// 
 	this->cDueDate->Text = L"Due Date";
-	this->cDueDate->Width = 171;
+	this->cDueDate->Width = 25;
 	// 
 	// tabOverdue
 	// 
@@ -181,8 +200,8 @@ void UiDisplay::InitializeComponent(void){
 	this->overdueListView->AutoArrange = false;
 	this->overdueListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->overdueListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->oIndex, this->oDescription, 
-		this->oDueDate});
+	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->oIndex, this->oDescription, 
+		this->oStartTime, this->oDueDate});
 	this->overdueListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->overdueListView->FullRowSelect = true;
@@ -199,26 +218,22 @@ void UiDisplay::InitializeComponent(void){
 	// oIndex
 	// 
 	this->oIndex->Text = L"#";
-	this->oIndex->Width = 29;
+	this->oIndex->Width = 25;
 	// 
 	// oDescription
 	// 
 	this->oDescription->Text = L"Description";
-	this->oDescription->Width = 160;
+	this->oDescription->Width = 25;
+	// 
+	// oStartTime
+	// 
+	this->oStartTime->Text = L"Start Time";
+	this->oStartTime->Width = 25;
 	// 
 	// oDueDate
 	// 
 	this->oDueDate->Text = L"Due Date";
-	this->oDueDate->Width = 171;
-	// 
-	// inputContainer
-	// 
-	this->inputContainer->Anchor = System::Windows::Forms::AnchorStyles::Left;
-	this->inputContainer->Controls->Add(this->textboxInput);
-	this->inputContainer->Location = System::Drawing::Point(12, 16);
-	this->inputContainer->Name = L"inputContainer";
-	this->inputContainer->Size = System::Drawing::Size(1047, 24);
-	this->inputContainer->TabIndex = 2;
+	this->oDueDate->Width = 25;
 	// 
 	// textboxInput
 	// 
@@ -227,7 +242,7 @@ void UiDisplay::InitializeComponent(void){
 	this->textboxInput->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
 	this->textboxInput->ForeColor = System::Drawing::SystemColors::Info;
-	this->textboxInput->Location = System::Drawing::Point(3, 3);
+	this->textboxInput->Location = System::Drawing::Point(15, 12);
 	this->textboxInput->Name = L"textboxInput";
 	this->textboxInput->Size = System::Drawing::Size(1047, 16);
 	this->textboxInput->TabIndex = 1;
@@ -235,27 +250,6 @@ void UiDisplay::InitializeComponent(void){
 	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UiDisplay::textboxInput_MouseClick);
 	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UiDisplay::textboxInput_KeyDown);
 	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UiDisplay::textboxInput_KeyPress);
-	// 
-	// messageContainer
-	// 
-	this->messageContainer->Controls->Add(this->messageBox);
-	this->messageContainer->Location = System::Drawing::Point(12, 42);
-	this->messageContainer->Name = L"messageContainer";
-	this->messageContainer->Size = System::Drawing::Size(361, 496);
-	this->messageContainer->TabIndex = 3;
-	// 
-	// messageBox
-	// 
-	this->messageBox->BackColor = System::Drawing::Color::IndianRed;
-	this->messageBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->messageBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-		static_cast<System::Byte>(0)));
-	this->messageBox->Location = System::Drawing::Point(3, 3);
-	this->messageBox->Name = L"messageBox";
-	this->messageBox->ReadOnly = true;
-	this->messageBox->Size = System::Drawing::Size(358, 493);
-	this->messageBox->TabIndex = 0;
-	this->messageBox->Text = L"";
 	// 
 	// notifyIcon1
 	// 
@@ -269,26 +263,168 @@ void UiDisplay::InitializeComponent(void){
 	this->timerRefresh->Interval = 60000;
 	this->timerRefresh->Tick += gcnew System::EventHandler(this, &UiDisplay::timerRefresh_Tick);
 	// 
-	// itemDisplayLabel
+	// messageBox
 	// 
-	this->itemDisplayLabel->AutoSize = true;
-	this->itemDisplayLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, 
+	this->messageBox->BackColor = System::Drawing::Color::IndianRed;
+	this->messageBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+	this->messageBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->messageBox->Location = System::Drawing::Point(15, 34);
+	this->messageBox->Name = L"messageBox";
+	this->messageBox->ReadOnly = true;
+	this->messageBox->Size = System::Drawing::Size(361, 526);
+	this->messageBox->TabIndex = 0;
+	this->messageBox->Text = L"";
+	// 
+	// labelContainer
+	// 
+	this->labelContainer->Controls->Add(this->labelTaskPriority);
+	this->labelContainer->Controls->Add(this->labelTaskEndTime);
+	this->labelContainer->Controls->Add(this->labelTaskStartTime);
+	this->labelContainer->Controls->Add(this->labelTaskVenue);
+	this->labelContainer->Controls->Add(this->labelTaskDesc);
+	this->labelContainer->Controls->Add(this->labelTagPriority);
+	this->labelContainer->Controls->Add(this->labelTagEndTime);
+	this->labelContainer->Controls->Add(this->labelTagStartTime);
+	this->labelContainer->Controls->Add(this->labelTagVenue);
+	this->labelContainer->Controls->Add(this->labelTagDesc);
+	this->labelContainer->ForeColor = System::Drawing::SystemColors::ControlDark;
+	this->labelContainer->Location = System::Drawing::Point(392, 370);
+	this->labelContainer->Name = L"labelContainer";
+	this->labelContainer->Size = System::Drawing::Size(671, 190);
+	this->labelContainer->TabIndex = 2;
+	this->labelContainer->TabStop = false;
+	this->labelContainer->Text = L"Task Details";
+	// 
+	// labelTaskPriority
+	// 
+	this->labelTaskPriority->AutoSize = true;
+	this->labelTaskPriority->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-	this->itemDisplayLabel->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-	this->itemDisplayLabel->Location = System::Drawing::Point(386, 375);
-	this->itemDisplayLabel->Name = L"itemDisplayLabel";
-	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
-	this->itemDisplayLabel->TabIndex = 4;
+	this->labelTaskPriority->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskPriority->Location = System::Drawing::Point(141, 156);
+	this->labelTaskPriority->Name = L"labelTaskPriority";
+	this->labelTaskPriority->Size = System::Drawing::Size(46, 18);
+	this->labelTaskPriority->TabIndex = 9;
+	this->labelTaskPriority->Text = L"label5";
+	// 
+	// labelTaskEndTime
+	// 
+	this->labelTaskEndTime->AutoSize = true;
+	this->labelTaskEndTime->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->labelTaskEndTime->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskEndTime->Location = System::Drawing::Point(141, 122);
+	this->labelTaskEndTime->Name = L"labelTaskEndTime";
+	this->labelTaskEndTime->Size = System::Drawing::Size(46, 18);
+	this->labelTaskEndTime->TabIndex = 8;
+	this->labelTaskEndTime->Text = L"label4";
+	// 
+	// labelTaskStartTime
+	// 
+	this->labelTaskStartTime->AutoSize = true;
+	this->labelTaskStartTime->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->labelTaskStartTime->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskStartTime->Location = System::Drawing::Point(141, 86);
+	this->labelTaskStartTime->Name = L"labelTaskStartTime";
+	this->labelTaskStartTime->Size = System::Drawing::Size(46, 18);
+	this->labelTaskStartTime->TabIndex = 7;
+	this->labelTaskStartTime->Text = L"label3";
+	// 
+	// labelTaskVenue
+	// 
+	this->labelTaskVenue->AutoSize = true;
+	this->labelTaskVenue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTaskVenue->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskVenue->Location = System::Drawing::Point(141, 52);
+	this->labelTaskVenue->Name = L"labelTaskVenue";
+	this->labelTaskVenue->Size = System::Drawing::Size(46, 18);
+	this->labelTaskVenue->TabIndex = 6;
+	this->labelTaskVenue->Text = L"label2";
+	// 
+	// labelTaskDesc
+	// 
+	this->labelTaskDesc->AutoSize = true;
+	this->labelTaskDesc->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTaskDesc->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskDesc->Location = System::Drawing::Point(141, 20);
+	this->labelTaskDesc->Name = L"labelTaskDesc";
+	this->labelTaskDesc->Size = System::Drawing::Size(46, 18);
+	this->labelTaskDesc->TabIndex = 5;
+	this->labelTaskDesc->Text = L"label1";
+	// 
+	// labelTagPriority
+	// 
+	this->labelTagPriority->AutoSize = true;
+	this->labelTagPriority->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagPriority->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagPriority->Location = System::Drawing::Point(49, 156);
+	this->labelTagPriority->Name = L"labelTagPriority";
+	this->labelTagPriority->Size = System::Drawing::Size(67, 18);
+	this->labelTagPriority->TabIndex = 4;
+	this->labelTagPriority->Text = L"Priority:";
+	// 
+	// labelTagEndTime
+	// 
+	this->labelTagEndTime->AutoSize = true;
+	this->labelTagEndTime->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagEndTime->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagEndTime->Location = System::Drawing::Point(32, 122);
+	this->labelTagEndTime->Name = L"labelTagEndTime";
+	this->labelTagEndTime->Size = System::Drawing::Size(84, 18);
+	this->labelTagEndTime->TabIndex = 3;
+	this->labelTagEndTime->Text = L"End Time:";
+	// 
+	// labelTagStartTime
+	// 
+	this->labelTagStartTime->AutoSize = true;
+	this->labelTagStartTime->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagStartTime->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagStartTime->Location = System::Drawing::Point(25, 86);
+	this->labelTagStartTime->Name = L"labelTagStartTime";
+	this->labelTagStartTime->Size = System::Drawing::Size(91, 18);
+	this->labelTagStartTime->TabIndex = 2;
+	this->labelTagStartTime->Text = L"Start Time:";
+	// 
+	// labelTagVenue
+	// 
+	this->labelTagVenue->AutoSize = true;
+	this->labelTagVenue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagVenue->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagVenue->Location = System::Drawing::Point(57, 52);
+	this->labelTagVenue->Name = L"labelTagVenue";
+	this->labelTagVenue->Size = System::Drawing::Size(59, 18);
+	this->labelTagVenue->TabIndex = 1;
+	this->labelTagVenue->Text = L"Venue:";
+	// 
+	// labelTagDesc
+	// 
+	this->labelTagDesc->AutoSize = true;
+	this->labelTagDesc->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagDesc->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagDesc->Location = System::Drawing::Point(17, 20);
+	this->labelTagDesc->Name = L"labelTagDesc";
+	this->labelTagDesc->Size = System::Drawing::Size(99, 18);
+	this->labelTagDesc->TabIndex = 0;
+	this->labelTagDesc->Text = L"Description:";
 	// 
 	// UiDisplay
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackColor = System::Drawing::Color::Black;
-	this->ClientSize = System::Drawing::Size(1075, 550);
-	this->Controls->Add(this->itemDisplayLabel);
-	this->Controls->Add(this->messageContainer);
-	this->Controls->Add(this->inputContainer);
+	this->ClientSize = System::Drawing::Size(1075, 572);
+	this->Controls->Add(this->labelContainer);
+	this->Controls->Add(this->textboxInput);
+	this->Controls->Add(this->messageBox);
 	this->Controls->Add(this->tabContainer);
 	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 	this->KeyPreview = true;
@@ -303,9 +439,8 @@ void UiDisplay::InitializeComponent(void){
 	this->tabTodo->ResumeLayout(false);
 	this->tabCompleted->ResumeLayout(false);
 	this->tabOverdue->ResumeLayout(false);
-	this->inputContainer->ResumeLayout(false);
-	this->inputContainer->PerformLayout();
-	this->messageContainer->ResumeLayout(false);
+	this->labelContainer->ResumeLayout(false);
+	this->labelContainer->PerformLayout();
 	this->ResumeLayout(false);
 	this->PerformLayout();
 
@@ -342,8 +477,6 @@ void UiDisplay::printError(string error){
 	String ^ error_sys_string;
 	converter->stringStdToSysConversion(error_sys_string, error);
 	array<String ^> ^ errorLines = {error_sys_string};
-	array<String ^> ^  emptyLines ={};
-	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
 }
 
@@ -362,7 +495,7 @@ void UiDisplay::passUserInput(){
 
 void UiDisplay::printList(){
 	try{
-		list<Task*> taskList;
+		list<Task*> taskList; 
 		taskList = execute->getUpdatedList(activeListType);
 		*listOfTasks = taskList;
 		switch(activeListType){
@@ -384,15 +517,14 @@ void UiDisplay::printList(){
 void UiDisplay::printToDoList(){
 	try{
 		int size = listOfTasks->size();
-
-		int j=0;
+		int j = INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 		if(loaded)
 		{
 			this->todoListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -420,7 +552,7 @@ void UiDisplay::printCompletedList(){
 	try{
 		int size = listOfTasks->size();
 
-		int j=0;
+		int j=INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 
@@ -428,7 +560,7 @@ void UiDisplay::printCompletedList(){
 		{
 			this->completedListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -457,7 +589,7 @@ void UiDisplay::printOverdueList(){
 	try{
 		int size = listOfTasks->size();
 
-		int j=0;
+		int j=INITIALISE_INT_ZERO;
 		array<ListViewItem^>^ temp;
 		Array::Resize(temp, size);
 
@@ -465,7 +597,7 @@ void UiDisplay::printOverdueList(){
 		{
 			this->overdueListView->Items->Clear();
 		}
-		if(size==0){
+		if(size==EMPTY_LIST_COUNT){
 			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
@@ -522,8 +654,8 @@ Void UiDisplay::UiDisplay_KeyDown(System::Object^  sender, System::Windows::Form
 Void UiDisplay::UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
-		this->textboxInput->SelectionStart = 1;
-		converter->stringSysToStdConversion(System::Convert::ToString(e->KeyChar), *commandKeyword); 
+		this->textboxInput->SelectionStart = POSITION_AFTER_FIRST_CHAR;
+		converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword); 
 	}
 }
 
@@ -613,28 +745,35 @@ Void UiDisplay::UiDisplay_KeyPress(System::Object^  sender, System::Windows::For
 //	}
 //}
 
-void UiDisplay::printLabel(ListViewItem^ item){
-	if(item->SubItems[ITEM_PRIORITY_SLOT]->Text == "high"){
-		this->itemDisplayLabel->ForeColor = Color::OrangeRed;
+void UiDisplay::changeLabelColour(String^ priority){
+	if(priority == HIGH_PRIORITY_NAME){
+		this->labelTaskDesc->ForeColor = Color::OrangeRed;
+		this->labelTaskVenue->ForeColor = Color::OrangeRed;
+		this->labelTaskStartTime->ForeColor = Color::OrangeRed;
+		this->labelTaskEndTime->ForeColor = Color::OrangeRed;
+		this->labelTaskPriority->ForeColor = Color::OrangeRed;
 	}
 	else{
-		this->itemDisplayLabel->ForeColor = Color::White;
+		this->labelTaskDesc->ForeColor = Color::White;
+		this->labelTaskVenue->ForeColor = Color::White;
+		this->labelTaskStartTime->ForeColor = Color::White;
+		this->labelTaskEndTime->ForeColor = Color::White;
+		this->labelTaskPriority->ForeColor = Color::White;
 	}
+}
+
+void UiDisplay::printLabel(ListViewItem^ item){
+	changeLabelColour(item->SubItems[ITEM_PRIORITY_SLOT]->Text);
 	//display selected item in product details
-	this->itemDisplayLabel->Text = TAG_NAME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_DESCRIPTION_SLOT]->Text->ToString();
-	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_LOCATION;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_LOCATION_SLOT]->Text->ToString();
-	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_START_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_STARTTIME_SLOT]->Text->ToString();
-	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_END_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_ENDTIME_SLOT]->Text->ToString();
-	this->itemDisplayLabel->Text += NEWLINE;
-	this->itemDisplayLabel->Text += TAG_PRIORITY;
-	this->itemDisplayLabel->Text +=item->SubItems[ITEM_PRIORITY_SLOT]->Text->ToString();
+	this->labelTaskDesc->Text = item->SubItems[ITEM_DESCRIPTION_SLOT]->Text;
+	
+	this->labelTaskVenue->Text = item->SubItems[ITEM_LOCATION_SLOT]->Text;
+	
+	this->labelTaskStartTime->Text = item->SubItems[ITEM_STARTTIME_SLOT]->Text;
+	
+	this->labelTaskEndTime->Text = item->SubItems[ITEM_ENDTIME_SLOT]->Text;
+	
+	this->labelTaskPriority->Text = item->SubItems[ITEM_PRIORITY_SLOT]->Text;
 }
 
 //Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
@@ -759,26 +898,38 @@ Void UiDisplay::textboxInput_KeyDown(System::Object^  sender, System::Windows::F
 	}
 }
 Void UiDisplay::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
-	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[ITEM_INDEX_SLOT]->Text) - 1;
-	this->printLabel(item);
+	if(todoListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[ITEM_INDEX_SLOT]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 Void UiDisplay::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
-	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
-	this->printLabel(item);
+	if(completedListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 Void UiDisplay::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
-	ListViewItem^ item = tasks[0];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
-	this->printLabel(item);
+	if(overdueListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 
 Void UiDisplay::checkInput(){
-	if(commandKeyword->size()==3){
+	if(commandKeyword->size()==INPUT_LENGTH_SHOW_HELP_INFO){
 		/*array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;*/
 		//MessageBox::Show("check input");
