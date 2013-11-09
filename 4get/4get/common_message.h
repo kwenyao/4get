@@ -63,6 +63,7 @@ namespace Message{
 	const string MESSAGE_ERROR_EMPTY_INPUT = "Error: Input is empty";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
+	const string MESSAGE_ERROR_UNABLE_TO_FORM_TIMED_TASK = "Error: Unable to find 'to' in input.";
 	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Input Format.";
 	const string MESSAGE_ERROR_WRONG_DATE_FORMAT = "Error: Wrong date format.";
 	const string MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT = "Error: Please specify at least month and date";

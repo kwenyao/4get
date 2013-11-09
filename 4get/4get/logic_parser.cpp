@@ -575,8 +575,8 @@ bool Parser::determineDateAndTime()
 				}
 			}
 			else{																					//wrong keyword definition
-				logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-				throw MESSAGE_ERROR_WRONG_KEYWORD;
+				logging(MESSAGE_ERROR_UNABLE_TO_FORM_TIMED_TASK ,Error,None);
+				throw MESSAGE_ERROR_UNABLE_TO_FORM_TIMED_TASK;
 			}
 		}
 		else																						//not specified date aka. Floating
