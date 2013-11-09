@@ -158,6 +158,9 @@ namespace UIDisplay {
 
 			 //timer to refresh every minute
 	private: System::Windows::Forms::Timer^  timerRefresh;
+private: System::Windows::Forms::ColumnHeader^  tStartTime;
+private: System::Windows::Forms::ColumnHeader^  cStartTime;
+private: System::Windows::Forms::ColumnHeader^  oStartTime;
 
 	private: System::ComponentModel::IContainer^  components;
 

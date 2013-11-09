@@ -12,7 +12,7 @@ const string UiConvert::NORMAL_PRIORITY_TEXT = "normal";
 
 UiConvert::UiConvert(){};
 
-void UiConvert::stringStdToSysConversion(String^ result, string& source){
+void UiConvert::stringStdToSysConversion(String^& result, string& source){
 	result = gcnew String(source.c_str());
 }
 string UiConvert::timetToStdString(time_t time){
@@ -39,13 +39,13 @@ string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	return result;
 }
 
-int UiConvert::stringSysToIntConversion(System::String^ source){
+int UiConvert::stringSysToIntConversion(String^ source){
 	int result = INITIALISE_INT_ZERO;
 	result = int::Parse(source);
 	return result;
 }
 
-void UiConvert::intToSysString(System::String^ result, int source){
+void UiConvert::intToSysString(String^& result, int source){
 	result = System::Convert::ToString(source);
 }
 
