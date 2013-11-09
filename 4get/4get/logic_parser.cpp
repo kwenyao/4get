@@ -70,7 +70,7 @@ const string Parser::REPEAT_EVERY = "every";
 const string Parser::REPEAT_NULL = "";
 
 /*************************************
-           PUBLIC FUNCTIONS            
+PUBLIC FUNCTIONS            
 *************************************/
 
 Parser::Parser()
@@ -119,7 +119,7 @@ void Parser::parseReset()
 }
 
 /*************************************
-           PRIVATE FUNCTIONS            
+PRIVATE FUNCTIONS            
 *************************************/
 
 void Parser::processCommand(string commandString, vector<string>& inputBits)
@@ -801,7 +801,7 @@ size_t Parser::determindExtractLength(size_t partitionStart,
 		shiftPos = markConstant.size();
 
 	extractStartPos = partitionStart + (++shiftPos); //shift the pos to first pos of text to be extracted.
-	extractEndPos = --partitionEnd;
+	extractEndPos = partitionEnd;
 
 	return extractEndPos - extractStartPos;
 }
@@ -1138,18 +1138,24 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		stringLength = stringCheck.size();
 
 		if(dateDetermined && timeDetermined && !stringCheck.empty()){
-			logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-			throw MESSAGE_ERROR_WRONG_FORMAT;							// If Date and Time has been determined and stringCheck still has a new word, it is an error
+			logging(MESSAGE_ERROR_DATE_TIME_ALREADY_FOUND,Error,None);
+			throw MESSAGE_ERROR_DATE_TIME_ALREADY_FOUND;							// If Date and Time has been determined and stringCheck still has a new word, it is an error
 		}
 		if(dateDayDetermine && dateMonthDetermined && dateYearDetermine)
 			dateDetermined = dateDayDetermine && dateMonthDetermined && dateYearDetermine; // if components of date are determined, turn dateDetermined as true
 
 		if(stringCheck==TIMER_REMOVE_TIME){
-			strDate = TIMER_REMOVE_TIME;
-			strTime = TIMER_REMOVE_TIME;
-			dateDetermined = true;
-			timeDetermined = true;
-			return true;
+			if(textCommand==COMMAND_MODIFY){
+				strDate = TIMER_REMOVE_TIME;
+				strTime = TIMER_REMOVE_TIME;
+				dateDetermined = true;
+				timeDetermined = true;
+				return true;
+			}
+			else{
+				logging(MESSAGE_ERROR_INVALID_REMOVAL_OF_TIME,Error,None);
+				throw MESSAGE_ERROR_INVALID_REMOVAL_OF_TIME;				// If user specify "*" not in modify, it will be an error.
+			}
 		}
 		/*scanResult = scanRepeatDictionary(stringCheck);
 		if(scanResult!=REPEAT_NULL && !foundRepeat){
@@ -1180,8 +1186,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				while(i != stringLength){
 					isDigit = isdigit(stringCheck[i]) != 0;
 					if(!isDigit){
-						logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_FORMAT;
+						logging(MESSAGE_ERROR_WRONG_DATE_IS_NOT_DIGIT,Error,None);
+						throw MESSAGE_ERROR_WRONG_DATE_IS_NOT_DIGIT;
 					}
 					i++;
 				}
@@ -1235,8 +1241,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					while(i != stringLength){
 						isChar = isalpha(stringCheck[i]) != 0;
 						if(!isChar){
-							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-							throw MESSAGE_ERROR_WRONG_FORMAT;
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_MONTH,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT_MONTH;
 						}
 						i++;
 					}
@@ -1253,8 +1259,8 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					while(i != stringLength){
 						isDigit = isdigit(stringCheck[i]) != 0;
 						if(!isDigit){
-							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-							throw MESSAGE_ERROR_WRONG_FORMAT;
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_YEAR,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT_YEAR;
 						}
 						i++;
 					}
@@ -1285,39 +1291,48 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					foundLeft = stringCheck.find(TIMER_SLASH);
 					if(stringCheck.rfind(TIMER_SLASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_SLASH);
-						if(foundRight!=foundLeft){
+						if((foundRight-foundLeft)<3 && (foundRight-foundLeft)>0){
 							strDate = _stringCheck;							// Date Format: 1/2/13 => Shorter representation of date with year
 							dateDetermined = true;
 							continue;
 						}
 						else{
-							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
-							throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH;
 						}
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH,Error,None);
+						throw MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH;
+
 					}
 				}
 				else if(stringCheck.find(TIMER_DASH)!=string::npos){
 					foundLeft = stringCheck.find(TIMER_DASH);
 					if(stringCheck.rfind(TIMER_DASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_DASH);
-						if(foundRight!=foundLeft){
+						if((foundRight-foundLeft)<3 && (foundRight-foundLeft)>0){
 							strDate = _stringCheck;							// Date Format: 1-2-13 => Shorter representation of date
 							dateDetermined = true;
 							continue;
 						}
 						else{
-							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
-							throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_DASH,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_DASH;
 						}
+					}
+					else{
+						logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_DASH,Error,None);
+						throw MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_DASH;
 					}
 				}
 				else if (stringLength < 10 && scanMonthDictionary(stringCheck)){								// Date Format: January or September  => Date month fragment, expect Date day fragment
-					int i = 0;
+					int i = INITIALIZE_INT;
 					while(i != stringLength){
-						isChar = isalpha(stringCheck[i]) != 0;
+						isChar = isalpha(stringCheck[i]) != false;
 						if(!isChar){
-							logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-							throw MESSAGE_ERROR_WRONG_FORMAT;
+							logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_MONTH,Error,None);
+							throw MESSAGE_ERROR_WRONG_DATE_FORMAT_MONTH;
 						}
 						i++;
 					}
@@ -1343,10 +1358,10 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					continue;
 				}
 			}
-			else{
-				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-				throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
-			}
+			//else{
+			//	logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
+			//throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
+			//}
 
 		}
 
@@ -1361,13 +1376,13 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						continue;
 					}
 					else{
-						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;				// Time Format: error, 09:00:00AM
+						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_2_COLONS,Error,None);
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT_2_COLONS;				// Time Format: error, 09:00:00AM
 					}
 				}
 				else{
-					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;					// Time Format: error, 09:00, use 24hr format instead or put AM/PM
+					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_NO_AM_PM ,Error,None);
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT_NO_AM_PM ;					// Time Format: error, 09:00, use 24hr format instead or put AM/PM
 				}
 			}
 			else if(stringCheck.find(TIMER_DOT)!=string::npos){
@@ -1380,13 +1395,13 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 						continue;
 					}
 					else{
-						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-						throw MESSAGE_ERROR_WRONG_TIME_FORMAT;				// Time Format: error, 09.00.00AM
+						logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_2_DOTS,Error,None);
+						throw MESSAGE_ERROR_WRONG_TIME_FORMAT_2_DOTS;				// Time Format: error, 09.00.00AM
 					}
 				}
 				else{
-					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_TIME_FORMAT;					// Time Format: error, 09.00, use 24hr format instead or put AM/PM
+					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_NO_AM_PM ,Error,None);
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT_NO_AM_PM ;					// Time Format: error, 09.00, use 24hr format instead or put AM/PM
 				}
 			}
 			else if(stringLength==TIMER_24HR_LENGTH) {
@@ -1403,13 +1418,13 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					continue;
 				}
 				else{
-					logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-					throw MESSAGE_ERROR_WRONG_FORMAT;
+					logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_NOT_24HR,Error,None);
+					throw MESSAGE_ERROR_WRONG_TIME_FORMAT_NOT_24HR;
 				}
 			}
 			else if(stringCheck==TIME_ANTE_MERIDIAN || stringCheck==TIME_POST_MERIDIAN){
-				logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
-				throw MESSAGE_ERROR_WRONG_FORMAT;									// Time Format : Cannot be 10 PM => only 10PM works
+				logging(MESSAGE_ERROR_WRONG_TIME_FORMAT_AM_PM,Error,None);
+				throw MESSAGE_ERROR_WRONG_TIME_FORMAT_AM_PM;									// Time Format : Cannot be 10 PM => only 10PM works
 			}
 			else if((stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos) && stringLength > TIMER_TIME_LOWER_LENGTH){
 				strTime = _stringCheck;
@@ -1427,27 +1442,26 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 		}
 	}
 
+	if((!dateYearDetermine && dateMonthDetermined && !dateDayDetermine) || 
+		(!dateYearDetermine && !dateMonthDetermined && dateDayDetermine)){
+			logging(MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT,Error,None);
+			throw MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT;
+	}
+
 	if(dateYearDetermine && !dateMonthDetermined && !dateDayDetermine){
-		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
+		logging(MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY,Error,None);
+			throw MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY;
 	}
 
-	if(!dateYearDetermine && dateMonthDetermined && !dateDayDetermine){
-		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
-	}
-
-	if(!dateYearDetermine && !dateMonthDetermined && dateDayDetermine){
-		logging(MESSAGE_ERROR_WRONG_TIME_FORMAT,Error,None);
-		throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
-	}
 	if(foundRepeat){
 		if(!textRepeat.empty())
 			throw MESSAGE_ERROR_NO_DOUBLE_REPEATS;
 		try{
 			textRepeat = scanRepeatDictionary(repeatCheck);
-			if(textRepeat == COMMAND_NULL)
+			if(textRepeat == COMMAND_NULL){
+				logging(MESSAGE_ERROR_WRONG_FORMAT,Error,None);
 				throw MESSAGE_ERROR_WRONG_FORMAT;
+			}
 		}
 		catch(string error){
 			throw;

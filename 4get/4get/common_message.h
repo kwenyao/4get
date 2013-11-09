@@ -53,20 +53,35 @@ namespace Message{
 	const string MESSAGE_ERROR_COMMAND_SHOW = "System was unable to display your task(s).";
 	const string MESSAGE_ERROR_COMMAND_ERROR = "You have entered a wrong command, pls try again.";
 	const string MESSAGE_ERROR_COMMAND_QUERY = "System was unable to process your query.";
-	
+
 	const string MESSAGE_ERROR_LIST_EMPTY = "Error: List is empty.";
 	const string MESSAGE_ERROR_INVALID_LIST = "Error: Invalid List.";
 	const string MESSAGE_ERROR_NO_DESCRIPTION = "Error: No description indicated";
 	const string MESSAGE_ERROR_NO_SLOT_NUM = "Error: No slot number.";
 	const string MESSAGE_ERROR_NOTHING_TO_REDO = "Error: There is nothing to redo.";
-	
+
 	const string MESSAGE_ERROR_EMPTY_INPUT = "Error: Input is empty";
 	const string MESSAGE_ERROR_INVALID_ID = "Error: Task ID does not exist";
 	const string MESSAGE_ERROR_WRONG_KEYWORD = "Error: Wrong Keyword.";
-	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Format.";
-	const string MESSAGE_ERROR_WRONG_DATE_FORMAT ="Error: Wrong date format.";
-	const string MESSAGE_ERROR_WRONG_TIME_FORMAT ="Error: Wrong time format."; 
-	const string MESSAGE_ERROR_WRONG_DATE = "Error: No such date exists";
+	const string MESSAGE_ERROR_WRONG_FORMAT = "Error: Wrong Input Format.";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT = "Error: Wrong date format.";
+	const string MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT = "Error: Please specify at least month and date";
+	const string MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY = "Error: Do not simply specify year or please use proper 24hr format.";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH = "Error: Please specify DD/MM/YYYY format.";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_DASH = "Error: Please specify DD-MM-YYYY format.";
+	const string MESSAGE_ERROR_DATE_TIME_ALREADY_FOUND = "Error: More than one date or time indication has been inputted.\nUnable to process input.";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT_MONTH = "Error: Please enter a correct month";
+	const string MESSAGE_ERROR_WRONG_DATE_FORMAT_YEAR = "Error: Please use year in YYYY format.";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT = "Error: Wrong time format.";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT_2_COLONS = "Error: 2 or more ':' detected";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT_2_DOTS = "Error: 2 or more '.' detected";
+	//const string MESSAGE_ERROR_WRONG_TIME_FORMAT_COLON_DOT = "Error: Please use ':' or '.' to separate time details.\nEg. use 09:00am or 09.00am";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT_NO_AM_PM = "Error: Please enter AM or PM behind the time.\nEg. use 09:00am or 09.00am.";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT_AM_PM = "Error: Use 10AM or 1PM instead of 10 AM or 1 PM.";
+	const string MESSAGE_ERROR_WRONG_TIME_FORMAT_NOT_24HR = "Error: Please ensure that hr is added behind the time.\nEg. use 1500hr.";
+	const string MESSAGE_ERROR_WRONG_DATE = "Error: No such date exists.";
+	const string MESSAGE_ERROR_WRONG_DATE_IS_NOT_DIGIT = "Error: Please enter the date correctly.";
+	const string MESSAGE_ERROR_INVALID_REMOVAL_OF_TIME = "Error: You may only use * in modify.";
 	const string MESSAGE_ERROR_WRONG_MONTH = "Error: No such month exists";
 	const string MESSAGE_ERROR_INVALID_TASKTYPE = "Error: Type of task do not exist.";
 	const string MESSAGE_ERROR_INVALID_YEAR = "Error: Year input is invalid.";
