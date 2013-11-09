@@ -101,6 +101,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
+	this->todoListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::todoListView_MouseClick);
 	// 
 	// tIndex
 	// 
@@ -147,6 +148,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
+	this->completedListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::completedListView_MouseClick);
 	// 
 	// cIndex
 	// 
@@ -192,6 +194,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
+	this->overdueListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::overdueListView_MouseClick);
 	// 
 	// oIndex
 	// 
@@ -371,12 +374,10 @@ void ui_display::printList(){
 		case listToDo:
 			printToDoList();
 			break;
-		default:
-			throw MESSAGE_ERROR_INVALID_LIST;
 		}
 	}
-	catch(string &error){
-		this->printError(error);
+	catch(string error){
+		printError(error);
 	}
 }
 void ui_display::printToDoList(){
@@ -760,6 +761,24 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 	catch(string &error){
 		this->printError(error);
 	}
+}
+Void ui_display::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+	ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
+	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+	this->printLabel(item);
+}
+Void ui_display::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+	ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
+	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+	this->printLabel(item);
+}
+Void ui_display::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
+	ListViewItem^ item = tasks[0];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+	this->printLabel(item);
 }
 
 Void ui_display::checkInput(){

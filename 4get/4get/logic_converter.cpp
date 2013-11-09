@@ -16,6 +16,7 @@ const string Converter::REPEAT_WEEKLY = "weekly";
 const string Converter::REPEAT_FORGHTNIGHTLY = "fortnightly";
 const string Converter::REPEAT_MONTHLY = "monthly";
 const string Converter::REPEAT_ANNUALLY = "annually";
+const string Converter::REPEAT_YEARLY = "yearly";
 const string Converter::PRIORITY_HIGH = "!";
 const string Converter::PRIORITY_HIGH2 = "high";
 
@@ -182,7 +183,7 @@ RepeatType Converter::convertStringToRepeatType(string str){
 		return fortnightly;
 	else if(isEqual(str, REPEAT_MONTHLY))
 		return monthly;
-	else if(isEqual(str, REPEAT_ANNUALLY))
+	else if(isEqual(str, REPEAT_ANNUALLY)||isEqual(str, REPEAT_YEARLY))
 		return annually;
 	else
 		return repeatNone;
