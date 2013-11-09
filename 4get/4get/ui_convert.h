@@ -24,7 +24,6 @@ public:
 
 public:
 
-	static string trim(const string& s, const string& delimiters = " \f\n\r\t\v" );
 	string timetToStdString(time_t time);
 	bool stringSysToStdConversion(System::String^ source, string& result);
 	string enumPriorityToStdString(Priority priority);

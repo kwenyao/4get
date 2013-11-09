@@ -391,7 +391,7 @@ void ui_display::printToDoList(){
 			this->todoListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
@@ -427,7 +427,7 @@ void ui_display::printCompletedList(){
 			this->completedListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
@@ -464,7 +464,7 @@ void ui_display::printOverdueList(){
 			this->overdueListView->Items->Clear();
 		}
 		if(size==0){
-			throw MESSAGE_ERROR_LIST_EMPTY;
+			return;
 		}
 		this->Cursor = Cursors::WaitCursor;
 
