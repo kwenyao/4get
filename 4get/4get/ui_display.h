@@ -189,5 +189,8 @@ namespace UIDisplay {
 			 private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
 			 private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);	*/
 
-	};
+	private: System::Void todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+private: System::Void overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+};
 }
