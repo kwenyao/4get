@@ -374,12 +374,10 @@ void ui_display::printList(){
 		case listToDo:
 			printToDoList();
 			break;
-		default:
-			throw MESSAGE_ERROR_INVALID_LIST;
 		}
 	}
-	catch(string &error){
-		this->printError(error);
+	catch(string error){
+		printError(error);
 	}
 }
 void ui_display::printToDoList(){
