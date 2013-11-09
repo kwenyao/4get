@@ -5,6 +5,10 @@ const long long Task::CONVERT_MULTIPLIER_MONTH = 100;
 const long long Task::CONVERT_MULTIPLIER_DAY = 1;
 const long long Task::CONVERT_MULTIPLIER_HOUR = 100;
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 Task::Task(){
 	clearAllAttr();
 }
@@ -27,11 +31,6 @@ void Task::setTaskStart(time_t startTime) {	taskStart = startTime; }
 void Task::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
 void Task::setTaskRepeat(RepeatType repeat) { taskRepeat = repeat; }
 void Task::setNextOccurance(){ return ; }
-
-void Task::updateAllAttr()
-{
-
-}
 
 void Task::clearTimeAttr()
 {

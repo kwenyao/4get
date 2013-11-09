@@ -18,6 +18,10 @@ const string Log::LOG_NONE = "\n";
 
 #define BUFFER_SIZE 100
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 void logging(std::string message, LogType type, LogStatus status)
 {
 	static std::ofstream _logFile;
@@ -29,6 +33,10 @@ void logging(std::string message, LogType type, LogStatus status)
 	_logFile << _logIndex << LOGGING_INDEX_BRACKET << getTimeStamp(Current) << logMessages(LOGGING_FORMAT, message) << logType(type) << logStatus(status);
 	_logIndex++;
 }
+
+/*************************************
+           PRIVATE FUNCTIONS            
+*************************************/
 
 void Log::createFileName(string& _logFileName)
 {
@@ -58,8 +66,6 @@ string Log::logMessages(const string feedback)
 
 	return string(buffer);
 }
-
-
 
 string Log::logMessages(const string feedback, string input)
 {

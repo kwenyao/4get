@@ -69,6 +69,10 @@ const string Parser::REPEAT_EVERY_YEAR = "every year";
 const string Parser::REPEAT_EVERY = "every";
 const string Parser::REPEAT_NULL = "";
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 Parser::Parser()
 {
 	dictionaryCommands.resize(DICTIONARY_COMMAND_SIZE);
@@ -113,6 +117,10 @@ void Parser::parseReset()
 	textSlotStartNumber = INITIALIZE_STRING_BLANK;
 	textSlotEndNumber = INITIALIZE_STRING_BLANK;
 }
+
+/*************************************
+           PRIVATE FUNCTIONS            
+*************************************/
 
 void Parser::processCommand(string commandString, vector<string>& inputBits)
 {

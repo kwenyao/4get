@@ -1,5 +1,9 @@
 #include "logic_task_timed.h"
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 TaskTimed::TaskTimed() : TaskDeadline(){
 	taskType = timed;
 }
