@@ -20,25 +20,36 @@ namespace UIDisplay {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Summary for ui_display
+	/// Summary for UiDisplay
 	/// </summary>
-	public ref class ui_display : public System::Windows::Forms::Form
+	public ref class UiDisplay : public System::Windows::Forms::Form
 	{
 	public:
-		ui_display(void);
+		UiDisplay(void);
 	protected:
-		~ui_display();
+		~UiDisplay();
 #pragma endregion
 
 #pragma region initialise
-	private: UiConvert* converter;
-			 Executor* execute;
-			 list<Task*>* listOfTasks;
-			 int selectedItem;
-			 bool loaded, up;
-			 string *commandKeyword;
+	private: static const int LEAST_INDEX = 0;
+			 static const int EMPTY_LIST_COUNT = 0;
+			 static const int ITEM_INDEX_SLOT = 0;
+			 static const int MOST_RECENT_SELECTED_ITEM = 0;
+			 static const int ITEM_DESCRIPTION_SLOT = 1;
+			 static const int ITEM_STARTTIME_SLOT = 2;
+			 static const int ITEM_ENDTIME_SLOT = 3;
+			 static const int ITEM_LOCATION_SLOT = 4;
+			 static const int ITEM_PRIORITY_SLOT = 5;
+			 static const int TAB_INDEX_TODO = 0;
+			 static const int TAB_INDEX_COMPLETED = 1;
+			 static const int TAB_INDEX_OVERDUE = 2;
+			 static const int INPUT_LENGTH_SHOW_HELP_INFO = 3;
+			 static const int MAX_EMPTY_TEXTBOX_LENGTH = 1;
+			 
+			 static const bool INITIALISE_BOOLEAN = false;
+			 static const ListType INITIALISE_LIST_TYPE = listToDo;
 
-	private: static String^ TAG_NAME = "Name: ";
+			 static String^ TAG_NAME = "Name: ";
 			 static String^ TAG_LOCATION = "Location: ";
 			 static String^ TAG_START_TIME = "Start Time: ";
 			 static String^ TAG_END_TIME = "End Time: ";
@@ -97,46 +108,52 @@ namespace UIDisplay {
 			 static String^ MESSAGE_HELP_MARK = "type \"mark\" to change the status of a task";
 			 static String^ MESSAGE_HELP_SEARCH = "type \"search\" to search list";
 
+	private: UiConvert* converter;
+			 Executor* execute;
+			 list<Task*>* listOfTasks;
+			 int selectedItem;
+			 bool loaded, up;
+			 string *commandKeyword;
+			 ListType activeListType;
+			 //list tab pages
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
 	private: System::Windows::Forms::TabPage^  tabCompleted;
 	private: System::Windows::Forms::TabPage^  tabOverdue;
 	private: System::Windows::Forms::TextBox^  textboxInput;
 	private: System::Windows::Forms::FlowLayoutPanel^  inputContainer;
-	private: ListType activeListType;
 
-
+			 //feedback message box
 	private: System::Windows::Forms::FlowLayoutPanel^  messageContainer;
 	private: System::Windows::Forms::RichTextBox^  messageBox;
+
+			 //label that display task details
+	private: System::Windows::Forms::Label^  itemDisplayLabel;
 
 			 //to do list view
 	private: System::Windows::Forms::ListView^  todoListView;
 	private: System::Windows::Forms::ColumnHeader^  tIndex;
 	private: System::Windows::Forms::ColumnHeader^  tDescription;
-
-
 	private: System::Windows::Forms::ColumnHeader^  tDueDate;
 
 			 //completed list view
 	private: System::Windows::Forms::ListView^  completedListView;
 	private: System::Windows::Forms::ColumnHeader^  cIndex;
 	private: System::Windows::Forms::ColumnHeader^  cDescription;
-
-
 	private: System::Windows::Forms::ColumnHeader^  cDueDate;
 
 			 //overdue list view
 	private: System::Windows::Forms::ListView^  overdueListView;
 	private: System::Windows::Forms::ColumnHeader^  oIndex;
 	private: System::Windows::Forms::ColumnHeader^  oDescription;
-
-
 	private: System::Windows::Forms::ColumnHeader^  oDueDate;
 
-
+			 //system tray icon
 	private: System::Windows::Forms::NotifyIcon^  notifyIcon1;
+
+			 //timer to refresh every minute
 	private: System::Windows::Forms::Timer^  timerRefresh;
-	private: System::Windows::Forms::Label^  itemDisplayLabel;
+
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -154,43 +171,47 @@ namespace UIDisplay {
 		void InitializeComponent(void);
 #pragma endregion
 
+		//printing functions
 	private: void printList();
 			 void printToDoList();
 			 void printCompletedList();
 			 void printOverdueList();
 			 void passUserInput();
+			 void printLabel(ListViewItem^ item);
 			 void printError(string error);
-
-			 System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-			 System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-			 System::Void checkInput();
 			 System::Void printAddMessage();
 			 System::Void printDelMessage();
 			 System::Void printModMessage();
 			 System::Void printMarMessage();
 			 System::Void printSearchMessage();
 			 System::Void printHelpMessage();
-			 bool SetFocus(Control ^ control);
-			 System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
-			 System::Void ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-			 System::Void ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-			 System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
-			 System::Void ui_display_Resize(System::Object^  sender, System::EventArgs^  e);
-			 void printLabel(ListViewItem^ item);
-			 void focusList(ListType activeListType);
 
-	public: System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-			/*private: void focusItem();
-			private: void focusToDoItem();
-			private: void focusCompletedItem();
-			private: void focusOverdueItem();*/
+			 //check ui interaction
+	private:System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+			System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			//check user input to display help messages
+			System::Void checkInput();
+			//check keyboard shortcuts
+			System::Void UiDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+			System::Void UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			//user selects an item
+			System::Void todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			System::Void completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			System::Void overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+
+			//minimising application	
+	private:System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
+			System::Void UiDisplay_Resize(System::Object^  sender, System::EventArgs^  e);
+
+	private:bool SetFocus(Control ^ control);
+			void focusList(ListType activeListType);
+			//user changes displayed list
+			System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
+
+			//refresh list
 	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
-			 /*private: System::Void todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-			 private: System::Void completedListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);
-			 private: System::Void overdueListView_ItemActivate(System::Object^  sender, System::EventArgs^  e);	*/
 
-	private: System::Void todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-private: System::Void completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-private: System::Void overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-};
+
+	};
 }

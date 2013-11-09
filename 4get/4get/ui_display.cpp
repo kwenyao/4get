@@ -3,16 +3,16 @@
 using namespace UIDisplay;
 
 //constructor
-ui_display::ui_display(){
+UiDisplay::UiDisplay(){
 	execute = new Executor;
 	converter = new UiConvert;
 	listOfTasks = new std::list<Task*>;
 	commandKeyword = new string;
 	commandKeyword->clear();
-	selectedItem = 0;
-	loaded = false;
-	up = false;
-	activeListType = listToDo;
+	selectedItem = LEAST_INDEX;
+	loaded = INITIALISE_BOOLEAN;
+	up = INITIALISE_BOOLEAN;
+	activeListType = INITIALISE_LIST_TYPE;
 	execute->setListType(activeListType);
 
 	InitializeComponent();
@@ -20,13 +20,13 @@ ui_display::ui_display(){
 	this->printHelpMessage();
 }
 
-ui_display::~ui_display(){
+UiDisplay::~UiDisplay(){
 	if (components){
 		delete components;
 	}
 }
 
-void ui_display::InitializeComponent(void){
+void UiDisplay::InitializeComponent(void){
 	this->components = (gcnew System::ComponentModel::Container());
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
@@ -69,7 +69,7 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->SelectedIndex = 0;
 	this->tabContainer->Size = System::Drawing::Size(677, 330);
 	this->tabContainer->TabIndex = 0;
-	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &ui_display::tabContainer_Selected);
+	this->tabContainer->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &UiDisplay::tabContainer_Selected);
 	// 
 	// tabTodo
 	// 
@@ -101,7 +101,7 @@ void ui_display::InitializeComponent(void){
 	this->todoListView->TabIndex = 1;
 	this->todoListView->UseCompatibleStateImageBehavior = false;
 	this->todoListView->View = System::Windows::Forms::View::Details;
-	this->todoListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::todoListView_MouseClick);
+	this->todoListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UiDisplay::todoListView_MouseClick);
 	// 
 	// tIndex
 	// 
@@ -148,7 +148,7 @@ void ui_display::InitializeComponent(void){
 	this->completedListView->TabIndex = 2;
 	this->completedListView->UseCompatibleStateImageBehavior = false;
 	this->completedListView->View = System::Windows::Forms::View::Details;
-	this->completedListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::completedListView_MouseClick);
+	this->completedListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UiDisplay::completedListView_MouseClick);
 	// 
 	// cIndex
 	// 
@@ -194,7 +194,7 @@ void ui_display::InitializeComponent(void){
 	this->overdueListView->TabIndex = 2;
 	this->overdueListView->UseCompatibleStateImageBehavior = false;
 	this->overdueListView->View = System::Windows::Forms::View::Details;
-	this->overdueListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::overdueListView_MouseClick);
+	this->overdueListView->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UiDisplay::overdueListView_MouseClick);
 	// 
 	// oIndex
 	// 
@@ -232,9 +232,9 @@ void ui_display::InitializeComponent(void){
 	this->textboxInput->Size = System::Drawing::Size(1047, 16);
 	this->textboxInput->TabIndex = 1;
 	this->textboxInput->Text = L"Enter Command Here";
-	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ui_display::textboxInput_MouseClick);
-	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::textboxInput_KeyDown);
-	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::textboxInput_KeyPress);
+	this->textboxInput->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UiDisplay::textboxInput_MouseClick);
+	this->textboxInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UiDisplay::textboxInput_KeyDown);
+	this->textboxInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UiDisplay::textboxInput_KeyPress);
 	// 
 	// messageContainer
 	// 
@@ -261,13 +261,13 @@ void ui_display::InitializeComponent(void){
 	// 
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
-	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &ui_display::notifyIcon1_DoubleClick);
+	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &UiDisplay::notifyIcon1_DoubleClick);
 	// 
 	// timerRefresh
 	// 
 	this->timerRefresh->Enabled = true;
 	this->timerRefresh->Interval = 60000;
-	this->timerRefresh->Tick += gcnew System::EventHandler(this, &ui_display::timerRefresh_Tick);
+	this->timerRefresh->Tick += gcnew System::EventHandler(this, &UiDisplay::timerRefresh_Tick);
 	// 
 	// itemDisplayLabel
 	// 
@@ -280,7 +280,7 @@ void ui_display::InitializeComponent(void){
 	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
 	this->itemDisplayLabel->TabIndex = 4;
 	// 
-	// ui_display
+	// UiDisplay
 	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -293,12 +293,12 @@ void ui_display::InitializeComponent(void){
 	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 	this->KeyPreview = true;
 	this->MaximizeBox = false;
-	this->Name = L"ui_display";
+	this->Name = L"UiDisplay";
 	this->Opacity = 0.95;
 	this->Text = L"4get";
-	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &ui_display::ui_display_KeyDown);
-	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ui_display::ui_display_KeyPress);
-	this->Resize += gcnew System::EventHandler(this, &ui_display::ui_display_Resize);
+	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UiDisplay::UiDisplay_KeyDown);
+	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UiDisplay::UiDisplay_KeyPress);
+	this->Resize += gcnew System::EventHandler(this, &UiDisplay::UiDisplay_Resize);
 	this->tabContainer->ResumeLayout(false);
 	this->tabTodo->ResumeLayout(false);
 	this->tabCompleted->ResumeLayout(false);
@@ -311,9 +311,9 @@ void ui_display::InitializeComponent(void){
 
 }
 
-Void ui_display::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e){
+Void UiDisplay::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e){
 	try{
-		if(todoListView->Items->Count!=0){
+		if(todoListView->Items->Count!=EMPTY_LIST_COUNT){
 			execute->refreshAll();
 			this->printList();
 		}
@@ -323,11 +323,11 @@ Void ui_display::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  
 	}
 }
 
-Void ui_display::notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e){
+Void UiDisplay::notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e){
 	this->Show();
 	this->WindowState = FormWindowState::Normal;
 }
-Void ui_display::ui_display_Resize(System::Object^  sender, System::EventArgs^  e){
+Void UiDisplay::UiDisplay_Resize(System::Object^  sender, System::EventArgs^  e){
 	if(this->WindowState == FormWindowState::Minimized){
 		this->notifyIcon1->Visible =true;
 		this->notifyIcon1->ShowBalloonTip(500);
@@ -338,15 +338,16 @@ Void ui_display::ui_display_Resize(System::Object^  sender, System::EventArgs^  
 	}
 }
 
-void ui_display::printError(string error){
-	String ^ error_sys_string=gcnew String(error.c_str());
+void UiDisplay::printError(string error){
+	String ^ error_sys_string;
+	converter->stringStdToSysConversion(error_sys_string, error);
 	array<String ^> ^ errorLines = {error_sys_string};
 	array<String ^> ^  emptyLines ={};
 	this->messageBox->Lines=emptyLines;
 	this->messageBox->Lines = errorLines;
 }
 
-void ui_display::passUserInput(){
+void UiDisplay::passUserInput(){
 	try{
 		string stdCommand;
 		converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
@@ -359,7 +360,7 @@ void ui_display::passUserInput(){
 	}
 }
 
-void ui_display::printList(){
+void UiDisplay::printList(){
 	try{
 		list<Task*> taskList;
 		taskList = execute->getUpdatedList(activeListType);
@@ -380,7 +381,7 @@ void ui_display::printList(){
 		printError(error);
 	}
 }
-void ui_display::printToDoList(){
+void UiDisplay::printToDoList(){
 	try{
 		int size = listOfTasks->size();
 
@@ -415,7 +416,7 @@ void ui_display::printToDoList(){
 	}
 	this->todoListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
 }
-void ui_display::printCompletedList(){
+void UiDisplay::printCompletedList(){
 	try{
 		int size = listOfTasks->size();
 
@@ -452,7 +453,7 @@ void ui_display::printCompletedList(){
 	}
 	this->completedListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
 }
-void ui_display::printOverdueList(){
+void UiDisplay::printOverdueList(){
 	try{
 		int size = listOfTasks->size();
 
@@ -491,7 +492,7 @@ void ui_display::printOverdueList(){
 	this->overdueListView->AutoResizeColumns(ColumnHeaderAutoResizeStyle::HeaderSize);
 }
 
-Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+Void UiDisplay::UiDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 	if(e->Control && e->KeyCode==Keys::Tab){
 		int nextPage = (this->tabContainer->SelectedIndex + 1) % 3;
 		this->tabContainer->SelectedIndex = nextPage;
@@ -518,7 +519,7 @@ Void ui_display::ui_display_KeyDown(System::Object^  sender, System::Windows::Fo
 		}
 	}
 }
-Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+Void UiDisplay::UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
 	if(SetFocus(textboxInput)){
 		this->textboxInput->Text = System::Convert::ToString(e->KeyChar);
 		this->textboxInput->SelectionStart = 1;
@@ -612,8 +613,8 @@ Void ui_display::ui_display_KeyPress(System::Object^  sender, System::Windows::F
 //	}
 //}
 
-void ui_display::printLabel(ListViewItem^ item){
-	if(item->SubItems[5]->Text == "high"){
+void UiDisplay::printLabel(ListViewItem^ item){
+	if(item->SubItems[ITEM_PRIORITY_SLOT]->Text == "high"){
 		this->itemDisplayLabel->ForeColor = Color::OrangeRed;
 	}
 	else{
@@ -621,20 +622,19 @@ void ui_display::printLabel(ListViewItem^ item){
 	}
 	//display selected item in product details
 	this->itemDisplayLabel->Text = TAG_NAME;
-	this->itemDisplayLabel->Text +=item->SubItems[1]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_DESCRIPTION_SLOT]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_LOCATION;
-	this->itemDisplayLabel->Text +=item->SubItems[3]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_LOCATION_SLOT]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_START_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[4]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_STARTTIME_SLOT]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_END_TIME;
-	this->itemDisplayLabel->Text +=item->SubItems[2]->Text->ToString();
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_ENDTIME_SLOT]->Text->ToString();
 	this->itemDisplayLabel->Text += NEWLINE;
 	this->itemDisplayLabel->Text += TAG_PRIORITY;
-	this->itemDisplayLabel->Text +=item->SubItems[5]->Text->ToString();
-	//}
+	this->itemDisplayLabel->Text +=item->SubItems[ITEM_PRIORITY_SLOT]->Text->ToString();
 }
 
 //Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
@@ -651,15 +651,15 @@ void ui_display::printLabel(ListViewItem^ item){
 //	this->printLabel(tasksSelected[0]);
 //}
 
-bool ui_display::SetFocus(Control ^ control){
+bool UiDisplay::SetFocus(Control ^ control){
 	if(!(control->Focused)){
-		selectedItem = 0;
+		selectedItem = LEAST_INDEX;
 		control->Focus();
 		return true;
 	}
 	return false;
 }
-void ui_display::focusList(ListType activeListType){
+void UiDisplay::focusList(ListType activeListType){
 	ListView^ list;
 	switch(activeListType){
 	case listToDo:
@@ -672,11 +672,11 @@ void ui_display::focusList(ListType activeListType){
 		list = overdueListView;
 		break;
 	}
-	if(list->Items->Count == 0)
+	if(list->Items->Count == EMPTY_LIST_COUNT)
 		return;
 	else if(!(list->Focused))
 		this->SetFocus(list);
-	else if (selectedItem == 0 && up || selectedItem == list->Items->Count - 1 && !up)
+	else if (selectedItem == LEAST_INDEX && up || selectedItem == list->Items->Count - 1 && !up)
 		return;
 	else if (selectedItem < list->Items->Count - 1 && !up || selectedItem < list->Items->Count && up){
 		if(up)
@@ -687,20 +687,20 @@ void ui_display::focusList(ListType activeListType){
 	this->printLabel(list->Items[selectedItem]);
 }
 
-Void ui_display::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+Void UiDisplay::textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	this->textboxInput->Enabled = true;
 	this->textboxInput->Clear();
 }
-Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
+Void UiDisplay::tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e){
 	try{
-		selectedItem=0;
-		if(this->tabContainer->SelectedIndex==1){
+		selectedItem=LEAST_INDEX;
+		if(this->tabContainer->SelectedIndex==TAB_INDEX_COMPLETED){
 			activeListType=listCompleted;
 		}
-		else if(this->tabContainer->SelectedIndex==2){
+		else if(this->tabContainer->SelectedIndex==TAB_INDEX_OVERDUE){
 			activeListType=listOverdue;
 		}
-		else if(this->tabContainer->SelectedIndex==0){
+		else if(this->tabContainer->SelectedIndex==TAB_INDEX_TODO){
 			activeListType=listToDo;
 		}
 		else
@@ -714,8 +714,8 @@ Void ui_display::tabContainer_Selected(System::Object^  sender, System::Windows:
 		this->printError(error);
 	}
 }
-Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
-	if(commandKeyword->size() < 3 ){
+Void UiDisplay::textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e){
+	if(commandKeyword->size() < INPUT_LENGTH_SHOW_HELP_INFO ){
 		//MessageBox::Show("keypress inside");
 		commandKeyword->clear();
 		converter->stringSysToStdConversion(this->textboxInput->Text, *commandKeyword);
@@ -726,7 +726,7 @@ Void ui_display::textboxInput_KeyPress(System::Object^  sender, System::Windows:
 	}
 	this->checkInput();
 }
-Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
+Void UiDisplay::textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e){
 
 	try{
 		if(e->KeyCode == Keys::Enter){
@@ -739,9 +739,8 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 		}
 		else if(e->KeyCode == Keys::Back){
 
-			if(this->textboxInput->Text->Length <= 1){
+			if(this->textboxInput->Text->Length <= MAX_EMPTY_TEXTBOX_LENGTH){
 				this->printHelpMessage();
-
 			}
 			else{
 				commandKeyword->clear();
@@ -754,34 +753,31 @@ Void ui_display::textboxInput_KeyDown(System::Object^  sender, System::Windows::
 			}
 
 		}
-		/*else if(e->KeyCode == Keys::Down || e->KeyCode == Keys::Up){
-		focusItem();
-		}*/
 	}
 	catch(string &error){
 		this->printError(error);
 	}
 }
-Void ui_display::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+Void UiDisplay::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
-	ListViewItem^ item = tasks[0];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+	selectedItem = converter->stringSysToIntConversion(item->SubItems[ITEM_INDEX_SLOT]->Text) - 1;
 	this->printLabel(item);
 }
-Void ui_display::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+Void UiDisplay::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
-	ListViewItem^ item = tasks[0];
+	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
 	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
-Void ui_display::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
+Void UiDisplay::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
 	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
 	ListViewItem^ item = tasks[0];
 	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
 	this->printLabel(item);
 }
 
-Void ui_display::checkInput(){
+Void UiDisplay::checkInput(){
 	if(commandKeyword->size()==3){
 		/*array<String ^> ^  emptyLines ={};
 		this->messageBox->Lines=emptyLines;*/
@@ -804,7 +800,7 @@ Void ui_display::checkInput(){
 	}
 	else return;
 }
-Void ui_display::printAddMessage(){
+Void UiDisplay::printAddMessage(){
 	array<String ^> ^  addLines ={
 		COMMAND_ADD_HELP,
 		COMMAND_ADD_HELP_LOCATION,
@@ -824,7 +820,7 @@ Void ui_display::printAddMessage(){
 	};
 	this->messageBox->Lines= addLines;
 }
-Void ui_display::printDelMessage(){
+Void UiDisplay::printDelMessage(){
 	array<String ^> ^  delLines ={
 		COMMAND_DEL_HELP,
 		COMMAND_DEL_HELP_MULTIPLE,
@@ -834,7 +830,7 @@ Void ui_display::printDelMessage(){
 	};
 	this->messageBox->Lines= delLines;
 }
-Void ui_display::printModMessage(){
+Void UiDisplay::printModMessage(){
 	array<String ^> ^  modLines ={
 		COMMAND_MOD_HELP,
 		COMMAND_MOD_HELP_LOCATION,
@@ -852,7 +848,7 @@ Void ui_display::printModMessage(){
 	};
 	this->messageBox->Lines= modLines;
 }
-Void ui_display::printMarMessage(){
+Void UiDisplay::printMarMessage(){
 	array<String ^> ^  markLines ={
 		COMMAND_MARK_HELP,
 		COMMAND_MARK_HELP_MULTIPLE,
@@ -862,7 +858,7 @@ Void ui_display::printMarMessage(){
 	};
 	this->messageBox->Lines = markLines;
 }
-Void ui_display::printSearchMessage(){
+Void UiDisplay::printSearchMessage(){
 	array<String ^> ^  searchLines ={
 		COMMAND_SEARCH_HELP_INSTRUCTIONS,
 		NEWLINE,
@@ -876,7 +872,7 @@ Void ui_display::printSearchMessage(){
 	};
 	this->messageBox->Lines = searchLines;
 }
-Void ui_display::printHelpMessage(){
+Void UiDisplay::printHelpMessage(){
 	array<String ^> ^  helpLines = {
 		MESSAGE_HELP_INSTRUCTIONS,
 		NEWLINE,

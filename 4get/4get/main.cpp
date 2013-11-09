@@ -15,6 +15,6 @@ int main() {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-	UIDisplay::ui_display form;
+	UIDisplay::UiDisplay form;
     Application::Run(%form);
 }
