@@ -28,9 +28,17 @@ public:
 	bool stringSysToStdConversion(System::String^ source, string& result);
 	string enumPriorityToStdString(Priority priority);
 	int stringSysToIntConversion(System::String^ source);
+	void intToSysString(System::String^ result, int source);
 	void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task*> *list, int taskIndex);
 
 private:
-	static const int ITEM_INDEX_SLOT = 0;
+	static const int ITEM_INDEX_SLOT;
+	static const int TIME_BUFFER_SIZE;
+	static const int INITIALISE_INT_ZERO;
+	static const string INITIALISE_EMPTY_STD_STRING;
+	static const string HIGH_PRIORITY_TEXT;
+	static const string NORMAL_PRIORITY_TEXT;
+	static const time_t EMPTY_TIME;
+
 };
 #endif
