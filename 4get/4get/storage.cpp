@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  storage.cpp
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #include "storage.h"
 
 const string Storage::FILENAME_TODO      = "todo.txt";

@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  storage.h
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #ifndef _STORAGE_H_
 #define _STORAGE_H_
 

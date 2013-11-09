@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_converter.cpp
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #include "logic_converter.h"
 
 const string Converter::REPEAT_DAILY = "daily";

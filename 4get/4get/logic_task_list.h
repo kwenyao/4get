@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_task_list.h
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #ifndef _LOGIC_TASK_LIST_H_
 #define _LOGIC_TASK_LIST_H_
 

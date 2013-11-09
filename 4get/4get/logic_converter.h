@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_converter.h
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #ifndef _LOGIC_CONVERTER_H_
 #define _LOGIC_CONVERTER_H_
 #include "logic_task.h"

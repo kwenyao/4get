@@ -1,3 +1,14 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  logic_task_list.cpp
+ *
+ *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+ *   Organization:  NUS, School of Computing
+ *
+ * =====================================================================================
+ */
+
 #include "logic_task_list.h"
 
 const int TaskList::INDEX_CORRECTION = -1;
@@ -260,7 +271,8 @@ void TaskList::turnOffFilter(){
 }
 
 void TaskList::refreshAll(time_t timeNow){
-	assert(!_toDoList.empty());
+	if(!_toDoList.empty())
+		return;
 	int listSize = _toDoList.size();
 	int marker = 0;
 	list<Task*>::iterator iterator = _toDoList.begin();
