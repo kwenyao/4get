@@ -1,5 +1,9 @@
 #include "logic_task_deadline.h"
 
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
+
 TaskDeadline::TaskDeadline(){
 	taskType = deadline;
 }
