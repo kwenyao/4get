@@ -1,5 +1,11 @@
 #include "logic_executor.h"
 
+const int Executor::ONE = 1;
+const int Executor::ID_MULTIPLIER = 1000;
+
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
 Executor::Executor(){}
 bool Executor::stringCollector(string task){
 	try{
@@ -75,7 +81,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		long long id;
 		string description; 
 		string location;
-		time_t reminderTime;
 		time_t startTime;
 		time_t endTime;
 		RepeatType repeat;
@@ -89,7 +94,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			repeat,
 			startTime,
 			endTime,
-			reminderTime,
 			taskTypeToCreate,
 			vectorOfInputs);
 
@@ -97,7 +101,6 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 			TaskFloating newTask(id,
 				description,
 				location,
-				reminderTime,
 				priority);
 
 			taskGlobal = new TaskFloating;
@@ -108,8 +111,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		else if(taskTypeToCreate == deadline){
 			TaskDeadline newTask(id,
 				description, 
-				location, 
-				reminderTime, 
+				location,  
 				priority,  
 				repeat, 
 				endTime); 
@@ -121,8 +123,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		else if(taskTypeToCreate == timed){
 			TaskTimed newTask(id, 
 				description, 
-				location, 
-				reminderTime, 
+				location,  
 				priority,  
 				repeat, 
 				startTime, 
@@ -148,7 +149,7 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 			deleteEndNumber,
 			deleteSize;
 		deleteStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
-		if (deleteStartNumber < 1){
+		if (deleteStartNumber < ONE){
 			throw string(MESSAGE_ERROR_COMMAND_DELETE);
 		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
@@ -189,7 +190,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		int	markSize;
 
 		markStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
-		if(markStartNumber < 1){
+		if(markStartNumber < ONE){
 			throw string(MESSAGE_ERROR_COMMAND_MARK);
 		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
@@ -232,19 +233,18 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		int modifyNumber;
 		string description, 
 			location;
-		time_t reminderTime, 
-			startTime, 
-			endTime;
+		time_t startTime, 
+			   endTime;
 		Priority priority;
 		RepeatType repeat;
-		TaskType /*typeOfTask,*/ typeOfOldTask;
+		TaskType typeOfOldTask;
 		bool flag = false;
 
 		modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
-		if(modifyNumber < 1){
+		if(modifyNumber < ONE){
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
-		for(int i = 2; i < SLOT_SIZE; i++){
+		for(int i = SLOT_DESCRIPTION; i < SLOT_SIZE; i++){
 			if(!vectorOfInputs[i].empty()){
 				flag = true;
 				break;
@@ -258,21 +258,11 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		storeIntoUndoTaskStack(*taskTemp);
 		description = vectorOfInputs[SLOT_DESCRIPTION];
 		location = vectorOfInputs[SLOT_LOCATION];
-		reminderTime = convert.convertStringToTime(vectorOfInputs[SLOT_REMIND_DATE], vectorOfInputs[SLOT_REMIND_TIME], false);
 		startTime = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME], true);
 		endTime = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME], false);
 		priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);
 		repeat = convert.convertStringToRepeatType(vectorOfInputs[SLOT_REPEAT]);
 
-		/*setParameters(description,
-			location,
-			priority,
-			repeat,
-			startTime,
-			endTime,
-			reminderTime,
-			typeOfTask,
-			vectorOfInputs);*/
 		bool isNoEndTime = (endTime == 0);
 		bool isNoStartTime = (startTime == 0);
 		if(typeOfOldTask == floating && isNoEndTime && !isNoStartTime){
@@ -284,11 +274,6 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		}
 		if(!location.empty()){
 			taskTemp->setTaskLocation(location);
-			taskList.saveToDoList();
-		}
-		if(!vectorOfInputs[SLOT_REMIND_TIME].empty())
-		{
-			taskTemp->setTaskReminder(reminderTime);
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
@@ -312,11 +297,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			string location = taskTemp->getTaskLocation();
 			Priority priority = taskTemp->getTaskPriority();
 			RepeatType repeat = taskTemp->getTaskRepeat();
-			time_t reminderTime = taskTemp->getTaskReminder();
 			taskNew = new TaskDeadline(id,
 				description, 
 				location, 
-				reminderTime, 
 				priority,
 				repeat, 
 				endTime);
@@ -332,11 +315,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			string location = taskTemp->getTaskLocation();
 			Priority priority = taskTemp->getTaskPriority();
 			RepeatType repeat = taskTemp->getTaskRepeat();
-			time_t reminderTime = taskTemp->getTaskReminder();
 			taskNew = new TaskTimed(id, 
 				description, 
 				location, 
-				reminderTime, 
 				priority,  
 				repeat, 
 				startTime, 
@@ -352,12 +333,10 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			string location = taskTemp->getTaskLocation();
 			Priority priority = taskTemp->getTaskPriority();
 			RepeatType repeat = taskTemp->getTaskRepeat();
-			time_t reminderTime = taskTemp->getTaskReminder();	
 			time_t endTime = taskTemp->getTaskEnd();
 			taskNew = new TaskTimed(id, 
 				description, 
 				location, 
-				reminderTime, 
 				priority,  
 				repeat, 
 				startTime, 
@@ -365,6 +344,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIDFromList(id, listType, true);
 			taskList.addToList(taskNew, listType);
 		}
+		//change deadline task to floating
+		//change timed to deadline 
+		//change timed to floating
 		return true;
 	}catch(string error){
 		throw;
@@ -631,7 +613,7 @@ bool Executor::isEqual(string str1, const string str2){
 	}
 }
 long long Executor::retrieveTaskID(){
-	time_t msec = time(NULL) * 1000;
+	time_t msec = time(NULL) * ID_MULTIPLIER;
 	long long ID;
 
 	return ID = time(&msec);
@@ -663,7 +645,6 @@ bool Executor::setParameters(string &description,
 							 RepeatType &repeat,
 							 time_t &startTime,
 							 time_t &endTime,
-							 time_t &reminderTime,
 							 TaskType &typeOfTask,
 							 vector<string> &vectorOfInputs){
 								 try{
@@ -674,9 +655,7 @@ bool Executor::setParameters(string &description,
 										 startDateSlot,
 										 startTimeSlot, 
 										 endDateSlot, 
-										 endTimeSlot, 
-										 reminderDateSlot, 
-										 reminderTimeSlot;
+										 endTimeSlot;
 
 									 descriptionSlot = vectorOfInputs[SLOT_DESCRIPTION];
 									 locationSlot = vectorOfInputs[SLOT_LOCATION];
@@ -686,15 +665,12 @@ bool Executor::setParameters(string &description,
 									 startTimeSlot = vectorOfInputs[SLOT_START_TIME];
 									 endDateSlot = vectorOfInputs[SLOT_END_DATE];
 									 endTimeSlot = vectorOfInputs[SLOT_END_TIME];
-									 reminderDateSlot = vectorOfInputs[SLOT_REMIND_DATE];
-									 reminderTimeSlot = vectorOfInputs[SLOT_REMIND_TIME];
 
 									 description = descriptionSlot;
 									 location = locationSlot;
 
 									 priority = convert.convertStringToPriority(prioritySlot);
 									 repeat = convert.convertStringToRepeatType(repeatSlot);
-									 reminderTime = convert.convertStringToTime(reminderDateSlot, reminderTimeSlot, false);
 									 typeOfTask = convert.convertStringToTime(startDateSlot, 
 										 startTimeSlot, 
 										 endDateSlot, 
@@ -717,7 +693,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 		string desc = taskToCreate.getTaskDescription();
 		string location = taskToCreate.getTaskLocation();
 		Priority priority = taskToCreate.getTaskPriority();
-		time_t reminderTime = taskToCreate.getTaskReminder();
 		//deadline variable
 		time_t endTime = taskToCreate.getTaskEnd();
 		RepeatType repeat = taskToCreate.getTaskRepeat();
@@ -730,7 +705,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 			taskPtr->setTaskDescription(desc);
 			taskPtr->setTaskLocation(location);
 			taskPtr->setTaskPriority(priority);
-			taskPtr->setTaskReminder(reminderTime);
 			return taskPtr;
 		}
 		else if(taskType == deadline){
@@ -738,7 +712,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 			taskPtr->setTaskDescription(desc);
 			taskPtr->setTaskLocation(location);
 			taskPtr->setTaskPriority(priority);
-			taskPtr->setTaskReminder(reminderTime);
 			taskPtr->setTaskEnd(endTime);
 			taskPtr->setTaskRepeat(repeat);
 			taskPtr->setTaskNextOccurance(nextOccurance);
@@ -749,7 +722,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 			taskPtr->setTaskDescription(desc);
 			taskPtr->setTaskLocation(location);
 			taskPtr->setTaskPriority(priority);
-			taskPtr->setTaskReminder(reminderTime);
 			taskPtr->setTaskEnd(endTime);
 			taskPtr->setTaskRepeat(repeat);
 			taskPtr->setTaskNextOccurance(nextOccurance);
@@ -798,9 +770,9 @@ int Executor::swapValueAndGetSizeFunction(int start, int end){
 	temp = end;
 	end = start;
 	start = temp;
-	return size = end - start + 1;
+	return size = end - start + ONE;
 }
 int Executor::getSizeFunction(int start, int end){
 	int size;
-	return size = end - start + 1;
+	return size = end - start + ONE;
 }
