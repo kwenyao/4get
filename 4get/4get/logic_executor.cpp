@@ -17,7 +17,7 @@ const string Executor::DOWNGRADE_INDICATOR = "*";
 const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call stringCollector";
 
 /*************************************
-PUBLIC FUNCTIONS                      
+          PUBLIC FUNCTIONS                      
 *************************************/
 
 Executor::Executor(){
