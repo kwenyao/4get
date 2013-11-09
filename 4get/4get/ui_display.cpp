@@ -50,6 +50,9 @@ void UiDisplay::InitializeComponent(void){
 	this->notifyIcon1 = (gcnew System::Windows::Forms::NotifyIcon(this->components));
 	this->timerRefresh = (gcnew System::Windows::Forms::Timer(this->components));
 	this->itemDisplayLabel = (gcnew System::Windows::Forms::Label());
+	this->tStartTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->cStartTime = (gcnew System::Windows::Forms::ColumnHeader());
+	this->oStartTime = (gcnew System::Windows::Forms::ColumnHeader());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -87,8 +90,8 @@ void UiDisplay::InitializeComponent(void){
 	this->todoListView->AutoArrange = false;
 	this->todoListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->todoListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->tIndex, this->tDescription, 
-		this->tDueDate});
+	this->todoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->tIndex, this->tDescription, 
+		this->tStartTime, this->tDueDate});
 	this->todoListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 		static_cast<System::Byte>(0)));
 	this->todoListView->FullRowSelect = true;
@@ -134,8 +137,8 @@ void UiDisplay::InitializeComponent(void){
 	this->completedListView->AutoArrange = false;
 	this->completedListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->completedListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->cIndex, this->cDescription, 
-		this->cDueDate});
+	this->completedListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->cIndex, this->cDescription, 
+		this->cStartTime, this->cDueDate});
 	this->completedListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->completedListView->FullRowSelect = true;
@@ -157,12 +160,12 @@ void UiDisplay::InitializeComponent(void){
 	// cDescription
 	// 
 	this->cDescription->Text = L"Description";
-	this->cDescription->Width = 160;
+	this->cDescription->Width = 25;
 	// 
 	// cDueDate
 	// 
 	this->cDueDate->Text = L"Due Date";
-	this->cDueDate->Width = 171;
+	this->cDueDate->Width = 25;
 	// 
 	// tabOverdue
 	// 
@@ -180,8 +183,8 @@ void UiDisplay::InitializeComponent(void){
 	this->overdueListView->AutoArrange = false;
 	this->overdueListView->BackColor = System::Drawing::Color::SandyBrown;
 	this->overdueListView->BorderStyle = System::Windows::Forms::BorderStyle::None;
-	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->oIndex, this->oDescription, 
-		this->oDueDate});
+	this->overdueListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {this->oIndex, this->oDescription, 
+		this->oStartTime, this->oDueDate});
 	this->overdueListView->Font = (gcnew System::Drawing::Font(L"MS Reference Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, 
 		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 	this->overdueListView->FullRowSelect = true;
@@ -198,17 +201,17 @@ void UiDisplay::InitializeComponent(void){
 	// oIndex
 	// 
 	this->oIndex->Text = L"#";
-	this->oIndex->Width = 29;
+	this->oIndex->Width = 25;
 	// 
 	// oDescription
 	// 
 	this->oDescription->Text = L"Description";
-	this->oDescription->Width = 160;
+	this->oDescription->Width = 25;
 	// 
 	// oDueDate
 	// 
 	this->oDueDate->Text = L"Due Date";
-	this->oDueDate->Width = 171;
+	this->oDueDate->Width = 25;
 	// 
 	// inputContainer
 	// 
@@ -278,6 +281,21 @@ void UiDisplay::InitializeComponent(void){
 	this->itemDisplayLabel->Name = L"itemDisplayLabel";
 	this->itemDisplayLabel->Size = System::Drawing::Size(0, 24);
 	this->itemDisplayLabel->TabIndex = 4;
+	// 
+	// tStartTime
+	// 
+	this->tStartTime->Text = L"Start Time";
+	this->tStartTime->Width = 25;
+	// 
+	// cStartTime
+	// 
+	this->cStartTime->Text = L"Start Time";
+	this->cStartTime->Width = 25;
+	// 
+	// oStartTime
+	// 
+	this->oStartTime->Text = L"Start Time";
+	this->oStartTime->Width = 25;
 	// 
 	// UiDisplay
 	// 
@@ -359,7 +377,9 @@ void UiDisplay::passUserInput(){
 
 void UiDisplay::printList(){
 	try{
-		*listOfTasks = execute->getUpdatedList(activeListType);
+		list<Task*> taskList; 
+		taskList = execute->getUpdatedList(activeListType);
+		*listOfTasks = taskList;
 		switch(activeListType){
 		case listCompleted:
 			printCompletedList();
@@ -753,22 +773,34 @@ Void UiDisplay::textboxInput_KeyDown(System::Object^  sender, System::Windows::F
 	}
 }
 Void UiDisplay::todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
-	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[ITEM_INDEX_SLOT]->Text) - 1;
-	this->printLabel(item);
+	if(todoListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->todoListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[ITEM_INDEX_SLOT]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 Void UiDisplay::completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
-	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
-	this->printLabel(item);
+	if(completedListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->completedListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 Void UiDisplay::overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e){
-	ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
-	ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
-	selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
-	this->printLabel(item);
+	if(overdueListView->Items->Count != 0){
+		ListView::SelectedListViewItemCollection^ tasks = this->overdueListView->SelectedItems;
+		ListViewItem^ item = tasks[MOST_RECENT_SELECTED_ITEM];
+		selectedItem = converter->stringSysToIntConversion(item->SubItems[0]->Text) - 1;
+		this->printLabel(item);
+	}
+	else
+		return;
 }
 
 Void UiDisplay::checkInput(){

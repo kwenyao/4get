@@ -26,12 +26,12 @@ namespace UIConvert {
 		static const bool isPrintSystemMessage = false;
 
 	public:
-		void stringStdToSysConversion(System::String^ result, string& source);
+		void stringStdToSysConversion(System::String^& result, string& source);
 		string timetToStdString(time_t time);
 		bool stringSysToStdConversion(System::String^ source, string& result);
 		string enumPriorityToStdString(Priority priority);
 		int stringSysToIntConversion(System::String^ source);
-		void intToSysString(System::String^ result, int source);
+		void intToSysString(System::String^& result, int source);
 		void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task*> *list, int taskIndex);
 
 	private:
