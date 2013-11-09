@@ -304,9 +304,8 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTaskPriority->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->labelTaskPriority->Location = System::Drawing::Point(141, 156);
 	this->labelTaskPriority->Name = L"labelTaskPriority";
-	this->labelTaskPriority->Size = System::Drawing::Size(46, 18);
+	this->labelTaskPriority->Size = System::Drawing::Size(0, 18);
 	this->labelTaskPriority->TabIndex = 9;
-	this->labelTaskPriority->Text = L"label5";
 	// 
 	// labelTaskEndTime
 	// 
@@ -316,9 +315,8 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTaskEndTime->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->labelTaskEndTime->Location = System::Drawing::Point(141, 122);
 	this->labelTaskEndTime->Name = L"labelTaskEndTime";
-	this->labelTaskEndTime->Size = System::Drawing::Size(46, 18);
+	this->labelTaskEndTime->Size = System::Drawing::Size(0, 18);
 	this->labelTaskEndTime->TabIndex = 8;
-	this->labelTaskEndTime->Text = L"label4";
 	// 
 	// labelTaskStartTime
 	// 
@@ -328,9 +326,8 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTaskStartTime->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->labelTaskStartTime->Location = System::Drawing::Point(141, 86);
 	this->labelTaskStartTime->Name = L"labelTaskStartTime";
-	this->labelTaskStartTime->Size = System::Drawing::Size(46, 18);
+	this->labelTaskStartTime->Size = System::Drawing::Size(0, 18);
 	this->labelTaskStartTime->TabIndex = 7;
-	this->labelTaskStartTime->Text = L"label3";
 	// 
 	// labelTaskVenue
 	// 
@@ -340,9 +337,8 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTaskVenue->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->labelTaskVenue->Location = System::Drawing::Point(141, 52);
 	this->labelTaskVenue->Name = L"labelTaskVenue";
-	this->labelTaskVenue->Size = System::Drawing::Size(46, 18);
+	this->labelTaskVenue->Size = System::Drawing::Size(0, 18);
 	this->labelTaskVenue->TabIndex = 6;
-	this->labelTaskVenue->Text = L"label2";
 	// 
 	// labelTaskDesc
 	// 
@@ -352,9 +348,8 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTaskDesc->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 	this->labelTaskDesc->Location = System::Drawing::Point(141, 20);
 	this->labelTaskDesc->Name = L"labelTaskDesc";
-	this->labelTaskDesc->Size = System::Drawing::Size(46, 18);
+	this->labelTaskDesc->Size = System::Drawing::Size(0, 18);
 	this->labelTaskDesc->TabIndex = 5;
-	this->labelTaskDesc->Text = L"label1";
 	// 
 	// labelTagPriority
 	// 
