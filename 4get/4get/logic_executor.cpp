@@ -250,7 +250,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		int	markEndNumber;
 		int	markSize;
 		int listSize;
-		if(listType != listToDo){
+		if(listType == listCompleted){
 			throw string(MESSAGE_ERROR_COMMAND_MARK);
 		}
 		listSize = taskList.getCurrentListSize();
@@ -315,7 +315,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		bool downgradeEndTime = false;
 		bool downgradeStartTime = false;
 		bool flagModify = false;
-		if(listType != listToDo)
+		if(listType == listCompleted)
 		{
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
