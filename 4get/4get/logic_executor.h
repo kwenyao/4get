@@ -54,6 +54,7 @@ private:
 	static const int LEAST_INDEX;
 	static const int SIZE_CORRECTION;
 	static const int ID_MULTIPLIER;
+	static const int SINGLE_OPERATION;
 	static const string DOWNGRADE_INDICATOR;
 	static const string LOGGING_MESSAGE_STRINGCOLLECTOR;
 

@@ -12,6 +12,7 @@
 
 const int Executor::LEAST_INDEX = 1;
 const int Executor::SIZE_CORRECTION = 1;
+const int Executor::SINGLE_OPERATION = 1;
 const int Executor::ID_MULTIPLIER = 1000;
 const string Executor::DOWNGRADE_INDICATOR = "*";
 const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call stringCollector";
@@ -234,6 +235,7 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 		}
 		else{
 			helperDeleteFunction(deleteStartNumber);
+			undoDeleteNumberStack.push(SINGLE_OPERATION);
 		}
 		return true;
 	}catch(string error){
@@ -296,6 +298,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		}
 		else{
 			helperMarkFunction(markStartNumber);
+			undoMarkNumberStack.push(SINGLE_OPERATION);
 		}
 		return true;
 	}catch (string errorStr){
