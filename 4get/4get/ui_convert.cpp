@@ -7,6 +7,9 @@ using namespace msclr::interop;
 
 UiConvert::UiConvert(){};
 
+void UiConvert::stringStdToSysConversion(String^ result, string& source){
+	result = gcnew String(source.c_str());
+}
 string UiConvert::timetToStdString(time_t time){
 	stringstream timeStream;
 	timeStream << time;
@@ -31,7 +34,7 @@ string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	return result;
 }
 
-int stringSysToIntConversion(System::String^ source){
+int UiConvert::stringSysToIntConversion(System::String^ source){
 	int result = 0;
 	result = int::Parse(source);
 	return result;
@@ -41,10 +44,13 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 {
 	Task* t1 = list->front();
 	char timeBuffer[32] = "";
+	string timeString = "";
 
 	System::String^ sys_index = System::Convert::ToString(taskIndex); //index
-	System::String^ sys_desc = gcnew System::String(t1->getTaskDescription().c_str()); //description
-	System::String^ sys_venue = gcnew System::String(t1->getTaskLocation().c_str()); //venue
+	System::String^ sys_desc;
+	this->stringStdToSysConversion(sys_desc, t1->getTaskDescription()); //description
+	System::String^ sys_venue;
+	this->stringStdToSysConversion(sys_venue, t1->getTaskLocation()); //venue
 
 	time_t timeAsTimeT;
 	tm*  timeAsTm=NULL;
@@ -54,7 +60,8 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	if(timeAsTimeT != 0){
 		timeAsTm = localtime(&timeAsTimeT);
 		asctime_s(timeBuffer, 32, timeAsTm);
-		sys_time = gcnew System::String(timeBuffer);
+		timeString = timeBuffer;
+		this->stringStdToSysConversion(sys_time, timeString);
 	}
 
 	timeAsTm = NULL;
@@ -62,18 +69,20 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	if(timeAsTimeT != 0){
 		timeAsTm = localtime(&timeAsTimeT);
 		asctime_s(timeBuffer, 32, timeAsTm);
-		sys_due = gcnew System::String(timeBuffer);
+		timeString = timeBuffer;
+		this->stringStdToSysConversion(sys_time, timeString);
 	}
 
-	System::String^ sys_priority = gcnew System::String(enumPriorityToStdString(t1->getTaskPriority()).c_str()); //priority
+	System::String^ sys_priority;
+	this->stringStdToSysConversion(sys_priority, enumPriorityToStdString(t1->getTaskPriority())); //priority
 
 	list->pop_front();
 
 	item->BeginEdit();
-	item->SubItems[0]->Text = sys_index;
+	item->SubItems[ITEM_INDEX_SLOT]->Text = sys_index;
 	item->SubItems->Add(sys_desc); //add description
+	item->SubItems->Add(sys_time); //add time
 	item->SubItems->Add(sys_due); //add due
 	item->SubItems->Add(sys_venue); //add venue	 
-	item->SubItems->Add(sys_time); //add time
 	item->SubItems->Add(sys_priority); //add priority
 }
