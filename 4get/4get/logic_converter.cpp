@@ -645,6 +645,7 @@ bool Converter::checkWord(vector<vector<string>> dictionary, string compareStr){
 
 bool Converter::isKeyWord(vector<string> keyWordVector, string compareStr){
 	int vectorSize = keyWordVector.size();
+	toLowerCase(compareStr);
 	for(int i=0; i<vectorSize; i++){
 		if(compareStr == keyWordVector[i])
 			return true;
