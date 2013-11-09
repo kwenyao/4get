@@ -4,13 +4,17 @@
 
 // handled by John Kuan (A0097592M)
 
-class TaskTimed : public TaskDeadline
-{
+class TaskTimed : public TaskDeadline {
 public:
 	TaskTimed();
 	TaskTimed(long long id);
-	TaskTimed(long long id, string description, string location, Priority priority, RepeatType repeat, time_t startTime, time_t endTime);
-	void setupTask(long long id, TaskType type, string description, string location, Priority priority, RepeatType repeat, time_t startTime, time_t endTime);
+	TaskTimed(long long id, 
+			  string description, 
+			  string location, 
+			  Priority priority, 
+			  RepeatType repeat, 
+			  time_t startTime, 
+			  time_t endTime);
 
 	void setTaskStart(time_t startTask);
 	void setNextOccurance();

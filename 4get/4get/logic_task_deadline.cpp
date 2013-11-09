@@ -10,15 +10,14 @@ TaskDeadline::TaskDeadline(long long id)
 	taskId = id;
 }
 
-TaskDeadline::TaskDeadline(long long id, string description, string location, Priority priority, RepeatType repeat, time_t endTime) : Task()
+TaskDeadline::TaskDeadline(long long id, 
+						   string description, 
+						   string location, 
+						   Priority priority, 
+						   RepeatType repeat, 
+						   time_t endTime) : Task()
 {
 	TaskType type = deadline;
-	setupTask(id, type, description, location, priority, repeat, endTime);
-}
-
-
-void TaskDeadline::setupTask(long long id, TaskType type, string description, string location, Priority priority, RepeatType repeat, time_t endTime)
-{
 	taskId = id;
 	taskType = type;
 	taskDescription = description;
@@ -27,6 +26,7 @@ void TaskDeadline::setupTask(long long id, TaskType type, string description, st
 	taskRepeat = repeat;
 	taskEnd = endTime;
 }
+
 void TaskDeadline::setTaskEnd(time_t endTime) {	taskEnd = endTime; }
 
 void TaskDeadline::setNextOccurance(){
@@ -61,9 +61,6 @@ long long TaskDeadline::getTimeLong(TimeType type){
 	case Enum::timeEnd:
 		temp = taskEnd;
 		break;
-	case Enum::timeNext:
-		temp = taskNextOccurance;
-		break;
 	default:
 		return 0;
 	}
@@ -73,7 +70,7 @@ long long TaskDeadline::getTimeLong(TimeType type){
 long long TaskDeadline::convertToLong(time_t rawTime){
 	long long yearMonthDayHourMin;
 	tm* time = {0};
-	time = localtime(&rawTime);
+	localtime_s(time, &rawTime);
 	long long min = time->tm_min;
 	long long hour = time->tm_hour;
 	long long day = time->tm_mday;

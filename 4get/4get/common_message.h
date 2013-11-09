@@ -77,6 +77,7 @@ namespace Message{
 	const string MESSAGE_ERROR_START_AFTER_END = "Error: Start time is before end time.";
 	const string MESSAGE_ERROR_NO_END_TIME = "Error: Please enter end time for task.";
 	const string MESSAGE_ERROR_INVALID_INDEX = "Error: Please enter a valid task index.";
+	const string MESSAGE_ERROR_INVALID_LIST_TYPE = "Error: Invalid list type.";
 	const string MESSAGE_ERROR_NO_DOUBLE_REPEATS = "Error: Unable to set 2 repeats in one input.";
 
 	const string MESSAGE_NO_SEARCH_RESULT = "Search yielded no results. Please try other keywords.";

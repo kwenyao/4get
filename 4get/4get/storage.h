@@ -33,35 +33,33 @@ private:
 	static const string MARKER_START_TIME;
 	static const string MARKER_END_TIME;
 	static const string MARKER_REPEAT;
-	static const string MARKER_NEXT_OCCURANCE;
 	static const string MARKER_PRIORITY;
-	static const string MARKER_REMINDER_TIME;
 	static const string MARKER_TASK_END;
 	static const string EMPTY_LINE;
 
 	static const string TASK_TYPE_FLOATING;
 	static const string TASK_TYPE_DEADLINE;
 	static const string TASK_TYPE_TIMED;
-
 	static const string REPEAT_TYPE_DAILY;
 	static const string REPEAT_TYPE_WEEKLY;
 	static const string REPEAT_TYPE_FORTNIGHTLY;
 	static const string REPEAT_TYPE_MONTHLY;
 	static const string REPEAT_TYPE_ANNUALLY;
 	static const string REPEAT_TYPE_NONE;
-
 	static const string PRIORITY_HIGH;
 	static const string PRIORITY_NORMAL;
 
-	void writeFileSetup(string fileName, ios_base::openmode mode);
 	string determineFile(ListType listType);
 
-	bool saveList(const list<Task*>& listToSave);
-	void saveTaskToFile(const Task& taskToSave);
+	//save functions
+	void writeFileSetup(string fileName, ios_base::openmode mode);
 	void closeFileWrite();
+	void saveList(const list<Task*>& listToSave);
+	void saveTaskToFile(const Task& taskToSave);
+	
+	//functions to write task attributes
 	void writeTaskAttributes(const Task& task);
 	void writeLine(string line);
-
 	void writeTaskType(const Task& task);
 	void writeID(const Task& task);
 	void writeDescription(const Task& task);
@@ -69,42 +67,39 @@ private:
 	void writeStartTime(const Task& task);
 	void writeEndTime(const Task& task);
 	void writeRepeat(const Task& task);
-	void writeNextOccurance(const Task& task);
 	void writePriority(const Task& task);
-	void writeReminderTime(const Task& task);
+
+	//load functions
+	void   readFileSetup(string fileName);
+	void   closeFileRead();
+	void   loadIntoList(list<Task*>& listToLoad);
+	void   insertTaskIntoList (list<Task*>& listToInsert, Task* task);
+	bool   isLoadIncomplete();
+	bool   foundNextTask();
+	string getNextLine();
+	Task*  getNewTask();
+	Task*  constructTask(TaskType taskType, string IDString);
+
 
 	//Functions to convert to string
-	//string convertToStr(long long number);
 	string convertToStr(tm* time);
 	string convertToStr(time_t time);
 	string convertToStr(TaskType taskType);
 	string convertToStr(RepeatType repeatType);
 	string convertToStr(Priority priority);
-	
 
-	//load functions
-	void readFileSetup(string fileName);
-	void closeFileRead();
-	void loadIntoList(list<Task*>& listToLoad);
-	bool isLoadIncomplete();
-	bool foundNextTask();
-	string getNextLine();
-	Task* getNewTask();
-	Task* constructTask(TaskType taskType, string IDString);
-	void insertTaskIntoList (list<Task*>& listToInsert, Task* task);
-	list<Task*>::iterator getIterator(list<Task*>& insertionList, Task* task);
-
-	TaskType convertToTaskType(string str);
-	int convertToInt(string str);
-	time_t convertToTime(string str);
+	//functions to convert from string
+	TaskType   convertToTaskType(string str);
+	int        convertToInt(string str);
+	time_t     convertToTime(string str);
 	RepeatType convertToRepeatType(string str);
-	Priority convertToPriority(string str);
+	Priority   convertToPriority(string str);
 
 public:
 	//constructor
 	Storage();
 	void clearFile(ListType);
-	bool save(const list<Task*>& list,ListType listType);
-	bool load(list<Task*>& listToLoadTo, ListType listType);
+	void save(const list<Task*>& list,ListType listType);
+	void load(list<Task*>& listToLoadTo, ListType listType);
 };
 #endif

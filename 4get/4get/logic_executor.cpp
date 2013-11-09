@@ -696,7 +696,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 		//deadline variable
 		time_t endTime = taskToCreate.getTaskEnd();
 		RepeatType repeat = taskToCreate.getTaskRepeat();
-		time_t nextOccurance = taskToCreate.getTaskNextOccurance();
 		//timed variable
 		time_t startTime = taskToCreate.getTaskStart();
 
@@ -714,7 +713,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 			taskPtr->setTaskPriority(priority);
 			taskPtr->setTaskEnd(endTime);
 			taskPtr->setTaskRepeat(repeat);
-			taskPtr->setTaskNextOccurance(nextOccurance);
 			return taskPtr;
 		}
 		else if(taskType == timed){
@@ -724,7 +722,6 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 			taskPtr->setTaskPriority(priority);
 			taskPtr->setTaskEnd(endTime);
 			taskPtr->setTaskRepeat(repeat);
-			taskPtr->setTaskNextOccurance(nextOccurance);
 			taskPtr->setTaskStart(startTime);
 			return taskPtr;
 		}

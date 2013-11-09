@@ -78,6 +78,7 @@ private:
 
 public:
 	TaskList(); //constructor
+	TaskList(time_t timeNow);
 	~TaskList(); //destructor
 
 	//storage functions

@@ -17,6 +17,12 @@ TaskList::TaskList(){
 	_isFiltered = false;
 }
 
+TaskList::TaskList(time_t timeNow){
+	loadFromFile();
+	refreshAll(timeNow);
+	_isFiltered = false;
+}
+
 TaskList::~TaskList(){
 	clearList(listToDo);
 	clearList(listCompleted);
@@ -54,9 +60,6 @@ bool TaskList::addToList(Task* task, ListType listType){
 	listToAdd = determineList(listType);
 	listToAdd->push_back(task);
 	listToAdd->sort(&TaskList::compareEndThenPriority);
-
-	/*iterator = getIterator(*listToAdd, task);
-	listToAdd->insert(iterator,task);*/
 	logging(LOG_TASK_ADDED, Info, Pass);
 	_storage.save(*listToAdd, listType);
 	return true;
