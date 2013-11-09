@@ -18,7 +18,7 @@ const string Executor::DOWNGRADE_INDICATOR = "*";
 const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call stringCollector";
 
 /*************************************
-          PUBLIC FUNCTIONS                      
+PUBLIC FUNCTIONS                      
 *************************************/
 Executor::Executor(){
 	refreshAll();
@@ -54,7 +54,7 @@ bool Executor::setListType(ListType uiListType)
 	return true;
 }
 /*************************************
-           PRIVATE FUNCTIONS            
+PRIVATE FUNCTIONS            
 *************************************/
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	try{
@@ -187,6 +187,8 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		taskList.addToList(taskGlobal, listToDo);
 		return true;
 	}catch(string error){
+		undoCommandStack.pop();
+		undoListTypeStack.pop();
 		throw;
 	}
 }
@@ -200,8 +202,6 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 		listSize = taskList.getCurrentListSize();
 		deleteStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if (deleteStartNumber < LEAST_INDEX){
-			undoCommandStack.pop();
-			undoListTypeStack.pop();
 			throw string(MESSAGE_ERROR_COMMAND_DELETE);
 		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
@@ -211,8 +211,6 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 			if(deleteEndNumber > deleteStartNumber){
 				deleteSize = getSizeFunction(deleteStartNumber, deleteEndNumber);
 				if(deleteSize > listSize){
-					undoCommandStack.pop();
-					undoListTypeStack.pop();
 					throw string(MESSAGE_ERROR_INVALID_SIZE);
 				}
 				undoDeleteNumberStack.push(deleteSize);
@@ -220,8 +218,6 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 			else if(deleteEndNumber < deleteStartNumber){
 				deleteSize = swapValueAndGetSizeFunction(deleteStartNumber, deleteEndNumber);
 				if(deleteSize > listSize){
-					undoCommandStack.pop();
-					undoListTypeStack.pop();
 					throw string(MESSAGE_ERROR_INVALID_SIZE);
 				}
 				undoDeleteNumberStack.push(deleteSize);
@@ -243,14 +239,8 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 		}
 		return true;
 	}catch(string error){
-		if(error == MESSAGE_ERROR_INVALID_INDEX){
 			undoCommandStack.pop();
 			undoListTypeStack.pop();
-		}
-		if(error == MESSAGE_ERROR_INVALID_ID){
-			undoCommandStack.pop();
-			undoListTypeStack.pop();
-		}
 		throw;
 	}
 }
@@ -260,11 +250,12 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		int	markEndNumber;
 		int	markSize;
 		int listSize;
-		
+		if(listType != listToDo){
+			throw string(MESSAGE_ERROR_COMMAND_MARK);
+		}
 		listSize = taskList.getCurrentListSize();
 		markStartNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if(markStartNumber < LEAST_INDEX){
-			undoCommandStack.pop();
 			throw string(MESSAGE_ERROR_COMMAND_MARK);
 		}
 		if(!vectorOfInputs[SLOT_SLOT_END_NUMBER].empty()){
@@ -274,8 +265,6 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 			if(markEndNumber > markStartNumber){
 				markSize = getSizeFunction(markStartNumber, markEndNumber);
 				if(markSize > listSize){
-					undoCommandStack.pop();
-					undoListTypeStack.pop();
 					throw string(MESSAGE_ERROR_INVALID_SIZE);
 				}
 				undoMarkNumberStack.push(markSize);
@@ -283,8 +272,6 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 			else if(markEndNumber < markStartNumber){
 				markSize = swapValueAndGetSizeFunction(markStartNumber, markEndNumber);
 				if(markSize > listSize){
-					undoCommandStack.pop();
-					undoListTypeStack.pop();
 					throw string(MESSAGE_ERROR_INVALID_SIZE);
 				}
 				undoMarkNumberStack.push(markSize);
@@ -306,10 +293,8 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		}
 		return true;
 	}catch (string errorStr){
-		if(errorStr == MESSAGE_ERROR_INVALID_INDEX){
 			undoCommandStack.pop();
 			undoListTypeStack.pop();
-		}
 		throw;
 	}
 }
@@ -330,10 +315,12 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		bool downgradeEndTime = false;
 		bool downgradeStartTime = false;
 		bool flagModify = false;
-
+		if(listType != listToDo)
+		{
+			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
+		}
 		modifyNumber = convert.convertStringToInt(vectorOfInputs[SLOT_SLOT_START_NUMBER]);
 		if(modifyNumber < LEAST_INDEX){
-			undoCommandStack.pop();
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
 		for(int i = SLOT_DESCRIPTION; i < SLOT_SIZE; i++){
@@ -504,10 +491,8 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		}
 		return true;
 	}catch(string error){
-		if(error == MESSAGE_ERROR_INVALID_INDEX){
-			undoCommandStack.pop();
-			undoListTypeStack.pop();
-		}
+		undoCommandStack.pop();
+		undoListTypeStack.pop();
 		throw;
 	}
 }
