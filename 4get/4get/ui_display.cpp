@@ -64,7 +64,7 @@ void ui_display::InitializeComponent(void){
 	this->tabContainer->Controls->Add(this->tabTodo);
 	this->tabContainer->Controls->Add(this->tabCompleted);
 	this->tabContainer->Controls->Add(this->tabOverdue);
-	this->tabContainer->Location = System::Drawing::Point(386, 42);
+	this->tabContainer->Location = System::Drawing::Point(382, 45);
 	this->tabContainer->Name = L"tabContainer";
 	this->tabContainer->SelectedIndex = 0;
 	this->tabContainer->Size = System::Drawing::Size(677, 330);
