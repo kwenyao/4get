@@ -54,7 +54,7 @@ namespace UIDisplay {
 			 static const bool INITIALISE_BOOLEAN = false;
 			 static const ListType INITIALISE_LIST_TYPE = listToDo;
 
-			 static String^ HIGH_PRIORITY_NAME = "high";
+			 static String^ HIGH_PRIORITY_NAME = "High";
 
 			/* static String^ TAG_NAME = "Name: ";
 			 static String^ TAG_LOCATION = "Location: ";
