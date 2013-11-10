@@ -40,7 +40,9 @@ namespace UIDisplay {
 			 static const int ITEM_STARTTIME_SLOT = 2;
 			 static const int ITEM_ENDTIME_SLOT = 3;
 			 static const int ITEM_LOCATION_SLOT = 4;
-			 static const int ITEM_PRIORITY_SLOT = 5;
+			 static const int ITEM_REPEAT_SLOT = 5;
+			 static const int ITEM_PRIORITY_SLOT = 6;
+			 static const int ITEM_TASKTYPE_SLOT = 7;
 			 static const int TAB_INDEX_TODO = 0;
 			 static const int TAB_INDEX_COMPLETED = 1;
 			 static const int TAB_INDEX_OVERDUE = 2;
@@ -177,6 +179,12 @@ private: System::Windows::Forms::Label^  labelTaskStartTime;
 private: System::Windows::Forms::Label^  labelTaskVenue;
 
 private: System::Windows::Forms::Label^  labelTaskDesc;
+private: System::Windows::Forms::Label^  labelTaskType;
+
+private: System::Windows::Forms::Label^  labelTaskRepeat;
+
+private: System::Windows::Forms::Label^  labelTagTaskType;
+private: System::Windows::Forms::Label^  labelTagRepeat;
 
 
 	private: System::ComponentModel::IContainer^  components;
