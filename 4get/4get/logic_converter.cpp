@@ -416,7 +416,7 @@ bool Converter::verifyDate(int year, int month, int day){
 	int todayDay = getToday(monthDayEnum);
 	bool isYearEqual = todayYear == year;
 	bool isMonthEqual = todayMonth == month;
-	bool isPassed;
+	bool isPassed = false;
 	if(year < todayYear)
 		isPassed = true;
 	else if(isYearEqual && month<todayMonth)
@@ -474,8 +474,6 @@ void Converter::monthCorrection(int& year, int& month, int& day){
 		throw string(Message::MESSAGE_ERROR_MISSING_DAY);
 	else
 		day = _dayDigit;
-	if(month < getToday(monthEnum))
-
 	if(_yearDigit == 0 && month < currentMonth)
 		year = getToday(yearEnum) + 1;
 	else if(_yearDigit == 0)
