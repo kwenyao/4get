@@ -61,6 +61,10 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTagStartTime = (gcnew System::Windows::Forms::Label());
 	this->labelTagVenue = (gcnew System::Windows::Forms::Label());
 	this->labelTagDesc = (gcnew System::Windows::Forms::Label());
+	this->labelTaskType = (gcnew System::Windows::Forms::Label());
+	this->labelTaskRepeat = (gcnew System::Windows::Forms::Label());
+	this->labelTagTaskType = (gcnew System::Windows::Forms::Label());
+	this->labelTagRepeat = (gcnew System::Windows::Forms::Label());
 	this->tabContainer->SuspendLayout();
 	this->tabTodo->SuspendLayout();
 	this->tabCompleted->SuspendLayout();
@@ -278,6 +282,10 @@ void UiDisplay::InitializeComponent(void){
 	// 
 	// labelContainer
 	// 
+	this->labelContainer->Controls->Add(this->labelTaskType);
+	this->labelContainer->Controls->Add(this->labelTaskRepeat);
+	this->labelContainer->Controls->Add(this->labelTagTaskType);
+	this->labelContainer->Controls->Add(this->labelTagRepeat);
 	this->labelContainer->Controls->Add(this->labelTaskPriority);
 	this->labelContainer->Controls->Add(this->labelTaskEndTime);
 	this->labelContainer->Controls->Add(this->labelTaskStartTime);
@@ -410,6 +418,52 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTagDesc->Size = System::Drawing::Size(99, 18);
 	this->labelTagDesc->TabIndex = 0;
 	this->labelTagDesc->Text = L"Description:";
+	// 
+	// labelTaskType
+	// 
+	this->labelTaskType->AutoSize = true;
+	this->labelTaskType->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTaskType->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskType->Location = System::Drawing::Point(434, 122);
+	this->labelTaskType->Name = L"labelTaskType";
+	this->labelTaskType->Size = System::Drawing::Size(0, 18);
+	this->labelTaskType->TabIndex = 13;
+	// 
+	// labelTaskRepeat
+	// 
+	this->labelTaskRepeat->AutoSize = true;
+	this->labelTaskRepeat->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, 
+		System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->labelTaskRepeat->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+	this->labelTaskRepeat->Location = System::Drawing::Point(434, 86);
+	this->labelTaskRepeat->Name = L"labelTaskRepeat";
+	this->labelTaskRepeat->Size = System::Drawing::Size(0, 18);
+	this->labelTaskRepeat->TabIndex = 12;
+	// 
+	// labelTagTaskType
+	// 
+	this->labelTagTaskType->AutoSize = true;
+	this->labelTagTaskType->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagTaskType->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagTaskType->Location = System::Drawing::Point(325, 122);
+	this->labelTagTaskType->Name = L"labelTagTaskType";
+	this->labelTagTaskType->Size = System::Drawing::Size(91, 18);
+	this->labelTagTaskType->TabIndex = 11;
+	this->labelTagTaskType->Text = L"Task Type:";
+	// 
+	// labelTagRepeat
+	// 
+	this->labelTagRepeat->AutoSize = true;
+	this->labelTagRepeat->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+		static_cast<System::Byte>(0)));
+	this->labelTagRepeat->ForeColor = System::Drawing::SystemColors::Control;
+	this->labelTagRepeat->Location = System::Drawing::Point(350, 86);
+	this->labelTagRepeat->Name = L"labelTagRepeat";
+	this->labelTagRepeat->Size = System::Drawing::Size(66, 18);
+	this->labelTagRepeat->TabIndex = 10;
+	this->labelTagRepeat->Text = L"Repeat:";
 	// 
 	// UiDisplay
 	// 
@@ -747,6 +801,8 @@ void UiDisplay::changeLabelColour(String^ priority){
 		this->labelTaskStartTime->ForeColor = Color::OrangeRed;
 		this->labelTaskEndTime->ForeColor = Color::OrangeRed;
 		this->labelTaskPriority->ForeColor = Color::OrangeRed;
+		this->labelTaskRepeat->ForeColor = Color::OrangeRed;
+		this->labelTaskType->ForeColor = Color::OrangeRed;
 	}
 	else{
 		this->labelTaskDesc->ForeColor = Color::White;
@@ -754,6 +810,8 @@ void UiDisplay::changeLabelColour(String^ priority){
 		this->labelTaskStartTime->ForeColor = Color::White;
 		this->labelTaskEndTime->ForeColor = Color::White;
 		this->labelTaskPriority->ForeColor = Color::White;
+		this->labelTaskRepeat->ForeColor = Color::White;
+		this->labelTaskType->ForeColor = Color::White;
 	}
 }
 
@@ -769,6 +827,10 @@ void UiDisplay::printLabel(ListViewItem^ item){
 	this->labelTaskEndTime->Text = item->SubItems[ITEM_ENDTIME_SLOT]->Text;
 	
 	this->labelTaskPriority->Text = item->SubItems[ITEM_PRIORITY_SLOT]->Text;
+
+	this->labelTaskRepeat->Text = item->SubItems[ITEM_REPEAT_SLOT]->Text;
+
+	this->labelTaskType->Text = item->SubItems[ITEM_TASKTYPE_SLOT]->Text;
 }
 
 //Void ui_display::todoListView_ItemActivate(System::Object^  sender, System::EventArgs^  e){
