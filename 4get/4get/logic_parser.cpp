@@ -477,7 +477,7 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		
+
 		else if(textInput.find(MARKER_DUE)!=string::npos){
 			found = textInput.find(MARKER_DUE);
 			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=string::npos ){			//try find comma
@@ -1197,7 +1197,6 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 				continue;
 			}
 		}
-
 		if(!dateDetermined){
 			if(stringLength > LENGTH_0 && stringLength < LENGTH_3 && !dateDayDetermine){					// Date Format: 7 or 07  => Date day fragment, expect Date month fragment 
 				int i = INITIALIZE_INT;
@@ -1322,7 +1321,6 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					else{
 						logging(MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH,Error,None);
 						throw MESSAGE_ERROR_WRONG_DATE_FORMAT_NOT_2_SLASH;
-
 					}
 				}
 				else if(stringCheck.find(TIMER_DASH)!=string::npos){
@@ -1376,13 +1374,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					continue;
 				}
 			}
-			//else{
-			//	logging(MESSAGE_ERROR_WRONG_DATE_FORMAT,Error,None);
-			//throw MESSAGE_ERROR_WRONG_DATE_FORMAT;
-			//}
-
 		}
-
 		if(!timeDetermined){
 			if(stringCheck.find(TIMER_COLON)!=string::npos){
 				if(stringCheck.find(TIME_ANTE_MERIDIAN)!=string::npos || stringCheck.find(TIME_POST_MERIDIAN)!=string::npos){
@@ -1459,18 +1451,15 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 			throw MESSAGE_ERROR_WRONG_TIME_FORMAT;
 		}
 	}
-
 	if((!dateYearDetermine && dateMonthDetermined && !dateDayDetermine) || 
 		(!dateYearDetermine && !dateMonthDetermined && dateDayDetermine)){
 			logging(MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT,Error,None);
 			throw MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_FORMAT;
 	}
-
 	if(dateYearDetermine && !dateMonthDetermined && !dateDayDetermine){
 		logging(MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY,Error,None);
-			throw MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY;
+		throw MESSAGE_ERROR_FOUND_INCOMPLETE_DATE_OR_YEAR_ONLY;
 	}
-
 	if(foundRepeat){
 		if(!textRepeat.empty())
 			throw MESSAGE_ERROR_NO_DOUBLE_REPEATS;
@@ -1485,7 +1474,6 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 			throw;
 		}
 	}
-
 	return true;
 }
 
