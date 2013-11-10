@@ -528,10 +528,16 @@ void UiDisplay::printError(string error){
 	array<String ^> ^ errorLines = {error_sys_string};
 	this->messageBox->Lines = errorLines;
 }
-
+void UiDisplay::checkIfExit(String^ userInput){
+	userInput = userInput->ToLower();
+	if(userInput == COMMAND_EXIT || userInput == COMMAND_QUIT){
+		Application::Exit();
+	}
+}
 void UiDisplay::passUserInput(){
 	try{
 		string stdCommand;
+		this->checkIfExit(this->textboxInput->Text);
 		converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
 		if(!execute->stringCollector(stdCommand)){
 			throw MESSAGE_ERROR_COMMAND_QUERY;
@@ -819,13 +825,13 @@ void UiDisplay::printLabel(ListViewItem^ item){
 	changeLabelColour(item->SubItems[ITEM_PRIORITY_SLOT]->Text);
 	//display selected item in product details
 	this->labelTaskDesc->Text = item->SubItems[ITEM_DESCRIPTION_SLOT]->Text;
-	
+
 	this->labelTaskVenue->Text = item->SubItems[ITEM_LOCATION_SLOT]->Text;
-	
+
 	this->labelTaskStartTime->Text = item->SubItems[ITEM_STARTTIME_SLOT]->Text;
-	
+
 	this->labelTaskEndTime->Text = item->SubItems[ITEM_ENDTIME_SLOT]->Text;
-	
+
 	this->labelTaskPriority->Text = item->SubItems[ITEM_PRIORITY_SLOT]->Text;
 
 	this->labelTaskRepeat->Text = item->SubItems[ITEM_REPEAT_SLOT]->Text;

@@ -5,6 +5,7 @@
 #include "logic_task.h"
 #include "common_message.h"
 #include <string>
+#include <algorithm>
 #include <list>
 #include <time.h>
 #include <Windows.h>
@@ -56,12 +57,15 @@ namespace UIDisplay {
 
 			 static String^ HIGH_PRIORITY_NAME = "High";
 
-			/* static String^ TAG_NAME = "Name: ";
+			 /* static String^ TAG_NAME = "Name: ";
 			 static String^ TAG_LOCATION = "Location: ";
 			 static String^ TAG_START_TIME = "Start Time: ";
 			 static String^ TAG_END_TIME = "End Time: ";
 			 static String^ TAG_PRIORITY = "Priority: ";*/
 			 static String^ NEWLINE = "\n";
+
+			 static String^ COMMAND_EXIT = "exit";
+			 static String^ COMMAND_QUIT = "quit";
 
 			 static String^ COMMAND_ADD_HELP = "add <task description>";
 			 static String^ COMMAND_ADD_HELP_LOCATION = ",at <venue>";
@@ -122,20 +126,13 @@ namespace UIDisplay {
 			 bool loaded, up;
 			 string *commandKeyword;
 			 ListType activeListType;
+
 			 //list tab pages
 	private: System::Windows::Forms::TabControl^  tabContainer;
 	private: System::Windows::Forms::TabPage^  tabTodo;
 	private: System::Windows::Forms::TabPage^  tabCompleted;
 	private: System::Windows::Forms::TabPage^  tabOverdue;
 	private: System::Windows::Forms::TextBox^  textboxInput;
-
-
-			 //feedback message box
-
-
-
-			 //label that display task details
-
 
 			 //to do list view
 	private: System::Windows::Forms::ListView^  todoListView;
@@ -160,31 +157,31 @@ namespace UIDisplay {
 
 			 //timer to refresh every minute
 	private: System::Windows::Forms::Timer^  timerRefresh;
-private: System::Windows::Forms::ColumnHeader^  tStartTime;
-private: System::Windows::Forms::ColumnHeader^  cStartTime;
-private: System::Windows::Forms::ColumnHeader^  oStartTime;
-private: System::Windows::Forms::RichTextBox^  messageBox;
-private: System::Windows::Forms::GroupBox^  labelContainer;
-private: System::Windows::Forms::Label^  labelTagPriority;
-private: System::Windows::Forms::Label^  labelTagEndTime;
-private: System::Windows::Forms::Label^  labelTagStartTime;
-private: System::Windows::Forms::Label^  labelTagVenue;
-private: System::Windows::Forms::Label^  labelTagDesc;
-private: System::Windows::Forms::Label^  labelTaskPriority;
+	private: System::Windows::Forms::ColumnHeader^  tStartTime;
+	private: System::Windows::Forms::ColumnHeader^  cStartTime;
+	private: System::Windows::Forms::ColumnHeader^  oStartTime;
+	private: System::Windows::Forms::RichTextBox^  messageBox;
+	private: System::Windows::Forms::GroupBox^  labelContainer;
+	private: System::Windows::Forms::Label^  labelTagPriority;
+	private: System::Windows::Forms::Label^  labelTagEndTime;
+	private: System::Windows::Forms::Label^  labelTagStartTime;
+	private: System::Windows::Forms::Label^  labelTagVenue;
+	private: System::Windows::Forms::Label^  labelTagDesc;
+	private: System::Windows::Forms::Label^  labelTaskPriority;
 
-private: System::Windows::Forms::Label^  labelTaskEndTime;
+	private: System::Windows::Forms::Label^  labelTaskEndTime;
 
-private: System::Windows::Forms::Label^  labelTaskStartTime;
+	private: System::Windows::Forms::Label^  labelTaskStartTime;
 
-private: System::Windows::Forms::Label^  labelTaskVenue;
+	private: System::Windows::Forms::Label^  labelTaskVenue;
 
-private: System::Windows::Forms::Label^  labelTaskDesc;
-private: System::Windows::Forms::Label^  labelTaskType;
+	private: System::Windows::Forms::Label^  labelTaskDesc;
+	private: System::Windows::Forms::Label^  labelTaskType;
 
-private: System::Windows::Forms::Label^  labelTaskRepeat;
+	private: System::Windows::Forms::Label^  labelTaskRepeat;
 
-private: System::Windows::Forms::Label^  labelTagTaskType;
-private: System::Windows::Forms::Label^  labelTagRepeat;
+	private: System::Windows::Forms::Label^  labelTagTaskType;
+	private: System::Windows::Forms::Label^  labelTagRepeat;
 
 
 	private: System::ComponentModel::IContainer^  components;
@@ -224,8 +221,9 @@ private: System::Windows::Forms::Label^  labelTagRepeat;
 	private:System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 			System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 			System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-			//check user input to display help messages
+			//check user input to react appropriately
 			System::Void checkInput();
+			void checkIfExit(String^ userInput);
 			//check keyboard shortcuts
 			System::Void UiDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 			System::Void UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
