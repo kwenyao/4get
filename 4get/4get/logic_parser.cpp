@@ -477,33 +477,7 @@ bool Parser::determineDateAndTime()
 				return true;
 			}
 		}
-		else if(textInput.find(MARKER_COMMA_TO)!=string::npos && textCommand==COMMAND_MODIFY){
-			found = textInput.find(MARKER_COMMA_TO);
-			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=string::npos ){			//try find comma
-				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
-				extractLength = determindExtractLength(found, foundComma, MARKER_COMMA_TO, extractStartPos);
-				i = foundComma; 
-				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
-					marker += textInput[i++];
-				if(scanMarkerDictionary(marker)){
-					textEnd = _textInput.substr(extractStartPos, extractLength);
-					shortenInput(found, foundComma);
-					parseAllTimeAndDate();
-					return true;
-				}
-				else{
-					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
-					throw MESSAGE_ERROR_WRONG_KEYWORD;
-				}//wrong keyword definition
-			}
-			else{																					//by keyword is the last key input
-				extractLength = determindExtractLength(found, stringLength, MARKER_COMMA_TO, extractStartPos);
-				textEnd = _textInput.substr(extractStartPos, ++extractLength);
-				shortenInput(found, stringLength);
-				parseAllTimeAndDate();
-				return true;
-			}
-		}
+		
 		else if(textInput.find(MARKER_DUE)!=string::npos){
 			found = textInput.find(MARKER_DUE);
 			if(textInput.find(MARKER_COMMA, found+MARKER_DUE_LENGTH)!=string::npos ){			//try find comma
@@ -533,13 +507,13 @@ bool Parser::determineDateAndTime()
 		}
 		else if(textInput.find(MARKER_FROM)!=string::npos){									//try find from
 			found = textInput.find(MARKER_FROM);
-			if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=string::npos){				//try find to
-				foundTo = textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH);
+			if(textInput.find(MARKER_COMMA_TO, found+MARKER_FROM_LENGTH)!=string::npos){				//try find to
+				foundTo = textInput.find(MARKER_COMMA_TO, found+MARKER_FROM_LENGTH);
 				extractLength = determindExtractLength(found, foundTo, MARKER_FROM, extractStartPos);
 				textStart = _textInput.substr(extractStartPos, extractLength);
-				if(textInput.find(MARKER_COMMA, foundTo)!=string::npos){						//try find comma
-					foundComma = textInput.find(MARKER_COMMA, foundTo);
-					extractLength = determindExtractLength(foundTo, foundComma, MARKER_TO, extractStartPos);
+				if(textInput.find(MARKER_COMMA, foundTo+MARKER_TO_LENGTH)!=string::npos){						//try find comma
+					foundComma = textInput.find(MARKER_COMMA, foundTo+MARKER_TO_LENGTH);
+					extractLength = determindExtractLength(foundTo, foundComma, MARKER_COMMA_TO, extractStartPos);
 					i = foundComma; 
 					while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)							//try forming keyword
 						marker += textInput[i++];
@@ -555,7 +529,7 @@ bool Parser::determineDateAndTime()
 					}
 				}
 				else{																				//from and to combination keyword is the last keyword  
-					extractLength = determindExtractLength(foundTo, stringLength, MARKER_TO, extractStartPos);
+					extractLength = determindExtractLength(foundTo, stringLength, MARKER_COMMA_TO, extractStartPos);
 					textEnd = _textInput.substr(extractStartPos, ++extractLength);
 					shortenInput(found, stringLength);
 					parseAllTimeAndDate();
@@ -591,6 +565,33 @@ bool Parser::determineDateAndTime()
 			else{																					//wrong keyword definition
 				logging(MESSAGE_ERROR_UNABLE_TO_FORM_TIMED_TASK ,Error,None);
 				throw MESSAGE_ERROR_UNABLE_TO_FORM_TIMED_TASK;
+			}
+		}
+		else if(textInput.find(MARKER_COMMA_TO)!=string::npos && textCommand==COMMAND_MODIFY){
+			found = textInput.find(MARKER_COMMA_TO);
+			if(textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH)!=string::npos ){			//try find comma
+				foundComma = textInput.find(MARKER_COMMA, found+MARKER_COMMA_TO_LENGTH);
+				extractLength = determindExtractLength(found, foundComma, MARKER_COMMA_TO, extractStartPos);
+				i = foundComma; 
+				while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)								//try forming keyword
+					marker += textInput[i++];
+				if(scanMarkerDictionary(marker)){
+					textEnd = _textInput.substr(extractStartPos, extractLength);
+					shortenInput(found, foundComma);
+					parseAllTimeAndDate();
+					return true;
+				}
+				else{
+					logging(MESSAGE_ERROR_WRONG_KEYWORD,Error,None);
+					throw MESSAGE_ERROR_WRONG_KEYWORD;
+				}//wrong keyword definition
+			}
+			else{																					//by keyword is the last key input
+				extractLength = determindExtractLength(found, stringLength, MARKER_COMMA_TO, extractStartPos);
+				textEnd = _textInput.substr(extractStartPos, ++extractLength);
+				shortenInput(found, stringLength);
+				parseAllTimeAndDate();
+				return true;
 			}
 		}
 		else																						//not specified date aka. Floating
@@ -1307,7 +1308,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					foundLeft = stringCheck.find(TIMER_SLASH);
 					if(stringCheck.rfind(TIMER_SLASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_SLASH);
-						if((foundRight-foundLeft)<SPACE_DIFF_3 && (foundRight-foundLeft)>SPACE_DIFF_0){
+						if((foundRight-foundLeft)<=SPACE_DIFF_3 && (foundRight-foundLeft)>SPACE_DIFF_0){
 							strDate = _stringCheck;							// Date Format: 1/2/13 => Shorter representation of date with year
 							dateDetermined = true;
 							continue;
@@ -1327,7 +1328,7 @@ bool Parser::parseTimeAndDate(string& str, string& strDate, string& strTime)
 					foundLeft = stringCheck.find(TIMER_DASH);
 					if(stringCheck.rfind(TIMER_DASH)!=string::npos){	
 						foundRight = stringCheck.rfind(TIMER_DASH);
-						if((foundRight-foundLeft)<SPACE_DIFF_3 && (foundRight-foundLeft)>SPACE_DIFF_0){
+						if((foundRight-foundLeft)<=SPACE_DIFF_3 && (foundRight-foundLeft)>SPACE_DIFF_0){
 							strDate = _stringCheck;							// Date Format: 1-2-13 => Shorter representation of date
 							dateDetermined = true;
 							continue;
