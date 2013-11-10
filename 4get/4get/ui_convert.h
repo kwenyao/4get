@@ -30,6 +30,8 @@ namespace UIConvert {
 		string timetToStdString(time_t time);
 		bool stringSysToStdConversion(System::String^ source, string& result);
 		string enumPriorityToStdString(Priority priority);
+		string enumRepeatToStdString(RepeatType repeat);
+		string enumTaskTypeToStdString(TaskType taskType);
 		int stringSysToIntConversion(System::String^ source);
 		void intToSysString(System::String^& result, int source);
 		void printItem(System::Windows::Forms::ListViewItem^ item, std::list<Task*> *list, int taskIndex);
@@ -42,6 +44,15 @@ namespace UIConvert {
 		static const string HIGH_PRIORITY_TEXT;
 		static const string NORMAL_PRIORITY_TEXT;
 		static const time_t EMPTY_TIME;
+		static const string DAILY_REPEAT_TEXT;
+		static const string WEEKLY_REPEAT_TEXT;
+		static const string FORTNIGHTLY_REPEAT_TEXT;
+		static const string MONTHLY_REPEAT_TEXT;
+		static const string ANNUALLY_REPEAT_TEXT;
+		static const string NONE_REPEAT_TEXT;
+		static const string FLOATING_TYPE_TEXT;
+		static const string DEADLINE_TYPE_TEXT;
+		static const string TIMED_TYPE_TEXT;
 
 	};
 }
