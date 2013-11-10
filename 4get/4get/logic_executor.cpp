@@ -14,7 +14,6 @@ const int Executor::LEAST_INDEX = 1;
 const int Executor::SIZE_CORRECTION = 1;
 const int Executor::SINGLE_OPERATION = 1;
 const int Executor::ID_MULTIPLIER = 1000;
-const string Executor::DOWNGRADE_INDICATOR = "*";
 const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call stringCollector";
 
 /*************************************
@@ -334,16 +333,16 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		storeIntoUndoTaskStack(*taskTemp);
 		description = vectorOfInputs[SLOT_DESCRIPTION];
 		location = vectorOfInputs[SLOT_LOCATION];
-		if(vectorOfInputs[SLOT_START_DATE] != DOWNGRADE_INDICATOR){
+		if(vectorOfInputs[SLOT_START_DATE] != TIMER_REMOVE_TIME){
 			startTime = convert.convertStringToTime(vectorOfInputs[SLOT_START_DATE], vectorOfInputs[SLOT_START_TIME], true);
 		}
-		if(vectorOfInputs[SLOT_END_DATE] != DOWNGRADE_INDICATOR){
+		if(vectorOfInputs[SLOT_END_DATE] != TIMER_REMOVE_TIME){
 			endTime = convert.convertStringToTime(vectorOfInputs[SLOT_END_DATE], vectorOfInputs[SLOT_END_TIME], false);
 		}
-		if(vectorOfInputs[SLOT_START_DATE] == DOWNGRADE_INDICATOR){
+		if(vectorOfInputs[SLOT_START_DATE] == TIMER_REMOVE_TIME){
 			downgradeStartTime = true;
 		}
-		if(vectorOfInputs[SLOT_END_DATE] == DOWNGRADE_INDICATOR){
+		if(vectorOfInputs[SLOT_END_DATE] == TIMER_REMOVE_TIME){
 			downgradeEndTime = true;
 		}
 		priority = convert.convertStringToPriority(vectorOfInputs[SLOT_PRIORITY]);

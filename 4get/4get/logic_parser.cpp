@@ -16,8 +16,8 @@ const string Parser::MARKER_DUE = ",due";
 const size_t Parser::MARKER_DUE_LENGTH = 4;
 const string Parser::MARKER_FROM = ",from";
 const size_t Parser::MARKER_FROM_LENGTH = 5;
-const string Parser::MARKER_TO = "to";
-const size_t Parser::MARKER_TO_LENGTH = 2;
+const string Parser::MARKER_TO = "to ";
+const size_t Parser::MARKER_TO_LENGTH = 3;
 const string Parser::MARKER_COMMA_TO = ",to";
 const size_t Parser::MARKER_COMMA_TO_LENGTH = 3;
 const string Parser::MARKER_ON = "on";
@@ -507,13 +507,13 @@ bool Parser::determineDateAndTime()
 		}
 		else if(textInput.find(MARKER_FROM)!=string::npos){									//try find from
 			found = textInput.find(MARKER_FROM);
-			if(textInput.find(MARKER_COMMA_TO, found+MARKER_FROM_LENGTH)!=string::npos){				//try find to
-				foundTo = textInput.find(MARKER_COMMA_TO, found+MARKER_FROM_LENGTH);
+			if(textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH)!=string::npos){				//try find to
+				foundTo = textInput.find(MARKER_TO, found+MARKER_FROM_LENGTH);
 				extractLength = determindExtractLength(found, foundTo, MARKER_FROM, extractStartPos);
 				textStart = _textInput.substr(extractStartPos, extractLength);
 				if(textInput.find(MARKER_COMMA, foundTo+MARKER_TO_LENGTH)!=string::npos){						//try find comma
 					foundComma = textInput.find(MARKER_COMMA, foundTo+MARKER_TO_LENGTH);
-					extractLength = determindExtractLength(foundTo, foundComma, MARKER_COMMA_TO, extractStartPos);
+					extractLength = determindExtractLength(foundTo, foundComma, MARKER_TO, extractStartPos);
 					i = foundComma; 
 					while(textInput[i]!=MARKER_ENCLOSE && i!=stringLength)							//try forming keyword
 						marker += textInput[i++];
@@ -536,7 +536,7 @@ bool Parser::determineDateAndTime()
 					return true;
 				}
 			}
-			else if(textCommand==COMMAND_MODIFY){
+			else if(textCommand==COMMAND_MODIFY || textCommand==COMMAND_SHOW){
 				if(textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH)!=string::npos ){			//try find comma
 					foundComma = textInput.find(MARKER_COMMA, found+MARKER_FROM_LENGTH);
 					extractLength = determindExtractLength(found, foundComma, MARKER_FROM, extractStartPos);
@@ -740,6 +740,7 @@ bool Parser::determineSlot()
 	size_t extractStartPos = INITIALIZE_SIZE_T;
 	size_t extractEndPos = INITIALIZE_SIZE_T;
 	size_t found = INITIALIZE_SIZE_T;
+	size_t foundTo = INITIALIZE_SIZE_T;
 	bool hasRange = false;
 	bool startSlotFilled = false;
 	bool endSlotFilled = false;
@@ -761,7 +762,7 @@ bool Parser::determineSlot()
 		if(scanMarkerDictionary(temp) && temp!=MARKER_TO) // this statement handles if the word is keyword
 			break;
 		else{
-			if (temp==MARKER_TO && count == SLOT_COUNT_2)
+			if (MARKER_TO.find(temp)!=string::npos && count == SLOT_COUNT_2)
 				hasRange = true;
 			else if(hasRange && startSlotFilled && isParseInt(temp, slotNumber)){
 				textSlotEndNumber = to_string(slotNumber);
