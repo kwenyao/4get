@@ -1,13 +1,13 @@
 /*
- * =====================================================================================
- *
- *       Filename:  logic_converter.cpp
- *
- *         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
- *   Organization:  NUS, School of Computing
- *
- * =====================================================================================
- */
+* =====================================================================================
+*
+*       Filename:  logic_converter.cpp
+*
+*         Author:  KOH WEN YAO (A0097210M), kwenyao@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 #include "logic_converter.h"
 
@@ -25,11 +25,14 @@ const int Converter::DEFAULT_END_MIN = 59;
 const int Converter::DEFAULT_START_HOUR = 0;
 const int Converter::DEFAULT_START_MIN = 0;
 const int Converter::YEAR_21_CENTURY = 2000;
-const int Converter::SLOT_DAY = 0;
+
+const int Converter::COMPLETE_DATE_VECTOR_SIZE = 3;
+
+const int Converter::SLOT_DAY   = 0;
 const int Converter::SLOT_MONTH = 1;
-const int Converter::SLOT_YEAR = 2;
-const int Converter::SLOT_HOUR = 0;
-const int Converter::SLOT_MIN = 1;
+const int Converter::SLOT_YEAR  = 2;
+const int Converter::SLOT_HOUR  = 0;
+const int Converter::SLOT_MIN   = 1;
 
 const int Converter::DATE_DICTIONARY_SIZE = 22;
 const int Converter::INDEX_TMR = 0;
@@ -413,12 +416,15 @@ bool Converter::verifyDate(int year, int month, int day){
 	int todayDay = getToday(monthDayEnum);
 	bool isYearEqual = todayYear == year;
 	bool isMonthEqual = todayMonth == month;
+	bool isPassed;
 	if(year < todayYear)
-		throw string(Message::MESSAGE_ERROR_INVALID_YEAR);
+		isPassed = true;
 	else if(isYearEqual && month<todayMonth)
-		throw string(Message::MESSAGE_ERROR_INVALID_MONTH);
+		isPassed = true;
 	else if(isYearEqual && isMonthEqual && day<todayDay)
-		throw string(Message::MESSAGE_ERROR_INVALID_DAY);
+		isPassed = true;
+	if(isPassed)
+		throw string(Message::MESSAGE_ERROR_DATE_PASSED);
 	else
 		return true;
 }
@@ -438,6 +444,7 @@ void Converter::determineDate(int& year, int& month, int& day){
 }
 
 void Converter::monthCorrection(int& year, int& month, int& day){
+	int currentMonth = getToday(monthEnum);
 	if(_matchedIndex == INDEX_JAN)
 		month = MONTH_NUMBER_JAN;
 	else if(_matchedIndex == INDEX_FEB)
@@ -467,11 +474,14 @@ void Converter::monthCorrection(int& year, int& month, int& day){
 		throw string(Message::MESSAGE_ERROR_MISSING_DAY);
 	else
 		day = _dayDigit;
+	if(month < getToday(monthEnum))
 
-	if(_yearDigit != 0)
-		year = _yearDigit;
-	else
+	if(_yearDigit == 0 && month < currentMonth)
+		year = getToday(yearEnum) + 1;
+	else if(_yearDigit == 0)
 		year = getToday(yearEnum);
+	else
+		year = _yearDigit;
 }
 
 void Converter::dayCorrection(int& year, int& month, int& day){
@@ -523,9 +533,13 @@ void Converter::dayCorrection(int& year, int& month, int& day){
 }
 
 void Converter::declareDate(vector<string>& dateVector, int& year, int& month, int& day){
+	int vectorSize = dateVector.size();
 	day = convertStringToInt(dateVector[SLOT_DAY]);
 	month = convertStringToInt(dateVector[SLOT_MONTH]);
-	year = convertStringToInt(dateVector[SLOT_YEAR]);
+	if(vectorSize == COMPLETE_DATE_VECTOR_SIZE)
+		year = convertStringToInt(dateVector[SLOT_YEAR]);
+	else
+		year = getToday(yearEnum);
 }
 
 void Converter::extractTime(string timeStr, int& hour, int& min){

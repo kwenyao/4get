@@ -70,6 +70,8 @@ private:
 	static const int DEFAULT_START_MIN;
 	static const int YEAR_21_CENTURY;
 
+	static const int COMPLETE_DATE_VECTOR_SIZE;
+
 	static const int SLOT_DAY;
 	static const int SLOT_MONTH;
 	static const int SLOT_YEAR;
@@ -148,7 +150,7 @@ private:
 	void getStartTime(bool isNoStartTime, int& hour, int& min, string startTime);
 	void getTodayDate(int& year, int& month, int& day);
 	void getWordDate(int correction, int& year, int& month, int& day);
-	int getToday(DateType dateType);
+	int  getToday(DateType dateType);
 
 	void getDefaultEndTime(int& hour, int& min);
 	void getDefaultStartTime(int& hour, int& min);
@@ -174,7 +176,6 @@ public:
 	RepeatType convertStringToRepeatType(string);
 	Priority convertStringToPriority(string);
 	long long convertDateToInt(string dateStr);
-	//bool convertStringToTime(string timeStr, time_t returnTime);
 	time_t convertStringToTime(string dateStr, string timeStr, bool isStart);
 	TaskType convertStringToTime(string startDate, 
 			  				     string startTime, 
