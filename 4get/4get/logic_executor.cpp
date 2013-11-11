@@ -58,7 +58,11 @@ PRIVATE FUNCTIONS
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	try{
 		Command commandType = determineCommandType(usercommand);
-		if(!(commandType == commandRedo || commandType == commandUndo || commandType == commandShow || commandType == commandShowAll || commandType == commandAdd)){
+		if(!(commandType == commandRedo 
+			|| commandType == commandUndo 
+			|| commandType == commandShow 
+			|| commandType == commandShowAll 
+			|| commandType == commandAdd)){
 			storeIntoUndoCommandStack(commandType); 
 			undoListTypeStack.push(listType);
 		}
@@ -66,7 +70,8 @@ bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 			storeIntoUndoCommandStack(commandType);
 			undoListTypeStack.push(listToDo);
 		}
-		if(commandType != commandRedo && commandType != commandUndo){
+		if(commandType != commandRedo 
+			&& commandType != commandUndo){
 			if(!redoCommandStack.empty()){
 				redoCommandStack.pop();
 				redoTaskStack.pop();
@@ -122,6 +127,7 @@ Enum::Command Executor::determineCommandType (string commandTypeString){
 	else
 		throw string(MESSAGE_ERROR_WRONG_KEYWORD);
 }
+//this function will add the task requested by the user
 bool Executor::adderFunction(vector<string> vectorOfInputs){
 	try{
 		long long id;
@@ -190,6 +196,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
+//this function will delete the task(s) that the user requested
 bool Executor::deleteFunction(vector<string> vectorOfInputs){
 	try{
 		int deleteStartNumber,
@@ -241,6 +248,7 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
+//this function will mark the task to be done and shift the task(s) in todoList to completedlist
 bool Executor::markFunction(vector<string> vectorOfInputs){
 	try{
 		int markStartNumber;
@@ -294,6 +302,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
+//this function will modify the task as requested by the user
 bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	try{
 		Task* taskTemp;
@@ -362,25 +371,29 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
-			if(startTime > taskTemp->getTaskEnd()){
+			if(!downgradeStartTime && isNoEndTime && startTime > taskTemp->getTaskEnd()){
 				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
 			}
-			taskTemp->setTaskStart(startTime);
+			if(!downgradeStartTime && startTime < taskTemp->getTaskEnd()){
+				taskTemp->setTaskStart(startTime);
+			}
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
-			if(endTime < taskTemp->getTaskStart()){
+			if(!downgradeEndTime && isNoStartTime && endTime < taskTemp->getTaskStart()){
 				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
+			}	
+			if(!downgradeEndTime && endTime > taskTemp->getTaskStart()){
+				taskTemp->setTaskEnd(endTime);
+				taskList.saveToDoList();
 			}
-			taskTemp->setTaskEnd(endTime);
-			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_PRIORITY].empty())
 		{
 			taskTemp->setTaskPriority(priority);
 			taskList.saveToDoList();
 		}
-		//change floating to deadline task
+		//change floating task to deadline task
 		if(typeOfOldTask == floating && !isNoEndTime && isNoStartTime){
 			id = taskTemp->getTaskId();									//set another task
 			taskTemp->setTaskEnd(endTime);
@@ -397,7 +410,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
-		//change floating to timed task
+		//change floating task to timed task
 		if(typeOfOldTask == floating && !isNoEndTime && !isNoStartTime){
 			taskTemp->setTaskEnd(endTime);
 			taskTemp->setTaskStart(startTime);
@@ -419,7 +432,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
-		//change deadline task to timed
+		//change deadline task to timed task
 		if(typeOfOldTask == deadline && !isNoStartTime){
 			taskTemp->setTaskStart(startTime);
 			id = taskTemp->getTaskId();
@@ -441,7 +454,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
-		//change deadline task to floating
+		//change deadline task to floating task
 		if(typeOfOldTask == deadline && downgradeEndTime){
 			id = taskTemp->getTaskId();									
 			string description = taskTemp->getTaskDescription();
@@ -455,7 +468,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
-		//change timed to deadline 
+		//change timed task to deadline task 
 		if(typeOfOldTask == timed && downgradeStartTime && !downgradeEndTime){
 			id = taskTemp->getTaskId();									
 			string description = taskTemp->getTaskDescription();
@@ -472,7 +485,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.deleteIndexFromList(modifyNumber, true);
 			taskList.addToList(taskNew, listType);
 		}
-		//change timed to floating
+		//change timed task to floating task
 		if(typeOfOldTask == timed && downgradeStartTime && downgradeEndTime){
 			id = taskTemp->getTaskId();									
 			string description = taskTemp->getTaskDescription();
@@ -491,6 +504,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
+//this function will undo the user last command
 bool Executor::undoFunction(){
 	try{
 		Task taskTemp;
@@ -590,6 +604,7 @@ bool Executor::undoFunction(){
 		throw;
 	}
 }
+//this function will redo what the user undo
 bool Executor::redoFunction(){
 	try{
 		Task taskTemp;

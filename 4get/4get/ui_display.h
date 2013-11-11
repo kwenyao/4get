@@ -69,13 +69,12 @@ namespace UIDisplay {
 
 			 static String^ COMMAND_ADD_HELP = "add <task description>";
 			 static String^ COMMAND_ADD_HELP_LOCATION = ",at <venue>";
-			 static String^ COMMAND_ADD_HELP_START = ",from <start time of timed task>";
-			 static String^ COMMAND_ADD_HELP_END = ",to <end time of timed task>";
+			 static String^ COMMAND_ADD_HELP_TIMED = ",from <start time of timed task> to <end time of timed task>";
 			 static String^ COMMAND_ADD_HELP_DUE = ",by <due time>";
 			 static String^ COMMAND_ADD_HELP_REPEAT = ",repeat <frequency>";
 			 static String^ COMMAND_ADD_HELP_PRIORITY = ",!";
 			 static String^ COMMAND_ADD_HELP_TIME_DATE = "date: jan, january, feb, feburary, mar, ...";
-			 static String^ COMMAND_ADD_HELP_TIME_DAY = "day: today, tomorrow, monday, tuesday, wednesday, ...";
+			 static String^ COMMAND_ADD_HELP_TIME_DAY = "day: today, tomorrow, monday, tuesday, next wednesday, next thursday...";
 			 static String^ COMMAND_ADD_HELP_TIME_TIME = "time: 1800hr, 6pm, 0900hr, 9am, ...";
 			 static String^ COMMAND_ADD_HELP_REMIND_FREQUENCY = "remind frequency: daily, weekly, monthy, yearly";
 			 static String^ COMMAND_ADD_FLOATING_EXAMPLE = "E.g. add get newspaper ,at newstand";
@@ -91,7 +90,6 @@ namespace UIDisplay {
 			 static String^ COMMAND_MOD_HELP_LOCATION = ",at <venue>";
 			 static String^ COMMAND_MOD_HELP_START = ",from <start time of task>";
 			 static String^ COMMAND_MOD_HELP_END = ",to <end time of task>";
-			 static String^ COMMAND_MOD_HELP_DUE = ",by <due time>";
 			 static String^ COMMAND_MOD_HELP_PRIORITY = ",<priority state>";
 			 static String^ COMMAND_MOD_HELP_PRIORITY_STATES = "priority states: normal, high";
 			 static String^ COMMAND_MOD_HELP_EXAMPLE1 = "changing to a timed task: \n mod 3 ,at grand pacific hotel ,from 9pm to 11pm";
@@ -103,11 +101,10 @@ namespace UIDisplay {
 			 static String^ COMMAND_MARK_HELP_EXAMPLE = "E.g. mark 1";
 			 static String^ COMMAND_MARK_HELP_MULTIPLE_EXAMPLE = "E.g. mark 1 to 3";
 
-			 static String^ COMMAND_SEARCH_HELP = "search ";
+			 static String^ COMMAND_SEARCH_HELP = "search <task description>";
 			 static String^ COMMAND_SEARCH_HELP_LOCATION = ",at <venue>";
 			 static String^ COMMAND_SEARCH_HELP_START = ",from <start time of task>";
 			 static String^ COMMAND_SEARCH_HELP_END = ",to <end time of task>";
-			 static String^ COMMAND_SEARCH_HELP_DUE = ",by <due time>";
 			 static String^ COMMAND_SEARCH_HELP_PRIORITY = ",<priority state>";
 			 static String^ COMMAND_SEARCH_HELP_PRIORITY_STATES = "priority states: normal, high";
 			 static String^ COMMAND_SEARCH_HELP_INSTRUCTIONS = "Choose the keywords according to the category you wish to search under.";
@@ -167,21 +164,15 @@ namespace UIDisplay {
 	private: System::Windows::Forms::Label^  labelTagStartTime;
 	private: System::Windows::Forms::Label^  labelTagVenue;
 	private: System::Windows::Forms::Label^  labelTagDesc;
-	private: System::Windows::Forms::Label^  labelTaskPriority;
-
-	private: System::Windows::Forms::Label^  labelTaskEndTime;
-
-	private: System::Windows::Forms::Label^  labelTaskStartTime;
-
-	private: System::Windows::Forms::Label^  labelTaskVenue;
-
-	private: System::Windows::Forms::Label^  labelTaskDesc;
-	private: System::Windows::Forms::Label^  labelTaskType;
-
-	private: System::Windows::Forms::Label^  labelTaskRepeat;
-
 	private: System::Windows::Forms::Label^  labelTagTaskType;
 	private: System::Windows::Forms::Label^  labelTagRepeat;
+	private: System::Windows::Forms::Label^  labelTaskPriority;
+	private: System::Windows::Forms::Label^  labelTaskEndTime;
+	private: System::Windows::Forms::Label^  labelTaskStartTime;
+	private: System::Windows::Forms::Label^  labelTaskVenue;
+	private: System::Windows::Forms::Label^  labelTaskDesc;
+	private: System::Windows::Forms::Label^  labelTaskType;
+	private: System::Windows::Forms::Label^  labelTaskRepeat;
 
 
 	private: System::ComponentModel::IContainer^  components;
@@ -218,33 +209,25 @@ namespace UIDisplay {
 			 System::Void printHelpMessage();
 
 			 //check ui interaction
-	private:System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-			System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-			System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-			//check user input to react appropriately
-			System::Void checkInput();
-			void checkIfExit(String^ userInput);
-			//check keyboard shortcuts
-			System::Void UiDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-			System::Void UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
-			//user selects an item
-			System::Void todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-			System::Void completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-			System::Void overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+	private: System::Void textboxInput_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			 System::Void textboxInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+			 System::Void textboxInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			 //check user input to react appropriately
+			 System::Void checkInput();
+			 void checkIfExit(String^ userInput);
+			 //check keyboard shortcuts
+			 System::Void UiDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
+			 System::Void UiDisplay_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+			 //user selects an item
+			 System::Void todoListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			 System::Void completedListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
+			 System::Void overdueListView_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 
-			//minimising application	
-	private:System::Void notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e);
-			System::Void UiDisplay_Resize(System::Object^  sender, System::EventArgs^  e);
-
-	private:bool SetFocus(Control ^ control);
-			void focusList(ListType activeListType);
-			//user changes displayed list
-			System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
-
-			//refresh list
-	private: System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
-
-private: System::Void labelContainer_Enter(System::Object^  sender, System::EventArgs^  e) {
-		 }
-};
+	private: bool SetFocus(Control ^ control);
+			 void focusList(ListType activeListType);
+			 //user changes displayed list
+			 System::Void tabContainer_Selected(System::Object^  sender, System::Windows::Forms::TabControlEventArgs^  e);
+			 //refresh list
+			 System::Void timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e);
+	};
 }

@@ -24,7 +24,6 @@
 #include <stack>
 #include <locale.h>
 #include <vector>
-#include <string>
 
 using namespace std;
 using namespace Message;
@@ -57,7 +56,7 @@ private:
 	static const int SINGLE_OPERATION;
 	static const string LOGGING_MESSAGE_STRINGCOLLECTOR;
 
-	//Functions to be executed
+	//Functions to be executed 
 	bool receive(string command, vector<string> vectorOfInputs);
 	Command determineCommandType (string commandTypeString); 
 	bool adderFunction(vector<string> vectorOfInputs);

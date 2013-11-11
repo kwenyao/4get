@@ -27,7 +27,7 @@ namespace UIConvert {
 
 	public:
 		void stringStdToSysConversion(System::String^& result, string& source);
-		string timetToStdString(time_t time);
+		bool timetToSysString(time_t time, System::String^ &sys_time);
 		bool stringSysToStdConversion(System::String^ source, string& result);
 		string enumPriorityToStdString(Priority priority);
 		string enumRepeatToStdString(RepeatType repeat);

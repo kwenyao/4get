@@ -116,6 +116,8 @@
     <EmbeddedResource Include="ui_display.resx">
       <DependentUpon>ui_display.h</DependentUpon>
       <SubType>Designer</SubType>
+      <LogicalName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
