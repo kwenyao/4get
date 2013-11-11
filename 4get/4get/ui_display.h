@@ -68,11 +68,11 @@ namespace UIDisplay {
 			 static String^ COMMAND_QUIT = "quit";
 
 			 static String^ COMMAND_ADD_HELP = "add <task description>";
-			 static String^ COMMAND_ADD_HELP_LOCATION = ",at <venue>";
-			 static String^ COMMAND_ADD_HELP_TIMED = ",from <start time of timed task> to <end time of timed task>";
-			 static String^ COMMAND_ADD_HELP_DUE = ",by <due time>";
-			 static String^ COMMAND_ADD_HELP_REPEAT = ",repeat <frequency>";
-			 static String^ COMMAND_ADD_HELP_PRIORITY = ",!";
+			 static String^ COMMAND_ADD_HELP_LOCATION = "	,at <venue>";
+			 static String^ COMMAND_ADD_HELP_TIMED = "	,from <start time of timed task> to <end time of timed task>";
+			 static String^ COMMAND_ADD_HELP_DUE = "	,by <due time>";
+			 static String^ COMMAND_ADD_HELP_REPEAT = "	,repeat <frequency>";
+			 static String^ COMMAND_ADD_HELP_PRIORITY = "	,!";
 			 static String^ COMMAND_ADD_HELP_TIME_DATE = "date: jan, january, feb, feburary, mar, ...";
 			 static String^ COMMAND_ADD_HELP_TIME_DAY = "day: today, tomorrow, monday, tuesday, next wednesday, next thursday...";
 			 static String^ COMMAND_ADD_HELP_TIME_TIME = "time: 1800hr, 6pm, 0900hr, 9am, ...";
