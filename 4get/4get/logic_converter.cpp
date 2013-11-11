@@ -103,75 +103,9 @@ Converter::Converter(){
 	initialiseDateDictionary();
 }
 
-void Converter::initialiseDateDictionary(){
-	_dateDictionary[INDEX_TMR].push_back(TIMER_TOMORROW);
-	_dateDictionary[INDEX_TMR].push_back(TIMER_TML);
-	_dateDictionary[INDEX_TMR].push_back(TIMER_TMR);
-	_dateDictionary[INDEX_TMR].push_back(TIMER_TMRW);
-
-	_dateDictionary[INDEX_MON].push_back(TIMER_MONDAY);
-	_dateDictionary[INDEX_MON].push_back(TIMER_MON);
-
-	_dateDictionary[INDEX_TUE].push_back(TIMER_TUESDAY);
-	_dateDictionary[INDEX_TUE].push_back(TIMER_TUES);
-	_dateDictionary[INDEX_TUE].push_back(TIMER_TUE);
-
-	_dateDictionary[INDEX_WED].push_back(TIMER_WEDNESDAY);
-	_dateDictionary[INDEX_WED].push_back(TIMER_WED);
-
-	_dateDictionary[INDEX_THU].push_back(TIMER_THURSDAY);
-	_dateDictionary[INDEX_THU].push_back(TIMER_THUR);
-	_dateDictionary[INDEX_THU].push_back(TIMER_THURS);
-	_dateDictionary[INDEX_THU].push_back(TIMER_THU);
-
-	_dateDictionary[INDEX_FRI].push_back(TIMER_FRIDAY);
-	_dateDictionary[INDEX_FRI].push_back(TIMER_FRI);
-
-	_dateDictionary[INDEX_SAT].push_back(TIMER_SATURDAY);
-	_dateDictionary[INDEX_SAT].push_back(TIMER_SAT);
-
-	_dateDictionary[INDEX_SUN].push_back(TIMER_SUNDAY);
-	_dateDictionary[INDEX_SUN].push_back(TIMER_SUN);
-
-	_dateDictionary[INDEX_JAN].push_back(MONTH_JANUARY);
-	_dateDictionary[INDEX_JAN].push_back(MONTH_JAN);
-
-	_dateDictionary[INDEX_FEB].push_back(MONTH_FEBRUARY);
-	_dateDictionary[INDEX_FEB].push_back(MONTH_FEB);
-
-	_dateDictionary[INDEX_MAR].push_back(MONTH_MARCH);
-	_dateDictionary[INDEX_MAR].push_back(MONTH_MAR);
-
-	_dateDictionary[INDEX_APR].push_back(MONTH_APRIL);
-	_dateDictionary[INDEX_APR].push_back(MONTH_APR);
-
-	_dateDictionary[INDEX_MAY].push_back(MONTH_MAY);
-
-	_dateDictionary[INDEX_JUN].push_back(MONTH_JUNE);
-	_dateDictionary[INDEX_JUN].push_back(MONTH_JUN);
-
-	_dateDictionary[INDEX_JUL].push_back(MONTH_JULY);
-	_dateDictionary[INDEX_JUL].push_back(MONTH_JUL);
-
-	_dateDictionary[INDEX_AUG].push_back(MONTH_AUGUST);
-	_dateDictionary[INDEX_AUG].push_back(MONTH_AUG);
-
-	_dateDictionary[INDEX_SEP].push_back(MONTH_SEPTEMBER);
-	_dateDictionary[INDEX_SEP].push_back(MONTH_SEPT);
-	_dateDictionary[INDEX_SEP].push_back(MONTH_SEP);
-
-	_dateDictionary[INDEX_OCT].push_back(MONTH_OCTOBER);
-	_dateDictionary[INDEX_OCT].push_back(MONTH_OCT);
-
-	_dateDictionary[INDEX_NOV].push_back(MONTH_NOVEMBER);
-	_dateDictionary[INDEX_NOV].push_back(MONTH_NOV);
-
-	_dateDictionary[INDEX_DEC].push_back(MONTH_DECEMBER);
-	_dateDictionary[INDEX_DEC].push_back(MONTH_DEC);
-
-	_dateDictionary[INDEX_TDY].push_back(TIMER_TODAY);
-	_dateDictionary[INDEX_NXT].push_back(TIMER_NEXT);
-}
+/*************************************
+           PUBLIC FUNCTIONS            
+*************************************/
 
 int Converter::convertStringToInt(string str)
 {
@@ -202,12 +136,6 @@ Priority Converter::convertStringToPriority(string str){
 		return high;
 	else
 		return normal;
-}
-
-bool Converter::isEqual(string string1, const string string2){
-	if(string1 == string2)
-		return true;
-	return false;
 }
 
 long long Converter::convertDateToInt(string dateStr){
@@ -303,6 +231,243 @@ TaskType Converter::convertStringToTime(string startDate,
 	}
 }
 
+time_t Converter::getNow(){
+	time_t returnTime;
+	time(&returnTime);
+	return returnTime;
+}
+
+/*************************************
+          PRIVATE FUNCTIONS            
+*************************************/
+
+void Converter::initialiseDateDictionary(){
+	_dateDictionary[INDEX_TMR].push_back(TIMER_TOMORROW);
+	_dateDictionary[INDEX_TMR].push_back(TIMER_TML);
+	_dateDictionary[INDEX_TMR].push_back(TIMER_TMR);
+	_dateDictionary[INDEX_TMR].push_back(TIMER_TMRW);
+
+	_dateDictionary[INDEX_MON].push_back(TIMER_MONDAY);
+	_dateDictionary[INDEX_MON].push_back(TIMER_MON);
+
+	_dateDictionary[INDEX_TUE].push_back(TIMER_TUESDAY);
+	_dateDictionary[INDEX_TUE].push_back(TIMER_TUES);
+	_dateDictionary[INDEX_TUE].push_back(TIMER_TUE);
+
+	_dateDictionary[INDEX_WED].push_back(TIMER_WEDNESDAY);
+	_dateDictionary[INDEX_WED].push_back(TIMER_WED);
+
+	_dateDictionary[INDEX_THU].push_back(TIMER_THURSDAY);
+	_dateDictionary[INDEX_THU].push_back(TIMER_THUR);
+	_dateDictionary[INDEX_THU].push_back(TIMER_THURS);
+	_dateDictionary[INDEX_THU].push_back(TIMER_THU);
+
+	_dateDictionary[INDEX_FRI].push_back(TIMER_FRIDAY);
+	_dateDictionary[INDEX_FRI].push_back(TIMER_FRI);
+
+	_dateDictionary[INDEX_SAT].push_back(TIMER_SATURDAY);
+	_dateDictionary[INDEX_SAT].push_back(TIMER_SAT);
+
+	_dateDictionary[INDEX_SUN].push_back(TIMER_SUNDAY);
+	_dateDictionary[INDEX_SUN].push_back(TIMER_SUN);
+
+	_dateDictionary[INDEX_JAN].push_back(MONTH_JANUARY);
+	_dateDictionary[INDEX_JAN].push_back(MONTH_JAN);
+
+	_dateDictionary[INDEX_FEB].push_back(MONTH_FEBRUARY);
+	_dateDictionary[INDEX_FEB].push_back(MONTH_FEB);
+
+	_dateDictionary[INDEX_MAR].push_back(MONTH_MARCH);
+	_dateDictionary[INDEX_MAR].push_back(MONTH_MAR);
+
+	_dateDictionary[INDEX_APR].push_back(MONTH_APRIL);
+	_dateDictionary[INDEX_APR].push_back(MONTH_APR);
+
+	_dateDictionary[INDEX_MAY].push_back(MONTH_MAY);
+
+	_dateDictionary[INDEX_JUN].push_back(MONTH_JUNE);
+	_dateDictionary[INDEX_JUN].push_back(MONTH_JUN);
+
+	_dateDictionary[INDEX_JUL].push_back(MONTH_JULY);
+	_dateDictionary[INDEX_JUL].push_back(MONTH_JUL);
+
+	_dateDictionary[INDEX_AUG].push_back(MONTH_AUGUST);
+	_dateDictionary[INDEX_AUG].push_back(MONTH_AUG);
+
+	_dateDictionary[INDEX_SEP].push_back(MONTH_SEPTEMBER);
+	_dateDictionary[INDEX_SEP].push_back(MONTH_SEPT);
+	_dateDictionary[INDEX_SEP].push_back(MONTH_SEP);
+
+	_dateDictionary[INDEX_OCT].push_back(MONTH_OCTOBER);
+	_dateDictionary[INDEX_OCT].push_back(MONTH_OCT);
+
+	_dateDictionary[INDEX_NOV].push_back(MONTH_NOVEMBER);
+	_dateDictionary[INDEX_NOV].push_back(MONTH_NOV);
+
+	_dateDictionary[INDEX_DEC].push_back(MONTH_DECEMBER);
+	_dateDictionary[INDEX_DEC].push_back(MONTH_DEC);
+
+	_dateDictionary[INDEX_TDY].push_back(TIMER_TODAY);
+	_dateDictionary[INDEX_NXT].push_back(TIMER_NEXT);
+}
+
+bool Converter::checkDictionary(string compareStr){
+	stringstream tempStream(compareStr);
+	string tempString;
+	bool isWord = false;
+	while(tempStream>>tempString){
+		if(isNumber(tempString))
+			checkNumber(tempString);
+		else if(checkWord(_dateDictionary, tempString))
+			isWord = true;
+	}
+	return isWord;
+}
+
+bool Converter::checkWord(vector<vector<string>> dictionary, string compareStr){
+	int vectorSize = dictionary.size();
+	for(int i=0; i<vectorSize; i++){
+		if(isKeyWord(dictionary[i], compareStr)){
+			saveIndex(i);
+			return true;
+		}
+		else
+			continue;
+	}
+	return false;
+}
+
+bool Converter::checkNumber(string compareStr){
+	assert(!compareStr.empty());
+	if(compareStr.size() < 3){
+		_dayDigit = convertStringToInt(compareStr);
+		return true;
+	}
+	else if(compareStr.size() == 4){
+		_yearDigit = convertStringToInt(compareStr);
+		return true;
+	}
+	return false;
+}
+
+void Converter::saveIndex(int index){
+	if(index == INDEX_NXT)
+		_isNext = true;
+	else
+		_matchedIndex = index;
+}
+
+void Converter::determineDate(int& year, int& month, int& day){
+	assert(_matchedIndex > -1);
+	try{
+		if(_matchedIndex < INDEX_JAN)
+			dayCorrection(year, month, day);
+		else if(_matchedIndex > INDEX_SUN && _matchedIndex < INDEX_NXT)
+			monthCorrection(year, month, day);
+		else
+			throw string(Message::MESSAGE_ERROR_WRONG_DATE);
+	} catch(string errStr) {
+		throw;
+	}
+}
+
+void Converter::dayCorrection(int& year, int& month, int& day){
+	int dayToday = getToday(weekDayEnum);
+	int correction;
+	if(_matchedIndex == INDEX_TMR)
+		correction = 1;
+	else if(_matchedIndex == INDEX_MON){
+		if(dayToday == DAY_SUNDAY)
+			correction = 1;
+		else
+			correction = 8 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_TUE){
+		if(dayToday < DAY_TUESDAY)
+			correction = 2 - dayToday;
+		else
+			correction = 9 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_WED){
+		if(dayToday < DAY_WEDNESDAY)
+			correction = 3 - dayToday;
+		else
+			correction = 10 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_THU){
+		if(dayToday < DAY_THURSDAY)
+			correction = 4 - dayToday;
+		else
+			correction = 11 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_FRI){
+		if(dayToday < DAY_FRIDAY)
+			correction = 5 - dayToday;
+		else
+			correction = 12 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_SAT){
+		if(dayToday < DAY_SATURDAY)
+			correction = 6 - dayToday;
+		else
+			correction = 13 - dayToday;
+	}
+	else if(_matchedIndex == INDEX_SUN)
+		correction = 7 - dayToday;
+	else if(_matchedIndex == INDEX_TDY)
+		correction = 0;
+	getWordDate(correction, year, month, day);
+}
+
+void Converter::monthCorrection(int& year, int& month, int& day){
+	int currentMonth = getToday(monthEnum);
+	if(_matchedIndex == INDEX_JAN)
+		month = MONTH_NUMBER_JAN;
+	else if(_matchedIndex == INDEX_FEB)
+		month = MONTH_NUMBER_FEB;
+	else if(_matchedIndex == INDEX_MAR)
+		month = MONTH_NUMBER_MAR;
+	else if(_matchedIndex == INDEX_APR)
+		month = MONTH_NUMBER_APR;
+	else if(_matchedIndex == INDEX_MAY)
+		month = MONTH_NUMBER_MAY;
+	else if(_matchedIndex == INDEX_JUN)
+		month = MONTH_NUMBER_JUN;
+	else if(_matchedIndex == INDEX_JUL)
+		month = MONTH_NUMBER_JUL;
+	else if(_matchedIndex == INDEX_AUG)
+		month = MONTH_NUMBER_AUG;
+	else if(_matchedIndex == INDEX_SEP)
+		month = MONTH_NUMBER_SEP;
+	else if(_matchedIndex == INDEX_OCT)
+		month = MONTH_NUMBER_OCT;
+	else if(_matchedIndex == INDEX_NOV)
+		month = MONTH_NUMBER_NOV;
+	else if(_matchedIndex == INDEX_DEC)
+		month = MONTH_NUMBER_DEC;
+
+	if(_dayDigit < 1)
+		throw string(Message::MESSAGE_ERROR_MISSING_DAY);
+	else
+		day = _dayDigit;
+	if(_yearDigit == 0 && month < currentMonth)
+		year = getToday(yearEnum) + 1;
+	else if(_yearDigit == 0)
+		year = getToday(yearEnum);
+	else
+		year = _yearDigit;
+}
+
+void Converter::declareDate(vector<string>& dateVector, int& year, int& month, int& day){
+	int vectorSize = dateVector.size();
+	day = convertStringToInt(dateVector[SLOT_DAY]);
+	month = convertStringToInt(dateVector[SLOT_MONTH]);
+	if(vectorSize == COMPLETE_DATE_VECTOR_SIZE)
+		year = convertStringToInt(dateVector[SLOT_YEAR]);
+	else
+		year = getToday(yearEnum);
+}
+
 void Converter::getDate(bool isNoDate, int& year, int& month, int& day, string dateStr){
 	try{
 		if(isNoDate)
@@ -377,12 +542,6 @@ int Converter::getToday(DateType dateType){
 	}
 }
 
-time_t Converter::getNow(){
-	time_t returnTime;
-	time(&returnTime);
-	return returnTime;
-}
-
 void Converter::getDefaultEndTime(int& hour, int& min){
 	hour = DEFAULT_END_HOUR;
 	min = DEFAULT_END_MIN;
@@ -413,136 +572,6 @@ void Converter::extractDate(string dateStr, int& year, int& month, int& day){
 	} catch (string errStr){
 		throw;
 	}
-}
-
-bool Converter::verifyDate(int year, int month, int day){
-	int todayYear = getToday(yearEnum);
-	int todayMonth = getToday(monthEnum);
-	int todayDay = getToday(monthDayEnum);
-	bool isYearEqual = todayYear == year;
-	bool isMonthEqual = todayMonth == month;
-	bool isPassed = false;
-	if(year < todayYear)
-		isPassed = true;
-	else if(isYearEqual && month<todayMonth)
-		isPassed = true;
-	else if(isYearEqual && isMonthEqual && day<todayDay)
-		isPassed = true;
-	if(isPassed)
-		throw string(Message::MESSAGE_ERROR_DATE_PASSED);
-	else
-		return true;
-}
-
-void Converter::determineDate(int& year, int& month, int& day){
-	assert(_matchedIndex > -1);
-	try{
-		if(_matchedIndex < INDEX_JAN)
-			dayCorrection(year, month, day);
-		else if(_matchedIndex > INDEX_SUN && _matchedIndex < INDEX_NXT)
-			monthCorrection(year, month, day);
-		else
-			throw string(Message::MESSAGE_ERROR_WRONG_DATE);
-	} catch(string errStr) {
-		throw;
-	}
-}
-
-void Converter::monthCorrection(int& year, int& month, int& day){
-	int currentMonth = getToday(monthEnum);
-	if(_matchedIndex == INDEX_JAN)
-		month = MONTH_NUMBER_JAN;
-	else if(_matchedIndex == INDEX_FEB)
-		month = MONTH_NUMBER_FEB;
-	else if(_matchedIndex == INDEX_MAR)
-		month = MONTH_NUMBER_MAR;
-	else if(_matchedIndex == INDEX_APR)
-		month = MONTH_NUMBER_APR;
-	else if(_matchedIndex == INDEX_MAY)
-		month = MONTH_NUMBER_MAY;
-	else if(_matchedIndex == INDEX_JUN)
-		month = MONTH_NUMBER_JUN;
-	else if(_matchedIndex == INDEX_JUL)
-		month = MONTH_NUMBER_JUL;
-	else if(_matchedIndex == INDEX_AUG)
-		month = MONTH_NUMBER_AUG;
-	else if(_matchedIndex == INDEX_SEP)
-		month = MONTH_NUMBER_SEP;
-	else if(_matchedIndex == INDEX_OCT)
-		month = MONTH_NUMBER_OCT;
-	else if(_matchedIndex == INDEX_NOV)
-		month = MONTH_NUMBER_NOV;
-	else if(_matchedIndex == INDEX_DEC)
-		month = MONTH_NUMBER_DEC;
-
-	if(_dayDigit < 1)
-		throw string(Message::MESSAGE_ERROR_MISSING_DAY);
-	else
-		day = _dayDigit;
-	if(_yearDigit == 0 && month < currentMonth)
-		year = getToday(yearEnum) + 1;
-	else if(_yearDigit == 0)
-		year = getToday(yearEnum);
-	else
-		year = _yearDigit;
-}
-
-void Converter::dayCorrection(int& year, int& month, int& day){
-	int dayToday = getToday(weekDayEnum);
-	int correction;
-	if(_matchedIndex == INDEX_TMR)
-		correction = 1;
-	else if(_matchedIndex == INDEX_MON){
-		if(dayToday == DAY_SUNDAY)
-			correction = 1;
-		else
-			correction = 8 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_TUE){
-		if(dayToday < DAY_TUESDAY)
-			correction = 2 - dayToday;
-		else
-			correction = 9 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_WED){
-		if(dayToday < DAY_WEDNESDAY)
-			correction = 3 - dayToday;
-		else
-			correction = 10 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_THU){
-		if(dayToday < DAY_THURSDAY)
-			correction = 4 - dayToday;
-		else
-			correction = 11 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_FRI){
-		if(dayToday < DAY_FRIDAY)
-			correction = 5 - dayToday;
-		else
-			correction = 12 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_SAT){
-		if(dayToday < DAY_SATURDAY)
-			correction = 6 - dayToday;
-		else
-			correction = 13 - dayToday;
-	}
-	else if(_matchedIndex == INDEX_SUN)
-		correction = 7 - dayToday;
-	else if(_matchedIndex == INDEX_TDY)
-		correction = 0;
-	getWordDate(correction, year, month, day);
-}
-
-void Converter::declareDate(vector<string>& dateVector, int& year, int& month, int& day){
-	int vectorSize = dateVector.size();
-	day = convertStringToInt(dateVector[SLOT_DAY]);
-	month = convertStringToInt(dateVector[SLOT_MONTH]);
-	if(vectorSize == COMPLETE_DATE_VECTOR_SIZE)
-		year = convertStringToInt(dateVector[SLOT_YEAR]);
-	else
-		year = getToday(yearEnum);
 }
 
 void Converter::extractTime(string timeStr, int& hour, int& min){
@@ -587,6 +616,25 @@ void Converter::extractTime(string timeStr, int& hour, int& min){
 		hour = 0;
 }
 
+bool Converter::verifyDate(int year, int month, int day){
+	int todayYear = getToday(yearEnum);
+	int todayMonth = getToday(monthEnum);
+	int todayDay = getToday(monthDayEnum);
+	bool isYearEqual = todayYear == year;
+	bool isMonthEqual = todayMonth == month;
+	bool isPassed = false;
+	if(year < todayYear)
+		isPassed = true;
+	else if(isYearEqual && month<todayMonth)
+		isPassed = true;
+	else if(isYearEqual && isMonthEqual && day<todayDay)
+		isPassed = true;
+	if(isPassed)
+		throw string(Message::MESSAGE_ERROR_DATE_PASSED);
+	else
+		return true;
+}
+
 time_t Converter::createTime(int year, int month, int day, int hour, int min){
 	struct tm  time = {0,0,0,0,0,0};
 	time_t returnTime;
@@ -616,43 +664,17 @@ void Converter::toLowerCase(string &str){
 	}
 }
 
-bool Converter::checkDictionary(string compareStr){
-	stringstream tempStream(compareStr);
-	string tempString;
-	bool isWord = false;
-	while(tempStream>>tempString){
-		if(isNumber(tempString))
-			checkNumber(tempString);
-		else if(checkWord(_dateDictionary, tempString))
-			isWord = true;
-	}
-	return isWord;
-}
-
-bool Converter::checkNumber(string compareStr){
-	assert(!compareStr.empty());
-	if(compareStr.size() < 3){
-		_dayDigit = convertStringToInt(compareStr);
+bool Converter::isEqual(string string1, const string string2){
+	if(string1 == string2)
 		return true;
-	}
-	else if(compareStr.size() == 4){
-		_yearDigit = convertStringToInt(compareStr);
-		return true;
-	}
 	return false;
 }
 
-bool Converter::checkWord(vector<vector<string>> dictionary, string compareStr){
-	int vectorSize = dictionary.size();
-	for(int i=0; i<vectorSize; i++){
-		if(isKeyWord(dictionary[i], compareStr)){
-			saveIndex(i);
-			return true;
-		}
-		else
-			continue;
-	}
-	return false;
+bool Converter::isNumber(const string& str){
+	string::const_iterator it = str.begin();
+	while (it != str.end() && isdigit(*it))
+		++it;
+	return !str.empty() && it == str.end();
 }
 
 bool Converter::isKeyWord(vector<string> keyWordVector, string compareStr){
@@ -665,18 +687,4 @@ bool Converter::isKeyWord(vector<string> keyWordVector, string compareStr){
 			continue;
 	}
 	return false;
-}
-
-bool Converter::isNumber(const string& str){
-	string::const_iterator it = str.begin();
-	while (it != str.end() && isdigit(*it))
-		++it;
-	return !str.empty() && it == str.end();
-}
-
-void Converter::saveIndex(int index){
-	if(index == INDEX_NXT)
-		_isNext = true;
-	else
-		_matchedIndex = index;
 }

@@ -135,7 +135,6 @@ private:
 	static const string TIME_DELIMITER;
 
 	void initialiseDateDictionary();
-	void initialiseTimeVector();
 
 	//functions to determine type of string
 	//returns true if format is in words
@@ -143,27 +142,32 @@ private:
 	bool checkWord(vector<vector<string>> dictionary, string compareStr);
 	bool checkNumber(string compareStr);
 
+	void saveIndex(int index);
+
 	void determineDate(int& year, int& month, int& day);
 	void dayCorrection(int& year, int& month, int& day);
 	void monthCorrection(int& year, int& month, int& day);
 	void declareDate(vector<string>& dateVector, int& year, int& month, int& day);
 
+	//Private getter functions
 	void getDate(bool isNoDate, int& year, int& month, int& day, string endDate);
 	void getEndTime(bool isNoEndTime, int& hour, int& min, string endTime);
 	void getStartTime(bool isNoStartTime, int& hour, int& min, string startTime);
 	void getTodayDate(int& year, int& month, int& day);
 	void getWordDate(int correction, int& year, int& month, int& day);
 	int  getToday(DateType dateType);
-
 	void getDefaultEndTime(int& hour, int& min);
 	void getDefaultStartTime(int& hour, int& min);
 
+	//functions to extract date/time from string
 	void extractDate(string dateStr, int& year, int& month, int& day);
 	void extractTime(string timeStr, int& hour, int& min);
 
+	//functions to help create time in time_t
 	bool verifyDate(int year, int month, int day);
 	time_t createTime(int year, int month, int day, int hour, int min);
 
+	//string helper functions
 	void splitString(string str, const string delimiter, vector<string>& strVector);
 	void toLowerCase(string &str);
 
@@ -171,21 +175,24 @@ private:
 	bool isNumber(const string& str);
 	bool isKeyWord(vector<string> keyWordVector, string compareStr);
 
-	void saveIndex(int index);
-
 public:
 	Converter();
-	int convertStringToInt(string);
-	RepeatType convertStringToRepeatType(string);
-	Priority convertStringToPriority(string);
-	long long convertDateToInt(string dateStr);
-	time_t convertStringToTime(string dateStr, string timeStr, bool isStart);
-	TaskType convertStringToTime(string startDate, 
-			  				     string startTime, 
-							     string endDate, 
-							     string endTime, 
-							     time_t& returnStart, 
-							     time_t& returnEnd);
+
+	//function to get current time
 	time_t getNow();
+
+	//Functions to convert from string to various types
+	int        convertStringToInt(string);
+	RepeatType convertStringToRepeatType(string);
+	Priority   convertStringToPriority(string);
+	long long  convertDateToInt(string dateStr);
+	time_t     convertStringToTime(string dateStr, string timeStr, bool isStart);
+	TaskType   convertStringToTime(string startDate, 
+			  	  			       string startTime, 
+							       string endDate, 
+							       string endTime, 
+							       time_t& returnStart, 
+							       time_t& returnEnd);
+	
 };
 #endif
