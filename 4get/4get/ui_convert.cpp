@@ -24,17 +24,25 @@ UiConvert::UiConvert(){};
 void UiConvert::stringStdToSysConversion(String^& result, string& source){
 	result = gcnew String(source.c_str());
 }
-string UiConvert::timetToStdString(time_t time){
-	stringstream timeStream;
-	timeStream << time;
-	return timeStream.str();
-}
+bool UiConvert::timetToSysString(time_t timeAsTimeT, System::String^& sys_time){
+	struct tm timeTm;
+	char timeBuffer[TIME_BUFFER_SIZE] = {0};
+	string timeString = INITIALISE_EMPTY_STD_STRING;
 
+	if(timeAsTimeT != EMPTY_TIME){
+		localtime_s(&timeTm,&timeAsTimeT);
+		asctime_s(timeBuffer, TIME_BUFFER_SIZE, &timeTm);
+		timeString = timeBuffer;
+		this->stringStdToSysConversion(sys_time, timeString);
+		return true;
+	}
+	else
+		return false;
+}
 bool UiConvert::stringSysToStdConversion(String^ source, string& result){
 	result = marshal_as<string>(source);
 	return true;
 }
-
 string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	string result = INITIALISE_EMPTY_STD_STRING;
 	switch(taskPriority){
@@ -47,7 +55,6 @@ string UiConvert::enumPriorityToStdString(Priority taskPriority){
 	}
 	return result;
 }
-
 string UiConvert::enumRepeatToStdString(RepeatType taskRepeat){
 	string result = INITIALISE_EMPTY_STD_STRING;
 	switch(taskRepeat){
@@ -72,7 +79,6 @@ string UiConvert::enumRepeatToStdString(RepeatType taskRepeat){
 	}
 	return result;
 }
-
 string UiConvert::enumTaskTypeToStdString(TaskType taskType){
 	string result = INITIALISE_EMPTY_STD_STRING;
 	switch(taskType){
@@ -88,13 +94,11 @@ string UiConvert::enumTaskTypeToStdString(TaskType taskType){
 	}
 	return result;
 }
-
 int UiConvert::stringSysToIntConversion(String^ source){
 	int result = INITIALISE_INT_ZERO;
 	result = int::Parse(source);
 	return result;
 }
-
 void UiConvert::intToSysString(String^& result, int source){
 	result = System::Convert::ToString(source);
 }
@@ -112,8 +116,6 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	System::String^ sys_repeat;
 	System::String^ sys_priority;
 	System::String^ sys_task_type;
-	time_t timeAsTimeT;
-	struct tm timeTm;
 	char timeBuffer[TIME_BUFFER_SIZE] = {0};
 	string timeString = INITIALISE_EMPTY_STD_STRING;
 
@@ -121,21 +123,8 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	this->stringStdToSysConversion(sys_desc, t1->getTaskDescription()); //description
 	this->stringStdToSysConversion(sys_venue, t1->getTaskLocation()); //venue
 
-	timeAsTimeT = t1->getTaskStart();
-	if(timeAsTimeT != EMPTY_TIME){
-		localtime_s(&timeTm,&timeAsTimeT);
-		asctime_s(timeBuffer, TIME_BUFFER_SIZE, &timeTm);
-		timeString = timeBuffer;
-		this->stringStdToSysConversion(sys_start_time, timeString); //start time
-	}
-	
-	timeAsTimeT = t1->getTaskEnd();
-	if(timeAsTimeT != EMPTY_TIME){
-		localtime_s(&timeTm,&timeAsTimeT);
-		asctime_s(timeBuffer, TIME_BUFFER_SIZE, &timeTm);
-		timeString = timeBuffer;
-		this->stringStdToSysConversion(sys_end_time, timeString); //end time
-	}
+	this->timetToSysString(t1->getTaskStart(), sys_start_time);
+	this->timetToSysString(t1->getTaskEnd(), sys_end_time);
 
 	this->stringStdToSysConversion(sys_repeat, enumRepeatToStdString(t1->getTaskRepeat())); //repeat
 
