@@ -124,7 +124,7 @@ void UiConvert::printItem(System::Windows::Forms::ListViewItem^ item, list<Task*
 	this->stringStdToSysConversion(sys_venue, t1->getTaskLocation()); //venue
 
 	this->timetToSysString(t1->getTaskStart(), sys_start_time);
-	this->timetToSysString(t1->getTaskStart(), sys_end_time);
+	this->timetToSysString(t1->getTaskEnd(), sys_end_time);
 
 	this->stringStdToSysConversion(sys_repeat, enumRepeatToStdString(t1->getTaskRepeat())); //repeat
 
