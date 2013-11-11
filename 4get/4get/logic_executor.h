@@ -24,7 +24,6 @@
 #include <stack>
 #include <locale.h>
 #include <vector>
-#include <string>
 
 using namespace std;
 using namespace Message;

@@ -58,7 +58,11 @@ PRIVATE FUNCTIONS
 bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 	try{
 		Command commandType = determineCommandType(usercommand);
-		if(!(commandType == commandRedo || commandType == commandUndo || commandType == commandShow || commandType == commandShowAll || commandType == commandAdd)){
+		if(!(commandType == commandRedo 
+			|| commandType == commandUndo 
+			|| commandType == commandShow 
+			|| commandType == commandShowAll 
+			|| commandType == commandAdd)){
 			storeIntoUndoCommandStack(commandType); 
 			undoListTypeStack.push(listType);
 		}
@@ -66,7 +70,8 @@ bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 			storeIntoUndoCommandStack(commandType);
 			undoListTypeStack.push(listToDo);
 		}
-		if(commandType != commandRedo && commandType != commandUndo){
+		if(commandType != commandRedo 
+			&& commandType != commandUndo){
 			if(!redoCommandStack.empty()){
 				redoCommandStack.pop();
 				redoTaskStack.pop();
@@ -362,17 +367,21 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
-			if(startTime > taskTemp->getTaskEnd()){
+			if(taskTemp->getTaskEnd() == 0){
+				taskTemp->setTaskStart(startTime);
+			}
+			if(!downgradeStartTime && isNoEndTime && startTime > taskTemp->getTaskEnd()){
 				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
 			}
-			taskTemp->setTaskStart(startTime);
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
-			if(endTime < taskTemp->getTaskStart()){
-				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
+			if(taskTemp->getTaskStart() == 0){
+				taskTemp->setTaskEnd(endTime);
 			}
-			taskTemp->setTaskEnd(endTime);
+			if(!downgradeEndTime && isNoStartTime && endTime < taskTemp->getTaskStart()){
+				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
+			}		
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_PRIORITY].empty())
