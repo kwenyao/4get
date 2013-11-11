@@ -371,6 +371,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
+			if(!isNoEndTime && startTime > endTime){
+				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
+			}
 			if(!downgradeStartTime && isNoEndTime && startTime > taskTemp->getTaskEnd()){
 				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
 			}
@@ -380,6 +383,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
+			if(!isNoStartTime && endTime < startTime){
+				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
+			}
 			if(!downgradeEndTime && isNoStartTime && endTime < taskTemp->getTaskStart()){
 				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
 			}	
@@ -604,7 +610,7 @@ bool Executor::undoFunction(){
 		throw;
 	}
 }
-//this function will redo what the user undo
+//this function will redo the user's undo
 bool Executor::redoFunction(){
 	try{
 		Task taskTemp;
@@ -706,6 +712,7 @@ bool Executor::redoFunction(){
 		throw;
 	}
 }
+//this function will display the search result of the user
 bool Executor::searchFunction(vector<string> vectorOfInputs){
 	try{
 		string searchDescription,
@@ -748,6 +755,7 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
+//this function will display all the tasks in the list
 bool Executor::showAllFunction(){
 	try{
 		taskList.turnOffFilter();
