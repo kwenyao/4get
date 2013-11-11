@@ -22,8 +22,6 @@
 #include "logic_task_deadline.h"
 #include "logic_task_timed.h"
 #include <stack>
-#include <locale.h>
-#include <vector>
 
 using namespace std;
 using namespace Message;
@@ -57,16 +55,16 @@ private:
 	static const string LOGGING_MESSAGE_STRINGCOLLECTOR;
 
 	//Functions to be executed 
-	bool receive(string command, vector<string> vectorOfInputs);
+	bool processCommand(string command, vector<string> vectorOfInputs);
 	Command determineCommandType (string commandTypeString); 
-	bool adderFunction(vector<string> vectorOfInputs);
-	bool modifyFunction(vector<string> vectorOfInputs);
-	bool deleteFunction(vector<string> vectorOfInputs);
-	bool markFunction(vector<string> vectorOfInputs);
-	bool undoFunction();
-	bool redoFunction();
-	bool searchFunction(vector<string> vectorOfInputs);
-	bool showAllFunction();
+	bool executeAdd(vector<string> vectorOfInputs);
+	bool executeModify(vector<string> vectorOfInputs);
+	bool executeDelete(vector<string> vectorOfInputs);
+	bool executeMark(vector<string> vectorOfInputs);
+	bool executeUndo();
+	bool executeRedo();
+	bool executeSearch(vector<string> vectorOfInputs);
+	bool executeShowAll();
 	
 	//helper functions
 	bool isEqual(string str1, const string str2);
@@ -97,7 +95,7 @@ public:
 	Executor();
 
 	//Functions to be used by UI
-	bool stringCollector(string task);
+	bool processInput(string task);
 	void refreshAll();
 	list<Task*> getUpdatedList(ListType listType);
 	bool setListType(ListType listType);
