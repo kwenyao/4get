@@ -30,6 +30,7 @@ UiDisplay::~UiDisplay(){
 
 void UiDisplay::InitializeComponent(void){
 	this->components = (gcnew System::ComponentModel::Container());
+	System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(UiDisplay::typeid));
 	this->tabContainer = (gcnew System::Windows::Forms::TabControl());
 	this->tabTodo = (gcnew System::Windows::Forms::TabPage());
 	this->todoListView = (gcnew System::Windows::Forms::ListView());
@@ -74,6 +75,33 @@ void UiDisplay::InitializeComponent(void){
 	this->tabOverdue->SuspendLayout();
 	this->labelContainer->SuspendLayout();
 	this->SuspendLayout();
+	// 
+	// UiDisplay
+	// 
+	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+	this->BackColor = System::Drawing::Color::Black;
+	this->ClientSize = System::Drawing::Size(1075, 572);
+	this->Controls->Add(this->labelContainer);
+	this->Controls->Add(this->textboxInput);
+	this->Controls->Add(this->messageBox);
+	this->Controls->Add(this->tabContainer);
+	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+	this->KeyPreview = true;
+	this->MaximizeBox = false;
+	this->Name = L"UiDisplay";
+	this->Opacity = 0.95;
+	this->Text = L"4get";
+	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UiDisplay::UiDisplay_KeyDown);
+	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UiDisplay::UiDisplay_KeyPress);
+	this->tabContainer->ResumeLayout(false);
+	this->tabTodo->ResumeLayout(false);
+	this->tabCompleted->ResumeLayout(false);
+	this->tabOverdue->ResumeLayout(false);
+	this->labelContainer->ResumeLayout(false);
+	this->labelContainer->PerformLayout();
+	this->ResumeLayout(false);
+	this->PerformLayout();
 	// 
 	// tabContainer
 	// 
@@ -262,7 +290,6 @@ void UiDisplay::InitializeComponent(void){
 	// 
 	this->notifyIcon1->Text = L"notifyIcon1";
 	this->notifyIcon1->Visible = true;
-	this->notifyIcon1->DoubleClick += gcnew System::EventHandler(this, &UiDisplay::notifyIcon1_DoubleClick);
 	// 
 	// timerRefresh
 	// 
@@ -306,7 +333,6 @@ void UiDisplay::InitializeComponent(void){
 	this->labelContainer->TabIndex = 2;
 	this->labelContainer->TabStop = false;
 	this->labelContainer->Text = L"Task Details";
-	this->labelContainer->Enter += gcnew System::EventHandler(this, &UiDisplay::labelContainer_Enter);
 	// 
 	// labelTaskType
 	// 
@@ -468,34 +494,7 @@ void UiDisplay::InitializeComponent(void){
 	this->labelTagDesc->Size = System::Drawing::Size(99, 18);
 	this->labelTagDesc->TabIndex = 0;
 	this->labelTagDesc->Text = L"Description:";
-	// 
-	// UiDisplay
-	// 
-	this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-	this->BackColor = System::Drawing::Color::Black;
-	this->ClientSize = System::Drawing::Size(1075, 572);
-	this->Controls->Add(this->labelContainer);
-	this->Controls->Add(this->textboxInput);
-	this->Controls->Add(this->messageBox);
-	this->Controls->Add(this->tabContainer);
-	this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
-	this->KeyPreview = true;
-	this->MaximizeBox = false;
-	this->Name = L"UiDisplay";
-	this->Opacity = 0.95;
-	this->Text = L"4get";
-	this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UiDisplay::UiDisplay_KeyDown);
-	this->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UiDisplay::UiDisplay_KeyPress);
-	this->Resize += gcnew System::EventHandler(this, &UiDisplay::UiDisplay_Resize);
-	this->tabContainer->ResumeLayout(false);
-	this->tabTodo->ResumeLayout(false);
-	this->tabCompleted->ResumeLayout(false);
-	this->tabOverdue->ResumeLayout(false);
-	this->labelContainer->ResumeLayout(false);
-	this->labelContainer->PerformLayout();
-	this->ResumeLayout(false);
-	this->PerformLayout();
+	
 
 }
 
@@ -508,21 +507,6 @@ Void UiDisplay::timerRefresh_Tick(System::Object^  sender, System::EventArgs^  e
 	}
 	catch(string &error){
 		this->printError(error);
-	}
-}
-
-Void UiDisplay::notifyIcon1_DoubleClick(System::Object^  sender, System::EventArgs^  e){
-	this->Show();
-	this->WindowState = FormWindowState::Normal;
-}
-Void UiDisplay::UiDisplay_Resize(System::Object^  sender, System::EventArgs^  e){
-	if(this->WindowState == FormWindowState::Minimized){
-		this->notifyIcon1->Visible =true;
-		this->notifyIcon1->ShowBalloonTip(500);
-		this->Hide();
-	}
-	else if (this->WindowState == FormWindowState::Normal){
-		notifyIcon1->Visible = false;
 	}
 }
 
@@ -1022,8 +1006,7 @@ Void UiDisplay::printAddMessage(){
 	array<String ^> ^  addLines ={
 		COMMAND_ADD_HELP,
 		COMMAND_ADD_HELP_LOCATION,
-		COMMAND_ADD_HELP_START,
-		COMMAND_ADD_HELP_END,
+		COMMAND_ADD_HELP_TIMED,
 		COMMAND_ADD_HELP_DUE,
 		COMMAND_ADD_HELP_REPEAT,
 		COMMAND_ADD_HELP_PRIORITY,
@@ -1054,7 +1037,6 @@ Void UiDisplay::printModMessage(){
 		COMMAND_MOD_HELP_LOCATION,
 		COMMAND_MOD_HELP_START,
 		COMMAND_MOD_HELP_END,
-		COMMAND_MOD_HELP_DUE,
 		COMMAND_MOD_HELP_PRIORITY,
 		COMMAND_MOD_HELP_PRIORITY_STATES,
 		NEWLINE,
@@ -1084,7 +1066,6 @@ Void UiDisplay::printSearchMessage(){
 		COMMAND_SEARCH_HELP_LOCATION,
 		COMMAND_SEARCH_HELP_START,
 		COMMAND_SEARCH_HELP_END,
-		COMMAND_SEARCH_HELP_DUE,
 		COMMAND_SEARCH_HELP_PRIORITY,
 		COMMAND_SEARCH_HELP_PRIORITY_STATES
 	};
