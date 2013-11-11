@@ -109,7 +109,7 @@ string Log::getTimeStamp(LogTime type)
 	string timeStamp;
 	struct tm *timeInfo = {0};
 	time(&now);
-	timeInfo = localtime ( &now );
+	localtime_s(timeInfo,&now);
 	if(type == Current){
 		timeStamp = INITIALIZE_STRING_BLANK;
 		// [DD/MM/YY HH:MM:SS] 
