@@ -530,7 +530,7 @@ void UiDisplay::passUserInput(){
 		string stdCommand;
 		this->checkIfExit(this->textboxInput->Text);
 		converter->stringSysToStdConversion(this->textboxInput->Text, stdCommand);
-		if(!execute->stringCollector(stdCommand)){
+		if(!execute->processInput(stdCommand)){
 			throw MESSAGE_ERROR_COMMAND_QUERY;
 		}
 	}

@@ -99,14 +99,15 @@ public:
 
 	//Public list manipulation functions
 	bool addToList(Task* task, ListType listToAdd);
+	bool markDone(int taskToMark);
 	void deleteIndexFromList(int indexUI, bool isDelete);
 	void deleteIDFromList(long long IDNumber, ListType listToDelete, bool isDelete);
-	bool markDone(int taskToMark);
 
 	//Getter functions
-	list<Task*> obtainList(ListType listToReturn);
-	Task*       obtainTask(int indexUI);
-	Task*       obtainTask(long long taskID, ListType listType);
+	list<Task*> getList(ListType listToReturn);
+	Task*       getTask(int indexUI);
+	Task*       getTask(long long taskID, ListType listType);
+	int         getCurrentListSize();
 
 	//Search functions (overload)
 	void searchList(string searchStr);
@@ -126,8 +127,6 @@ public:
 
 	//Refresh
 	void refreshAll(time_t timeNow);
-
-	int getCurrentListSize();
 
 	//Functions used in testing only
 	void setCurrentDisplayed(ListType listType);

@@ -14,7 +14,7 @@ const int Executor::LEAST_INDEX = 1;
 const int Executor::SIZE_CORRECTION = 1;
 const int Executor::SINGLE_OPERATION = 1;
 const int Executor::ID_MULTIPLIER = 1000;
-const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call stringCollector";
+const string Executor::LOGGING_MESSAGE_STRINGCOLLECTOR = "Number of times UI call processInput";
 
 /*************************************
 PUBLIC FUNCTIONS                      
@@ -22,11 +22,11 @@ PUBLIC FUNCTIONS
 Executor::Executor(){
 	refreshAll();
 }
-bool Executor::stringCollector(string task){
+bool Executor::processInput(string task){
 	try{
 		vector<string> vectorOfInputs(SLOT_SIZE);
 		parser.parseInput(task, (vectorOfInputs));
-		if(receive(vectorOfInputs[SLOT_COMMAND], vectorOfInputs)){
+		if(processCommand(vectorOfInputs[SLOT_COMMAND], vectorOfInputs)){
 			logging(LOGGING_MESSAGE_STRINGCOLLECTOR, Info, Pass);
 			return true;
 		}
@@ -38,7 +38,7 @@ bool Executor::stringCollector(string task){
 	}
 }
 list<Task*> Executor::getUpdatedList(ListType listType){
-	return taskList.obtainList(listType);
+	return taskList.getList(listType);
 }
 void Executor::refreshAll(){
 	try{
@@ -55,7 +55,7 @@ bool Executor::setListType(ListType uiListType)
 /*************************************
 PRIVATE FUNCTIONS            
 *************************************/
-bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
+bool Executor::processCommand(string usercommand, vector<string> vectorOfInputs){
 	try{
 		Command commandType = determineCommandType(usercommand);
 		if(!(commandType == commandRedo 
@@ -86,21 +86,21 @@ bool Executor::receive(string usercommand, vector<string> vectorOfInputs){
 		switch(commandType)
 		{
 		case commandAdd:
-			return adderFunction(vectorOfInputs);
+			return executeAdd(vectorOfInputs);
 		case commandDelete:
-			return deleteFunction(vectorOfInputs);
+			return executeDelete(vectorOfInputs);
 		case commandMark:
-			return markFunction(vectorOfInputs);
+			return executeMark(vectorOfInputs);
 		case commandModify:
-			return modifyFunction(vectorOfInputs);
+			return executeModify(vectorOfInputs);
 		case commandUndo:
-			return undoFunction();
+			return executeUndo();
 		case commandRedo:
-			return redoFunction();
+			return executeRedo();
 		case commandShow:
-			return searchFunction(vectorOfInputs);
+			return executeSearch(vectorOfInputs);
 		case commandShowAll:
-			return showAllFunction();
+			return executeShowAll();
 		default: throw string(MESSAGE_ERROR_WRONG_KEYWORD);
 		}
 	}catch(string error){
@@ -128,7 +128,7 @@ Enum::Command Executor::determineCommandType (string commandTypeString){
 		throw string(MESSAGE_ERROR_WRONG_KEYWORD);
 }
 //this function will add the task requested by the user
-bool Executor::adderFunction(vector<string> vectorOfInputs){
+bool Executor::executeAdd(vector<string> vectorOfInputs){
 	try{
 		long long id;
 		string description; 
@@ -197,7 +197,7 @@ bool Executor::adderFunction(vector<string> vectorOfInputs){
 	}
 }
 //this function will delete the task(s) that the user requested
-bool Executor::deleteFunction(vector<string> vectorOfInputs){
+bool Executor::executeDelete(vector<string> vectorOfInputs){
 	try{
 		int deleteStartNumber,
 			deleteEndNumber,
@@ -249,7 +249,7 @@ bool Executor::deleteFunction(vector<string> vectorOfInputs){
 	}
 }
 //this function will mark the task to be done and shift the task(s) in todoList to completedlist
-bool Executor::markFunction(vector<string> vectorOfInputs){
+bool Executor::executeMark(vector<string> vectorOfInputs){
 	try{
 		int markStartNumber;
 		int	markEndNumber;
@@ -303,7 +303,7 @@ bool Executor::markFunction(vector<string> vectorOfInputs){
 	}
 }
 //this function will modify the task as requested by the user
-bool Executor::modifyFunction(vector<string> vectorOfInputs){
+bool Executor::executeModify(vector<string> vectorOfInputs){
 	try{
 		Task* taskTemp;
 		Task* taskNew;
@@ -337,7 +337,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 		if(flagModify == false){
 			throw string(MESSAGE_ERROR_COMMAND_MODIFY);
 		}
-		taskTemp = taskList.obtainTask(modifyNumber);
+		taskTemp = taskList.getTask(modifyNumber);
 		typeOfOldTask = taskTemp->getTaskType();
 		storeIntoUndoTaskStack(*taskTemp);
 		description = vectorOfInputs[SLOT_DESCRIPTION];
@@ -371,6 +371,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_START_TIME].empty() || !vectorOfInputs[SLOT_START_DATE].empty()){
+			if(!isNoEndTime && startTime > endTime){
+				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
+			}
 			if(!downgradeStartTime && isNoEndTime && startTime > taskTemp->getTaskEnd()){
 				throw string(MESSAGE_ERROR_START_TIME_MORE_THAN_END_TIME);
 			}
@@ -380,6 +383,9 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 			taskList.saveToDoList();
 		}
 		if(!vectorOfInputs[SLOT_END_TIME].empty() || !vectorOfInputs[SLOT_END_DATE].empty()){
+			if(!isNoStartTime && endTime < startTime){
+				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
+			}
 			if(!downgradeEndTime && isNoStartTime && endTime < taskTemp->getTaskStart()){
 				throw string(MESSAGE_ERROR_END_TIME_LESS_THAN_START_TIME);
 			}	
@@ -505,7 +511,7 @@ bool Executor::modifyFunction(vector<string> vectorOfInputs){
 	}
 }
 //this function will undo the user last command
-bool Executor::undoFunction(){
+bool Executor::executeUndo(){
 	try{
 		Task taskTemp;
 		Command commandType;
@@ -588,7 +594,7 @@ bool Executor::undoFunction(){
 			}
 			break;
 		case commandModify:
-			storeIntoRedoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), listType));  //get the task currently in the list
+			storeIntoRedoTaskStack(*taskList.getTask(taskTemp.getTaskId(), listType));  //get the task currently in the list
 			taskList.deleteIDFromList(taskTemp.getTaskId(), listType, true);     //delete away the task current in the list
 			taskList.addToList(taskPtrToAdd, undoListType);								//add the task.
 			undoTaskStack.pop();
@@ -604,8 +610,8 @@ bool Executor::undoFunction(){
 		throw;
 	}
 }
-//this function will redo what the user undo
-bool Executor::redoFunction(){
+//this function will redo the user's undo
+bool Executor::executeRedo(){
 	try{
 		Task taskTemp;
 		Task taskUndo;
@@ -689,7 +695,7 @@ bool Executor::redoFunction(){
 		case commandModify:
 			taskTemp = redoTaskStack.top();
 			taskPtrToAdd = createTaskPtr(taskTemp);
-			storeIntoUndoTaskStack(*taskList.obtainTask(taskTemp.getTaskId(), redoListType));
+			storeIntoUndoTaskStack(*taskList.getTask(taskTemp.getTaskId(), redoListType));
 			taskList.deleteIDFromList(taskTemp.getTaskId(), redoListType, true);
 			taskList.addToList(taskPtrToAdd, redoListType);
 			redoTaskStack.pop();
@@ -706,7 +712,8 @@ bool Executor::redoFunction(){
 		throw;
 	}
 }
-bool Executor::searchFunction(vector<string> vectorOfInputs){
+//this function will display the search result of the user
+bool Executor::executeSearch(vector<string> vectorOfInputs){
 	try{
 		string searchDescription,
 			searchLocation;
@@ -748,7 +755,8 @@ bool Executor::searchFunction(vector<string> vectorOfInputs){
 		throw;
 	}
 }
-bool Executor::showAllFunction(){
+//this function will display all the tasks in the list
+bool Executor::executeShowAll(){
 	try{
 		taskList.turnOffFilter();
 		return true;
@@ -881,7 +889,7 @@ Task* Executor::createTaskPtr(Task taskToCreate){
 void Executor::helperDeleteFunction(int deleteStartNumber){
 	try{
 		Task taskTemp;
-		taskTemp = *taskList.obtainTask(deleteStartNumber);
+		taskTemp = *taskList.getTask(deleteStartNumber);
 		storeIntoUndoTaskStack(taskTemp);
 		taskList.deleteIndexFromList(deleteStartNumber, true);	
 	}catch(string error){
@@ -891,7 +899,7 @@ void Executor::helperDeleteFunction(int deleteStartNumber){
 void Executor::helperMarkFunction(int markStartNumber){
 	try{
 		Task taskTemp;
-		taskTemp = *taskList.obtainTask(markStartNumber);
+		taskTemp = *taskList.getTask(markStartNumber);
 		storeIntoUndoTaskStack(taskTemp);
 		taskList.markDone(markStartNumber);
 	}catch(string error){
