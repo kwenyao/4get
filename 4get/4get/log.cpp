@@ -107,42 +107,41 @@ string Log::getTimeStamp(LogTime type)
 {
 	time_t now;
 	string timeStamp;
-	struct tm *timeInfo = {0};
+	struct tm timeInfo = {0};
 	time(&now);
-	localtime_s(timeInfo,&now);
+	//timeInfo = localtime(&now);
+	localtime_s(&timeInfo,&now);
 	if(type == Current){
 		timeStamp = INITIALIZE_STRING_BLANK;
 		// [DD/MM/YY HH:MM:SS] 
 		timeStamp += TIMER_SQUARE_BRACKETS_OPEN;
-		timeStamp += std::to_string(timeInfo->tm_mday);
+		timeStamp += std::to_string(timeInfo.tm_mday);
 		timeStamp += TIMER_SLASH;
-		timeStamp += std::to_string(timeInfo->tm_mon+1);
+		timeStamp += std::to_string(timeInfo.tm_mon+1);
 		timeStamp += TIMER_SLASH;
-		timeStamp += std::to_string(timeInfo->tm_year+1900);
+		timeStamp += std::to_string(timeInfo.tm_year+1900);
 		timeStamp += TIMER_SPACE;
-		timeStamp += std::to_string(timeInfo->tm_hour);
+		timeStamp += std::to_string(timeInfo.tm_hour);
 		timeStamp += TIMER_COLON;
-		timeStamp += std::to_string(timeInfo->tm_min);
+		timeStamp += std::to_string(timeInfo.tm_min);
 		timeStamp += TIMER_COLON;
-		timeStamp += std::to_string(timeInfo->tm_sec);
+		timeStamp += std::to_string(timeInfo.tm_sec);
 		timeStamp += TIMER_SQUARE_BRACKETS_CLOSE;
-
-
 	}
 	else{
 		timeStamp = APP_NAME + LOGGING_NEW;
 		//DD-MM-YY HH.MM.SS
-		timeStamp += std::to_string(timeInfo->tm_mday);
+		timeStamp += std::to_string(timeInfo.tm_mday);
 		timeStamp += TIMER_DASH;
-		timeStamp += std::to_string(timeInfo->tm_mon+1);
+		timeStamp += std::to_string(timeInfo.tm_mon+1);
 		timeStamp += TIMER_DASH;
-		timeStamp += std::to_string(timeInfo->tm_year+1900);
+		timeStamp += std::to_string(timeInfo.tm_year+1900);
 		timeStamp += TIMER_SPACE;
-		timeStamp += std::to_string(timeInfo->tm_hour);
+		timeStamp += std::to_string(timeInfo.tm_hour);
 		timeStamp += TIMER_DOT;
-		timeStamp += std::to_string(timeInfo->tm_min);
+		timeStamp += std::to_string(timeInfo.tm_min);
 		timeStamp += TIMER_DOT;
-		timeStamp += std::to_string(timeInfo->tm_sec);
+		timeStamp += std::to_string(timeInfo.tm_sec);
 	}
 
 	return timeStamp;

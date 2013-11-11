@@ -5,6 +5,7 @@
 #include <string>
 #include <assert.h>
 #include "common_message.h"
+
 #undef logging
 
 using namespace std;
