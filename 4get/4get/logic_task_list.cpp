@@ -289,7 +289,7 @@ void TaskList::turnOffFilter(){
 }
 
 void TaskList::refreshAll(time_t timeNow){
-	if(!_toDoList.empty())
+	if(_toDoList.empty())
 		return;
 	int listSize = _toDoList.size();
 	int marker = 0;
