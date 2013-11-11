@@ -1,5 +1,16 @@
 #include "Log.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  Log.cpp
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 const string Log::LOGGING_NEW = " Log data on ";
 const string Log::LOGGING_EXT = ".txt";
 const string Log::LOGGING_STARTING = "---------------Log started---------------\n" ;

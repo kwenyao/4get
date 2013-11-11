@@ -11,7 +11,16 @@
 #include "common_message.h"
 #include "Log.h"
 
-// handled by John Kuan (A0097592M)
+/*
+* =====================================================================================
+*
+*       Filename:  logic_parser.h
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 using namespace std;
 using namespace Enum;

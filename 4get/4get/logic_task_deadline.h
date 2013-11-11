@@ -2,7 +2,16 @@
 #define _LOGIC_TASK_DEADLINE_H_
 #include "logic_task.h"
 
-// handled by John Kuan (A0097592M)
+/*
+* =====================================================================================
+*
+*       Filename:  logic_task_deadline.h
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 class TaskDeadline : public Task
 {

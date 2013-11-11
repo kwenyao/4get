@@ -1,5 +1,16 @@
 #include "ui_convert.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  ui_convert.cpp
+*
+*         Author:  HO JIA YI (A0101360A), a0101360@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 using namespace UIConvert;
 
 const int UiConvert::ITEM_INDEX_SLOT = 0;

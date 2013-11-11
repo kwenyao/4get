@@ -1,5 +1,16 @@
 #include "logic_parser.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  logic_parser.cpp
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 const char Parser::MARKER_COMMA = ',';
 const size_t Parser::MARKER_COMMA_LENGTH = 1;
 const char Parser::MARKER_ENCLOSE = ' ';

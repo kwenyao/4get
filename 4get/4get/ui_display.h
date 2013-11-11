@@ -1,4 +1,14 @@
 #pragma once
+/*
+* =====================================================================================
+*
+*       Filename:  ui_display.h
+*
+*         Author:  HO JIA YI (A0101360A), a0101360@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 #include "ui_convert.h"
 #include "logic_executor.h"
@@ -10,6 +20,7 @@
 #include <time.h>
 #include <Windows.h>
 #include <ctype.h>
+
 
 namespace UIDisplay {
 

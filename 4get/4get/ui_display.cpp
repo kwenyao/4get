@@ -1,5 +1,16 @@
 #include "ui_display.h"
 #include <sstream>
+/*
+* =====================================================================================
+*
+*       Filename:  ui_display.cpp
+*
+*         Author:  HO JIA YI (A0101360A), a0101360@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 using namespace UIDisplay;
 //constructor
 UiDisplay::UiDisplay(){

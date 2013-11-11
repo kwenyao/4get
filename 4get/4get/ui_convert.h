@@ -11,6 +11,17 @@
 #include <vcclr.h>
 #include "msclr\marshal_cppstd.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  ui_convert.h
+*
+*         Author:  HO JIA YI (A0101360A), a0101360@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 #define BUFFER_SIZE 255
 namespace UIConvert {
 	using namespace std;

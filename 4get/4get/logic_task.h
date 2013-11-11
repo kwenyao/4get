@@ -5,7 +5,16 @@
 #include <ctime>
 #include "common_message.h"
 
-// handled by John Kuan (A0097592M)
+/*
+* =====================================================================================
+*
+*       Filename:  logic_task.h
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
 
 using namespace std;
 using namespace Enum;

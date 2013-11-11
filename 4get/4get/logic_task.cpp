@@ -1,5 +1,16 @@
 #include "logic_task.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  logic_task.cpp
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 const long long Task::CONVERT_MULTIPLIER_YEAR = 10000;
 const long long Task::CONVERT_MULTIPLIER_MONTH = 100;
 const long long Task::CONVERT_MULTIPLIER_DAY = 1;

@@ -6,6 +6,17 @@
 #include <assert.h>
 #include "common_message.h"
 
+/*
+* =====================================================================================
+*
+*       Filename:  Log.h
+*
+*         Author:  KUAN CHOW LEONG JOHN (A0097592M), johnkuan@nus.edu.sg
+*   Organization:  NUS, School of Computing
+*
+* =====================================================================================
+*/
+
 #undef logging
 
 using namespace std;
