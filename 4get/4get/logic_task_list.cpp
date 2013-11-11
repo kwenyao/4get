@@ -11,13 +11,15 @@
 
 #include "logic_task_list.h"
 
-const int TaskList::INDEX_CORRECTION = -1;
-const string TaskList::LOG_TASK_ADDED = "Task inserted into list";
+const string TaskList::LOG_TASK_ADDED   = "Task inserted into list";
 const string TaskList::LOG_TASK_DELETED = "Task deleted from list";
-const string TaskList::LOG_TASK_MARKED = "Task marked";
-const int TaskList::YYYYMMDD_YEAR_MULTIPLIER = 10000;
+const string TaskList::LOG_TASK_MARKED  = "Task marked";
+
+const int TaskList::INDEX_CORRECTION = -1;
+
+const int TaskList::YYYYMMDD_YEAR_MULTIPLIER  = 10000;
 const int TaskList::YYYYMMDD_MONTH_MULTIPLIER = 100;
-const int TaskList::HHMM_HOUR_MULTIPLIER = 100;
+const int TaskList::HHMM_HOUR_MULTIPLIER      = 100;
 
 /*************************************
            PUBLIC FUNCTIONS                      
@@ -137,7 +139,7 @@ bool TaskList::markDone(int indexUI){
 	return true;
 }
 
-list<Task*> TaskList::obtainList(ListType listToReturn){
+list<Task*> TaskList::getList(ListType listToReturn){
 	if(_isFiltered && listToReturn == _actualList){
 		assert(_currentDisplayed == listFiltered);
 		return _filteredList;
@@ -148,7 +150,7 @@ list<Task*> TaskList::obtainList(ListType listToReturn){
 	return _listToDisplay;
 }
 
-Task* TaskList::obtainTask(int indexUI){
+Task* TaskList::getTask(int indexUI){
 	Task* taskToReturn;
 	int listSize;
 	list<Task*>::iterator iterator;
@@ -161,7 +163,7 @@ Task* TaskList::obtainTask(int indexUI){
 	return taskToReturn;
 }
 
-Task* TaskList::obtainTask(long long taskID, ListType listType){
+Task* TaskList::getTask(long long taskID, ListType listType){
 	list<Task*>* listToFind;
 	list<Task*>::iterator iterator;
 	try{
@@ -171,6 +173,11 @@ Task* TaskList::obtainTask(long long taskID, ListType listType){
 		throw;
 	}
 	return (*iterator);
+}
+
+int TaskList::getCurrentListSize(){
+	list<Task*>* currentList = determineList(_currentDisplayed);
+	return currentList->size();
 }
 
 void TaskList::searchList(string searchStr){
@@ -544,9 +551,4 @@ void TaskList::clearList(ListType listType){
 			delete *iterator;
 	}
 	listToClear->clear();
-}
-
-int TaskList::getCurrentListSize(){
-	list<Task*>* currentList = determineList(_currentDisplayed);
-	return currentList->size();
 }
