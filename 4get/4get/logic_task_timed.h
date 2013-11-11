@@ -1,3 +1,4 @@
+//@author A0097592M
 #ifndef _LOGIC_TASK_TIMED_H_
 #define _LOGIC_TASK_TIMED_H_
 #include "logic_task_deadline.h"

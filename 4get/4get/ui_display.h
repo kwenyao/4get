@@ -1,9 +1,10 @@
+//@author A0101360A
 #pragma once
 /*
 * =====================================================================================
-*
+*		
 *       Filename:  ui_display.h
-*
+*			
 *         Author:  HO JIA YI (A0101360A), a0101360@nus.edu.sg
 *   Organization:  NUS, School of Computing
 *

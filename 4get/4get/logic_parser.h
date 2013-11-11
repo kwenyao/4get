@@ -1,3 +1,4 @@
+//@author A0097592M
 #ifndef _LOGIC_PARSER_H_
 #define _LOGIC_PARSER_H_
 #define PROGRAM_NAME "4get"

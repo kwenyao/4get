@@ -1,3 +1,4 @@
+//@author A0097592M
 #include "Log.h"
 
 /*
