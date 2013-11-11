@@ -810,7 +810,7 @@ size_t Parser::determindExtractLength(size_t partitionStart,
 	size_t shiftPos = INITIALIZE_SIZE_T;
 
 	if(markConstant == MARKER_PRIORITY || markConstant == MARKER_PRIORITY_HIGH || markConstant == MARKER_PRIORITY_NORMAL){
-		shiftPos = shiftPos;
+		shiftPos++;
 	}
 
 	else
